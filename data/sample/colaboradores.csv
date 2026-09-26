@@ -1,0 +1,7 @@
+colaborador_id,nome,equipe_id,funcao,perfil,status,origem_dado
+COL001,Líder Técnico 01,EQ01,Líder Técnico,LIDER,ATIVO,SIMULADO
+COL002,Líder Técnico 02,EQ02,Líder Técnico,LIDER,ATIVO,SIMULADO
+COL003,Líder Técnico 03,EQ03,Líder Técnico,LIDER,ATIVO,SIMULADO
+COL004,Líder Técnico 04,EQ04,Líder Técnico,LIDER,ATIVO,SIMULADO
+COL005,Líder Técnico 05,EQ05,Líder Técnico,LIDER,ATIVO,SIMULADO
+COL006,Líder Técnico 06,EQ06,Líder Técnico,LIDER,ATIVO,SIMULADO
