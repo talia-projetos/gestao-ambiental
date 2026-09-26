@@ -110,7 +110,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 
       <section class="kpi-grid" id="planning-section">
         <article class="kpi-card accent-blue">
-          <div class="kpi-head"><span>Cobertura do plano</span><i data-lucide="target"></i></div>
+          <div class="kpi-head"><span>Cobertura de atividades</span><i data-lucide="target"></i></div>
           <strong id="kpiCoverage">—</strong>
           <div class="kpi-foot"><span id="kpiCoverageNote">—</span></div>
         </article>
@@ -139,7 +139,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
       <section class="dashboard-grid">
         <article class="card chart-card span-8">
           <div class="card-header">
-            <div><h2>Plano, execução e interferência</h2><p>Leitura comparativa por equipe</p></div>
+            <div><h2>Carga operacional e interferências</h2><p>Planejado, executado e demandas não previstas por equipe</p></div>
             <button class="icon-btn ghost expand-btn" data-chart="planChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
           </div>
           <div class="chart-wrap tall"><canvas id="planChart"></canvas></div>
@@ -175,6 +175,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
               <div><span>Risco de seca</span><strong id="droughtLevel">—</strong></div>
             </div>
             <p class="climate-guidance" id="climateGuidance">—</p>
+            <p class="climate-guidance" style="font-size:11px;opacity:.72;margin-top:6px">Fonte nesta V1: <strong>base climática simulada</strong>. O painel relê os arquivos a cada 5 min por padrão; isso não transforma o cenário em dado meteorológico em tempo real.</p>
           </article>
 
           <article class="card attention-card">
@@ -206,7 +207,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Equipe</th><th>Líder técnico</th><th>Colaboradores</th><th>Cobertura</th><th>Demandas</th><th>Taxa de bloqueio</th><th>Interferência demandas</th><th>Impacto total</th><th>Situação</th></tr></thead>
+              <thead><tr><th>Equipe</th><th>Líder técnico</th><th>Colaboradores</th><th>Cobertura</th><th>Demandas</th><th>Taxa de bloqueio</th><th>Interferência demandas</th><th>Impacto total</th><th>Nível automático</th></tr></thead>
               <tbody id="teamTableBody"></tbody>
             </table>
           </div>
@@ -236,16 +237,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
           <input id="leaderName" type="text" readonly />
         </label>
 
-        <label class="field-label">Prioridade
-          <select id="leaderPriority" required>
-            <option value="BAIXA">Baixa</option>
-            <option value="MÉDIA" selected>Média</option>
-            <option value="ALTA">Alta</option>
-            <option value="CRÍTICA">Crítica</option>
-          </select>
-        </label>
-
-        <label class="field-label">Demanda surgida
+        <label class="field-label full">Demanda surgida
           <select id="leaderActivity" required></select>
         </label>
 
@@ -253,28 +245,15 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
           <textarea id="leaderDescription" placeholder="O que surgiu e o que precisa ser feito?" required></textarea>
         </label>
 
-        <label class="field-label">Impacta o planejamento atual?
-          <select id="leaderImpacted" required>
-            <option value="NÃO">Não</option>
-            <option value="SIM">Sim</option>
-          </select>
-        </label>
-
-        <label class="field-label">Localização
+        <label class="field-label full">Localização
           <div class="form-inline">
             <input id="leaderCoords" type="text" readonly placeholder="Não capturada" />
             <button type="button" class="secondary-action" id="captureLocation">Capturar GPS</button>
           </div>
         </label>
-
-        <div class="form-secondary" id="impactFields">
-          <label class="field-label full">Qual atividade planejada será afetada?
-            <select id="affectedPlan"></select>
-          </label>
-        </div>
       </div>
 
-      <div class="form-note" id="leaderFormNote">Data, hora, status e identificadores são registrados automaticamente.</div>
+      <div class="form-note" id="leaderFormNote">Data, hora, status e identificadores são automáticos. Classificação de impacto, prioridade gerencial e alterações no planejamento não são definidas pelo líder técnico.</div>
       <div class="form-actions">
         <button type="button" class="secondary-action" id="cancelLeaderForm">Cancelar</button>
         <button type="submit" class="primary-action">Registrar demanda</button>
@@ -336,6 +315,14 @@ function monthOf(row, field='data'){ const d=parseDate(row[field]); return d ? d
 function byTeam(rows, team=state.team){ return team==='ALL' ? rows : rows.filter(r=>r.equipe_id===team); }
 function currentMonth(rows, dateField='data'){ return rows.filter(r=>monthOf(r,dateField)===Number(state.month)); }
 function uniq(arr){ return [...new Set(arr.filter(Boolean))]; }
+function automaticImpactLevel(rate){
+  const r=Number(rate)||0;
+  if(r===0)return ['SEM IMPACTO','status-normal'];
+  if(r<.10)return ['BAIXO','status-normal'];
+  if(r<.25)return ['MODERADO','status-watch'];
+  if(r<.50)return ['ALTO','status-alert'];
+  return ['CRÍTICO','status-alert'];
+}
 
 async function csv(path){
   return new Promise((resolve,reject)=>Papa.parse(path,{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>resolve(r.data),error:reject}));
@@ -429,7 +416,7 @@ function renderKPIs(){
   document.getElementById('kpiBlockedNote').textContent=`${m.blockedPlanIds.length} de ${m.totalPlan} atividades · ${fmtNum(m.blockedHours)} h bloqueadas`;
   document.getElementById('kpiAttention').textContent=fmtPct(m.planImpactRate);
   const el=document.querySelector('#kpiAttention').closest('.kpi-card').querySelector('.kpi-foot span');
-  if(el) el.textContent=`${m.allAffectedPlanIds.length} de ${m.totalPlan} atividades planejadas afetadas`;
+  if(el){ const lvl=automaticImpactLevel(m.planImpactRate); el.textContent=`${m.allAffectedPlanIds.length} de ${m.totalPlan} atividades afetadas · nível ${lvl[0]}`; }
 }
 
 function destroyChart(id){ if(state.charts[id]){state.charts[id].destroy(); delete state.charts[id];} }
@@ -443,16 +430,18 @@ function renderPlanChart(){
   const labels=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
   const planned=labels.map(id=>metricsForTeam(id).totalPlan);
   const executed=labels.map(id=>metricsForTeam(id).covered);
+  const demands=labels.map(id=>metricsForTeam(id).dem.length);
   const affected=labels.map(id=>uniq(metricsForTeam(id).impacted.map(x=>x.plano_afetado_id)).length);
   const blocked=labels.map(id=>metricsForTeam(id).blockedPlanIds.length);
   const options=chartBase(); options.plugins.legend.position='bottom';
   const config={type:'bar',data:{labels,datasets:[
     {label:'Planejado',data:planned,backgroundColor:cssVar('--surface-2'),borderColor:cssVar('--border'),borderWidth:1,borderRadius:7},
     {label:'Com execução',data:executed,backgroundColor:cssVar('--green'),borderRadius:7},
-    {label:'Afetado por demanda',data:affected,backgroundColor:cssVar('--red'),borderRadius:7},
-    {label:'Afetado por bloqueador',data:blocked,backgroundColor:cssVar('--ochre'),borderRadius:7}
+    {label:'Demandas não previstas',data:demands,backgroundColor:cssVar('--blue'),borderRadius:7},
+    {label:'Plano afetado por demanda',data:affected,backgroundColor:cssVar('--red'),borderRadius:7},
+    {label:'Plano afetado por bloqueador',data:blocked,backgroundColor:cssVar('--ochre'),borderRadius:7}
   ]},options};
-  setChart('planChart',config,'Plano, execução e interferência','Quantas atividades foram previstas, executadas e diretamente afetadas por demandas não planejadas');
+  setChart('planChart',config,'Carga operacional e interferências','Planejado, execução, demandas não previstas e efeitos efetivamente identificados no plano');
 }
 
 function renderImpactChart(){
@@ -460,10 +449,15 @@ function renderImpactChart(){
   const impacts=m.impacted;
   const counts={REPROGRAMADO:0,PARCIAL:0,SUBSTITUÍDO:0,CANCELADO:0};
   impacts.forEach(i=>{const k=(i.destino_planejamento||'REPROGRAMADO').toUpperCase(); counts[k]=(counts[k]||0)+1;});
-  const labels=Object.keys(counts).filter(k=>counts[k]>0); const data=labels.map(k=>counts[k]);
+  const impactedDemandIds=new Set(impacts.map(x=>x.demanda_id));
+  const noImpact=m.demands.filter(d=>!impactedDemandIds.has(d.demanda_id)).length;
+  const labels=[]; const data=[]; const colors=[];
+  if(noImpact>0){labels.push('Sem impacto identificado');data.push(noImpact);colors.push(cssVar('--surface-2'));}
+  Object.entries(counts).forEach(([k,v],idx)=>{if(v>0){labels.push(k);data.push(v);colors.push([cssVar('--ochre'),cssVar('--blue'),cssVar('--green'),cssVar('--red')][idx]);}});
+  if(!data.length){labels.push('Sem demandas');data.push(1);colors.push(cssVar('--surface-2'));}
   const options={responsive:true,maintainAspectRatio:false,cutout:'70%',animation:state.animations?{duration:500}:false,plugins:{legend:{position:'bottom',labels:{color:cssVar('--muted'),boxWidth:10,usePointStyle:true,font:{size:10}}},tooltip:{backgroundColor:cssVar('--text'),titleColor:cssVar('--surface'),bodyColor:cssVar('--surface')}}};
-  const config={type:'doughnut',data:{labels:labels.length?labels:['Sem impacto'],datasets:[{data:data.length?data:[1],backgroundColor:data.length?[cssVar('--ochre'),cssVar('--blue'),cssVar('--green'),cssVar('--red')]:[cssVar('--surface-2')],borderWidth:0}]},options};
-  setChart('impactChart',config,'Impacto das demandas','Destino do planejamento afetado');
+  const config={type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0}]},options};
+  setChart('impactChart',config,'Impacto das demandas','Destino das demandas não previstas no planejamento');
 }
 
 function renderBlockerChart(){
@@ -503,7 +497,7 @@ function renderClimate(){
 function statusFromScore(s){ return s>=45?['ATENÇÃO','status-alert']:s>=25?['OBSERVAR','status-watch']:['NORMAL','status-normal']; }
 function renderTeamTable(){
   const body=document.getElementById('teamTableBody');
-  body.innerHTML=state.teams.map(t=>{const m=metricsForTeam(t.equipe_id); const st=statusFromScore(m.score); return `<tr data-team="${t.equipe_id}"><td><span class="team-name">${t.equipe_id} · ${t.equipe}</span><span class="team-sub">${t.frente_atuacao}</span></td><td class="leader-name">${t.lider_tecnico}</td><td>${t.qtd_colaboradores}</td><td>${fmtPct(m.coverage)}</td><td>${m.dem.length}</td><td>${fmtPct(m.blockRate)}</td><td>${fmtPct(m.impactRatio)}</td><td>${fmtPct(m.planImpactRate)}</td><td><span class="status-pill ${st[1]}">${st[0]}</span></td></tr>`;}).join('');
+  body.innerHTML=state.teams.map(t=>{const m=metricsForTeam(t.equipe_id); const lvl=automaticImpactLevel(m.planImpactRate); return `<tr data-team="${t.equipe_id}"><td><span class="team-name">${t.equipe_id} · ${t.equipe}</span><span class="team-sub">${t.frente_atuacao}</span></td><td class="leader-name">${t.lider_tecnico}</td><td>${t.qtd_colaboradores}</td><td>${fmtPct(m.coverage)}</td><td>${m.dem.length}</td><td>${fmtPct(m.blockRate)}</td><td>${fmtPct(m.impactRatio)}</td><td>${fmtPct(m.planImpactRate)}</td><td><span class="status-pill ${lvl[1]}">${lvl[0]}</span></td></tr>`;}).join('');
   body.querySelectorAll('tr').forEach(row=>row.addEventListener('click',()=>{state.team=row.dataset.team;document.getElementById('teamFilter').value=state.team;renderAll();updateDemandMarkers();window.scrollTo({top:0,behavior:'smooth'});}));
 }
 
@@ -568,8 +562,6 @@ function populateLeaderForm(){
   const preferred=state.team!=='ALL'?state.team:(state.teams[0]?.equipe_id||'');
   teamSelect.innerHTML=state.teams.map(t=>`<option value="${t.equipe_id}">${t.equipe_id} · ${t.equipe}</option>`).join('');
   teamSelect.value=preferred;
-  document.getElementById('leaderImpacted').value='NÃO';
-  document.getElementById('impactFields').classList.remove('visible');
   const coords=document.getElementById('leaderCoords');
   coords.value=''; delete coords.dataset.lat; delete coords.dataset.lon;
   updateLeaderDependentFields();
@@ -580,10 +572,6 @@ function updateLeaderDependentFields(){
   document.getElementById('leaderName').value=t?.lider_tecnico||'';
   const acts=uniq(state.planning.filter(p=>p.equipe_id===teamId).map(p=>p.atividade));
   document.getElementById('leaderActivity').innerHTML=acts.map(a=>`<option value="${a}">${a}</option>`).join('')+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
-  const plans=state.planning.filter(p=>p.equipe_id===teamId&&Number(p.mes_num)===Number(state.month));
-  document.getElementById('affectedPlan').innerHTML=plans.length
-    ? plans.map(p=>`<option value="${p.plano_id}">${p.atividade} · ${p.meta_planejada} ${p.unidade}</option>`).join('')
-    : '<option value="">Nenhuma atividade planejada no período</option>';
 }
 function openLeaderForm(){
   populateLeaderForm();
@@ -599,7 +587,6 @@ function saveLocalLeaderRecord(e){
   const now=new Date();
   const teamId=document.getElementById('leaderTeam').value;
   const team=state.teams.find(t=>t.equipe_id===teamId);
-  const impacted=document.getElementById('leaderImpacted').value==='SIM';
   const coords=document.getElementById('leaderCoords').dataset;
   const id='LOCAL-'+Date.now();
   const demand={
@@ -611,7 +598,7 @@ function saveLocalLeaderRecord(e){
     atividade_id:'LOCAL',
     atividade_sugerida:document.getElementById('leaderActivity').value,
     descricao:document.getElementById('leaderDescription').value.trim(),
-    prioridade:document.getElementById('leaderPriority').value,
+    prioridade:'A CLASSIFICAR',
     status:'ABERTA',
     latitude:coords.lat||'',
     longitude:coords.lon||'',
@@ -619,12 +606,12 @@ function saveLocalLeaderRecord(e){
   };
   const impact={
     demanda_id:id,
-    impactou_planejamento:impacted?'SIM':'NÃO',
-    plano_afetado_id:impacted?document.getElementById('affectedPlan').value:'',
-    tipo_impacto:impacted?'PENDENTE DE AVALIAÇÃO':'',
+    impactou_planejamento:'PENDENTE',
+    plano_afetado_id:'',
+    tipo_impacto:'PENDENTE DE ANÁLISE',
     horas_desviadas:'0',
     qtd_planejada_afetada:'0',
-    destino_planejamento:impacted?'EM ANÁLISE':'',
+    destino_planejamento:'',
     nova_data_prevista:'',
     origem_dado:'SIMULADO_LOCAL'
   };
@@ -635,7 +622,7 @@ function saveLocalLeaderRecord(e){
   renderAll(); updateDemandMarkers();
   const note=document.getElementById('leaderFormNote');
   note.classList.add('success');
-  note.textContent='Demanda registrada. Ela já entrou no controle para reorganização do planejamento.';
+  note.textContent='Demanda registrada. O sistema fará a leitura gerencial sem alterar o planejamento a partir deste formulário.';
   setTimeout(()=>{e.target.reset();closeLeaderForm();},850);
 }
 
@@ -644,7 +631,6 @@ function setupUI(){
   document.getElementById('closeLeaderForm').addEventListener('click',closeLeaderForm);
   document.getElementById('cancelLeaderForm').addEventListener('click',closeLeaderForm);
   document.getElementById('leaderTeam').addEventListener('change',updateLeaderDependentFields);
-  document.getElementById('leaderImpacted').addEventListener('change',e=>document.getElementById('impactFields').classList.toggle('visible',e.target.value==='SIM'));
   document.getElementById('leaderDemandForm').addEventListener('submit',saveLocalLeaderRecord);
   document.getElementById('captureLocation').addEventListener('click',()=>{
     const out=document.getElementById('leaderCoords');
