@@ -373,9 +373,9 @@ function uniq(arr){ return [...new Set(arr.filter(Boolean))]; }
 function automaticImpactLevel(rate){
   const r=Number(rate)||0;
   if(r===0)return ['SEM IMPACTO','status-normal'];
-  if(r<.10)return ['BAIXO','status-normal'];
-  if(r<.25)return ['MODERADO','status-watch'];
-  if(r<.50)return ['ALTO','status-alert'];
+  if(r<.20)return ['BAIXO','status-normal'];
+  if(r<.40)return ['MODERADO','status-watch'];
+  if(r<.60)return ['ALTO','status-alert'];
   return ['CRÍTICO','status-alert'];
 }
 
