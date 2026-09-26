@@ -35,3 +35,13 @@ BLQ0033,2026-06-18,EQ01,Solo saturado,BAIXO,6,SIM,PLN-2026-06-AT001,Roçada meca
 BLQ0034,2026-07-20,EQ03,Estiagem,MÉDIO,8,SIM,PLN-2026-07-AT010,Repicagem e rustificação de mudas,Registro simulado para teste de recorrência e análise.,SIMULADO
 BLQ0035,2026-08-22,EQ05,Vento forte,ALTO,1,SIM,PLN-2026-08-AT017,Plantio florestal,Registro simulado para teste de recorrência e análise.,SIMULADO
 BLQ0036,2026-09-24,EQ01,Indisponibilidade de equipamento,BAIXO,2,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
+BLQ0037,2026-09-03,EQ02,Chuva intensa,MÉDIO,4,SIM,PLN-2026-09-AT005,Corte de gramado e acabamento,Bloqueador simulado para cenário analítico.,SIMULADO
+BLQ0038,2026-09-05,EQ03,Indisponibilidade de equipamento,ALTO,5,SIM,PLN-2026-09-AT009,Produção de mudas florestais,Bloqueador simulado para cenário analítico.,SIMULADO
+BLQ0039,2026-09-16,EQ03,Logística,MÉDIO,7,SIM,PLN-2026-09-AT011,Expedição e carregamento de mudas,Bloqueador simulado para cenário analítico.,SIMULADO
+BLQ0040,2026-09-02,EQ04,Pessoal,ALTO,6,SIM,PLN-2026-09-AT013,Produção de hortaliças,Bloqueador simulado para cenário analítico.,SIMULADO
+BLQ0041,2026-09-09,EQ04,Acesso restrito,MÉDIO,8,SIM,PLN-2026-09-AT014,Manejo de vasos ornamentais,Bloqueador simulado para cenário analítico.,SIMULADO
+BLQ0042,2026-09-18,EQ04,Indisponibilidade de equipamento,MÉDIO,4,SIM,PLN-2026-09-AT015,Transplante e renovação de canteiros,Bloqueador simulado para cenário analítico.,SIMULADO
+BLQ0043,2026-09-07,EQ05,Estiagem,ALTO,9,SIM,PLN-2026-09-AT017,Plantio florestal,Bloqueador simulado para cenário analítico.,SIMULADO
+BLQ0044,2026-09-04,EQ06,Logística,MÉDIO,6,SIM,PLN-2026-09-AT021,Aceiro preventivo,Bloqueador simulado para cenário analítico.,SIMULADO
+BLQ0045,2026-09-11,EQ06,Pessoal,ALTO,10,SIM,PLN-2026-09-AT022,Ronda preventiva de incêndio,Bloqueador simulado para cenário analítico.,SIMULADO
+BLQ0046,2026-09-22,EQ06,Indisponibilidade de equipamento,MÉDIO,4,SIM,PLN-2026-09-AT023,Inspeção de equipamentos de combate,Bloqueador simulado para cenário analítico.,SIMULADO
