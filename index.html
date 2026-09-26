@@ -224,7 +224,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
   <div class="leader-modal" id="leaderFormModal" aria-hidden="true">
     <form class="leader-form-panel" id="leaderDemandForm">
       <div class="drawer-head">
-        <div><h2>Registro do líder técnico</h2><p>Demanda não planejada e impacto sobre o plano</p></div>
+        <div><h2>Registrar demanda não planejada</h2><p>Registro rápido para controle e reorganização do trabalho</p></div>
         <button type="button" class="icon-btn ghost" id="closeLeaderForm"><i data-lucide="x"></i></button>
       </div>
 
@@ -236,31 +236,27 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
           <input id="leaderName" type="text" readonly />
         </label>
 
-        <label class="field-label">Data do registro
-          <input id="leaderDate" type="date" required />
-        </label>
         <label class="field-label">Prioridade
           <select id="leaderPriority" required>
-            <option value="BAIXA">Baixa</option><option value="MÉDIA" selected>Média</option><option value="ALTA">Alta</option><option value="CRÍTICA">Crítica</option>
+            <option value="BAIXA">Baixa</option>
+            <option value="MÉDIA" selected>Média</option>
+            <option value="ALTA">Alta</option>
+            <option value="CRÍTICA">Crítica</option>
           </select>
         </label>
 
-        <label class="field-label">Atividade / demanda
+        <label class="field-label">Demanda surgida
           <select id="leaderActivity" required></select>
         </label>
-        <label class="field-label">Situação
-          <select id="leaderStatus" required>
-            <option value="ABERTA">Aberta</option><option value="EM ANDAMENTO">Em andamento</option><option value="CONCLUÍDA">Concluída</option>
-          </select>
+
+        <label class="field-label full">Descrição objetiva
+          <textarea id="leaderDescription" placeholder="O que surgiu e o que precisa ser feito?" required></textarea>
         </label>
 
-        <label class="field-label full">Descrição complementar
-          <textarea id="leaderDescription" placeholder="Registre somente o necessário para contextualizar a demanda." required></textarea>
-        </label>
-
-        <label class="field-label">Impactou atividade planejada?
+        <label class="field-label">Impacta o planejamento atual?
           <select id="leaderImpacted" required>
-            <option value="NÃO">Não</option><option value="SIM">Sim</option>
+            <option value="NÃO">Não</option>
+            <option value="SIM">Sim</option>
           </select>
         </label>
 
@@ -272,32 +268,13 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
         </label>
 
         <div class="form-secondary" id="impactFields">
-          <label class="field-label">Atividade planejada afetada
+          <label class="field-label full">Qual atividade planejada será afetada?
             <select id="affectedPlan"></select>
-          </label>
-          <label class="field-label">Tipo de impacto
-            <select id="impactType">
-              <option value="ADIAMENTO">Adiamento</option><option value="SUBSTITUIÇÃO">Substituição</option><option value="EXECUÇÃO PARCIAL">Execução parcial</option><option value="CANCELAMENTO">Cancelamento</option>
-            </select>
-          </label>
-          <label class="field-label">Horas desviadas
-            <input id="divertedHours" type="number" min="0" step="0.5" value="0" />
-          </label>
-          <label class="field-label">Quantidade planejada afetada
-            <input id="affectedQty" type="number" min="0" step="0.1" value="0" />
-          </label>
-          <label class="field-label">Destino do planejamento
-            <select id="planDestination">
-              <option value="REPROGRAMADO">Reprogramado</option><option value="PARCIAL">Parcial</option><option value="SUBSTITUÍDO">Substituído</option><option value="CANCELADO">Cancelado</option>
-            </select>
-          </label>
-          <label class="field-label">Nova data prevista
-            <input id="rescheduledDate" type="date" />
           </label>
         </div>
       </div>
 
-      <div class="form-note" id="leaderFormNote">Nesta V1, o registro é salvo localmente no navegador para simulação. A integração com Google Sheets será conectada na implantação real.</div>
+      <div class="form-note" id="leaderFormNote">Data, hora, status e identificadores são registrados automaticamente.</div>
       <div class="form-actions">
         <button type="button" class="secondary-action" id="cancelLeaderForm">Cancelar</button>
         <button type="submit" class="primary-action">Registrar demanda</button>
@@ -583,7 +560,10 @@ function populateLeaderForm(){
   const preferred=state.team!=='ALL'?state.team:(state.teams[0]?.equipe_id||'');
   teamSelect.innerHTML=state.teams.map(t=>`<option value="${t.equipe_id}">${t.equipe_id} · ${t.equipe}</option>`).join('');
   teamSelect.value=preferred;
-  document.getElementById('leaderDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('leaderImpacted').value='NÃO';
+  document.getElementById('impactFields').classList.remove('visible');
+  const coords=document.getElementById('leaderCoords');
+  coords.value=''; delete coords.dataset.lat; delete coords.dataset.lon;
   updateLeaderDependentFields();
 }
 function updateLeaderDependentFields(){
@@ -593,7 +573,9 @@ function updateLeaderDependentFields(){
   const acts=uniq(state.planning.filter(p=>p.equipe_id===teamId).map(p=>p.atividade));
   document.getElementById('leaderActivity').innerHTML=acts.map(a=>`<option value="${a}">${a}</option>`).join('')+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
   const plans=state.planning.filter(p=>p.equipe_id===teamId&&Number(p.mes_num)===Number(state.month));
-  document.getElementById('affectedPlan').innerHTML=plans.map(p=>`<option value="${p.plano_id}">${p.atividade} · ${p.meta_planejada} ${p.unidade}</option>`).join('');
+  document.getElementById('affectedPlan').innerHTML=plans.length
+    ? plans.map(p=>`<option value="${p.plano_id}">${p.atividade} · ${p.meta_planejada} ${p.unidade}</option>`).join('')
+    : '<option value="">Nenhuma atividade planejada no período</option>';
 }
 function openLeaderForm(){
   populateLeaderForm();
@@ -606,32 +588,47 @@ function closeLeaderForm(){
 }
 function saveLocalLeaderRecord(e){
   e.preventDefault();
+  const now=new Date();
   const teamId=document.getElementById('leaderTeam').value;
   const team=state.teams.find(t=>t.equipe_id===teamId);
   const impacted=document.getElementById('leaderImpacted').value==='SIM';
   const coords=document.getElementById('leaderCoords').dataset;
   const id='LOCAL-'+Date.now();
   const demand={
-    demanda_id:id,data:document.getElementById('leaderDate').value,equipe_id:teamId,lider_tecnico:team?.lider_tecnico||'',
-    atividade_id:'LOCAL',atividade_sugerida:document.getElementById('leaderActivity').value,
-    descricao:document.getElementById('leaderDescription').value,prioridade:document.getElementById('leaderPriority').value,
-    status:document.getElementById('leaderStatus').value,latitude:coords.lat||'',longitude:coords.lon||'',origem_dado:'SIMULADO_LOCAL'
+    demanda_id:id,
+    data:now.toISOString().slice(0,10),
+    hora_registro:now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
+    equipe_id:teamId,
+    lider_tecnico:team?.lider_tecnico||'',
+    atividade_id:'LOCAL',
+    atividade_sugerida:document.getElementById('leaderActivity').value,
+    descricao:document.getElementById('leaderDescription').value.trim(),
+    prioridade:document.getElementById('leaderPriority').value,
+    status:'ABERTA',
+    latitude:coords.lat||'',
+    longitude:coords.lon||'',
+    origem_dado:'SIMULADO_LOCAL'
   };
   const impact={
-    demanda_id:id,impactou_planejamento:impacted?'SIM':'NÃO',
+    demanda_id:id,
+    impactou_planejamento:impacted?'SIM':'NÃO',
     plano_afetado_id:impacted?document.getElementById('affectedPlan').value:'',
-    tipo_impacto:impacted?document.getElementById('impactType').value:'',
-    horas_desviadas:impacted?document.getElementById('divertedHours').value:'0',
-    qtd_planejada_afetada:impacted?document.getElementById('affectedQty').value:'0',
-    destino_planejamento:impacted?document.getElementById('planDestination').value:'',
-    nova_data_prevista:impacted?document.getElementById('rescheduledDate').value:'',origem_dado:'SIMULADO_LOCAL'
+    tipo_impacto:impacted?'PENDENTE DE AVALIAÇÃO':'',
+    horas_desviadas:'0',
+    qtd_planejada_afetada:'0',
+    destino_planejamento:impacted?'EM ANÁLISE':'',
+    nova_data_prevista:'',
+    origem_dado:'SIMULADO_LOCAL'
   };
   const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
-  local.demands.push(demand); local.impact.push(impact); localStorage.setItem('ga-local-records',JSON.stringify(local));
+  local.demands.push(demand); local.impact.push(impact);
+  localStorage.setItem('ga-local-records',JSON.stringify(local));
   state.demands.push(demand); state.impact.push(impact);
   renderAll(); updateDemandMarkers();
-  const note=document.getElementById('leaderFormNote'); note.classList.add('success'); note.textContent='Registro salvo localmente e incorporado ao dashboard desta simulação.';
-  setTimeout(()=>{e.target.reset();closeLeaderForm();},800);
+  const note=document.getElementById('leaderFormNote');
+  note.classList.add('success');
+  note.textContent='Demanda registrada. Ela já entrou no controle para reorganização do planejamento.';
+  setTimeout(()=>{e.target.reset();closeLeaderForm();},850);
 }
 
 function setupUI(){
