@@ -125,14 +125,14 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
           <div class="kpi-foot"><span id="kpiImpactNote">Índice de interferência não planejada</span></div>
         </article>
         <article class="kpi-card accent-green">
-          <div class="kpi-head"><span>Horas bloqueadas</span><i data-lucide="timer-off"></i></div>
+          <div class="kpi-head"><span>Taxa de bloqueio</span><i data-lucide="timer-off"></i></div>
           <strong id="kpiBlocked">—</strong>
           <div class="kpi-foot"><span id="kpiBlockedNote">—</span></div>
         </article>
         <article class="kpi-card accent-purple">
-          <div class="kpi-head"><span>Equipes em atenção</span><i data-lucide="scan-search"></i></div>
+          <div class="kpi-head"><span>Impacto no planejamento</span><i data-lucide="scan-search"></i></div>
           <strong id="kpiAttention">—</strong>
-          <div class="kpi-foot"><span>Prioridade para supervisão</span></div>
+          <div class="kpi-foot"><span>Atividades planejadas afetadas</span></div>
         </article>
       </section>
 
@@ -206,7 +206,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Equipe</th><th>Líder técnico</th><th>Colaboradores</th><th>Cobertura do plano</th><th>Demandas</th><th>Horas bloqueadas</th><th>Interferência</th><th>Situação</th></tr></thead>
+              <thead><tr><th>Equipe</th><th>Líder técnico</th><th>Colaboradores</th><th>Cobertura</th><th>Demandas</th><th>Taxa de bloqueio</th><th>Interferência demandas</th><th>Impacto total</th><th>Situação</th></tr></thead>
               <tbody id="teamTableBody"></tbody>
             </table>
           </div>
@@ -385,11 +385,16 @@ function metricsForTeam(teamId, month=state.month){
   const execActs=uniq(exec.map(x=>x.atividade_id));
   const covered=planActs.filter(a=>execActs.includes(a)).length;
   const coverage=planActs.length?covered/planActs.length:0;
-  const impactRatio=planActs.length?uniq(impacted.map(x=>x.plano_afetado_id)).length/planActs.length:0;
+  const demandPlanIds=uniq(impacted.map(x=>x.plano_afetado_id));
+  const blockedPlanIds=uniq(blq.filter(x=>x.impactou_planejamento==='SIM').map(x=>x.plano_afetado_id));
+  const allAffectedPlanIds=uniq([...demandPlanIds,...blockedPlanIds]);
+  const impactRatio=planActs.length?demandPlanIds.length/planActs.length:0;
+  const blockRate=planActs.length?blockedPlanIds.length/planActs.length:0;
+  const planImpactRate=planActs.length?allAffectedPlanIds.length/planActs.length:0;
   const blockedHours=blq.reduce((s,x)=>s+Number(x.horas_impactadas||0),0);
   const openDem=dem.filter(x=>x.status!=='CONCLUÍDA'&&x.status!=='CANCELADA').length;
-  const score=Math.min(100,(1-coverage)*48+Math.min(impactRatio,1)*28+Math.min(blockedHours/16,1)*14+Math.min(openDem/4,1)*10);
-  return {plan,exec,dem,blq,impacted,coverage,impactRatio,blockedHours,openDem,score,covered,totalPlan:planActs.length};
+  const score=Math.min(100,(1-coverage)*35+Math.min(planImpactRate,1)*35+Math.min(blockRate,1)*20+Math.min(openDem/4,1)*10);
+  return {plan,exec,dem,blq,impacted,coverage,impactRatio,blockRate,planImpactRate,blockedPlanIds,allAffectedPlanIds,blockedHours,openDem,score,covered,totalPlan:planActs.length};
 }
 
 function currentAggregate(){
@@ -400,30 +405,31 @@ function currentAggregate(){
   const coverage=planActs.length?covered/planActs.length:0;
   const impacted=f.impact.filter(x=>x.impactou_planejamento==='SIM');
   const impactedPlans=uniq(impacted.map(x=>x.plano_afetado_id));
+  const blockedPlanIds=uniq(f.blockers.filter(x=>x.impactou_planejamento==='SIM').map(x=>x.plano_afetado_id));
+  const allAffectedPlanIds=uniq([...impactedPlans,...blockedPlanIds]);
   const impactRatio=planActs.length?impactedPlans.length/planActs.length:0;
+  const blockRate=planActs.length?blockedPlanIds.length/planActs.length:0;
+  const planImpactRate=planActs.length?allAffectedPlanIds.length/planActs.length:0;
   const blockedHours=f.blockers.reduce((s,x)=>s+Number(x.horas_impactadas||0),0);
   const attention=state.teams.map(t=>metricsForTeam(t.equipe_id)).filter(m=>m.score>=45).length;
-  return {...f,coverage,covered,totalPlan:planActs.length,impactRatio,blockedHours,attention,impacted};
+  return {...f,coverage,covered,totalPlan:planActs.length,impactRatio,blockRate,planImpactRate,blockedPlanIds,allAffectedPlanIds,blockedHours,attention,impacted};
 }
 
 function renderKPIs(){
   const m=currentAggregate();
   const diverted=m.impacted.reduce((s,x)=>s+Number(x.horas_desviadas||0),0);
   const gap=Math.max(0,m.totalPlan-m.covered);
-  const blockerHours={}; m.blockers.forEach(b=>blockerHours[b.tipo_bloqueador]=(blockerHours[b.tipo_bloqueador]||0)+Number(b.horas_impactadas||0));
-  const topBlocker=Object.entries(blockerHours).sort((a,b)=>b[1]-a[1])[0];
-  const ranked=state.teams.map(t=>({id:t.equipe_id,name:t.equipe,...metricsForTeam(t.equipe_id)})).sort((a,b)=>b.score-a.score)[0];
   document.getElementById('kpiCoverage').textContent=fmtPct(m.coverage);
   document.getElementById('kpiCoverageNote').textContent=`${m.covered} executadas · ${gap} ainda sem execução registrada`;
   document.getElementById('kpiDemands').textContent=fmtNum(m.demands.length);
   document.getElementById('kpiDemandNote').textContent=`${m.demands.filter(x=>x.status==='ABERTA').length} abertas · ${m.demands.filter(x=>x.prioridade==='ALTA'||x.prioridade==='CRÍTICA').length} de alta prioridade`;
   document.getElementById('kpiImpact').textContent=fmtPct(m.impactRatio);
-  document.getElementById('kpiImpactNote').textContent=`${uniq(m.impacted.map(x=>x.plano_afetado_id)).length} planos afetados · ${fmtNum(diverted)} h desviadas`;
-  document.getElementById('kpiBlocked').textContent=`${fmtNum(m.blockedHours)} h`;
-  document.getElementById('kpiBlockedNote').textContent=topBlocker?`${topBlocker[0]} · ${fmtNum(topBlocker[1])} h`:'Sem bloqueador dominante';
-  document.getElementById('kpiAttention').textContent=fmtNum(m.attention);
+  document.getElementById('kpiImpactNote').textContent=`${uniq(m.impacted.map(x=>x.plano_afetado_id)).length} atividades afetadas · ${fmtNum(diverted)} h desviadas`;
+  document.getElementById('kpiBlocked').textContent=fmtPct(m.blockRate);
+  document.getElementById('kpiBlockedNote').textContent=`${m.blockedPlanIds.length} de ${m.totalPlan} atividades · ${fmtNum(m.blockedHours)} h bloqueadas`;
+  document.getElementById('kpiAttention').textContent=fmtPct(m.planImpactRate);
   const el=document.querySelector('#kpiAttention').closest('.kpi-card').querySelector('.kpi-foot span');
-  if(el) el.textContent=ranked?`Maior pressão: ${ranked.id} · score ${Math.round(ranked.score)}`:'Sem sinal crítico';
+  if(el) el.textContent=`${m.allAffectedPlanIds.length} de ${m.totalPlan} atividades planejadas afetadas`;
 }
 
 function destroyChart(id){ if(state.charts[id]){state.charts[id].destroy(); delete state.charts[id];} }
@@ -438,11 +444,13 @@ function renderPlanChart(){
   const planned=labels.map(id=>metricsForTeam(id).totalPlan);
   const executed=labels.map(id=>metricsForTeam(id).covered);
   const affected=labels.map(id=>uniq(metricsForTeam(id).impacted.map(x=>x.plano_afetado_id)).length);
+  const blocked=labels.map(id=>metricsForTeam(id).blockedPlanIds.length);
   const options=chartBase(); options.plugins.legend.position='bottom';
   const config={type:'bar',data:{labels,datasets:[
     {label:'Planejado',data:planned,backgroundColor:cssVar('--surface-2'),borderColor:cssVar('--border'),borderWidth:1,borderRadius:7},
     {label:'Com execução',data:executed,backgroundColor:cssVar('--green'),borderRadius:7},
-    {label:'Afetado por demanda',data:affected,backgroundColor:cssVar('--red'),borderRadius:7}
+    {label:'Afetado por demanda',data:affected,backgroundColor:cssVar('--red'),borderRadius:7},
+    {label:'Afetado por bloqueador',data:blocked,backgroundColor:cssVar('--ochre'),borderRadius:7}
   ]},options};
   setChart('planChart',config,'Plano, execução e interferência','Quantas atividades foram previstas, executadas e diretamente afetadas por demandas não planejadas');
 }
@@ -495,7 +503,7 @@ function renderClimate(){
 function statusFromScore(s){ return s>=45?['ATENÇÃO','status-alert']:s>=25?['OBSERVAR','status-watch']:['NORMAL','status-normal']; }
 function renderTeamTable(){
   const body=document.getElementById('teamTableBody');
-  body.innerHTML=state.teams.map(t=>{const m=metricsForTeam(t.equipe_id); const st=statusFromScore(m.score); return `<tr data-team="${t.equipe_id}"><td><span class="team-name">${t.equipe_id} · ${t.equipe}</span><span class="team-sub">${t.frente_atuacao}</span></td><td class="leader-name">${t.lider_tecnico}</td><td>${t.qtd_colaboradores}</td><td>${fmtPct(m.coverage)}</td><td>${m.dem.length}</td><td>${fmtNum(m.blockedHours)} h</td><td>${fmtPct(m.impactRatio)}</td><td><span class="status-pill ${st[1]}">${st[0]}</span></td></tr>`;}).join('');
+  body.innerHTML=state.teams.map(t=>{const m=metricsForTeam(t.equipe_id); const st=statusFromScore(m.score); return `<tr data-team="${t.equipe_id}"><td><span class="team-name">${t.equipe_id} · ${t.equipe}</span><span class="team-sub">${t.frente_atuacao}</span></td><td class="leader-name">${t.lider_tecnico}</td><td>${t.qtd_colaboradores}</td><td>${fmtPct(m.coverage)}</td><td>${m.dem.length}</td><td>${fmtPct(m.blockRate)}</td><td>${fmtPct(m.impactRatio)}</td><td>${fmtPct(m.planImpactRate)}</td><td><span class="status-pill ${st[1]}">${st[0]}</span></td></tr>`;}).join('');
   body.querySelectorAll('tr').forEach(row=>row.addEventListener('click',()=>{state.team=row.dataset.team;document.getElementById('teamFilter').value=state.team;renderAll();updateDemandMarkers();window.scrollTo({top:0,behavior:'smooth'});}));
 }
 
