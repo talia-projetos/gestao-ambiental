@@ -1,0 +1,13 @@
+mes_num,mes,cenario_operacional,chuva_simulada,risco_seca_simulado,orientacao_operacional_simulada
+1,Janeiro,ÚMIDO,Alta,Baixo,"Priorizar plantio e manejo; prever substituição em dias de chuva intensa"
+2,Fevereiro,ÚMIDO,Alta,Baixo,"Priorizar plantio e manejo; prever substituição em dias de chuva intensa"
+3,Março,ÚMIDO,Alta,Baixo,"Priorizar plantio e manejo; atenção a acesso e solo saturado"
+4,Abril,TRANSIÇÃO,Média,Baixo,Boa janela para manutenção externa
+5,Maio,TRANSIÇÃO,Média,Médio,Ampliar ações preventivas e manutenção
+6,Junho,SECO,Baixa,Médio,"Priorizar aceiros, poda e manutenção; reduzir dependência de plantio"
+7,Julho,SECO,Baixa,Alto,Reforçar prevenção a incêndios e atividades compatíveis com estiagem
+8,Agosto,SECO,Baixa,Alto,Reforçar prevenção a incêndios e prontidão
+9,Setembro,TRANSIÇÃO,Média,Médio,Preparar áreas e insumos para retomada de plantios
+10,Outubro,ÚMIDO,Alta,Baixo,"Retomar plantios; prever substituição por chuva"
+11,Novembro,ÚMIDO,Alta,Baixo,Plantio e manutenção florestal com plano alternativo
+12,Dezembro,ÚMIDO,Alta,Baixo,"Plantio e manejo; atenção a chuva intensa"
