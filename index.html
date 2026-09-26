@@ -30,7 +30,30 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 @media(max-width:1180px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.span-8,.span-7,.span-5,.span-4{grid-column:span 12}.side-stack{display:grid;grid-template-columns:1fr 1fr}.toolbar .filter-wide{display:none}}
 @media(max-width:760px){.sidebar{display:none}.main-content{margin:0;padding:14px}.topbar{align-items:flex-start;flex-direction:column}.toolbar{width:100%;overflow:auto}.kpi-grid{grid-template-columns:1fr 1fr}.status-strip{align-items:flex-start;gap:7px;flex-direction:column}.side-stack{grid-template-columns:1fr}.app-footer img{width:92px}.filter-control select{min-width:118px}}
 
-  </style>
+  
+/* Formulário operacional dos líderes técnicos */
+.leader-modal{position:fixed;inset:0;background:rgba(14,18,16,.42);display:none;align-items:center;justify-content:center;padding:24px;z-index:1300}
+.leader-modal.open{display:flex}
+.leader-form-panel{width:min(920px,96vw);max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.22);padding:22px}
+.leader-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px}
+.leader-form-grid .full{grid-column:1/-1}
+.field-label{display:flex;flex-direction:column;gap:7px;font-size:12px;color:var(--muted);font-weight:650}
+.field-label input,.field-label select,.field-label textarea{width:100%;border:1px solid var(--border);background:var(--surface-3);color:var(--text);border-radius:12px;padding:11px 12px;font:inherit;outline:none}
+.field-label textarea{min-height:88px;resize:vertical}
+.field-label input:focus,.field-label select:focus,.field-label textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 14%,transparent)}
+.field-label input[readonly]{color:var(--muted);background:var(--surface-2)}
+.form-inline{display:flex;gap:9px;align-items:center}
+.form-inline input{flex:1}
+.form-secondary{display:none;grid-column:1/-1}
+.form-secondary.visible{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.primary-action,.secondary-action{border:0;border-radius:12px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer}
+.primary-action{background:var(--blue);color:#fff}.secondary-action{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}
+.form-note{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:12px;color:var(--muted)}
+.form-note.success{background:color-mix(in srgb,var(--green) 14%,var(--surface));color:var(--text)}
+@media(max-width:760px){.leader-form-grid,.form-secondary.visible{grid-template-columns:1fr}}
+
+</style>
 </head>
 <body>
   <div class="app-shell">
@@ -39,6 +62,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
       <nav class="sidebar-nav">
         <button class="nav-btn active" data-scroll="overview" title="Visão geral"><i data-lucide="layout-dashboard"></i><span>Visão geral</span></button>
         <button class="nav-btn" data-scroll="teams-section" title="Equipes"><i data-lucide="users"></i><span>Equipes</span></button>
+        <button class="nav-btn" id="leaderFormBtn" title="Registrar demanda"><i data-lucide="clipboard-pen-line"></i><span>Registrar</span></button>
         <button class="nav-btn" data-scroll="planning-section" title="Planejamento"><i data-lucide="calendar-range"></i><span>Planejamento</span></button>
         <button class="nav-btn" data-scroll="map-section" title="Mapa operacional"><i data-lucide="map"></i><span>Mapa</span></button>
         <button class="nav-btn" data-scroll="blockers-section" title="Bloqueadores"><i data-lucide="triangle-alert"></i><span>Bloqueadores</span></button>
@@ -195,6 +219,91 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
     </main>
   </div>
 
+
+  <div class="leader-modal" id="leaderFormModal" aria-hidden="true">
+    <form class="leader-form-panel" id="leaderDemandForm">
+      <div class="drawer-head">
+        <div><h2>Registro do líder técnico</h2><p>Demanda não planejada e impacto sobre o plano</p></div>
+        <button type="button" class="icon-btn ghost" id="closeLeaderForm"><i data-lucide="x"></i></button>
+      </div>
+
+      <div class="leader-form-grid">
+        <label class="field-label">Equipe
+          <select id="leaderTeam" required></select>
+        </label>
+        <label class="field-label">Líder técnico
+          <input id="leaderName" type="text" readonly />
+        </label>
+
+        <label class="field-label">Data do registro
+          <input id="leaderDate" type="date" required />
+        </label>
+        <label class="field-label">Prioridade
+          <select id="leaderPriority" required>
+            <option value="BAIXA">Baixa</option><option value="MÉDIA" selected>Média</option><option value="ALTA">Alta</option><option value="CRÍTICA">Crítica</option>
+          </select>
+        </label>
+
+        <label class="field-label">Atividade / demanda
+          <select id="leaderActivity" required></select>
+        </label>
+        <label class="field-label">Situação
+          <select id="leaderStatus" required>
+            <option value="ABERTA">Aberta</option><option value="EM ANDAMENTO">Em andamento</option><option value="CONCLUÍDA">Concluída</option>
+          </select>
+        </label>
+
+        <label class="field-label full">Descrição complementar
+          <textarea id="leaderDescription" placeholder="Registre somente o necessário para contextualizar a demanda." required></textarea>
+        </label>
+
+        <label class="field-label">Impactou atividade planejada?
+          <select id="leaderImpacted" required>
+            <option value="NÃO">Não</option><option value="SIM">Sim</option>
+          </select>
+        </label>
+
+        <label class="field-label">Localização
+          <div class="form-inline">
+            <input id="leaderCoords" type="text" readonly placeholder="Não capturada" />
+            <button type="button" class="secondary-action" id="captureLocation">Capturar GPS</button>
+          </div>
+        </label>
+
+        <div class="form-secondary" id="impactFields">
+          <label class="field-label">Atividade planejada afetada
+            <select id="affectedPlan"></select>
+          </label>
+          <label class="field-label">Tipo de impacto
+            <select id="impactType">
+              <option value="ADIAMENTO">Adiamento</option><option value="SUBSTITUIÇÃO">Substituição</option><option value="EXECUÇÃO PARCIAL">Execução parcial</option><option value="CANCELAMENTO">Cancelamento</option>
+            </select>
+          </label>
+          <label class="field-label">Horas desviadas
+            <input id="divertedHours" type="number" min="0" step="0.5" value="0" />
+          </label>
+          <label class="field-label">Quantidade planejada afetada
+            <input id="affectedQty" type="number" min="0" step="0.1" value="0" />
+          </label>
+          <label class="field-label">Destino do planejamento
+            <select id="planDestination">
+              <option value="REPROGRAMADO">Reprogramado</option><option value="PARCIAL">Parcial</option><option value="SUBSTITUÍDO">Substituído</option><option value="CANCELADO">Cancelado</option>
+            </select>
+          </label>
+          <label class="field-label">Nova data prevista
+            <input id="rescheduledDate" type="date" />
+          </label>
+        </div>
+      </div>
+
+      <div class="form-note" id="leaderFormNote">Nesta V1, o registro é salvo localmente no navegador para simulação. A integração com Google Sheets será conectada na implantação real.</div>
+      <div class="form-actions">
+        <button type="button" class="secondary-action" id="cancelLeaderForm">Cancelar</button>
+        <button type="submit" class="primary-action">Registrar demanda</button>
+      </div>
+    </form>
+  </div>
+
   <aside class="settings-drawer" id="settingsDrawer" aria-hidden="true">
     <div class="drawer-head"><div><h2>Configurações</h2><p>Reuniões e apresentações</p></div><button class="icon-btn ghost" id="closeSettings"><i data-lucide="x"></i></button></div>
     <div class="setting-group">
@@ -260,6 +369,9 @@ async function loadData(){
     csv(`${DATA_BASE}impacto_demandas.csv`).catch(()=>[])
   ]);
   Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact});
+  const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
+  state.demands=[...state.demands,...(local.demands||[])];
+  state.impact=[...state.impact,...(local.impact||[])];
   populateTeamFilter(); renderAll(); updateDemandMarkers();
   document.getElementById('lastUpdate').textContent = `Atualizado às ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
 }
@@ -426,7 +538,79 @@ function applyDensity(v){state.density=v;localStorage.setItem('ga-density',v);do
 function applyNames(on){state.names=on;localStorage.setItem('ga-names',on);document.body.classList.toggle('hide-names',!on);document.getElementById('namesSetting').checked=on;}
 function setupRefresh(){ if(state.refreshTimer)clearInterval(state.refreshTimer); localStorage.setItem('ga-refresh',state.refreshMinutes); if(state.refreshMinutes>0)state.refreshTimer=setInterval(loadData,state.refreshMinutes*60*1000); }
 
+
+function populateLeaderForm(){
+  const teamSelect=document.getElementById('leaderTeam');
+  const preferred=state.team!=='ALL'?state.team:(state.teams[0]?.equipe_id||'');
+  teamSelect.innerHTML=state.teams.map(t=>`<option value="${t.equipe_id}">${t.equipe_id} · ${t.equipe}</option>`).join('');
+  teamSelect.value=preferred;
+  document.getElementById('leaderDate').value=new Date().toISOString().slice(0,10);
+  updateLeaderDependentFields();
+}
+function updateLeaderDependentFields(){
+  const teamId=document.getElementById('leaderTeam').value;
+  const t=state.teams.find(x=>x.equipe_id===teamId);
+  document.getElementById('leaderName').value=t?.lider_tecnico||'';
+  const acts=uniq(state.planning.filter(p=>p.equipe_id===teamId).map(p=>p.atividade));
+  document.getElementById('leaderActivity').innerHTML=acts.map(a=>`<option value="${a}">${a}</option>`).join('')+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
+  const plans=state.planning.filter(p=>p.equipe_id===teamId&&Number(p.mes_num)===Number(state.month));
+  document.getElementById('affectedPlan').innerHTML=plans.map(p=>`<option value="${p.plano_id}">${p.atividade} · ${p.meta_planejada} ${p.unidade}</option>`).join('');
+}
+function openLeaderForm(){
+  populateLeaderForm();
+  const modal=document.getElementById('leaderFormModal');
+  modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); lucide.createIcons();
+}
+function closeLeaderForm(){
+  const modal=document.getElementById('leaderFormModal');
+  modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
+}
+function saveLocalLeaderRecord(e){
+  e.preventDefault();
+  const teamId=document.getElementById('leaderTeam').value;
+  const team=state.teams.find(t=>t.equipe_id===teamId);
+  const impacted=document.getElementById('leaderImpacted').value==='SIM';
+  const coords=document.getElementById('leaderCoords').dataset;
+  const id='LOCAL-'+Date.now();
+  const demand={
+    demanda_id:id,data:document.getElementById('leaderDate').value,equipe_id:teamId,lider_tecnico:team?.lider_tecnico||'',
+    atividade_id:'LOCAL',atividade_sugerida:document.getElementById('leaderActivity').value,
+    descricao:document.getElementById('leaderDescription').value,prioridade:document.getElementById('leaderPriority').value,
+    status:document.getElementById('leaderStatus').value,latitude:coords.lat||'',longitude:coords.lon||'',origem_dado:'SIMULADO_LOCAL'
+  };
+  const impact={
+    demanda_id:id,impactou_planejamento:impacted?'SIM':'NÃO',
+    plano_afetado_id:impacted?document.getElementById('affectedPlan').value:'',
+    tipo_impacto:impacted?document.getElementById('impactType').value:'',
+    horas_desviadas:impacted?document.getElementById('divertedHours').value:'0',
+    qtd_planejada_afetada:impacted?document.getElementById('affectedQty').value:'0',
+    destino_planejamento:impacted?document.getElementById('planDestination').value:'',
+    nova_data_prevista:impacted?document.getElementById('rescheduledDate').value:'',origem_dado:'SIMULADO_LOCAL'
+  };
+  const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
+  local.demands.push(demand); local.impact.push(impact); localStorage.setItem('ga-local-records',JSON.stringify(local));
+  state.demands.push(demand); state.impact.push(impact);
+  renderAll(); updateDemandMarkers();
+  const note=document.getElementById('leaderFormNote'); note.classList.add('success'); note.textContent='Registro salvo localmente e incorporado ao dashboard desta simulação.';
+  setTimeout(()=>{e.target.reset();closeLeaderForm();},800);
+}
+
 function setupUI(){
+  document.getElementById('leaderFormBtn').addEventListener('click',openLeaderForm);
+  document.getElementById('closeLeaderForm').addEventListener('click',closeLeaderForm);
+  document.getElementById('cancelLeaderForm').addEventListener('click',closeLeaderForm);
+  document.getElementById('leaderTeam').addEventListener('change',updateLeaderDependentFields);
+  document.getElementById('leaderImpacted').addEventListener('change',e=>document.getElementById('impactFields').classList.toggle('visible',e.target.value==='SIM'));
+  document.getElementById('leaderDemandForm').addEventListener('submit',saveLocalLeaderRecord);
+  document.getElementById('captureLocation').addEventListener('click',()=>{
+    const out=document.getElementById('leaderCoords');
+    if(!navigator.geolocation){out.value='GPS indisponível';return;}
+    out.value='Capturando...';
+    navigator.geolocation.getCurrentPosition(p=>{
+      const lat=p.coords.latitude.toFixed(6),lon=p.coords.longitude.toFixed(6);
+      out.value=`${lat}, ${lon}`; out.dataset.lat=lat; out.dataset.lon=lon;
+    },()=>{out.value='Não foi possível obter a localização';},{enableHighAccuracy:true,timeout:10000});
+  });
   document.getElementById('monthFilter').addEventListener('change',e=>{state.month=Number(e.target.value);renderAll();updateDemandMarkers();});
   document.getElementById('teamFilter').addEventListener('change',e=>{state.team=e.target.value;renderAll();updateDemandMarkers();});
   document.getElementById('clearTeamFilter').addEventListener('click',()=>{state.team='ALL';document.getElementById('teamFilter').value='ALL';renderAll();updateDemandMarkers();});
