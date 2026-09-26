@@ -51,7 +51,32 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .primary-action{background:var(--blue);color:#fff}.secondary-action{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}
 .form-note{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:12px;color:var(--muted)}
 .form-note.success{background:color-mix(in srgb,var(--green) 14%,var(--surface));color:var(--text)}
+
 @media(max-width:760px){.leader-form-grid,.form-secondary.visible{grid-template-columns:1fr}}
+.report-modal{position:fixed;inset:0;background:rgba(14,18,16,.48);display:none;align-items:center;justify-content:center;padding:20px;z-index:1350}
+.report-modal.open{display:flex}
+.report-panel{width:min(1120px,97vw);max-height:94vh;overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.25);padding:24px}
+.report-toolbar{display:flex;gap:10px;align-items:center}
+.report-hero{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--border)}
+.report-hero h3{font-size:24px;margin:0 0 5px}.report-hero p{margin:0;color:var(--muted)}
+.report-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:18px 0}
+.report-kpi{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:12px}
+.report-kpi span{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}.report-kpi strong{font-size:22px}
+.report-section{margin-top:20px}.report-section h4{font-size:14px;margin:0 0 10px}
+.report-table{width:100%;border-collapse:collapse;font-size:12px}.report-table th,.report-table td{padding:9px 8px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}.report-table th{color:var(--muted);font-weight:700}
+.report-empty{padding:14px;border:1px dashed var(--border);border-radius:12px;color:var(--muted);font-size:12px}
+.report-footer{margin-top:18px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:11px}
+.team-row-action{font-weight:700;color:var(--blue)}
+@media(max-width:900px){.report-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.report-hero{flex-direction:column}}
+@media print{
+  body *{visibility:hidden!important}
+  #teamReportModal,#teamReportModal *{visibility:visible!important}
+  #teamReportModal{display:block!important;position:absolute!important;inset:0!important;background:#fff!important;padding:0!important}
+  #teamReportModal .report-panel{width:100%!important;max-height:none!important;overflow:visible!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:10mm!important;background:#fff!important;color:#111!important}
+  #teamReportModal .report-toolbar,#teamReportModal .drawer-head button{display:none!important}
+  #teamReportModal .report-kpi{background:#f5f5f5!important;border-color:#ddd!important}
+  #teamReportModal .report-table th,#teamReportModal .report-table td{border-color:#ddd!important}
+}
 
 </style>
 </head>
@@ -130,7 +155,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
           <div class="kpi-foot"><span id="kpiBlockedNote">—</span></div>
         </article>
         <article class="kpi-card accent-purple">
-          <div class="kpi-head"><span>Impacto no planejamento</span><i data-lucide="scan-search"></i></div>
+          <div class="kpi-head"><span>Impacto total no planejamento</span><i data-lucide="scan-search"></i></div>
           <strong id="kpiAttention">—</strong>
           <div class="kpi-foot"><span>Atividades planejadas afetadas</span></div>
         </article>
@@ -168,14 +193,14 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 
         <div class="span-4 side-stack">
           <article class="card climate-card">
-            <div class="card-header compact"><div><h2>Condição operacional</h2><p>Cenário climático simulado</p></div><i data-lucide="cloud-rain-wind" class="section-icon"></i></div>
-            <div class="climate-main"><strong id="climateScenario">—</strong><span id="climateMonth">—</span></div>
+            <div class="card-header compact"><div><h2>Meteorologia operacional</h2><p id="weatherLocation">SIMEPAR · Foz do Iguaçu/PR</p></div><i data-lucide="cloud-sun" class="section-icon"></i></div>
+            <div class="climate-main"><strong id="weatherTemp">—</strong><span id="weatherObserved">—</span></div>
             <div class="climate-metrics">
-              <div><span>Chuva</span><strong id="rainLevel">—</strong></div>
-              <div><span>Risco de seca</span><strong id="droughtLevel">—</strong></div>
+              <div><span>Precipitação observada</span><strong id="weatherRain">—</strong></div>
+              <div><span>Vento / rajada</span><strong id="weatherWind">—</strong></div>
             </div>
-            <p class="climate-guidance" id="climateGuidance">—</p>
-            <p class="climate-guidance" style="font-size:11px;opacity:.72;margin-top:6px">Fonte nesta V1: <strong>base climática simulada</strong>. O painel relê os arquivos a cada 5 min por padrão; isso não transforma o cenário em dado meteorológico em tempo real.</p>
+            <p class="climate-guidance" id="weatherOutlook">Carregando previsão...</p>
+            <p class="climate-guidance" id="weatherSource" style="font-size:11px;opacity:.72;margin-top:6px">Fonte: SIMEPAR.</p>
           </article>
 
           <article class="card attention-card">
@@ -200,14 +225,30 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
           <div class="chart-wrap medium"><canvas id="pressureChart"></canvas></div>
         </article>
 
+        <article class="card chart-card span-6">
+          <div class="card-header">
+            <div><h2>Pressão operacional por equipe</h2><p>Índice sintético de atenção gerencial (0–100)</p></div>
+            <button class="icon-btn ghost expand-btn" data-chart="teamPressureChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
+          </div>
+          <div class="chart-wrap medium"><canvas id="teamPressureChart"></canvas></div>
+        </article>
+
+        <article class="card chart-card span-6">
+          <div class="card-header">
+            <div><h2>Perfil das demandas não previstas</h2><p>Status das demandas extraordinárias por equipe</p></div>
+            <button class="icon-btn ghost expand-btn" data-chart="demandStatusChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
+          </div>
+          <div class="chart-wrap medium"><canvas id="demandStatusChart"></canvas></div>
+        </article>
+
         <article class="card team-card span-12" id="teams-section">
           <div class="card-header">
-            <div><h2>Relatório por equipes</h2><p>Clique em uma equipe para filtrar toda a sala de situação</p></div>
+            <div><h2>Relatório por equipes</h2><p>Clique em uma equipe para abrir o relatório detalhado</p></div>
             <button class="chip-btn" id="clearTeamFilter"><i data-lucide="filter-x"></i> Limpar filtro</button>
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Equipe</th><th>Líder técnico</th><th>Colaboradores</th><th>Cobertura</th><th>Demandas</th><th>Taxa de bloqueio</th><th>Interferência demandas</th><th>Impacto total</th><th>Nível automático</th></tr></thead>
+              <thead><tr><th>Equipe</th><th>Líder técnico</th><th>Colaboradores</th><th>Cobertura</th><th>Demandas</th><th>Taxa de bloqueio</th><th>Interferência demandas</th><th>Impacto total</th><th>Nível automático</th><th></th></tr></thead>
               <tbody id="teamTableBody"></tbody>
             </table>
           </div>
@@ -221,6 +262,20 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
     </main>
   </div>
 
+
+  <div class="report-modal" id="teamReportModal" aria-hidden="true">
+    <div class="report-panel">
+      <div class="drawer-head">
+        <div><h2>Relatório operacional por equipe</h2><p id="reportPeriod">—</p></div>
+        <div class="report-toolbar">
+          <button type="button" class="secondary-action" id="printTeamReport"><i data-lucide="printer"></i> Imprimir / Salvar PDF</button>
+          <button type="button" class="secondary-action" id="filterFromReport"><i data-lucide="filter"></i> Filtrar dashboard</button>
+          <button type="button" class="icon-btn ghost" id="closeTeamReport"><i data-lucide="x"></i></button>
+        </div>
+      </div>
+      <div id="teamReportContent"></div>
+    </div>
+  </div>
 
   <div class="leader-modal" id="leaderFormModal" aria-hidden="true">
     <form class="leader-form-panel" id="leaderDemandForm">
@@ -296,7 +351,7 @@ const IAT_BP3_URL = 'https://geopr.iat.pr.gov.br/server/rest/services/00_PUBLICA
 const IAT_HIDRO_BP3_BASE = 'https://geopr.iat.pr.gov.br/server/rest/services/00_PUBLICACOES/pbpar_hidrografia_integrada/FeatureServer/0/query';
 
 const state = {
-  teams: [], planning: [], execution: [], demands: [], blockers: [], climate: [], impact: [],
+  teams: [], planning: [], execution: [], demands: [], blockers: [], climate: [], impact: [], weather: null,
   month: 9, team: 'ALL', theme: localStorage.getItem('ga-theme') || 'light',
   animations: localStorage.getItem('ga-animations') !== 'false', names: localStorage.getItem('ga-names') !== 'false',
   presentation: localStorage.getItem('ga-presentation') === 'true', density: localStorage.getItem('ga-density') || 'comfortable',
@@ -329,12 +384,13 @@ async function csv(path){
 }
 
 async function loadData(){
-  const [teams,planning,execution,demands,blockers,climate,impact] = await Promise.all([
+  const [teams,planning,execution,demands,blockers,climate,impact,weather] = await Promise.all([
     csv(`${DATA_BASE}equipes.csv`), csv(`${DATA_BASE}programacao_mensal.csv`), csv(`${DATA_BASE}execucao_campo.csv`),
     csv(`${DATA_BASE}demandas_nao_previstas.csv`), csv(`${DATA_BASE}bloqueadores.csv`), csv(`${DATA_BASE}clima_simulado.csv`),
-    csv(`${DATA_BASE}impacto_demandas.csv`).catch(()=>[])
+    csv(`${DATA_BASE}impacto_demandas.csv`).catch(()=>[]),
+    fetch('data/weather/foz_simepar.json').then(r=>r.ok?r.json():null).catch(()=>null)
   ]);
-  Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact});
+  Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact,weather});
   const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
   state.demands=[...state.demands,...(local.demands||[])];
   state.impact=[...state.impact,...(local.impact||[])];
@@ -485,20 +541,95 @@ function renderPressureChart(){
   setChart('pressureChart',config,'Pressão não planejada','Volume de demandas e capacidade desviada, em escalas independentes');
 }
 
-function renderClimate(){
-  const c=state.climate.find(x=>Number(x.mes_num)===Number(state.month)); if(!c)return;
-  document.getElementById('climateScenario').textContent=c.cenario_operacional;
-  document.getElementById('climateMonth').textContent=c.mes;
-  document.getElementById('rainLevel').textContent=c.chuva_simulada;
-  document.getElementById('droughtLevel').textContent=c.risco_seca_simulado;
-  document.getElementById('climateGuidance').textContent=c.orientacao_operacional_simulada;
+function renderWeather(){
+  const w=state.weather;
+  if(!w){
+    document.getElementById('weatherTemp').textContent='—';
+    document.getElementById('weatherObserved').textContent='Dados indisponíveis';
+    document.getElementById('weatherOutlook').textContent='Não foi possível carregar o snapshot meteorológico.';
+    return;
+  }
+  const cur=w.current||{};
+  document.getElementById('weatherLocation').textContent=`${w.source} · ${w.location}`;
+  document.getElementById('weatherTemp').textContent=`${fmtNum(cur.temperature_c,1)} °C`;
+  const observed=new Date(w.observed_at);
+  document.getElementById('weatherObserved').textContent=`observado ${observed.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})} às ${observed.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
+  document.getElementById('weatherRain').textContent=`${fmtNum(cur.precipitation_mm,1)} mm`;
+  document.getElementById('weatherWind').textContent=`${fmtNum(cur.wind_kmh)} / ${fmtNum(cur.gust_kmh)} km/h`;
+  const critical=(w.forecast||[]).filter(x=>Number(x.rain_probability_pct)>=70||Number(x.gust_kmh)>=45);
+  if(critical.length){
+    const first=critical[0], d=new Date(first.date+'T12:00:00');
+    document.getElementById('weatherOutlook').textContent=`Janela de atenção: ${d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'})} · chuva ${first.rain_probability_pct}% · ${fmtNum(first.precipitation_mm,1)} mm · rajada até ${fmtNum(first.gust_kmh)} km/h.`;
+  }else{
+    document.getElementById('weatherOutlook').textContent='Sem janela meteorológica crítica no horizonte carregado.';
+  }
+  document.getElementById('weatherSource').innerHTML=`Fonte: <strong>${w.source}</strong> · snapshot real de demonstração · atualização automática da fonte oficial ainda não ativada.`;
 }
 
 function statusFromScore(s){ return s>=45?['ATENÇÃO','status-alert']:s>=25?['OBSERVAR','status-watch']:['NORMAL','status-normal']; }
+function reportRows(rows,columns){
+  if(!rows.length)return '<div class="report-empty">Nenhum registro neste período.</div>';
+  return `<table class="report-table"><thead><tr>${columns.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${columns.map(c=>`<td>${c.value(r)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+}
+
+function openTeamReport(teamId){
+  const t=state.teams.find(x=>x.equipe_id===teamId); if(!t)return;
+  const m=metricsForTeam(teamId);
+  const lvl=automaticImpactLevel(m.planImpactRate);
+  const demandIds=new Set(m.dem.map(d=>d.demanda_id));
+  const impacts=state.impact.filter(x=>demandIds.has(x.demanda_id)&&x.impactou_planejamento==='SIM');
+  const impactMap=new Map(impacts.map(x=>[x.demanda_id,x]));
+  const planMap=new Map(m.plan.map(x=>[x.plano_id,x]));
+  const execIds=new Set(m.exec.map(x=>x.atividade_id));
+  const report=document.getElementById('teamReportContent');
+  report.innerHTML=`
+    <div class="report-hero">
+      <div><h3>${t.equipe_id} · ${t.equipe}</h3><p>${t.frente_atuacao}</p><p>${state.names?t.lider_tecnico:'Líder técnico oculto'} · ${t.qtd_colaboradores} colaboradores</p></div>
+      <span class="status-pill ${lvl[1]}">${lvl[0]}</span>
+    </div>
+    <div class="report-kpis">
+      <div class="report-kpi"><span>Cobertura de atividades</span><strong>${fmtPct(m.coverage)}</strong></div>
+      <div class="report-kpi"><span>Demandas não previstas</span><strong>${m.dem.length}</strong></div>
+      <div class="report-kpi"><span>Taxa de bloqueio</span><strong>${fmtPct(m.blockRate)}</strong></div>
+      <div class="report-kpi"><span>Interferência por demandas</span><strong>${fmtPct(m.impactRatio)}</strong></div>
+      <div class="report-kpi"><span>Impacto total</span><strong>${fmtPct(m.planImpactRate)}</strong></div>
+    </div>
+    <div class="report-section"><h4>Planejamento do período</h4>${reportRows(m.plan,[
+      {label:'Atividade',value:r=>r.atividade},
+      {label:'Meta',value:r=>`${r.meta_planejada} ${r.unidade}`},
+      {label:'Execução registrada',value:r=>execIds.has(r.atividade_id)?'Sim':'Não'},
+      {label:'Afetada',value:r=>m.allAffectedPlanIds.includes(r.plano_id)?'Sim':'Não'}
+    ])}</div>
+    <div class="report-section"><h4>Demandas não previstas</h4>${reportRows(m.dem,[
+      {label:'Data',value:r=>parseDate(r.data)?.toLocaleDateString('pt-BR')||r.data},
+      {label:'Demanda',value:r=>r.atividade_sugerida},
+      {label:'Prioridade',value:r=>r.prioridade},
+      {label:'Status',value:r=>r.status},
+      {label:'Efeito no plano',value:r=>{const x=impactMap.get(r.demanda_id);return x?`${x.destino_planejamento||x.tipo_impacto} · ${x.horas_desviadas||0} h`:'Sem impacto identificado';}}
+    ])}</div>
+    <div class="report-section"><h4>Bloqueadores</h4>${reportRows(m.blq,[
+      {label:'Data',value:r=>parseDate(r.data)?.toLocaleDateString('pt-BR')||r.data},
+      {label:'Bloqueador',value:r=>r.tipo_bloqueador},
+      {label:'Horas',value:r=>`${r.horas_impactadas} h`},
+      {label:'Atividade afetada',value:r=>r.atividade_planejada_afetada||'—'}
+    ])}</div>
+    <div class="report-footer"><span>Gestão Ambiental · dados simulados para validação</span><span>Gerado em ${new Date().toLocaleString('pt-BR')}</span></div>`;
+  document.getElementById('reportPeriod').textContent=`${months[state.month-1]} de 2026`;
+  document.getElementById('teamReportModal').dataset.team=teamId;
+  document.getElementById('teamReportModal').classList.add('open');
+  document.getElementById('teamReportModal').setAttribute('aria-hidden','false');
+  lucide.createIcons();
+}
+
+function closeTeamReport(){
+  const el=document.getElementById('teamReportModal');
+  el.classList.remove('open'); el.setAttribute('aria-hidden','true');
+}
+
 function renderTeamTable(){
   const body=document.getElementById('teamTableBody');
-  body.innerHTML=state.teams.map(t=>{const m=metricsForTeam(t.equipe_id); const lvl=automaticImpactLevel(m.planImpactRate); return `<tr data-team="${t.equipe_id}"><td><span class="team-name">${t.equipe_id} · ${t.equipe}</span><span class="team-sub">${t.frente_atuacao}</span></td><td class="leader-name">${t.lider_tecnico}</td><td>${t.qtd_colaboradores}</td><td>${fmtPct(m.coverage)}</td><td>${m.dem.length}</td><td>${fmtPct(m.blockRate)}</td><td>${fmtPct(m.impactRatio)}</td><td>${fmtPct(m.planImpactRate)}</td><td><span class="status-pill ${lvl[1]}">${lvl[0]}</span></td></tr>`;}).join('');
-  body.querySelectorAll('tr').forEach(row=>row.addEventListener('click',()=>{state.team=row.dataset.team;document.getElementById('teamFilter').value=state.team;renderAll();updateDemandMarkers();window.scrollTo({top:0,behavior:'smooth'});}));
+  body.innerHTML=state.teams.map(t=>{const m=metricsForTeam(t.equipe_id); const lvl=automaticImpactLevel(m.planImpactRate); return `<tr data-team="${t.equipe_id}"><td><span class="team-name">${t.equipe_id} · ${t.equipe}</span><span class="team-sub">${t.frente_atuacao}</span></td><td class="leader-name">${t.lider_tecnico}</td><td>${t.qtd_colaboradores}</td><td>${fmtPct(m.coverage)}</td><td>${m.dem.length}</td><td>${fmtPct(m.blockRate)}</td><td>${fmtPct(m.impactRatio)}</td><td>${fmtPct(m.planImpactRate)}</td><td><span class="status-pill ${lvl[1]}">${lvl[0]}</span></td><td><span class="team-row-action">Ver relatório</span></td></tr>`;}).join('');
+  body.querySelectorAll('tr').forEach(row=>row.addEventListener('click',()=>openTeamReport(row.dataset.team)));
 }
 
 function renderAttention(){
@@ -509,7 +640,7 @@ function renderAttention(){
   document.getElementById('attentionInsight').innerHTML=`<strong>${top.team.equipe_id} · ${top.team.equipe}</strong><span>${top.score>=45?'Concentra os principais sinais de atenção no período.':top.score>=25?'Apresenta sinais que merecem acompanhamento.':'Operação sem sinal crítico no recorte selecionado.'}</span><div class="risk-reasons">${(reasons.length?reasons:['sem bloqueador dominante']).map(r=>`<span class="risk-chip">${r}</span>`).join('')}</div>`;
 }
 
-function renderAll(){ renderKPIs(); renderPlanChart(); renderImpactChart(); renderBlockerChart(); renderPressureChart(); renderClimate(); renderTeamTable(); renderAttention(); lucide.createIcons(); }
+function renderAll(){ renderKPIs(); renderPlanChart(); renderImpactChart(); renderBlockerChart(); renderPressureChart(); renderTeamPressureChart(); renderDemandStatusChart(); renderWeather(); renderTeamTable(); renderAttention(); lucide.createIcons(); }
 
 
 async function fetchArcGISGeoJSON(baseUrl){
@@ -627,6 +758,12 @@ function saveLocalLeaderRecord(e){
 }
 
 function setupUI(){
+  document.getElementById('closeTeamReport').addEventListener('click',closeTeamReport);
+  document.getElementById('printTeamReport').addEventListener('click',()=>window.print());
+  document.getElementById('filterFromReport').addEventListener('click',()=>{
+    const team=document.getElementById('teamReportModal').dataset.team;
+    if(team){state.team=team;document.getElementById('teamFilter').value=team;closeTeamReport();renderAll();updateDemandMarkers();window.scrollTo({top:0,behavior:'smooth'});}
+  });
   document.getElementById('leaderFormBtn').addEventListener('click',openLeaderForm);
   document.getElementById('closeLeaderForm').addEventListener('click',closeLeaderForm);
   document.getElementById('cancelLeaderForm').addEventListener('click',closeLeaderForm);
