@@ -139,7 +139,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
       <section class="dashboard-grid">
         <article class="card chart-card span-8">
           <div class="card-header">
-            <div><h2>Planejado x executado</h2><p>Cobertura das atividades previstas por equipe</p></div>
+            <div><h2>Plano, execução e interferência</h2><p>Leitura comparativa por equipe</p></div>
             <button class="icon-btn ghost expand-btn" data-chart="planChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
           </div>
           <div class="chart-wrap tall"><canvas id="planChart"></canvas></div>
@@ -155,14 +155,15 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 
         <article class="card map-card span-8" id="map-section">
           <div class="card-header">
-            <div><h2>Mapa operacional</h2><p>BP3 oficial + demandas não previstas simuladas</p></div>
+            <div><h2>Mapa operacional</h2><p>BP3 oficial + hidrografia integrada + demandas não previstas simuladas</p></div>
             <div class="map-actions">
               <button class="chip-btn active" id="bp3Toggle"><i data-lucide="layers-3"></i> BP3</button>
+              <button class="chip-btn active" id="hydroToggle"><i data-lucide="waves"></i> Hidrografia</button>
               <button class="chip-btn active" id="demandToggle"><i data-lucide="map-pin"></i> Demandas</button>
             </div>
           </div>
           <div id="map" aria-label="Mapa operacional"></div>
-          <div class="map-caption"><span>Limite BP3: IAT/PR</span><span>Basemap: Esri</span></div>
+          <div class="map-caption"><span>Limite e hidrografia BP3: IAT/PR</span><span>Basemap: Esri</span></div>
         </article>
 
         <div class="span-4 side-stack">
@@ -184,7 +185,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 
         <article class="card chart-card span-5" id="blockers-section">
           <div class="card-header">
-            <div><h2>Bloqueadores recorrentes</h2><p>Ocorrências registradas no período</p></div>
+            <div><h2>Impacto dos bloqueadores</h2><p>Horas operacionais afetadas por causa</p></div>
             <button class="icon-btn ghost expand-btn" data-chart="blockerChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
           </div>
           <div class="chart-wrap medium"><canvas id="blockerChart"></canvas></div>
@@ -336,6 +337,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
   <script>
 const DATA_BASE = 'data/sample/';
 const IAT_BP3_URL = 'https://geopr.iat.pr.gov.br/server/rest/services/00_PUBLICACOES/pbpar_limite/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&f=geojson';
+const IAT_HIDRO_BP3_BASE = 'https://geopr.iat.pr.gov.br/server/rest/services/00_PUBLICACOES/pbpar_hidrografia_integrada/FeatureServer/0/query';
 
 const state = {
   teams: [], planning: [], execution: [], demands: [], blockers: [], climate: [], impact: [],
@@ -343,7 +345,7 @@ const state = {
   animations: localStorage.getItem('ga-animations') !== 'false', names: localStorage.getItem('ga-names') !== 'false',
   presentation: localStorage.getItem('ga-presentation') === 'true', density: localStorage.getItem('ga-density') || 'comfortable',
   refreshMinutes: Number(localStorage.getItem('ga-refresh') || 5), charts: {}, chartSpecs: {}, map: null,
-  bp3Layer: null, demandLayer: null, baseLight: null, labelsLight: null, baseDark: null, labelsDark: null, refreshTimer: null
+  bp3Layer: null, hydroLayer: null, demandLayer: null, baseLight: null, labelsLight: null, baseDark: null, labelsDark: null, refreshTimer: null
 };
 
 const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -429,14 +431,22 @@ function currentAggregate(){
 
 function renderKPIs(){
   const m=currentAggregate();
+  const diverted=m.impacted.reduce((s,x)=>s+Number(x.horas_desviadas||0),0);
+  const gap=Math.max(0,m.totalPlan-m.covered);
+  const blockerHours={}; m.blockers.forEach(b=>blockerHours[b.tipo_bloqueador]=(blockerHours[b.tipo_bloqueador]||0)+Number(b.horas_impactadas||0));
+  const topBlocker=Object.entries(blockerHours).sort((a,b)=>b[1]-a[1])[0];
+  const ranked=state.teams.map(t=>({id:t.equipe_id,name:t.equipe,...metricsForTeam(t.equipe_id)})).sort((a,b)=>b.score-a.score)[0];
   document.getElementById('kpiCoverage').textContent=fmtPct(m.coverage);
-  document.getElementById('kpiCoverageNote').textContent=`${m.covered} de ${m.totalPlan} atividades com execução registrada`;
+  document.getElementById('kpiCoverageNote').textContent=`${m.covered} executadas · ${gap} ainda sem execução registrada`;
   document.getElementById('kpiDemands').textContent=fmtNum(m.demands.length);
-  document.getElementById('kpiDemandNote').textContent=`${m.demands.filter(x=>x.status==='ABERTA').length} abertas no período`;
+  document.getElementById('kpiDemandNote').textContent=`${m.demands.filter(x=>x.status==='ABERTA').length} abertas · ${m.demands.filter(x=>x.prioridade==='ALTA'||x.prioridade==='CRÍTICA').length} de alta prioridade`;
   document.getElementById('kpiImpact').textContent=fmtPct(m.impactRatio);
+  document.getElementById('kpiImpactNote').textContent=`${uniq(m.impacted.map(x=>x.plano_afetado_id)).length} planos afetados · ${fmtNum(diverted)} h desviadas`;
   document.getElementById('kpiBlocked').textContent=`${fmtNum(m.blockedHours)} h`;
-  document.getElementById('kpiBlockedNote').textContent=`${m.blockers.length} ocorrências registradas`;
+  document.getElementById('kpiBlockedNote').textContent=topBlocker?`${topBlocker[0]} · ${fmtNum(topBlocker[1])} h`:'Sem bloqueador dominante';
   document.getElementById('kpiAttention').textContent=fmtNum(m.attention);
+  const el=document.querySelector('#kpiAttention').closest('.kpi-card').querySelector('.kpi-foot span');
+  if(el) el.textContent=ranked?`Maior pressão: ${ranked.id} · score ${Math.round(ranked.score)}`:'Sem sinal crítico';
 }
 
 function destroyChart(id){ if(state.charts[id]){state.charts[id].destroy(); delete state.charts[id];} }
@@ -450,9 +460,14 @@ function renderPlanChart(){
   const labels=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
   const planned=labels.map(id=>metricsForTeam(id).totalPlan);
   const executed=labels.map(id=>metricsForTeam(id).covered);
+  const affected=labels.map(id=>uniq(metricsForTeam(id).impacted.map(x=>x.plano_afetado_id)).length);
   const options=chartBase(); options.plugins.legend.position='bottom';
-  const config={type:'bar',data:{labels,datasets:[{label:'Planejado',data:planned,backgroundColor:cssVar('--surface-2'),borderColor:cssVar('--border'),borderWidth:1,borderRadius:7},{label:'Com execução',data:executed,backgroundColor:cssVar('--green'),borderRadius:7}]},options};
-  setChart('planChart',config,'Planejado x executado','Cobertura das atividades previstas por equipe');
+  const config={type:'bar',data:{labels,datasets:[
+    {label:'Planejado',data:planned,backgroundColor:cssVar('--surface-2'),borderColor:cssVar('--border'),borderWidth:1,borderRadius:7},
+    {label:'Com execução',data:executed,backgroundColor:cssVar('--green'),borderRadius:7},
+    {label:'Afetado por demanda',data:affected,backgroundColor:cssVar('--red'),borderRadius:7}
+  ]},options};
+  setChart('planChart',config,'Plano, execução e interferência','Quantas atividades foram previstas, executadas e diretamente afetadas por demandas não planejadas');
 }
 
 function renderImpactChart(){
@@ -467,11 +482,11 @@ function renderImpactChart(){
 }
 
 function renderBlockerChart(){
-  const m=currentAggregate(); const map={}; m.blockers.forEach(b=>map[b.tipo_bloqueador]=(map[b.tipo_bloqueador]||0)+1);
+  const m=currentAggregate(); const map={}; m.blockers.forEach(b=>map[b.tipo_bloqueador]=(map[b.tipo_bloqueador]||0)+Number(b.horas_impactadas||0));
   const entries=Object.entries(map).sort((a,b)=>b[1]-a[1]);
   const options=chartBase(); options.indexAxis='y'; options.plugins.legend.display=false; options.scales.x.ticks.precision=0;
-  const config={type:'bar',data:{labels:entries.map(x=>x[0]),datasets:[{label:'Ocorrências',data:entries.map(x=>x[1]),backgroundColor:cssVar('--ochre'),borderRadius:7}]},options};
-  setChart('blockerChart',config,'Bloqueadores recorrentes','Ocorrências registradas no período');
+  const config={type:'bar',data:{labels:entries.map(x=>x[0]),datasets:[{label:'Horas impactadas',data:entries.map(x=>x[1]),backgroundColor:cssVar('--ochre'),borderRadius:7}]},options};
+  setChart('blockerChart',config,'Impacto dos bloqueadores','Horas operacionais afetadas por causa no período');
 }
 
 function renderPressureChart(){
@@ -482,8 +497,13 @@ function renderPressureChart(){
     return state.impact.filter(x=>ids.has(x.demanda_id)).reduce((s,x)=>s+Number(x.horas_desviadas||0),0);
   });
   const options=chartBase(); options.plugins.legend.position='bottom';
-  const config={type:'line',data:{labels,datasets:[{label:'Demandas',data:demands,borderColor:cssVar('--blue'),backgroundColor:'transparent',tension:.35,pointRadius:3},{label:'Horas desviadas',data:hours,borderColor:cssVar('--ochre'),backgroundColor:'transparent',tension:.35,pointRadius:3}]},options};
-  setChart('pressureChart',config,'Pressão não planejada','Demandas extraordinárias e horas desviadas ao longo do ano');
+  options.scales.y={beginAtZero:true,position:'left',title:{display:true,text:'Demandas',color:cssVar('--muted')},grid:{color:cssVar('--chart-grid')},ticks:{color:cssVar('--muted'),precision:0}};
+  options.scales.y1={beginAtZero:true,position:'right',title:{display:true,text:'Horas desviadas',color:cssVar('--muted')},grid:{drawOnChartArea:false},ticks:{color:cssVar('--muted'),precision:0}};
+  const config={type:'line',data:{labels,datasets:[
+    {label:'Demandas',data:demands,yAxisID:'y',borderColor:cssVar('--blue'),backgroundColor:'transparent',tension:.35,pointRadius:3},
+    {label:'Horas desviadas',data:hours,yAxisID:'y1',borderColor:cssVar('--ochre'),backgroundColor:'transparent',tension:.35,pointRadius:3}
+  ]},options};
+  setChart('pressureChart',config,'Pressão não planejada','Volume de demandas e capacidade desviada, em escalas independentes');
 }
 
 function renderClimate(){
@@ -512,6 +532,20 @@ function renderAttention(){
 
 function renderAll(){ renderKPIs(); renderPlanChart(); renderImpactChart(); renderBlockerChart(); renderPressureChart(); renderClimate(); renderTeamTable(); renderAttention(); lucide.createIcons(); }
 
+
+async function fetchArcGISGeoJSON(baseUrl){
+  const features=[]; const pageSize=2000;
+  for(let offset=0,guard=0;guard<20;offset+=pageSize,guard++){
+    const u=new URL(baseUrl);
+    u.searchParams.set('where','1=1'); u.searchParams.set('outFields','*'); u.searchParams.set('returnGeometry','true');
+    u.searchParams.set('f','geojson'); u.searchParams.set('resultOffset',String(offset)); u.searchParams.set('resultRecordCount',String(pageSize));
+    const r=await fetch(u.toString()); if(!r.ok)throw new Error('Falha ao consultar camada IAT');
+    const g=await r.json(); const batch=g.features||[]; features.push(...batch);
+    if(batch.length<pageSize && !g.exceededTransferLimit) break;
+  }
+  return {type:'FeatureCollection',features};
+}
+
 function setupMap(){
   state.map=L.map('map',{zoomControl:true,attributionControl:true}).setView([-24.8,-54.05],8);
   state.baseLight=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',{attribution:'Tiles © Esri',maxZoom:16});
@@ -520,12 +554,17 @@ function setupMap(){
   state.labelsDark=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',{maxZoom:16,pane:'overlayPane'});
   setMapTheme();
   fetch(IAT_BP3_URL).then(r=>r.json()).then(g=>{
-    state.bp3Layer=L.geoJSON(g,{style:{color:cssVar('--blue'),weight:2,fillColor:cssVar('--blue'),fillOpacity:.08}}).addTo(state.map);
+    state.bp3Layer=L.geoJSON(g,{style:{color:cssVar('--blue'),weight:2,fillColor:cssVar('--blue'),fillOpacity:.07}}).addTo(state.map);
     try{state.map.fitBounds(state.bp3Layer.getBounds(),{padding:[18,18]});}catch(e){}
   }).catch(()=>{ state.map.fitBounds([[-25.5926,-54.6199],[-23.9889,-53.4399]]); });
+  fetchArcGISGeoJSON(IAT_HIDRO_BP3_BASE).then(g=>{
+    state.hydroLayer=L.geoJSON(g,{style:{color:cssVar('--blue-2'),weight:1.15,opacity:.72}}).addTo(state.map);
+    if(state.bp3Layer) state.bp3Layer.bringToFront();
+    if(state.demandLayer) state.demandLayer.bringToFront?.();
+  }).catch(err=>console.warn('Hidrografia BP3 indisponível',err));
   state.demandLayer=L.layerGroup().addTo(state.map); updateDemandMarkers();
 }
-function setMapTheme(){ if(!state.map)return; [state.baseLight,state.labelsLight,state.baseDark,state.labelsDark].forEach(l=>l&&state.map.hasLayer(l)&&state.map.removeLayer(l)); const dark=document.documentElement.dataset.theme==='dark'; (dark?state.baseDark:state.baseLight).addTo(state.map); (dark?state.labelsDark:state.labelsLight).addTo(state.map); if(state.bp3Layer)state.bp3Layer.setStyle({color:cssVar('--blue'),fillColor:cssVar('--blue')}); }
+function setMapTheme(){ if(!state.map)return; [state.baseLight,state.labelsLight,state.baseDark,state.labelsDark].forEach(l=>l&&state.map.hasLayer(l)&&state.map.removeLayer(l)); const dark=document.documentElement.dataset.theme==='dark'; (dark?state.baseDark:state.baseLight).addTo(state.map); (dark?state.labelsDark:state.labelsLight).addTo(state.map); if(state.bp3Layer)state.bp3Layer.setStyle({color:cssVar('--blue'),fillColor:cssVar('--blue')}); if(state.hydroLayer)state.hydroLayer.setStyle({color:cssVar('--blue-2')}); }
 function updateDemandMarkers(){ if(!state.demandLayer)return; state.demandLayer.clearLayers(); const rows=byTeam(currentMonth(state.demands)); rows.forEach(d=>{const color=teamColors[d.equipe_id]||cssVar('--blue'); const icon=L.divIcon({className:'',html:`<div class="map-demand-dot" style="width:13px;height:13px;background:${color}"></div>`,iconSize:[13,13],iconAnchor:[6,6]}); L.marker([Number(d.latitude),Number(d.longitude)],{icon}).bindPopup(`<strong>${d.demanda_id}</strong><br>${d.equipe_id} · ${d.atividade_sugerida}<br><small>${d.status}</small>`).addTo(state.demandLayer);}); }
 
 function applyTheme(value){
@@ -629,6 +668,7 @@ function setupUI(){
   document.getElementById('fullscreenBtn').addEventListener('click',()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen());
   document.getElementById('resetSettings').addEventListener('click',()=>{applyTheme('light');applyPresentation(false);applyDensity('comfortable');applyNames(true);state.animations=true;document.getElementById('animationSetting').checked=true;state.refreshMinutes=5;document.getElementById('refreshSetting').value='5';setupRefresh();});
   document.getElementById('bp3Toggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.bp3Layer)return;const on=state.map.hasLayer(state.bp3Layer);on?state.map.removeLayer(state.bp3Layer):state.bp3Layer.addTo(state.map);b.classList.toggle('active',!on);});
+  document.getElementById('hydroToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.hydroLayer)return;const on=state.map.hasLayer(state.hydroLayer);on?state.map.removeLayer(state.hydroLayer):state.hydroLayer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('demandToggle').addEventListener('click',e=>{const b=e.currentTarget;const on=state.map.hasLayer(state.demandLayer);on?state.map.removeLayer(state.demandLayer):state.demandLayer.addTo(state.map);b.classList.toggle('active',!on);});
   setupChartModal();
 }
