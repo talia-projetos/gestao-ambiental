@@ -652,6 +652,38 @@ function renderTeamTable(){
   body.querySelectorAll('tr').forEach(row=>row.addEventListener('click',()=>openTeamReport(row.dataset.team)));
 }
 
+function renderTeamPressureChart(){
+  const labels=state.teams.map(t=>t.equipe_id);
+  const values=labels.map(id=>Math.round(metricsForTeam(id).score));
+  const options=chartBase();
+  options.indexAxis='y';
+  options.plugins.legend.display=false;
+  options.scales.x.max=100;
+  options.scales.x.min=0;
+  const config={type:'bar',data:{labels,datasets:[{
+    label:'Índice de pressão',
+    data:values,
+    backgroundColor:cssVar('--red'),
+    borderRadius:7
+  }]},options};
+  setChart('teamPressureChart',config,'Pressão operacional por equipe','Índice sintético composto por lacuna de execução, impacto total, bloqueios e demandas abertas');
+}
+
+function renderDemandStatusChart(){
+  const labels=state.teams.map(t=>t.equipe_id);
+  const counts=status=>labels.map(id=>metricsForTeam(id).dem.filter(d=>d.status===status).length);
+  const options=chartBase();
+  options.plugins.legend.position='bottom';
+  options.scales.x.stacked=true;
+  options.scales.y.stacked=true;
+  const config={type:'bar',data:{labels,datasets:[
+    {label:'Abertas',data:counts('ABERTA'),backgroundColor:cssVar('--red'),stack:'status',borderRadius:5},
+    {label:'Em andamento',data:counts('EM ANDAMENTO'),backgroundColor:cssVar('--ochre'),stack:'status',borderRadius:5},
+    {label:'Concluídas',data:counts('CONCLUÍDA'),backgroundColor:cssVar('--green'),stack:'status',borderRadius:5}
+  ]},options};
+  setChart('demandStatusChart',config,'Perfil das demandas não previstas','Status das demandas extraordinárias por equipe');
+}
+
 function renderAttention(){
   const ranked=state.teams.map(t=>({team:t,...metricsForTeam(t.equipe_id)})).sort((a,b)=>b.score-a.score);
   const top=state.team==='ALL'?ranked[0]:ranked.find(x=>x.team.equipe_id===state.team);
