@@ -1,0 +1,25 @@
+atividade_id,equipe_id,atividade,unidade_meta,janela_operacional,restricao_principal,atividade_alternativa_id,atividade_alternativa,origem_dado
+AT001,EQ01,Roçada mecanizada em faixa,ha,"Ano todo; reforço em meses úmidos",Chuva intensa / solo saturado,AT004,Manutenção de sinalização e organização operacional,SIMULADO
+AT002,EQ01,Roçada manual seletiva,ha,Ano todo,Chuva intensa / acesso inseguro,AT004,Manutenção de sinalização e organização operacional,SIMULADO
+AT003,EQ01,Inspeção de faixa e pontos críticos,km,Ano todo,Tempestade / risco de descarga elétrica,AT004,Manutenção de sinalização e organização operacional,SIMULADO
+AT004,EQ01,Manutenção de sinalização e organização operacional,un,Ano todo,Sem restrição climática relevante,AT003,Inspeção de faixa e pontos críticos,SIMULADO
+AT005,EQ02,Corte de gramado e acabamento,ha,Ano todo,Chuva intensa / solo saturado,AT008,Manutenção leve de jardins e mobiliário verde,SIMULADO
+AT006,EQ02,Poda de formação e condução,un,Preferência por período seco,Vento forte / chuva intensa,AT008,Manutenção leve de jardins e mobiliário verde,SIMULADO
+AT007,EQ02,Controle de plantas invasoras,ha,Ano todo,Chuva intensa,AT008,Manutenção leve de jardins e mobiliário verde,SIMULADO
+AT008,EQ02,Manutenção leve de jardins e mobiliário verde,h,Ano todo,Sem restrição climática relevante,AT006,Poda de formação e condução,SIMULADO
+AT009,EQ03,Produção de mudas florestais,milheiro,Ano todo,Calor extremo sem irrigação disponível,AT012,Beneficiamento de sementes e organização de viveiro,SIMULADO
+AT010,EQ03,Repicagem e rustificação de mudas,milheiro,Ano todo,Calor extremo,AT012,Beneficiamento de sementes e organização de viveiro,SIMULADO
+AT011,EQ03,Expedição e carregamento de mudas,milheiro,Conforme demanda,Chuva intensa / logística,AT012,Beneficiamento de sementes e organização de viveiro,SIMULADO
+AT012,EQ03,Beneficiamento de sementes e organização de viveiro,h,Ano todo,Sem restrição climática relevante,AT009,Produção de mudas florestais,SIMULADO
+AT013,EQ04,Produção de hortaliças,canteiro,Ano todo,Calor extremo / falha de irrigação,AT016,Preparação de substrato e manutenção interna,SIMULADO
+AT014,EQ04,Manejo de vasos ornamentais,un,Ano todo,Sem restrição climática relevante,AT016,Preparação de substrato e manutenção interna,SIMULADO
+AT015,EQ04,Transplante e renovação de canteiros,m²,Preferência por clima ameno,Calor extremo / chuva intensa,AT016,Preparação de substrato e manutenção interna,SIMULADO
+AT016,EQ04,Preparação de substrato e manutenção interna,h,Ano todo,Sem restrição climática relevante,AT014,Manejo de vasos ornamentais,SIMULADO
+AT017,EQ05,Plantio florestal,ha,Preferência por período úmido,Estiagem / déficit hídrico,AT020,Preparo de insumos e manutenção de ferramentas,SIMULADO
+AT018,EQ05,Coroamento e manutenção de plantios,ha,Ano todo,Chuva intensa / solo saturado,AT020,Preparo de insumos e manutenção de ferramentas,SIMULADO
+AT019,EQ05,Controle de invasoras em área florestal,ha,Ano todo,Chuva intensa,AT020,Preparo de insumos e manutenção de ferramentas,SIMULADO
+AT020,EQ05,Preparo de insumos e manutenção de ferramentas,h,Ano todo,Sem restrição climática relevante,AT018,Coroamento e manutenção de plantios,SIMULADO
+AT021,EQ06,Aceiro preventivo,km,Preferência por período seco,Chuva intensa,AT024,"Treinamento, prontidão e organização de base",SIMULADO
+AT022,EQ06,Ronda preventiva de incêndio,h,Reforço em período seco,Chuva intensa reduz criticidade,AT024,"Treinamento, prontidão e organização de base",SIMULADO
+AT023,EQ06,Inspeção de equipamentos de combate,un,Ano todo,Sem restrição climática relevante,AT024,"Treinamento, prontidão e organização de base",SIMULADO
+AT024,EQ06,"Treinamento, prontidão e organização de base",h,Ano todo,Sem restrição climática relevante,AT023,Inspeção de equipamentos de combate,SIMULADO
