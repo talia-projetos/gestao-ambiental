@@ -286,12 +286,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
         <div class="toolbar" aria-label="Filtros do painel">
           <label class="filter-control">
             <i data-lucide="calendar-days"></i>
-            <select id="monthFilter" aria-label="Período">
-              <option value="1">Janeiro 2026</option><option value="2">Fevereiro 2026</option><option value="3">Março 2026</option>
-              <option value="4">Abril 2026</option><option value="5">Maio 2026</option><option value="6">Junho 2026</option>
-              <option value="7">Julho 2026</option><option value="8">Agosto 2026</option><option value="9" selected>Setembro 2026</option>
-              <option value="10">Outubro 2026</option><option value="11">Novembro 2026</option><option value="12">Dezembro 2026</option>
-            </select>
+            <select id="monthFilter" aria-label="Período"></select>
           </label>
           <label class="filter-control filter-wide">
             <i data-lucide="users"></i>
@@ -378,7 +373,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
           <!-- Evolução mensal — área suave -->
           <article class="card chart-card span-7">
             <div class="card-header">
-              <div><h2>Evolução mensal de demandas</h2><p>Demandas não previstas registradas mês a mês — 2026</p></div>
+              <div><h2>Evolução mensal de demandas</h2><p>Demandas não previstas registradas mês a mês — Out/2026 a Out/2028</p></div>
               <button class="icon-btn ghost expand-btn" data-chart="pressureChart" title="Ampliar"><i data-lucide="maximize-2"></i></button>
             </div>
             <div class="chart-wrap" style="height:220px"><canvas id="pressureChart"></canvas></div>
@@ -606,7 +601,7 @@ const PARAGUAY_GEOJSON_URL = 'https://raw.githubusercontent.com/johan/world.geo.
 
 const state = {
   teams: [], planning: [], execution: [], demands: [], blockers: [], climate: [], impact: [], weather: null, notifications: [],
-  month: 9, team: 'ALL', theme: localStorage.getItem('ga-theme') || 'light',
+  month: 1, team: 'ALL', theme: localStorage.getItem('ga-theme') || 'light',
   animations: localStorage.getItem('ga-animations') !== 'false', names: localStorage.getItem('ga-names') !== 'false',
   presentation: localStorage.getItem('ga-presentation') === 'true', density: localStorage.getItem('ga-density') || 'comfortable',
   refreshMinutes: Number(localStorage.getItem('ga-refresh') || 5), charts: {}, chartSpecs: {}, map: null,
@@ -614,13 +609,22 @@ const state = {
 };
 
 const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const PROJECT_START_YEAR = 2026;
+const PROJECT_START_MONTH = 10; // Outubro
+const PROJECT_MONTHS = 25; // Out/2026 → Out/2028
+function mesNumToCalendar(n){ const t=PROJECT_START_MONTH-1+n-1; return {month:(t%12)+1, year:PROJECT_START_YEAR+Math.floor(t/12)}; }
+function mesNumLabel(n){ const {month,year}=mesNumToCalendar(n); return `${months[month-1]} ${year}`; }
 const teamColors = { EQ01:'#4C77BB', EQ02:'#48B381', EQ03:'#BA8044', EQ04:'#7F82B8', EQ05:'#598CC7', EQ06:'#7B9383' };
 
 function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 function fmtPct(n){ return `${Math.round((Number(n)||0)*100)}%`; }
 function fmtNum(n, max=0){ return new Intl.NumberFormat('pt-BR',{maximumFractionDigits:max}).format(Number(n)||0); }
 function parseDate(s){ return s ? new Date(`${s}T12:00:00`) : null; }
-function monthOf(row, field='data'){ const d=parseDate(row[field]); return d ? d.getMonth()+1 : Number(row.mes_num)||0; }
+function monthOf(row, field='data'){
+  const d=parseDate(row[field]);
+  if(d){ const m=d.getMonth()+1,y=d.getFullYear(); const n=(y-PROJECT_START_YEAR)*12+m-PROJECT_START_MONTH+1; return n>0?n:0; }
+  return Number(row.mes_num)||0;
+}
 function byTeam(rows, team=state.team){ return team==='ALL' ? rows : rows.filter(r=>r.equipe_id===team); }
 function currentMonth(rows, dateField='data'){ const m=Number(state.month); return rows.filter(r=>{const rm=monthOf(r,dateField);return rm===m||rm===0;}); }
 function uniq(arr){ return [...new Set(arr.filter(Boolean))]; }
@@ -886,10 +890,11 @@ function renderBlockerChart(){
 }
 
 function renderPressureChart(){
-  const labels=months.map(m=>m.slice(0,3));
-  const demands=months.map((_,i)=>byTeam(state.demands).filter(d=>monthOf(d)===i+1).length);
-  const hours=months.map((_,i)=>{
-    const ids=new Set(byTeam(state.demands).filter(d=>monthOf(d)===i+1).map(d=>d.demanda_id));
+  const projectMs=Array.from({length:PROJECT_MONTHS},(_,i)=>i+1);
+  const labels=projectMs.map(n=>{ const {month,year}=mesNumToCalendar(n); return months[month-1].slice(0,3)+(n===1||month===1?` ${year}`:''); });
+  const demands=projectMs.map(n=>byTeam(state.demands).filter(d=>monthOf(d)===n).length);
+  const hours=projectMs.map(n=>{
+    const ids=new Set(byTeam(state.demands).filter(d=>monthOf(d)===n).map(d=>d.demanda_id));
     return state.impact.filter(x=>ids.has(x.demanda_id)).reduce((s,x)=>s+Number(x.horas_desviadas||0),0);
   });
   const options=chartBase(); options.plugins.legend.position='bottom';
@@ -902,7 +907,8 @@ function renderPressureChart(){
   setChart('pressureChart',config,'Pressão não planejada','Volume de demandas e capacidade desviada, em escalas independentes');
 }
 
-function workDaysInMonth(month, year=2026){
+function workDaysInMonth(mesNum){
+  const {month,year}=mesNumToCalendar(mesNum);
   const days=new Date(year,month,0).getDate();
   let count=0;
   for(let d=1;d<=days;d++){const dow=new Date(year,month-1,d).getDay();if(dow!==0&&dow!==6)count++;}
@@ -1029,7 +1035,7 @@ function openTeamReport(teamId){
       {label:'Atividade afetada',value:r=>r.atividade_planejada_afetada||'—'}
     ])}</div>
     <div class="report-footer"><span>Gestão Ambiental · dados simulados para validação</span><span>Gerado em ${new Date().toLocaleString('pt-BR')}</span></div>`;
-  document.getElementById('reportPeriod').textContent=`${months[state.month-1]} de 2026`;
+  document.getElementById('reportPeriod').textContent=mesNumLabel(state.month);
   document.getElementById('teamReportModal').dataset.team=teamId;
   document.getElementById('teamReportModal').classList.add('open');
   document.getElementById('teamReportModal').setAttribute('aria-hidden','false');
@@ -1363,7 +1369,10 @@ function setupUI(){
       out.value=`${lat}, ${lon}`; out.dataset.lat=lat; out.dataset.lon=lon;
     },()=>{out.value='Não foi possível obter a localização';},{enableHighAccuracy:true,timeout:10000});
   });
-  document.getElementById('monthFilter').addEventListener('change',e=>{state.month=Number(e.target.value);renderAll();updateDemandMarkers();});
+  const mfEl=document.getElementById('monthFilter');
+  mfEl.innerHTML=Array.from({length:PROJECT_MONTHS},(_,i)=>`<option value="${i+1}">${mesNumLabel(i+1)}</option>`).join('');
+  mfEl.value=state.month;
+  mfEl.addEventListener('change',e=>{state.month=Number(e.target.value);renderAll();updateDemandMarkers();});
   document.getElementById('teamFilter').addEventListener('change',e=>{state.team=e.target.value;renderAll();updateDemandMarkers();});
   document.getElementById('clearTeamFilter').addEventListener('click',()=>{state.team='ALL';document.getElementById('teamFilter').value='ALL';renderAll();updateDemandMarkers();});
   document.getElementById('refreshBtn').addEventListener('click',loadData);
