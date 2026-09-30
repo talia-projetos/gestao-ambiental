@@ -711,7 +711,7 @@ function fmtNum(n, max=0){ return new Intl.NumberFormat('pt-BR',{maximumFraction
 function parseDate(s){ return s ? new Date(`${s}T12:00:00`) : null; }
 function monthOf(row, field='data'){
   const d=parseDate(row[field]);
-  if(d){ const m=d.getMonth()+1,y=d.getFullYear(); const n=(y-PROJECT_START_YEAR)*12+m-PROJECT_START_MONTH+1; return n>0?n:0; }
+  if(d){ const m=d.getMonth()+1,y=d.getFullYear(); const n=(y-PROJECT_START_YEAR)*12+m-PROJECT_START_MONTH+1; return n>=1?n:1; } // registros antes do início → mês 1
   // Fallback: mes_num é mês calendário (1-12) → converte para sequencial
   const raw=Number(row.mes_num)||0; if(!raw)return 0;
   let seq=raw-PROJECT_START_MONTH+1;
