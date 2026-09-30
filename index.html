@@ -119,7 +119,7 @@ html[data-theme="dark"] .status-strip{background:var(--surface-2)!important;bord
 .kpi-ring-bg{fill:none;stroke:var(--border);stroke-width:4.5}
 .kpi-ring-fill{fill:none;stroke:var(--green);stroke-width:4.5;stroke-linecap:round;stroke-dasharray:0 138.23;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dasharray .7s cubic-bezier(.4,0,.2,1),stroke .4s}
 /* Demand badge */
-.kpi-demand-badge{width:54px;height:54px;flex:none;border-radius:50%;background:color-mix(in srgb,var(--ochre) 12%,transparent);border:2px solid color-mix(in srgb,var(--ochre) 30%,transparent);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--ochre);letter-spacing:-.04em}
+.kpi-trend{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:44px;flex:none}.kpi-trend-arrow{font-size:30px;line-height:1;font-weight:900;transition:color .3s}.kpi-trend-delta{font-size:10px;color:var(--muted);white-space:nowrap}.kpi-trend.trend-up .kpi-trend-arrow{color:var(--ochre)}.kpi-trend.trend-down .kpi-trend-arrow{color:var(--green)}.kpi-trend.trend-flat .kpi-trend-arrow{color:var(--faint)}
 
 /* ── Cards: tipografia ───────────────────────────────────────── */
 .card h2{font-size:13px!important;font-weight:700!important;letter-spacing:.005em!important}
@@ -325,7 +325,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
             <strong id="kpiDemands">—</strong>
             <span class="kpi-v2-note" id="kpiDemandNote">—</span>
           </div>
-          <div class="kpi-demand-badge" id="demandBadge">0</div>
+          <div class="kpi-trend trend-flat" id="demandTrend"><span class="kpi-trend-arrow" id="demandTrendArrow">—</span><span class="kpi-trend-delta" id="demandTrendDelta"></span></div>
         </article>
         <article class="kpi-card kpi-v2 accent-red">
           <div class="kpi-v2-left">
@@ -797,7 +797,18 @@ function renderKPIs(){
   setRing('ringCoverage',m.coverage);
   const nd=m.demands.length;
   document.getElementById('kpiDemands').textContent=nd;
-  document.getElementById('demandBadge').textContent=nd;
+  const prevM=Number(state.month)-1;
+  const prevNd=prevM>0?state.demands.filter(r=>monthOf(r)===prevM).length:null;
+  const delta=prevNd!==null?nd-prevNd:null;
+  const trendEl=document.getElementById('demandTrend');
+  const arrowEl=document.getElementById('demandTrendArrow');
+  const deltaEl=document.getElementById('demandTrendDelta');
+  if(trendEl&&arrowEl&&deltaEl){
+    const cls=delta===null||delta===0?'trend-flat':delta>0?'trend-up':'trend-down';
+    trendEl.className='kpi-trend '+cls;
+    arrowEl.textContent=delta===null?'—':delta>0?'↑':delta<0?'↓':'→';
+    deltaEl.textContent=delta===null?'':`${delta>0?'+':''}${delta} vs ${months[prevM-1]||''}`;
+  }
   document.getElementById('kpiDemandNote').textContent=`${m.demands.filter(x=>['EM ANDAMENTO','ABERTA','PENDENTE'].includes(x.status)).length} em andamento · ${m.demands.filter(x=>x.prioridade==='ALTA'||x.prioridade==='CRÍTICA').length} alta prioridade`;
   document.getElementById('kpiImpact').textContent=fmtPct(m.impactRatio);
   document.getElementById('kpiImpactNote').textContent=`${uniq(m.impacted.map(x=>x.plano_afetado_id)).length} ativ. afetadas · ${fmtNum(diverted)} h desviadas`;
@@ -842,15 +853,17 @@ function renderPlanChart(){
 function renderImpactChart(){
   const m=currentAggregate();
   const impacts=m.impacted;
-  const counts={REPROGRAMADO:0,PARCIAL:0,SUBSTITUÍDO:0,CANCELADO:0};
+  // mapa de cores fixo por destino (evita depender de ordem do Object.entries)
+  const colorMap={REPROGRAMADO:cssVar('--ochre'),ABSORVIDO:cssVar('--blue'),PARCIAL:cssVar('--amber'),SUBSTITUÍDO:cssVar('--green'),CANCELADO:cssVar('--red'),'EM ANÁLISE':cssVar('--purple')};
+  const counts={};
   impacts.forEach(i=>{const k=(i.destino_planejamento||'REPROGRAMADO').toUpperCase(); counts[k]=(counts[k]||0)+1;});
   const impactedDemandIds=new Set(impacts.map(x=>x.demanda_id));
   const noImpact=m.demands.filter(d=>!impactedDemandIds.has(d.demanda_id)).length;
   const labels=[]; const data=[]; const colors=[];
-  if(noImpact>0){labels.push('Sem impacto identificado');data.push(noImpact);colors.push(cssVar('--surface-2'));}
-  Object.entries(counts).forEach(([k,v],idx)=>{if(v>0){labels.push(k);data.push(v);colors.push([cssVar('--ochre'),cssVar('--blue'),cssVar('--green'),cssVar('--red')][idx]);}});
-  if(!data.length){labels.push('Sem demandas');data.push(1);colors.push(cssVar('--surface-2'));}
-  const options={responsive:true,maintainAspectRatio:false,cutout:'68%',animation:state.animations?{duration:500}:false,plugins:{legend:{position:'right',align:'center',labels:{color:cssVar('--muted'),boxWidth:8,usePointStyle:true,pointStyle:'circle',font:{size:10.5},padding:10}},tooltip:{backgroundColor:cssVar('--text'),titleColor:cssVar('--surface'),bodyColor:cssVar('--surface')}}};
+  if(noImpact>0){labels.push('Sem impacto identificado');data.push(noImpact);colors.push(cssVar('--border'));}
+  Object.entries(counts).forEach(([k,v])=>{if(v>0){labels.push(k);data.push(v);colors.push(colorMap[k]||cssVar('--muted'));}});
+  if(!data.length){labels.push('Sem demandas');data.push(1);colors.push(cssVar('--border'));}
+  const options={responsive:true,maintainAspectRatio:false,cutout:'68%',animation:state.animations?{duration:500}:false,plugins:{legend:{position:'bottom',align:'center',labels:{color:cssVar('--muted'),boxWidth:7,boxHeight:7,usePointStyle:true,pointStyle:'circle',font:{size:9},padding:10}},tooltip:{backgroundColor:cssVar('--text'),titleColor:cssVar('--surface'),bodyColor:cssVar('--surface')}}};
   const config={type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0}]},options};
   setChart('impactChart',config,'Impacto das demandas','Destino das demandas não previstas no planejamento');
 }
@@ -873,9 +886,9 @@ function renderPressureChart(){
   const options=chartBase(); options.plugins.legend.position='bottom';
   options.scales.y={beginAtZero:true,position:'left',title:{display:true,text:'Demandas',color:cssVar('--muted')},grid:{color:cssVar('--chart-grid')},ticks:{color:cssVar('--muted'),precision:0}};
   options.scales.y1={beginAtZero:true,position:'right',title:{display:true,text:'Horas desviadas',color:cssVar('--muted')},grid:{drawOnChartArea:false},ticks:{color:cssVar('--muted'),precision:0}};
-  const config={type:'line',data:{labels,datasets:[
-    {label:'Demandas',data:demands,yAxisID:'y',borderColor:cssVar('--blue'),backgroundColor:'transparent',tension:.35,pointRadius:3},
-    {label:'Horas desviadas',data:hours,yAxisID:'y1',borderColor:cssVar('--ochre'),backgroundColor:'transparent',tension:.35,pointRadius:3}
+  const config={type:'bar',data:{labels,datasets:[
+    {label:'Demandas',data:demands,yAxisID:'y',backgroundColor:'rgba(76,119,187,0.55)',borderColor:cssVar('--blue'),borderWidth:1,borderRadius:5,barPercentage:.55},
+    {label:'Horas desviadas',data:hours,yAxisID:'y1',type:'line',borderColor:cssVar('--ochre'),backgroundColor:'transparent',tension:.4,pointRadius:3,pointBackgroundColor:cssVar('--ochre'),order:0}
   ]},options};
   setChart('pressureChart',config,'Pressão não planejada','Volume de demandas e capacidade desviada, em escalas independentes');
 }
@@ -890,24 +903,29 @@ function workDaysInMonth(month, year=2026){
 function renderHoursChart(){
   const wdays=workDaysInMonth(Number(state.month));
   const eqIds=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
-  const labels=eqIds.map(id=>{const t=state.teams.find(x=>x.equipe_id===id);return t?t.equipe:id;});
-  const disponivel=eqIds.map(id=>{const t=state.teams.find(x=>x.equipe_id===id);return t?(t.qtd_colaboradores*(t.jornada_horas_dia||6)*wdays):0;});
-  const executadas=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===Number(state.month)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.quantidade_executada||0),0));
-  const demandas=eqIds.map(id=>state.demands.filter(r=>monthOf(r)===Number(state.month)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_consumidas||0),0));
-  const bloqueadas=eqIds.map(id=>state.blockers.filter(r=>monthOf(r)===Number(state.month)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_impactadas||0),0));
+  // usa equipe_id como label (curto) para não comprimir o gráfico
+  const labels=eqIds;
+  const m=Number(state.month);
+  const disponivel=eqIds.map(id=>{const t=state.teams.find(x=>x.equipe_id===id);return t?(Number(t.qtd_colaboradores||0)*Number(t.jornada_horas_dia||6)*wdays):0;});
+  const executadas=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.quantidade_executada||0),0));
+  const demandas=eqIds.map(id=>state.demands.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_consumidas||0),0));
+  const bloqueadas=eqIds.map(id=>state.blockers.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_impactadas||0),0));
   const naoAtuadas=eqIds.map((_,i)=>Math.max(0,disponivel[i]-executadas[i]-demandas[i]-bloqueadas[i]));
   const options=chartBase();
-  options.indexAxis='y';
   options.plugins.legend.position='bottom';
-  options.plugins.legend.align='start';
+  options.plugins.legend.align='center';
   options.scales.x.stacked=true;
   options.scales.y.stacked=true;
-  options.scales.x.ticks={...options.scales.x.ticks,callback:v=>`${v}h`};
+  options.scales.y.beginAtZero=true;
+  options.scales.y.ticks={...options.scales.y.ticks,callback:v=>`${v}h`};
+  // linha de capacidade disponível
+  const dispDs={label:'Capacidade total',data:disponivel,type:'line',borderColor:cssVar('--faint'),borderWidth:1.5,borderDash:[4,3],pointRadius:0,fill:false,order:0};
   const config={type:'bar',data:{labels,datasets:[
-    {label:'Executadas',data:executadas,backgroundColor:cssVar('--green'),borderRadius:0,stack:'s'},
+    {label:'Executadas',data:executadas,backgroundColor:cssVar('--green'),borderRadius:3,stack:'s'},
     {label:'Demandas não previstas',data:demandas,backgroundColor:cssVar('--ochre'),borderRadius:0,stack:'s'},
     {label:'Bloqueadas',data:bloqueadas,backgroundColor:cssVar('--red'),borderRadius:0,stack:'s'},
-    {label:'Não atuadas / sem registro',data:naoAtuadas,backgroundColor:'rgba(180,190,184,0.35)',borderRadius:0,stack:'s'}
+    {label:'Sem registro',data:naoAtuadas,backgroundColor:'rgba(180,190,184,0.30)',borderRadius:3,stack:'s'},
+    dispDs
   ]},options};
   setChart('hoursChart',config,'Balanço de horas por equipe','Distribuição das horas disponíveis no mês');
 }
