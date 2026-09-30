@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T10:18:41.510941Z",
+  "generated_at": "2026-09-30T12:15:37.584123Z",
   "source": "PROERG",
   "teams": [
     {
@@ -7,7 +7,8 @@
       "equipe": "Equipe Fauna",
       "lider_tecnico": "Ana Paula Ferreira",
       "frente_atuacao": "Monitoramento de Fauna",
-      "qtd_colaboradores": "18",
+      "qtd_colaboradores": 18,
+      "jornada_horas_dia": 6,
       "status": "ATIVA",
       "origem_dado": "PROERG"
     },
@@ -16,7 +17,8 @@
       "equipe": "Equipe Flora",
       "lider_tecnico": "Ricardo Mendes",
       "frente_atuacao": "Monitoramento de Flora e Vegetação",
-      "qtd_colaboradores": "20",
+      "qtd_colaboradores": 20,
+      "jornada_horas_dia": 6,
       "status": "ATIVA",
       "origem_dado": "PROERG"
     },
@@ -25,7 +27,8 @@
       "equipe": "Equipe Hídricos",
       "lider_tecnico": "Camila Torres",
       "frente_atuacao": "Recursos Hídricos e Limnologia",
-      "qtd_colaboradores": "17",
+      "qtd_colaboradores": 17,
+      "jornada_horas_dia": 6,
       "status": "ATIVA",
       "origem_dado": "PROERG"
     },
@@ -34,7 +37,8 @@
       "equipe": "Equipe Recuperação",
       "lider_tecnico": "Fábio Leal",
       "frente_atuacao": "Recuperação de Áreas Degradadas",
-      "qtd_colaboradores": "22",
+      "qtd_colaboradores": 22,
+      "jornada_horas_dia": 6,
       "status": "ATIVA",
       "origem_dado": "PROERG"
     },
@@ -43,7 +47,8 @@
       "equipe": "Equipe Erosão",
       "lider_tecnico": "Juliana Costa",
       "frente_atuacao": "Controle de Erosão e Engenharia Natural",
-      "qtd_colaboradores": "19",
+      "qtd_colaboradores": 19,
+      "jornada_horas_dia": 6,
       "status": "ATIVA",
       "origem_dado": "PROERG"
     },
@@ -52,7 +57,8 @@
       "equipe": "Equipe Educação",
       "lider_tecnico": "Marcos Ribeiro",
       "frente_atuacao": "Educação Ambiental e Comunicação",
-      "qtd_colaboradores": "19",
+      "qtd_colaboradores": 19,
+      "jornada_horas_dia": 6,
       "status": "ATIVA",
       "origem_dado": "PROERG"
     }
@@ -5992,6 +5998,7 @@
       "descricao": "Registro de fauna morta e resgate de animais feridos na rodovia BR-277 km 734. Coordenadas solicitadas pela equipe de campo.",
       "prioridade": "ALTA",
       "status": "RESOLVIDA",
+      "horas_consumidas": 6,
       "latitude": "-25.492",
       "longitude": "-54.576",
       "origem_dado": "PROERG"
@@ -6006,6 +6013,7 @@
       "descricao": "Deslizamento de taludes no talhão T-06 danificou 800 mudas recém plantadas. Replantio necessário.",
       "prioridade": "ALTA",
       "status": "RESOLVIDA",
+      "horas_consumidas": 18,
       "latitude": "-25.51",
       "longitude": "-54.61",
       "origem_dado": "PROERG"
@@ -6020,6 +6028,7 @@
       "descricao": "Infestação detectada em área de restauração recém-implantada. Intervenção imediata solicitada.",
       "prioridade": "MÉDIA",
       "status": "RESOLVIDA",
+      "horas_consumidas": 12,
       "latitude": "-25.468",
       "longitude": "-54.605",
       "origem_dado": "PROERG"
@@ -6034,6 +6043,7 @@
       "descricao": "Nova voçoroca identificada na estrada vicinal ao setor norte. Risco de colapso da via.",
       "prioridade": "ALTA",
       "status": "EM ATENDIMENTO",
+      "horas_consumidas": 24,
       "latitude": "-25.435",
       "longitude": "-54.599",
       "origem_dado": "PROERG"
@@ -6048,6 +6058,7 @@
       "descricao": "Bloom de cianobactérias detectado no setor leste do reservatório. Coleta urgente de amostras.",
       "prioridade": "ALTA",
       "status": "EM ATENDIMENTO",
+      "horas_consumidas": 18,
       "latitude": "-25.505",
       "longitude": "-54.6",
       "origem_dado": "PROERG"
@@ -6062,6 +6073,7 @@
       "descricao": "Escola Estadual em Medianeira solicita apresentação sobre fauna da BP3 para feira científica.",
       "prioridade": "BAIXA",
       "status": "RESOLVIDA",
+      "horas_consumidas": 6,
       "latitude": "-25.48",
       "longitude": "-54.58",
       "origem_dado": "PROERG"
@@ -6076,6 +6088,7 @@
       "descricao": "Camera CT-14 vandalizada. Solicitação de vistoria e boletim de ocorrência.",
       "prioridade": "MÉDIA",
       "status": "RESOLVIDA",
+      "horas_consumidas": 6,
       "latitude": "-25.475",
       "longitude": "-54.615",
       "origem_dado": "PROERG"
@@ -6090,6 +6103,7 @@
       "descricao": "Foco de incêndio avançando sobre área de restauração. Acionamento de brigada solicitado.",
       "prioridade": "ALTA",
       "status": "EM ATENDIMENTO",
+      "horas_consumidas": 30,
       "latitude": "-25.46",
       "longitude": "-54.61",
       "origem_dado": "PROERG"
@@ -6104,6 +6118,7 @@
       "descricao": "Viveiro municipal informa atraso de 30 dias na entrega de 2000 mudas. Alternativas necessárias.",
       "prioridade": "MÉDIA",
       "status": "PENDENTE",
+      "horas_consumidas": 0,
       "latitude": "-25.52",
       "longitude": "-54.63",
       "origem_dado": "PROERG"
@@ -6118,6 +6133,7 @@
       "descricao": "Dreno superficial instalado em julho colmatou com as primeiras chuvas de setembro. Limpeza necessária.",
       "prioridade": "MÉDIA",
       "status": "PENDENTE",
+      "horas_consumidas": 0,
       "latitude": "-25.492",
       "longitude": "-54.598",
       "origem_dado": "PROERG"
@@ -6132,6 +6148,7 @@
       "descricao": "Erosão marginal aguda detectada no levantamento batimétrico de setembro. Registro e monitoramento.",
       "prioridade": "ALTA",
       "status": "PENDENTE",
+      "horas_consumidas": 6,
       "latitude": "-25.51",
       "longitude": "-54.605",
       "origem_dado": "PROERG"
@@ -6146,6 +6163,7 @@
       "descricao": "Grupo de 25 pesquisadores da UNIOESTE solicita trilha guiada especializada no lago.",
       "prioridade": "BAIXA",
       "status": "PENDENTE",
+      "horas_consumidas": 0,
       "latitude": "-25.4082",
       "longitude": "-54.5882",
       "origem_dado": "PROERG"
