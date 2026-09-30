@@ -964,18 +964,21 @@ function renderPlanChart(){
   options.scales.x.ticks.maxRotation=0;
   options.scales.y={...options.scales.y,beginAtZero:true,ticks:{...options.scales.y?.ticks,precision:0,color:cssVar('--muted')},title:{display:true,text:'Atividades',color:cssVar('--muted'),font:{size:9}}};
   options.scales.y2={beginAtZero:true,position:'right',title:{display:true,text:'Demandas',color:cssVar('--muted'),font:{size:9}},grid:{drawOnChartArea:false},ticks:{color:cssVar('--muted'),font:{size:9},precision:0}};
-  options.plugins.tooltip={callbacks:{label:ctx=>{
+  options.plugins.tooltip.callbacks={label:ctx=>{
     const i=ctx.dataIndex,ds=ctx.dataset.label;
     if(ds==='Planejado')return ` ${ctx.parsed.y} atividades · ${plannedH[i]}h previstas`;
     if(ds==='Executado')return ` ${ctx.parsed.y} registros · ${executedH[i]}h executadas`;
     return ` ${ctx.parsed.y} demandas`;
-  }}};
+  }};
+  destroyChart('planChart');
+  const ctx=document.getElementById('planChart'); if(!ctx)return;
   const config={type:'bar',data:{labels:eqIds,datasets:[
     {label:'Planejado',data:planned,backgroundColor:'rgba(180,188,190,.28)',borderColor:'rgba(180,188,190,.6)',borderWidth:1,borderRadius:6,barPercentage:.75},
     {label:'Executado',data:executed,backgroundColor:cssVar('--green'),borderRadius:6,barPercentage:.75},
     {label:'Demandas não previstas',data:demands,type:'line',borderColor:cssVar('--red'),backgroundColor:'rgba(185,78,78,.08)',fill:true,tension:.35,pointRadius:5,pointBackgroundColor:cssVar('--red'),yAxisID:'y2',order:0}
   ]},options};
-  setChart('planChart',config,'Execução vs planejamento','Atividades planejadas vs executadas e demandas não previstas — horas no tooltip');
+  state.chartSpecs['planChart']={config:{},title:'Execução vs planejamento',subtitle:'Atividades planejadas vs executadas e demandas não previstas'};
+  state.charts['planChart']=new Chart(ctx,config);
 }
 
 function renderImpactChart(){
