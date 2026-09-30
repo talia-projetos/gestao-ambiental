@@ -216,6 +216,22 @@ html[data-theme="dark"] .notif-panel{background:rgba(20,28,24,.94)!important}
 @keyframes notif-pulse{0%,100%{transform:scale(1)}30%{transform:scale(1.2)}65%{transform:scale(.94)}}
 .notif-pulse{animation:notif-pulse .45s ease}
 
+/* ── Previsão meteorológica 3 dias ──────────────────────────────── */
+.weather-forecast{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0 8px}
+.weather-day{background:var(--surface-3);border:1px solid var(--border);border-radius:11px;padding:8px 6px;text-align:center}
+.weather-day .wd-date{font-size:9px;color:var(--faint);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.weather-day .wd-rain{font-size:14px;font-weight:800;color:var(--blue);letter-spacing:-.02em}
+.weather-day .wd-sub{font-size:9px;color:var(--muted);margin-top:2px}
+.weather-day .wd-risk{display:inline-block;font-size:8px;font-weight:700;padding:2px 6px;border-radius:6px;margin-top:4px;letter-spacing:.04em}
+.wd-risk-ok{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green)}
+.wd-risk-watch{background:color-mix(in srgb,var(--amber) 18%,transparent);color:var(--ochre)}
+.wd-risk-alert{background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)}
+
+/* ── Legenda do mapa ────────────────────────────────────────────── */
+.map-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}
+.map-legend-item{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--muted)}
+.map-legend-dot{width:10px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,.7);box-shadow:0 1px 3px rgba(0,0,0,.22)}
+
 </style>
 </head>
 <body>
@@ -346,6 +362,15 @@ html[data-theme="dark"] .notif-panel{background:rgba(20,28,24,.94)!important}
             <div class="chart-wrap" style="height:220px"><canvas id="teamPressureChart"></canvas></div>
           </article>
 
+          <!-- Balanço de horas por equipe -->
+          <article class="card chart-card span-12">
+            <div class="card-header">
+              <div><h2>Balanço de horas por equipe</h2><p>Horas disponíveis no mês vs. executadas, demandas não previstas e bloqueios</p></div>
+              <button class="icon-btn ghost expand-btn" data-chart="hoursChart" title="Ampliar"><i data-lucide="maximize-2"></i></button>
+            </div>
+            <div class="chart-wrap" style="height:200px"><canvas id="hoursChart"></canvas></div>
+          </article>
+
           <!-- Para onde olhar + Impacto side by side -->
           <article class="card attention-card span-8">
             <div class="card-header compact"><div><h2>Para onde olhar agora?</h2><p>Leitura automática — equipe com maior índice de atenção no período</p></div><i data-lucide="crosshair" class="section-icon"></i></div>
@@ -412,7 +437,8 @@ html[data-theme="dark"] .notif-panel{background:rgba(20,28,24,.94)!important}
               </div>
             </div>
             <div id="map" style="height:420px" aria-label="Mapa operacional"></div>
-            <div class="map-caption"><span>BP3 e hidrografia: IAT/PR · Estados BP3 + Paraguai: IBGE / Natural Earth</span><span>Basemap: Esri</span></div>
+            <div id="mapLegend" class="map-legend"></div>
+            <div class="map-caption"><span>BP3 e hidrografia: IAT/PR · Basemap: Esri</span><span>Pontos: demandas não previstas por equipe</span></div>
           </article>
           <article class="card climate-card span-5">
             <div class="card-header compact"><div><h2>Meteorologia operacional</h2><p id="weatherLocation">Open-Meteo · Foz do Iguaçu/PR</p></div><i data-lucide="cloud-sun" class="section-icon"></i></div>
@@ -421,6 +447,7 @@ html[data-theme="dark"] .notif-panel{background:rgba(20,28,24,.94)!important}
               <div><span>Precipitação observada</span><strong id="weatherRain">—</strong></div>
               <div><span>Vento / rajada</span><strong id="weatherWind">—</strong></div>
             </div>
+            <div id="weatherForecast" class="weather-forecast"></div>
             <p class="climate-guidance" id="weatherOutlook">Carregando previsão...</p>
             <p class="climate-guidance" id="weatherSource" style="font-size:11px;opacity:.72;margin-top:6px">Fonte: Open-Meteo · ao vivo.</p>
           </article>
@@ -805,6 +832,38 @@ function renderPressureChart(){
   setChart('pressureChart',config,'Pressão não planejada','Volume de demandas e capacidade desviada, em escalas independentes');
 }
 
+function workDaysInMonth(month, year=2026){
+  const days=new Date(year,month,0).getDate();
+  let count=0;
+  for(let d=1;d<=days;d++){const dow=new Date(year,month-1,d).getDay();if(dow!==0&&dow!==6)count++;}
+  return count;
+}
+
+function renderHoursChart(){
+  const wdays=workDaysInMonth(Number(state.month));
+  const eqIds=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
+  const labels=eqIds.map(id=>{const t=state.teams.find(x=>x.equipe_id===id);return t?t.equipe:id;});
+  const disponivel=eqIds.map(id=>{const t=state.teams.find(x=>x.equipe_id===id);return t?(t.qtd_colaboradores*(t.jornada_horas_dia||6)*wdays):0;});
+  const executadas=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===Number(state.month)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.quantidade_executada||0),0));
+  const demandas=eqIds.map(id=>state.demands.filter(r=>monthOf(r)===Number(state.month)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_consumidas||0),0));
+  const bloqueadas=eqIds.map(id=>state.blockers.filter(r=>monthOf(r)===Number(state.month)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_impactadas||0),0));
+  const naoAtuadas=eqIds.map((_,i)=>Math.max(0,disponivel[i]-executadas[i]-demandas[i]-bloqueadas[i]));
+  const options=chartBase();
+  options.indexAxis='y';
+  options.plugins.legend.position='bottom';
+  options.plugins.legend.align='start';
+  options.scales.x.stacked=true;
+  options.scales.y.stacked=true;
+  options.scales.x.ticks={...options.scales.x.ticks,callback:v=>`${v}h`};
+  const config={type:'bar',data:{labels,datasets:[
+    {label:'Executadas',data:executadas,backgroundColor:cssVar('--green'),borderRadius:0,stack:'s'},
+    {label:'Demandas não previstas',data:demandas,backgroundColor:cssVar('--ochre'),borderRadius:0,stack:'s'},
+    {label:'Bloqueadas',data:bloqueadas,backgroundColor:cssVar('--red'),borderRadius:0,stack:'s'},
+    {label:'Não atuadas / sem registro',data:naoAtuadas,backgroundColor:'rgba(180,190,184,0.35)',borderRadius:0,stack:'s'}
+  ]},options};
+  setChart('hoursChart',config,'Balanço de horas por equipe','Distribuição das horas disponíveis no mês');
+}
+
 function renderWeather(){
   const w=state.weather;
   if(!w){
@@ -820,6 +879,23 @@ function renderWeather(){
   document.getElementById('weatherObserved').textContent=`observado ${observed.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})} às ${observed.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
   document.getElementById('weatherRain').textContent=`${fmtNum(cur.precipitation_mm,1)} mm`;
   document.getElementById('weatherWind').textContent=`${fmtNum(cur.wind_kmh)} / ${fmtNum(cur.gust_kmh)} km/h`;
+  // Previsão 3 dias
+  const fc=document.getElementById('weatherForecast');
+  if(fc){
+    const days=(w.forecast||[]).slice(0,3);
+    fc.innerHTML=days.map(f=>{
+      const d=new Date(f.date+'T12:00:00');
+      const dow=d.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','');
+      const dm=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+      const prob=Number(f.rain_probability_pct||0);
+      const mm=Number(f.precipitation_mm||0);
+      const gust=Number(f.gust_kmh||0);
+      let riskClass='wd-risk-ok',riskLabel='OK';
+      if(prob>=70||mm>=25||gust>=60){riskClass='wd-risk-alert';riskLabel='ALERTA';}
+      else if(prob>=40||mm>=10||gust>=40){riskClass='wd-risk-watch';riskLabel='ATENÇÃO';}
+      return `<div class="weather-day"><div class="wd-date">${dow} ${dm}</div><div class="wd-rain">${mm.toFixed(1)} mm</div><div class="wd-sub">${prob}% chuva · ${Math.round(gust)} km/h</div><span class="wd-risk ${riskClass}">${riskLabel}</span></div>`;
+    }).join('');
+  }
   const critical=(w.forecast||[]).filter(x=>Number(x.rain_probability_pct)>=70||Number(x.gust_kmh)>=45);
   if(critical.length){
     const first=critical[0], d=new Date(first.date+'T12:00:00');
@@ -827,7 +903,7 @@ function renderWeather(){
   }else{
     document.getElementById('weatherOutlook').textContent='Sem janela meteorológica crítica no horizonte carregado.';
   }
-  document.getElementById('weatherSource').innerHTML=`Fonte: <strong>${w.source}</strong> · ${w.source==='Open-Meteo'?'dados ao vivo · atualiza a cada carregamento':'snapshot estático'}. `;
+  document.getElementById('weatherSource').innerHTML=`Fonte: <strong>${w.source}</strong> · ${w.source==='Open-Meteo'?'dados ao vivo · atualiza a cada carregamento':'snapshot estático'}.`;
 }
 
 function statusFromScore(s){ return s>=45?['ATENÇÃO','status-alert']:s>=25?['OBSERVAR','status-watch']:['NORMAL','status-normal']; }
@@ -966,7 +1042,7 @@ function showPage(id){
   },50);
 }
 function renderAll(){
-  [renderKPIs,renderPlanChart,renderImpactChart,renderBlockerChart,renderPressureChart,renderTeamPressureChart,renderDemandStatusChart,renderWeather,renderTeamTable,renderAttention]
+  [renderKPIs,renderPlanChart,renderHoursChart,renderImpactChart,renderBlockerChart,renderPressureChart,renderTeamPressureChart,renderDemandStatusChart,renderWeather,renderTeamTable,renderAttention]
     .forEach(fn=>{try{fn();}catch(e){console.error('[render]',fn.name,e);}});
   try{lucide.createIcons();}catch(e){}
 }
@@ -1025,9 +1101,21 @@ function setupMap(){
   state.demandLayer=L.layerGroup().addTo(state.map); updateDemandMarkers();
 }
 function setMapTheme(){ if(!state.map)return; [state.baseLight,state.labelsLight,state.baseDark,state.labelsDark].forEach(l=>l&&state.map.hasLayer(l)&&state.map.removeLayer(l)); const dark=document.documentElement.dataset.theme==='dark'; (dark?state.baseDark:state.baseLight).addTo(state.map); (dark?state.labelsDark:state.labelsLight).addTo(state.map); if(state.bp3Layer)state.bp3Layer.setStyle({color:cssVar('--green'),weight:1.8,fillColor:cssVar('--green'),fillOpacity:.04}); if(state.stateLayer)state.stateLayer.setStyle(bp3StateStyle()); if(state.hydroLayer)state.hydroLayer.setStyle(hydroStyle()); }
+function renderMapLegend(){
+  const legend=document.getElementById('mapLegend');
+  if(!legend)return;
+  const teamsWithDemands=state.teams.filter(t=>byTeam(state.demands).some(d=>d.equipe_id===t.equipe_id&&d.latitude&&d.longitude));
+  if(!teamsWithDemands.length){legend.innerHTML='';return;}
+  legend.innerHTML=teamsWithDemands.map(t=>{
+    const color=teamColors[t.equipe_id]||'#888';
+    return `<span class="map-legend-item"><span class="map-legend-dot" style="background:${color}"></span>${t.equipe}</span>`;
+  }).join('');
+}
+
 function updateDemandMarkers(){
   if(!state.demandLayer)return;
   state.demandLayer.clearLayers();
+  renderMapLegend();
   const rows=byTeam(state.demands).filter(d=>d.latitude&&d.longitude);
   rows.forEach(d=>{
     const color=teamColors[d.equipe_id]||cssVar('--blue');
