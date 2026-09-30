@@ -1067,7 +1067,8 @@ function renderHoursChart(){
   const executadas=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.quantidade_executada||0),0));
   const planejadas=eqIds.map(id=>state.planning.filter(r=>Number(r.mes_num)===calMonth&&r.equipe_id===id).reduce((s,x)=>s+Number(x.meta_planejada||0),0));
   const ratios=eqIds.map((_,i)=>planejadas[i]>0?Math.round(executadas[i]/planejadas[i]*100):executadas[i]>0?100:0);
-  const bgColors=ratios.map(r=>r>=80?cssVar('--green'):r>=50?cssVar('--ochre'):cssVar('--blue'));
+  const teamColorMap=Object.fromEntries(state.teams.map(t=>[t.equipe_id,t.cor||cssVar('--muted')]));
+  const bgColors=eqIds.map((id,i)=>ratios[i]>=80?cssVar('--green'):ratios[i]>=50?cssVar('--ochre'):(teamColorMap[id]||cssVar('--muted')));
   const maxX=Math.max(130,Math.max(...ratios,100)+15);
   const refLinePlugin={id:'refLine',afterDraw(chart){
     const {ctx,chartArea:{top,bottom},scales:{x}}=chart;
