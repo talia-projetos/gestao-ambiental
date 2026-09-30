@@ -247,9 +247,6 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
 <body>
   <div class="app-shell">
     <aside class="sidebar" aria-label="Navegação principal">
-      <div class="brand-mark">
-        <div class="brand-text"><strong>PROERG</strong><span>Gestão Ambiental</span></div>
-      </div>
       <nav class="sidebar-nav">
         <div class="sidebar-label">Principal</div>
         <button class="nav-btn active" data-page="page-overview" title="Visão geral"><i data-lucide="layout-dashboard"></i><span>Visão geral</span></button>
@@ -701,9 +698,11 @@ async function loadData(){
   const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
   state.demands=[...state.demands,...(local.demands||[])];
   state.impact=[...state.impact,...(local.impact||[])];
-  // auto-detectar o mês mais recente com dados operacionais
-  const opMs=[...execution,...state.demands,...blockers].map(r=>monthOf(r)).filter(m=>m>0);
-  if(opMs.length){state.month=Math.max(...opMs);const mf=document.getElementById('monthFilter');if(mf)mf.value=state.month;}
+  // auto-detectar o mês mais recente com execução (fallback: qualquer dado operacional)
+  const execMs=execution.map(r=>monthOf(r)).filter(m=>m>0);
+  const allOpMs=[...execution,...state.demands,...blockers].map(r=>monthOf(r)).filter(m=>m>0);
+  const srcMs=execMs.length?execMs:allOpMs;
+  if(srcMs.length){state.month=Math.max(...srcMs);const mf=document.getElementById('monthFilter');if(mf)mf.value=state.month;}
   populateTeamFilter(); renderAll(); updateDemandMarkers();
   if(lu)lu.textContent=`${state.teams.length} equipes · ${state.demands.length} demandas · atualizado às ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
 }
@@ -737,13 +736,13 @@ function metricsForTeam(teamId, month=state.month){
   const planActs=uniq(plan.map(x=>x.atividade_id));
   const execActs=uniq(exec.map(x=>x.atividade_id));
   const covered=planActs.filter(a=>execActs.includes(a)).length;
-  const coverage=planActs.length?covered/planActs.length:0;
-  const demandPlanIds=uniq(impacted.map(x=>x.plano_afetado_id));
-  const blockedPlanIds=uniq(blq.filter(x=>x.impactou_planejamento==='SIM').map(x=>x.plano_afetado_id));
-  const allAffectedPlanIds=uniq([...demandPlanIds,...blockedPlanIds]);
-  const impactRatio=planActs.length?demandPlanIds.length/planActs.length:0;
-  const blockRate=planActs.length?blockedPlanIds.length/planActs.length:0;
-  const planImpactRate=planActs.length?allAffectedPlanIds.length/planActs.length:0;
+  const coverage=planActs.length?covered/planActs.length:exec.length>0?1:0;
+  // Interferência e bloqueio por equipe (independente de plano_afetado_id)
+  const impactRatio=plan.length?Math.min(dem.length/Math.max(plan.length,1),1):0;
+  const blockedPlanIds=uniq(blq.filter(x=>x.impactou_planejamento==='SIM').map(x=>x.plano_afetado_id).filter(Boolean));
+  const allAffectedPlanIds=uniq(blockedPlanIds);
+  const blockRate=plan.length?Math.min(blq.length/Math.max(plan.length,1),1):0;
+  const planImpactRate=Math.max(impactRatio,blockRate);
   const blockedHours=blq.reduce((s,x)=>s+Number(x.horas_impactadas||0),0);
   const openDem=dem.filter(x=>!['CONCLUÍDA','RESOLVIDA','CANCELADA'].includes(x.status)).length;
   const score=Math.min(100,(1-coverage)*35+Math.min(planImpactRate,1)*35+Math.min(blockRate,1)*20+Math.min(openDem/4,1)*10);
@@ -759,11 +758,17 @@ function currentAggregate(){
   const covered=planTeams.filter(t=>execTeams.includes(t)).length;
   const coverage=planTeams.length?covered/planTeams.length:0;
   const impacted=f.impact.filter(x=>x.impactou_planejamento==='SIM');
-  const impactedPlans=uniq(impacted.map(x=>x.plano_afetado_id));
-  const blockedPlanIds=uniq(f.blockers.filter(x=>x.impactou_planejamento==='SIM').map(x=>x.plano_afetado_id));
+  const impactedPlans=uniq(impacted.map(x=>x.plano_afetado_id).filter(Boolean));
+  // Interferência: equipes com demanda no mês / equipes com planejamento
+  const demTeams=uniq(f.demands.map(x=>x.equipe_id));
+  const impactedTeams=planTeams.filter(t=>demTeams.includes(t));
+  const impactRatio=planTeams.length?impactedTeams.length/planTeams.length:0;
+  // Bloqueio: equipes com bloqueador no mês / equipes com planejamento
+  const blqTeams=uniq(f.blockers.map(x=>x.equipe_id));
+  const blockedTeams=planTeams.filter(t=>blqTeams.includes(t));
+  const blockedPlanIds=uniq(f.blockers.filter(x=>x.impactou_planejamento==='SIM').map(x=>x.plano_afetado_id).filter(Boolean));
   const allAffectedPlanIds=uniq([...impactedPlans,...blockedPlanIds]);
-  const impactRatio=planActs.length?impactedPlans.length/planActs.length:0;
-  const blockRate=planActs.length?blockedPlanIds.length/planActs.length:0;
+  const blockRate=planTeams.length?blockedTeams.length/planTeams.length:0;
   // Impacto total = YTD acumulado (todos os meses), para diferenciar da interferência do mês
   const ytdPlanMap=new Map(state.planning.map(p=>[p.plano_id,`${p.equipe_id}:${p.atividade_id}`]));
   const ytdAffActsSet=new Set([
