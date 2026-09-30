@@ -1,47 +1,11 @@
 bloqueador_id,data,equipe_id,tipo_bloqueador,impacto,horas_impactadas,impactou_planejamento,plano_afetado_id,atividade_planejada_afetada,observacao,origem_dado
-BLQ0001,2026-01-04,EQ03,Solo saturado,MÉDIO,2,SIM,PLN-2026-01-AT009,Produção de mudas florestais,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0002,2026-02-06,EQ05,Estiagem,ALTO,4,SIM,PLN-2026-02-AT018,Coroamento e manutenção de plantios,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0003,2026-03-08,EQ01,Vento forte,BAIXO,6,SIM,PLN-2026-03-AT001,Roçada mecanizada em faixa,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0004,2026-04-10,EQ03,Indisponibilidade de equipamento,MÉDIO,8,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0005,2026-05-12,EQ05,Acesso restrito,ALTO,1,SIM,PLN-2026-05-AT017,Plantio florestal,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0006,2026-06-14,EQ01,Logística,BAIXO,2,SIM,PLN-2026-06-AT002,Roçada manual seletiva,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0007,2026-07-16,EQ03,Pessoal,MÉDIO,4,SIM,PLN-2026-07-AT009,Produção de mudas florestais,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0008,2026-08-18,EQ05,Chuva intensa,ALTO,6,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0009,2026-09-20,EQ01,Solo saturado,BAIXO,8,SIM,PLN-2026-09-AT001,Roçada mecanizada em faixa,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0010,2026-01-22,EQ03,Estiagem,MÉDIO,1,SIM,PLN-2026-01-AT010,Repicagem e rustificação de mudas,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0011,2026-02-24,EQ05,Vento forte,ALTO,2,SIM,PLN-2026-02-AT017,Plantio florestal,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0012,2026-03-26,EQ01,Indisponibilidade de equipamento,BAIXO,4,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0013,2026-04-03,EQ03,Acesso restrito,MÉDIO,6,SIM,PLN-2026-04-AT009,Produção de mudas florestais,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0014,2026-05-05,EQ05,Logística,ALTO,8,SIM,PLN-2026-05-AT018,Coroamento e manutenção de plantios,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0015,2026-06-07,EQ01,Pessoal,BAIXO,1,SIM,PLN-2026-06-AT001,Roçada mecanizada em faixa,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0016,2026-07-09,EQ03,Chuva intensa,MÉDIO,2,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0017,2026-08-11,EQ05,Solo saturado,ALTO,4,SIM,PLN-2026-08-AT017,Plantio florestal,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0018,2026-09-13,EQ01,Estiagem,BAIXO,6,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0019,2026-01-15,EQ03,Vento forte,MÉDIO,8,SIM,PLN-2026-01-AT009,Produção de mudas florestais,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0020,2026-02-17,EQ05,Indisponibilidade de equipamento,ALTO,1,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0021,2026-03-19,EQ01,Acesso restrito,BAIXO,2,SIM,PLN-2026-03-AT001,Roçada mecanizada em faixa,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0022,2026-04-21,EQ03,Logística,MÉDIO,4,SIM,PLN-2026-04-AT010,Repicagem e rustificação de mudas,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0023,2026-05-23,EQ05,Pessoal,ALTO,6,SIM,PLN-2026-05-AT017,Plantio florestal,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0024,2026-06-25,EQ01,Chuva intensa,BAIXO,8,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0025,2026-07-02,EQ03,Solo saturado,MÉDIO,1,SIM,PLN-2026-07-AT009,Produção de mudas florestais,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0026,2026-08-04,EQ05,Estiagem,ALTO,2,SIM,PLN-2026-08-AT018,Coroamento e manutenção de plantios,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0027,2026-09-06,EQ01,Vento forte,BAIXO,4,SIM,PLN-2026-09-AT001,Roçada mecanizada em faixa,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0028,2026-01-08,EQ03,Indisponibilidade de equipamento,MÉDIO,6,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0029,2026-02-10,EQ05,Acesso restrito,ALTO,8,SIM,PLN-2026-02-AT017,Plantio florestal,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0030,2026-03-12,EQ01,Logística,BAIXO,1,SIM,PLN-2026-03-AT002,Roçada manual seletiva,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0031,2026-04-14,EQ03,Pessoal,MÉDIO,2,SIM,PLN-2026-04-AT009,Produção de mudas florestais,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0032,2026-05-16,EQ05,Chuva intensa,ALTO,4,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0033,2026-06-18,EQ01,Solo saturado,BAIXO,6,SIM,PLN-2026-06-AT001,Roçada mecanizada em faixa,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0034,2026-07-20,EQ03,Estiagem,MÉDIO,8,SIM,PLN-2026-07-AT010,Repicagem e rustificação de mudas,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0035,2026-08-22,EQ05,Vento forte,ALTO,1,SIM,PLN-2026-08-AT017,Plantio florestal,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0036,2026-09-24,EQ01,Indisponibilidade de equipamento,BAIXO,2,NÃO,,,Registro simulado para teste de recorrência e análise.,SIMULADO
-BLQ0037,2026-09-03,EQ02,Chuva intensa,MÉDIO,4,NÃO,,,Bloqueador simulado para cenário analítico.,SIMULADO
-BLQ0038,2026-09-05,EQ03,Indisponibilidade de equipamento,ALTO,5,SIM,PLN-2026-09-AT009,Produção de mudas florestais,Bloqueador simulado para cenário analítico.,SIMULADO
-BLQ0039,2026-09-16,EQ03,Logística,MÉDIO,7,NÃO,,,Bloqueador simulado para cenário analítico.,SIMULADO
-BLQ0040,2026-09-02,EQ04,Pessoal,ALTO,6,SIM,PLN-2026-09-AT013,Produção de hortaliças,Bloqueador simulado para cenário analítico.,SIMULADO
-BLQ0041,2026-09-09,EQ04,Acesso restrito,MÉDIO,8,SIM,PLN-2026-09-AT014,Manejo de vasos ornamentais,Bloqueador simulado para cenário analítico.,SIMULADO
-BLQ0042,2026-09-18,EQ04,Indisponibilidade de equipamento,MÉDIO,4,NÃO,,,Bloqueador simulado para cenário analítico.,SIMULADO
-BLQ0043,2026-09-07,EQ05,Estiagem,ALTO,9,SIM,PLN-2026-09-AT017,Plantio florestal,Bloqueador simulado para cenário analítico.,SIMULADO
-BLQ0044,2026-09-04,EQ06,Logística,MÉDIO,6,SIM,PLN-2026-09-AT021,Aceiro preventivo,Bloqueador simulado para cenário analítico.,SIMULADO
-BLQ0045,2026-09-11,EQ06,Pessoal,ALTO,10,SIM,PLN-2026-09-AT022,Ronda preventiva de incêndio,Bloqueador simulado para cenário analítico.,SIMULADO
-BLQ0046,2026-09-22,EQ06,Indisponibilidade de equipamento,MÉDIO,4,NÃO,,,Bloqueador simulado para cenário analítico.,SIMULADO
+BL001,2026-03-10,EQ01,CLIMÁTICO,ALTO,72,SIM,PM0001,Monitoramento de avifauna,Chuva excepcional 150mm em 24h suspendeu campo por 3 dias consecutivos.,PROERG
+BL002,2026-04-15,EQ02,LOGÍSTICO,MÉDIO,40,SIM,PM0017,Inventário florestal,Veículo da equipe quebrou — aguardou 5 dias por manutenção; laudo enviado à frota.,PROERG
+BL003,2026-05-03,EQ03,REGULATÓRIO,ALTO,80,SIM,PM0033,Monitoramento qualidade da água,Autorização IBAMA para coleta em zona núcleo não renovada a tempo. Aguardou 2 semanas.,PROERG
+BL004,2026-06-18,EQ04,CLIMÁTICO,MÉDIO,32,SIM,PM0049,Plantio de mudas nativas,Geada registrada às 03h — proteção emergencial das mudas recém plantadas.,PROERG
+BL005,2026-07-09,EQ05,LOGÍSTICO,MÉDIO,16,SIM,PM0065,Instalação de bacias de contenção,EPI de escavação (respiradores e luvas anti-corte) em falta — compra emergencial realizada.,PROERG
+BL006,2026-08-05,EQ01,CLIMÁTICO,BAIXO,24,NÃO,PM0001,Monitoramento de câmeras-trap,Seca extrema alterou comportamento da fauna — câmeras realocadas para pontos d'água.,PROERG
+BL007,2026-08-06,EQ03,LOGÍSTICO,ALTO,64,SIM,PM0033,Batimetria e erosão marginal,Embarcação com defeito — manutenção durou 8 dias; batimetria parcialmente realizada por terra.,PROERG
+BL008,2026-08-08,EQ06,INSTITUCIONAL,BAIXO,8,NÃO,PM0065,Prog. ambiental em escolas,Escola comunicou recesso escolar antecipado de inverno — atividade remarcada para setembro.,PROERG
+BL009,2026-08-10,EQ02,CLIMÁTICO,ALTO,48,SIM,PM0017,Controle de exóticas invasoras,Foco de incêndio limítrofe à área de trabalho — equipe retirada por 6 dias. Área interditada.,PROERG
+BL010,2026-08-20,EQ04,LOGÍSTICO,ALTO,56,SIM,PM0049,Plantio de mudas nativas,Viveiro municipal com atraso de 30 dias na entrega de 2000 mudas — plantio suspenso.,PROERG

@@ -1,7 +1,7 @@
 equipe_id,equipe,lider_tecnico,frente_atuacao,qtd_colaboradores,status,origem_dado
-EQ01,Faixas de Servidão,Líder Técnico 01,Conservação de faixas de servidão e apoio a linhas de transmissão,20,ATIVA,SIMULADO
-EQ02,Áreas Verdes e Paisagismo,Líder Técnico 02,"Manutenção de áreas verdes, jardins e paisagismo",19,ATIVA,SIMULADO
-EQ03,Viveiro Florestal,Líder Técnico 03,"Produção, manejo e expedição de mudas florestais",19,ATIVA,SIMULADO
-EQ04,Viveiro Ornamental e Horticultura,Líder Técnico 04,Produção e manejo de ornamentais e hortaliças,19,ATIVA,SIMULADO
-EQ05,Reflorestamento e Manutenção Florestal,Líder Técnico 05,"Implantação, condução e manutenção de áreas florestais",19,ATIVA,SIMULADO
-EQ06,Prevenção a Incêndios e Apoio Ambiental,Líder Técnico 06,"Prevenção, prontidão e apoio operacional ambiental",19,ATIVA,SIMULADO
+EQ01,Equipe Fauna,Ana Paula Ferreira,Monitoramento de Fauna,18,ATIVA,PROERG
+EQ02,Equipe Flora,Ricardo Mendes,Monitoramento de Flora e Vegetação,20,ATIVA,PROERG
+EQ03,Equipe Hídricos,Camila Torres,Recursos Hídricos e Limnologia,17,ATIVA,PROERG
+EQ04,Equipe Recuperação,Fábio Leal,Recuperação de Áreas Degradadas,22,ATIVA,PROERG
+EQ05,Equipe Erosão,Juliana Costa,Controle de Erosão e Engenharia Natural,19,ATIVA,PROERG
+EQ06,Equipe Educação,Marcos Ribeiro,Educação Ambiental e Comunicação,19,ATIVA,PROERG

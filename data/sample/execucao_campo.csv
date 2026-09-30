@@ -1,163 +1,83 @@
 execucao_id,data,equipe_id,lider_tecnico,atividade_id,atividade,unidade,quantidade_executada,status_execucao,bloqueador,local_referencia,latitude,longitude,origem_dado
-EXE0001,2026-01-05,EQ01,Líder Técnico 01,AT002,Roçada manual seletiva,ha,6,CONCLUÍDA,,Ponto Simulado 001,-25.538000,-54.582000,SIMULADO
-EXE0002,2026-01-11,EQ01,Líder Técnico 01,AT003,Inspeção de faixa e pontos críticos,km,7,CONCLUÍDA,,Ponto Simulado 002,-25.535000,-54.578000,SIMULADO
-EXE0003,2026-01-18,EQ01,Líder Técnico 01,AT004,Manutenção de sinalização e organização operacional,un,8,CONCLUÍDA,,Ponto Simulado 003,-25.532000,-54.574000,SIMULADO
-EXE0004,2026-01-05,EQ02,Líder Técnico 02,AT006,Poda de formação e condução,un,7,CONCLUÍDA,,Ponto Simulado 004,-25.531000,-54.577000,SIMULADO
-EXE0005,2026-01-11,EQ02,Líder Técnico 02,AT007,Controle de plantas invasoras,ha,8,CONCLUÍDA,,Ponto Simulado 005,-25.528000,-54.573000,SIMULADO
-EXE0006,2026-01-18,EQ02,Líder Técnico 02,AT008,Manutenção leve de jardins e mobiliário verde,h,9,CONCLUÍDA,,Ponto Simulado 006,-25.525000,-54.569000,SIMULADO
-EXE0007,2026-01-05,EQ03,Líder Técnico 03,AT010,Repicagem e rustificação de mudas,milheiro,8,CONCLUÍDA,,Ponto Simulado 007,-25.555000,-54.572000,SIMULADO
-EXE0008,2026-01-11,EQ03,Líder Técnico 03,AT011,Expedição e carregamento de mudas,milheiro,9,CONCLUÍDA,,Ponto Simulado 008,-25.552000,-54.568000,SIMULADO
-EXE0009,2026-01-18,EQ03,Líder Técnico 03,AT012,Beneficiamento de sementes e organização de viveiro,h,10,CONCLUÍDA,,Ponto Simulado 009,-25.549000,-54.595000,SIMULADO
-EXE0010,2026-01-05,EQ04,Líder Técnico 04,AT014,Manejo de vasos ornamentais,un,9,CONCLUÍDA,,Ponto Simulado 010,-25.548000,-54.567000,SIMULADO
-EXE0011,2026-01-11,EQ04,Líder Técnico 04,AT015,Transplante e renovação de canteiros,m²,10,CONCLUÍDA,,Ponto Simulado 011,-25.545000,-54.594000,SIMULADO
-EXE0012,2026-01-18,EQ04,Líder Técnico 04,AT016,Preparação de substrato e manutenção interna,h,11,CONCLUÍDA,,Ponto Simulado 012,-25.542000,-54.590000,SIMULADO
-EXE0013,2026-01-05,EQ05,Líder Técnico 05,AT018,Coroamento e manutenção de plantios,ha,10,CONCLUÍDA,,Ponto Simulado 013,-25.541000,-54.593000,SIMULADO
-EXE0014,2026-01-11,EQ05,Líder Técnico 05,AT019,Controle de invasoras em área florestal,ha,11,CONCLUÍDA,,Ponto Simulado 014,-25.538000,-54.589000,SIMULADO
-EXE0015,2026-01-18,EQ05,Líder Técnico 05,AT020,Preparo de insumos e manutenção de ferramentas,h,12,CONCLUÍDA,,Ponto Simulado 015,-25.535000,-54.585000,SIMULADO
-EXE0016,2026-01-05,EQ06,Líder Técnico 06,AT022,Ronda preventiva de incêndio,h,11,CONCLUÍDA,,Ponto Simulado 016,-25.534000,-54.588000,SIMULADO
-EXE0017,2026-01-11,EQ06,Líder Técnico 06,AT023,Inspeção de equipamentos de combate,un,12,CONCLUÍDA,,Ponto Simulado 017,-25.531000,-54.584000,SIMULADO
-EXE0018,2026-01-18,EQ06,Líder Técnico 06,AT024,"Treinamento, prontidão e organização de base",h,13,PARCIAL,Chuva intensa,Ponto Simulado 018,-25.528000,-54.580000,SIMULADO
-EXE0019,2026-02-05,EQ01,Líder Técnico 01,AT003,Inspeção de faixa e pontos críticos,km,7,CONCLUÍDA,,Ponto Simulado 019,-25.552000,-54.569000,SIMULADO
-EXE0020,2026-02-11,EQ01,Líder Técnico 01,AT004,Manutenção de sinalização e organização operacional,un,8,CONCLUÍDA,,Ponto Simulado 020,-25.549000,-54.565000,SIMULADO
-EXE0021,2026-02-18,EQ01,Líder Técnico 01,AT001,Roçada mecanizada em faixa,ha,9,CONCLUÍDA,,Ponto Simulado 021,-25.546000,-54.592000,SIMULADO
-EXE0022,2026-02-05,EQ02,Líder Técnico 02,AT007,Controle de plantas invasoras,ha,8,CONCLUÍDA,,Ponto Simulado 022,-25.545000,-54.595000,SIMULADO
-EXE0023,2026-02-11,EQ02,Líder Técnico 02,AT008,Manutenção leve de jardins e mobiliário verde,h,9,CONCLUÍDA,,Ponto Simulado 023,-25.542000,-54.591000,SIMULADO
-EXE0024,2026-02-18,EQ02,Líder Técnico 02,AT005,Corte de gramado e acabamento,ha,10,CONCLUÍDA,,Ponto Simulado 024,-25.539000,-54.587000,SIMULADO
-EXE0025,2026-02-05,EQ03,Líder Técnico 03,AT011,Expedição e carregamento de mudas,milheiro,9,CONCLUÍDA,,Ponto Simulado 025,-25.538000,-54.590000,SIMULADO
-EXE0026,2026-02-11,EQ03,Líder Técnico 03,AT012,Beneficiamento de sementes e organização de viveiro,h,10,CONCLUÍDA,,Ponto Simulado 026,-25.535000,-54.586000,SIMULADO
-EXE0027,2026-02-18,EQ03,Líder Técnico 03,AT009,Produção de mudas florestais,milheiro,11,CONCLUÍDA,,Ponto Simulado 027,-25.532000,-54.582000,SIMULADO
-EXE0028,2026-02-05,EQ04,Líder Técnico 04,AT015,Transplante e renovação de canteiros,m²,10,CONCLUÍDA,,Ponto Simulado 028,-25.531000,-54.585000,SIMULADO
-EXE0029,2026-02-11,EQ04,Líder Técnico 04,AT016,Preparação de substrato e manutenção interna,h,11,CONCLUÍDA,,Ponto Simulado 029,-25.528000,-54.581000,SIMULADO
-EXE0030,2026-02-18,EQ04,Líder Técnico 04,AT013,Produção de hortaliças,canteiro,12,CONCLUÍDA,,Ponto Simulado 030,-25.525000,-54.577000,SIMULADO
-EXE0031,2026-02-05,EQ05,Líder Técnico 05,AT019,Controle de invasoras em área florestal,ha,11,CONCLUÍDA,,Ponto Simulado 031,-25.555000,-54.580000,SIMULADO
-EXE0032,2026-02-11,EQ05,Líder Técnico 05,AT020,Preparo de insumos e manutenção de ferramentas,h,12,CONCLUÍDA,,Ponto Simulado 032,-25.552000,-54.576000,SIMULADO
-EXE0033,2026-02-18,EQ05,Líder Técnico 05,AT017,Plantio florestal,ha,13,PARCIAL,Chuva intensa,Ponto Simulado 033,-25.549000,-54.572000,SIMULADO
-EXE0034,2026-02-05,EQ06,Líder Técnico 06,AT023,Inspeção de equipamentos de combate,un,12,CONCLUÍDA,,Ponto Simulado 034,-25.548000,-54.575000,SIMULADO
-EXE0035,2026-02-11,EQ06,Líder Técnico 06,AT024,"Treinamento, prontidão e organização de base",h,13,PARCIAL,Chuva intensa,Ponto Simulado 035,-25.545000,-54.571000,SIMULADO
-EXE0036,2026-02-18,EQ06,Líder Técnico 06,AT021,Aceiro preventivo,km,14,CONCLUÍDA,,Ponto Simulado 036,-25.542000,-54.567000,SIMULADO
-EXE0037,2026-03-05,EQ01,Líder Técnico 01,AT004,Manutenção de sinalização e organização operacional,un,8,CONCLUÍDA,,Ponto Simulado 037,-25.535000,-54.587000,SIMULADO
-EXE0038,2026-03-11,EQ01,Líder Técnico 01,AT001,Roçada mecanizada em faixa,ha,9,CONCLUÍDA,,Ponto Simulado 038,-25.532000,-54.583000,SIMULADO
-EXE0039,2026-03-18,EQ01,Líder Técnico 01,AT002,Roçada manual seletiva,ha,10,CONCLUÍDA,,Ponto Simulado 039,-25.529000,-54.579000,SIMULADO
-EXE0040,2026-03-05,EQ02,Líder Técnico 02,AT008,Manutenção leve de jardins e mobiliário verde,h,9,CONCLUÍDA,,Ponto Simulado 040,-25.528000,-54.582000,SIMULADO
-EXE0041,2026-03-11,EQ02,Líder Técnico 02,AT005,Corte de gramado e acabamento,ha,10,CONCLUÍDA,,Ponto Simulado 041,-25.525000,-54.578000,SIMULADO
-EXE0042,2026-03-18,EQ02,Líder Técnico 02,AT006,Poda de formação e condução,un,11,CONCLUÍDA,,Ponto Simulado 042,-25.553000,-54.574000,SIMULADO
-EXE0043,2026-03-05,EQ03,Líder Técnico 03,AT012,Beneficiamento de sementes e organização de viveiro,h,10,CONCLUÍDA,,Ponto Simulado 043,-25.552000,-54.577000,SIMULADO
-EXE0044,2026-03-11,EQ03,Líder Técnico 03,AT009,Produção de mudas florestais,milheiro,11,CONCLUÍDA,,Ponto Simulado 044,-25.549000,-54.573000,SIMULADO
-EXE0045,2026-03-18,EQ03,Líder Técnico 03,AT010,Repicagem e rustificação de mudas,milheiro,12,CONCLUÍDA,,Ponto Simulado 045,-25.546000,-54.569000,SIMULADO
-EXE0046,2026-03-05,EQ04,Líder Técnico 04,AT016,Preparação de substrato e manutenção interna,h,11,CONCLUÍDA,,Ponto Simulado 046,-25.545000,-54.572000,SIMULADO
-EXE0047,2026-03-11,EQ04,Líder Técnico 04,AT013,Produção de hortaliças,canteiro,12,CONCLUÍDA,,Ponto Simulado 047,-25.542000,-54.568000,SIMULADO
-EXE0048,2026-03-18,EQ04,Líder Técnico 04,AT014,Manejo de vasos ornamentais,un,13,PARCIAL,Chuva intensa,Ponto Simulado 048,-25.539000,-54.595000,SIMULADO
-EXE0049,2026-03-05,EQ05,Líder Técnico 05,AT020,Preparo de insumos e manutenção de ferramentas,h,12,CONCLUÍDA,,Ponto Simulado 049,-25.538000,-54.567000,SIMULADO
-EXE0050,2026-03-11,EQ05,Líder Técnico 05,AT017,Plantio florestal,ha,13,PARCIAL,Chuva intensa,Ponto Simulado 050,-25.535000,-54.594000,SIMULADO
-EXE0051,2026-03-18,EQ05,Líder Técnico 05,AT018,Coroamento e manutenção de plantios,ha,14,CONCLUÍDA,,Ponto Simulado 051,-25.532000,-54.590000,SIMULADO
-EXE0052,2026-03-05,EQ06,Líder Técnico 06,AT024,"Treinamento, prontidão e organização de base",h,13,PARCIAL,Chuva intensa,Ponto Simulado 052,-25.531000,-54.593000,SIMULADO
-EXE0053,2026-03-11,EQ06,Líder Técnico 06,AT021,Aceiro preventivo,km,14,CONCLUÍDA,,Ponto Simulado 053,-25.528000,-54.589000,SIMULADO
-EXE0054,2026-03-18,EQ06,Líder Técnico 06,AT022,Ronda preventiva de incêndio,h,15,CONCLUÍDA,,Ponto Simulado 054,-25.525000,-54.585000,SIMULADO
-EXE0055,2026-04-05,EQ01,Líder Técnico 01,AT001,Roçada mecanizada em faixa,ha,9,CONCLUÍDA,,Ponto Simulado 055,-25.549000,-54.574000,SIMULADO
-EXE0056,2026-04-11,EQ01,Líder Técnico 01,AT002,Roçada manual seletiva,ha,10,CONCLUÍDA,,Ponto Simulado 056,-25.546000,-54.570000,SIMULADO
-EXE0057,2026-04-18,EQ01,Líder Técnico 01,AT003,Inspeção de faixa e pontos críticos,km,11,CONCLUÍDA,,Ponto Simulado 057,-25.543000,-54.566000,SIMULADO
-EXE0058,2026-04-05,EQ02,Líder Técnico 02,AT005,Corte de gramado e acabamento,ha,10,CONCLUÍDA,,Ponto Simulado 058,-25.542000,-54.569000,SIMULADO
-EXE0059,2026-04-11,EQ02,Líder Técnico 02,AT006,Poda de formação e condução,un,11,CONCLUÍDA,,Ponto Simulado 059,-25.539000,-54.565000,SIMULADO
-EXE0060,2026-04-18,EQ02,Líder Técnico 02,AT007,Controle de plantas invasoras,ha,12,CONCLUÍDA,,Ponto Simulado 060,-25.536000,-54.592000,SIMULADO
-EXE0061,2026-04-05,EQ03,Líder Técnico 03,AT009,Produção de mudas florestais,milheiro,11,CONCLUÍDA,,Ponto Simulado 061,-25.535000,-54.595000,SIMULADO
-EXE0062,2026-04-11,EQ03,Líder Técnico 03,AT010,Repicagem e rustificação de mudas,milheiro,12,CONCLUÍDA,,Ponto Simulado 062,-25.532000,-54.591000,SIMULADO
-EXE0063,2026-04-18,EQ03,Líder Técnico 03,AT011,Expedição e carregamento de mudas,milheiro,13,PARCIAL,Chuva intensa,Ponto Simulado 063,-25.529000,-54.587000,SIMULADO
-EXE0064,2026-04-05,EQ04,Líder Técnico 04,AT013,Produção de hortaliças,canteiro,12,CONCLUÍDA,,Ponto Simulado 064,-25.528000,-54.590000,SIMULADO
-EXE0065,2026-04-11,EQ04,Líder Técnico 04,AT014,Manejo de vasos ornamentais,un,13,PARCIAL,Chuva intensa,Ponto Simulado 065,-25.525000,-54.586000,SIMULADO
-EXE0066,2026-04-18,EQ04,Líder Técnico 04,AT015,Transplante e renovação de canteiros,m²,14,CONCLUÍDA,,Ponto Simulado 066,-25.553000,-54.582000,SIMULADO
-EXE0067,2026-04-05,EQ05,Líder Técnico 05,AT017,Plantio florestal,ha,13,PARCIAL,Chuva intensa,Ponto Simulado 067,-25.552000,-54.585000,SIMULADO
-EXE0068,2026-04-11,EQ05,Líder Técnico 05,AT018,Coroamento e manutenção de plantios,ha,14,CONCLUÍDA,,Ponto Simulado 068,-25.549000,-54.581000,SIMULADO
-EXE0069,2026-04-18,EQ05,Líder Técnico 05,AT019,Controle de invasoras em área florestal,ha,15,CONCLUÍDA,,Ponto Simulado 069,-25.546000,-54.577000,SIMULADO
-EXE0070,2026-04-05,EQ06,Líder Técnico 06,AT021,Aceiro preventivo,km,14,CONCLUÍDA,,Ponto Simulado 070,-25.545000,-54.580000,SIMULADO
-EXE0071,2026-04-11,EQ06,Líder Técnico 06,AT022,Ronda preventiva de incêndio,h,15,CONCLUÍDA,,Ponto Simulado 071,-25.542000,-54.576000,SIMULADO
-EXE0072,2026-04-18,EQ06,Líder Técnico 06,AT023,Inspeção de equipamentos de combate,un,16,CONCLUÍDA,,Ponto Simulado 072,-25.539000,-54.572000,SIMULADO
-EXE0073,2026-05-05,EQ01,Líder Técnico 01,AT002,Roçada manual seletiva,ha,10,CONCLUÍDA,,Ponto Simulado 073,-25.532000,-54.592000,SIMULADO
-EXE0074,2026-05-11,EQ01,Líder Técnico 01,AT003,Inspeção de faixa e pontos críticos,km,11,CONCLUÍDA,,Ponto Simulado 074,-25.529000,-54.588000,SIMULADO
-EXE0075,2026-05-18,EQ01,Líder Técnico 01,AT004,Manutenção de sinalização e organização operacional,un,12,CONCLUÍDA,,Ponto Simulado 075,-25.526000,-54.584000,SIMULADO
-EXE0076,2026-05-05,EQ02,Líder Técnico 02,AT006,Poda de formação e condução,un,11,CONCLUÍDA,,Ponto Simulado 076,-25.525000,-54.587000,SIMULADO
-EXE0077,2026-05-11,EQ02,Líder Técnico 02,AT007,Controle de plantas invasoras,ha,12,CONCLUÍDA,,Ponto Simulado 077,-25.553000,-54.583000,SIMULADO
-EXE0078,2026-05-18,EQ02,Líder Técnico 02,AT008,Manutenção leve de jardins e mobiliário verde,h,13,PARCIAL,Chuva intensa,Ponto Simulado 078,-25.550000,-54.579000,SIMULADO
-EXE0079,2026-05-05,EQ03,Líder Técnico 03,AT010,Repicagem e rustificação de mudas,milheiro,12,CONCLUÍDA,,Ponto Simulado 079,-25.549000,-54.582000,SIMULADO
-EXE0080,2026-05-11,EQ03,Líder Técnico 03,AT011,Expedição e carregamento de mudas,milheiro,13,PARCIAL,Chuva intensa,Ponto Simulado 080,-25.546000,-54.578000,SIMULADO
-EXE0081,2026-05-18,EQ03,Líder Técnico 03,AT012,Beneficiamento de sementes e organização de viveiro,h,14,CONCLUÍDA,,Ponto Simulado 081,-25.543000,-54.574000,SIMULADO
-EXE0082,2026-05-05,EQ04,Líder Técnico 04,AT014,Manejo de vasos ornamentais,un,13,PARCIAL,Chuva intensa,Ponto Simulado 082,-25.542000,-54.577000,SIMULADO
-EXE0083,2026-05-11,EQ04,Líder Técnico 04,AT015,Transplante e renovação de canteiros,m²,14,CONCLUÍDA,,Ponto Simulado 083,-25.539000,-54.573000,SIMULADO
-EXE0084,2026-05-18,EQ04,Líder Técnico 04,AT016,Preparação de substrato e manutenção interna,h,15,CONCLUÍDA,,Ponto Simulado 084,-25.536000,-54.569000,SIMULADO
-EXE0085,2026-05-05,EQ05,Líder Técnico 05,AT018,Coroamento e manutenção de plantios,ha,14,CONCLUÍDA,,Ponto Simulado 085,-25.535000,-54.572000,SIMULADO
-EXE0086,2026-05-11,EQ05,Líder Técnico 05,AT019,Controle de invasoras em área florestal,ha,15,CONCLUÍDA,,Ponto Simulado 086,-25.532000,-54.568000,SIMULADO
-EXE0087,2026-05-18,EQ05,Líder Técnico 05,AT020,Preparo de insumos e manutenção de ferramentas,h,16,CONCLUÍDA,,Ponto Simulado 087,-25.529000,-54.595000,SIMULADO
-EXE0088,2026-05-05,EQ06,Líder Técnico 06,AT022,Ronda preventiva de incêndio,h,15,CONCLUÍDA,,Ponto Simulado 088,-25.528000,-54.567000,SIMULADO
-EXE0089,2026-05-11,EQ06,Líder Técnico 06,AT023,Inspeção de equipamentos de combate,un,16,CONCLUÍDA,,Ponto Simulado 089,-25.525000,-54.594000,SIMULADO
-EXE0090,2026-05-18,EQ06,Líder Técnico 06,AT024,"Treinamento, prontidão e organização de base",h,17,CONCLUÍDA,,Ponto Simulado 090,-25.553000,-54.590000,SIMULADO
-EXE0091,2026-06-05,EQ01,Líder Técnico 01,AT003,Inspeção de faixa e pontos críticos,km,11,CONCLUÍDA,,Ponto Simulado 091,-25.546000,-54.579000,SIMULADO
-EXE0092,2026-06-11,EQ01,Líder Técnico 01,AT004,Manutenção de sinalização e organização operacional,un,12,CONCLUÍDA,,Ponto Simulado 092,-25.543000,-54.575000,SIMULADO
-EXE0093,2026-06-18,EQ01,Líder Técnico 01,AT001,Roçada mecanizada em faixa,ha,13,PARCIAL,Chuva intensa,Ponto Simulado 093,-25.540000,-54.571000,SIMULADO
-EXE0094,2026-06-05,EQ02,Líder Técnico 02,AT007,Controle de plantas invasoras,ha,12,CONCLUÍDA,,Ponto Simulado 094,-25.539000,-54.574000,SIMULADO
-EXE0095,2026-06-11,EQ02,Líder Técnico 02,AT008,Manutenção leve de jardins e mobiliário verde,h,13,PARCIAL,Chuva intensa,Ponto Simulado 095,-25.536000,-54.570000,SIMULADO
-EXE0096,2026-06-18,EQ02,Líder Técnico 02,AT005,Corte de gramado e acabamento,ha,14,CONCLUÍDA,,Ponto Simulado 096,-25.533000,-54.566000,SIMULADO
-EXE0097,2026-06-05,EQ03,Líder Técnico 03,AT011,Expedição e carregamento de mudas,milheiro,13,PARCIAL,Chuva intensa,Ponto Simulado 097,-25.532000,-54.569000,SIMULADO
-EXE0098,2026-06-11,EQ03,Líder Técnico 03,AT012,Beneficiamento de sementes e organização de viveiro,h,14,CONCLUÍDA,,Ponto Simulado 098,-25.529000,-54.565000,SIMULADO
-EXE0099,2026-06-18,EQ03,Líder Técnico 03,AT009,Produção de mudas florestais,milheiro,15,CONCLUÍDA,,Ponto Simulado 099,-25.526000,-54.592000,SIMULADO
-EXE0100,2026-06-05,EQ04,Líder Técnico 04,AT015,Transplante e renovação de canteiros,m²,14,CONCLUÍDA,,Ponto Simulado 100,-25.525000,-54.595000,SIMULADO
-EXE0101,2026-06-11,EQ04,Líder Técnico 04,AT016,Preparação de substrato e manutenção interna,h,15,CONCLUÍDA,,Ponto Simulado 101,-25.553000,-54.591000,SIMULADO
-EXE0102,2026-06-18,EQ04,Líder Técnico 04,AT013,Produção de hortaliças,canteiro,16,CONCLUÍDA,,Ponto Simulado 102,-25.550000,-54.587000,SIMULADO
-EXE0103,2026-06-05,EQ05,Líder Técnico 05,AT019,Controle de invasoras em área florestal,ha,15,CONCLUÍDA,,Ponto Simulado 103,-25.549000,-54.590000,SIMULADO
-EXE0104,2026-06-11,EQ05,Líder Técnico 05,AT020,Preparo de insumos e manutenção de ferramentas,h,16,CONCLUÍDA,,Ponto Simulado 104,-25.546000,-54.586000,SIMULADO
-EXE0105,2026-06-18,EQ05,Líder Técnico 05,AT017,Plantio florestal,ha,17,CONCLUÍDA,,Ponto Simulado 105,-25.543000,-54.582000,SIMULADO
-EXE0106,2026-06-05,EQ06,Líder Técnico 06,AT023,Inspeção de equipamentos de combate,un,16,CONCLUÍDA,,Ponto Simulado 106,-25.542000,-54.585000,SIMULADO
-EXE0107,2026-06-11,EQ06,Líder Técnico 06,AT024,"Treinamento, prontidão e organização de base",h,17,CONCLUÍDA,,Ponto Simulado 107,-25.539000,-54.581000,SIMULADO
-EXE0108,2026-06-18,EQ06,Líder Técnico 06,AT021,Aceiro preventivo,km,18,CONCLUÍDA,,Ponto Simulado 108,-25.536000,-54.577000,SIMULADO
-EXE0109,2026-07-05,EQ01,Líder Técnico 01,AT004,Manutenção de sinalização e organização operacional,un,12,CONCLUÍDA,,Ponto Simulado 109,-25.529000,-54.566000,SIMULADO
-EXE0110,2026-07-11,EQ01,Líder Técnico 01,AT001,Roçada mecanizada em faixa,ha,13,PARCIAL,Chuva intensa,Ponto Simulado 110,-25.526000,-54.593000,SIMULADO
-EXE0111,2026-07-18,EQ01,Líder Técnico 01,AT002,Roçada manual seletiva,ha,14,CONCLUÍDA,,Ponto Simulado 111,-25.554000,-54.589000,SIMULADO
-EXE0112,2026-07-05,EQ02,Líder Técnico 02,AT008,Manutenção leve de jardins e mobiliário verde,h,13,PARCIAL,Chuva intensa,Ponto Simulado 112,-25.553000,-54.592000,SIMULADO
-EXE0113,2026-07-11,EQ02,Líder Técnico 02,AT005,Corte de gramado e acabamento,ha,14,CONCLUÍDA,,Ponto Simulado 113,-25.550000,-54.588000,SIMULADO
-EXE0114,2026-07-18,EQ02,Líder Técnico 02,AT006,Poda de formação e condução,un,15,CONCLUÍDA,,Ponto Simulado 114,-25.547000,-54.584000,SIMULADO
-EXE0115,2026-07-05,EQ03,Líder Técnico 03,AT012,Beneficiamento de sementes e organização de viveiro,h,14,CONCLUÍDA,,Ponto Simulado 115,-25.546000,-54.587000,SIMULADO
-EXE0116,2026-07-11,EQ03,Líder Técnico 03,AT009,Produção de mudas florestais,milheiro,15,CONCLUÍDA,,Ponto Simulado 116,-25.543000,-54.583000,SIMULADO
-EXE0117,2026-07-18,EQ03,Líder Técnico 03,AT010,Repicagem e rustificação de mudas,milheiro,16,CONCLUÍDA,,Ponto Simulado 117,-25.540000,-54.579000,SIMULADO
-EXE0118,2026-07-05,EQ04,Líder Técnico 04,AT016,Preparação de substrato e manutenção interna,h,15,CONCLUÍDA,,Ponto Simulado 118,-25.539000,-54.582000,SIMULADO
-EXE0119,2026-07-11,EQ04,Líder Técnico 04,AT013,Produção de hortaliças,canteiro,16,CONCLUÍDA,,Ponto Simulado 119,-25.536000,-54.578000,SIMULADO
-EXE0120,2026-07-18,EQ04,Líder Técnico 04,AT014,Manejo de vasos ornamentais,un,17,CONCLUÍDA,,Ponto Simulado 120,-25.533000,-54.574000,SIMULADO
-EXE0121,2026-07-05,EQ05,Líder Técnico 05,AT020,Preparo de insumos e manutenção de ferramentas,h,16,CONCLUÍDA,,Ponto Simulado 121,-25.532000,-54.577000,SIMULADO
-EXE0122,2026-07-11,EQ05,Líder Técnico 05,AT017,Plantio florestal,ha,17,CONCLUÍDA,,Ponto Simulado 122,-25.529000,-54.573000,SIMULADO
-EXE0123,2026-07-18,EQ05,Líder Técnico 05,AT018,Coroamento e manutenção de plantios,ha,18,CONCLUÍDA,,Ponto Simulado 123,-25.526000,-54.569000,SIMULADO
-EXE0124,2026-07-05,EQ06,Líder Técnico 06,AT024,"Treinamento, prontidão e organização de base",h,17,CONCLUÍDA,,Ponto Simulado 124,-25.525000,-54.572000,SIMULADO
-EXE0125,2026-07-11,EQ06,Líder Técnico 06,AT021,Aceiro preventivo,km,18,CONCLUÍDA,,Ponto Simulado 125,-25.553000,-54.568000,SIMULADO
-EXE0126,2026-07-18,EQ06,Líder Técnico 06,AT022,Ronda preventiva de incêndio,h,19,CONCLUÍDA,,Ponto Simulado 126,-25.550000,-54.595000,SIMULADO
-EXE0127,2026-08-05,EQ01,Líder Técnico 01,AT001,Roçada mecanizada em faixa,ha,13,PARCIAL,Chuva intensa,Ponto Simulado 127,-25.543000,-54.584000,SIMULADO
-EXE0128,2026-08-11,EQ01,Líder Técnico 01,AT002,Roçada manual seletiva,ha,14,CONCLUÍDA,,Ponto Simulado 128,-25.540000,-54.580000,SIMULADO
-EXE0129,2026-08-18,EQ01,Líder Técnico 01,AT003,Inspeção de faixa e pontos críticos,km,15,CONCLUÍDA,,Ponto Simulado 129,-25.537000,-54.576000,SIMULADO
-EXE0130,2026-08-05,EQ02,Líder Técnico 02,AT005,Corte de gramado e acabamento,ha,14,CONCLUÍDA,,Ponto Simulado 130,-25.536000,-54.579000,SIMULADO
-EXE0131,2026-08-11,EQ02,Líder Técnico 02,AT006,Poda de formação e condução,un,15,CONCLUÍDA,,Ponto Simulado 131,-25.533000,-54.575000,SIMULADO
-EXE0132,2026-08-18,EQ02,Líder Técnico 02,AT007,Controle de plantas invasoras,ha,16,CONCLUÍDA,,Ponto Simulado 132,-25.530000,-54.571000,SIMULADO
-EXE0133,2026-08-05,EQ03,Líder Técnico 03,AT009,Produção de mudas florestais,milheiro,15,CONCLUÍDA,,Ponto Simulado 133,-25.529000,-54.574000,SIMULADO
-EXE0134,2026-08-11,EQ03,Líder Técnico 03,AT010,Repicagem e rustificação de mudas,milheiro,16,CONCLUÍDA,,Ponto Simulado 134,-25.526000,-54.570000,SIMULADO
-EXE0135,2026-08-18,EQ03,Líder Técnico 03,AT011,Expedição e carregamento de mudas,milheiro,17,CONCLUÍDA,,Ponto Simulado 135,-25.554000,-54.566000,SIMULADO
-EXE0136,2026-08-05,EQ04,Líder Técnico 04,AT013,Produção de hortaliças,canteiro,16,CONCLUÍDA,,Ponto Simulado 136,-25.553000,-54.569000,SIMULADO
-EXE0137,2026-08-11,EQ04,Líder Técnico 04,AT014,Manejo de vasos ornamentais,un,17,CONCLUÍDA,,Ponto Simulado 137,-25.550000,-54.565000,SIMULADO
-EXE0138,2026-08-18,EQ04,Líder Técnico 04,AT015,Transplante e renovação de canteiros,m²,18,CONCLUÍDA,,Ponto Simulado 138,-25.547000,-54.592000,SIMULADO
-EXE0139,2026-08-05,EQ05,Líder Técnico 05,AT017,Plantio florestal,ha,17,CONCLUÍDA,,Ponto Simulado 139,-25.546000,-54.595000,SIMULADO
-EXE0140,2026-08-11,EQ05,Líder Técnico 05,AT018,Coroamento e manutenção de plantios,ha,18,CONCLUÍDA,,Ponto Simulado 140,-25.543000,-54.591000,SIMULADO
-EXE0141,2026-08-18,EQ05,Líder Técnico 05,AT019,Controle de invasoras em área florestal,ha,19,CONCLUÍDA,,Ponto Simulado 141,-25.540000,-54.587000,SIMULADO
-EXE0142,2026-08-05,EQ06,Líder Técnico 06,AT021,Aceiro preventivo,km,18,CONCLUÍDA,,Ponto Simulado 142,-25.539000,-54.590000,SIMULADO
-EXE0143,2026-08-11,EQ06,Líder Técnico 06,AT022,Ronda preventiva de incêndio,h,19,CONCLUÍDA,,Ponto Simulado 143,-25.536000,-54.586000,SIMULADO
-EXE0144,2026-08-18,EQ06,Líder Técnico 06,AT023,Inspeção de equipamentos de combate,un,20,CONCLUÍDA,,Ponto Simulado 144,-25.533000,-54.582000,SIMULADO
-EXE0145,2026-09-05,EQ01,Líder Técnico 01,AT002,Roçada manual seletiva,ha,14,CONCLUÍDA,,Ponto Simulado 145,-25.526000,-54.571000,SIMULADO
-EXE0146,2026-09-11,EQ01,Líder Técnico 01,AT003,Inspeção de faixa e pontos críticos,km,15,CONCLUÍDA,,Ponto Simulado 146,-25.554000,-54.567000,SIMULADO
-EXE0147,2026-09-18,EQ01,Líder Técnico 01,AT004,Manutenção de sinalização e organização operacional,un,16,CONCLUÍDA,,Ponto Simulado 147,-25.551000,-54.594000,SIMULADO
-EXE0148,2026-09-05,EQ02,Líder Técnico 02,AT006,Poda de formação e condução,un,15,CONCLUÍDA,,Ponto Simulado 148,-25.550000,-54.566000,SIMULADO
-EXE0149,2026-09-11,EQ02,Líder Técnico 02,AT007,Controle de plantas invasoras,ha,16,CONCLUÍDA,,Ponto Simulado 149,-25.547000,-54.593000,SIMULADO
-EXE0150,2026-09-18,EQ02,Líder Técnico 02,AT008,Manutenção leve de jardins e mobiliário verde,h,17,CONCLUÍDA,,Ponto Simulado 150,-25.544000,-54.589000,SIMULADO
-EXE0151,2026-09-05,EQ03,Líder Técnico 03,AT010,Repicagem e rustificação de mudas,milheiro,16,CONCLUÍDA,,Ponto Simulado 151,-25.543000,-54.592000,SIMULADO
-EXE0152,2026-09-11,EQ03,Líder Técnico 03,AT011,Expedição e carregamento de mudas,milheiro,17,CONCLUÍDA,,Ponto Simulado 152,-25.540000,-54.588000,SIMULADO
-EXE0153,2026-09-18,EQ03,Líder Técnico 03,AT012,Beneficiamento de sementes e organização de viveiro,h,18,CONCLUÍDA,,Ponto Simulado 153,-25.537000,-54.584000,SIMULADO
-EXE0154,2026-09-05,EQ04,Líder Técnico 04,AT014,Manejo de vasos ornamentais,un,17,CONCLUÍDA,,Ponto Simulado 154,-25.536000,-54.587000,SIMULADO
-EXE0155,2026-09-11,EQ04,Líder Técnico 04,AT015,Transplante e renovação de canteiros,m²,18,CONCLUÍDA,,Ponto Simulado 155,-25.533000,-54.583000,SIMULADO
-EXE0157,2026-09-05,EQ05,Líder Técnico 05,AT018,Coroamento e manutenção de plantios,ha,18,CONCLUÍDA,,Ponto Simulado 157,-25.529000,-54.582000,SIMULADO
-EXE0158,2026-09-11,EQ05,Líder Técnico 05,AT019,Controle de invasoras em área florestal,ha,19,CONCLUÍDA,,Ponto Simulado 158,-25.526000,-54.578000,SIMULADO
-EXE0159,2026-09-18,EQ05,Líder Técnico 05,AT020,Preparo de insumos e manutenção de ferramentas,h,20,CONCLUÍDA,,Ponto Simulado 159,-25.554000,-54.574000,SIMULADO
-EXE0160,2026-09-05,EQ06,Líder Técnico 06,AT022,Ronda preventiva de incêndio,h,19,CONCLUÍDA,,Ponto Simulado 160,-25.553000,-54.577000,SIMULADO
-EXE0161,2026-09-11,EQ06,Líder Técnico 06,AT023,Inspeção de equipamentos de combate,un,20,CONCLUÍDA,,Ponto Simulado 161,-25.550000,-54.573000,SIMULADO
-EXE0163,2026-09-23,EQ02,Líder Técnico 02,AT005,Corte de gramado e acabamento,ha,12,CONCLUÍDA,,Ponto Simulado 163,-25.541000,-54.565000,SIMULADO
-EXE0164,2026-09-24,EQ05,Líder Técnico 05,AT017,Plantio florestal,ha,4,CONCLUÍDA,,Ponto Simulado 164,-25.528000,-54.576000,SIMULADO
+EX0001,2026-01-11,EQ01,Ana Paula Ferreira,AT001,Monitoramento de avifauna (transecto),h,40,PARCIAL,Chuva forte — janelas restritas,Bacia de contenção BC-07 — área industrial,-25.44,-54.58,PROERG
+EX0002,2026-01-12,EQ01,Ana Paula Ferreira,AT002,Monitoramento de mastofauna e câmeras-trap,h,30,PARCIAL,Chuva impede acesso às câmeras-trap,Voçoroca da Estrada Velha — PR-495,-25.495,-54.585,PROERG
+EX0003,2026-01-07,EQ03,Camila Torres,AT009,Monitoramento de qualidade da água,h,60,CONCLUÍDO,,Reflorestamento Eixo Leste — talhão 3,-25.52,-54.63,PROERG
+EX0004,2026-01-21,EQ03,Camila Torres,AT010,Controle de macrófitas aquáticas,ha,4,CONCLUÍDO,,Bacia de contenção BC-07 — área industrial,-25.505,-54.6,PROERG
+EX0005,2026-01-24,EQ04,Fábio Leal,AT014,Restauração de APP e recuperação de nascentes,ha,3,CONCLUÍDO,,Fazenda São Cristóvão — área A,-25.43,-54.6,PROERG
+EX0006,2026-02-18,EQ01,Ana Paula Ferreira,AT001,Monitoramento de avifauna (transecto),h,40,PARCIAL,Chuvas intensas — saídas limitadas,Escola Municipal Carlos Drumond — Santa Helena,-25.5,-54.605,PROERG
+EX0007,2026-02-11,EQ01,Ana Paula Ferreira,AT002,Monitoramento de mastofauna e câmeras-trap,h,30,PARCIAL,Trilhas alagadas,Nascente N-14 — APP prioritária,-25.495,-54.585,PROERG
+EX0008,2026-02-11,EQ03,Camila Torres,AT009,Monitoramento de qualidade da água,h,60,CONCLUÍDO,,Bacia de contenção BC-07 — área industrial,-25.53,-54.59,PROERG
+EX0009,2026-02-10,EQ03,Camila Torres,AT010,Controle de macrófitas aquáticas,ha,4,CONCLUÍDO,,Viveiro municipal — recebimento mudas,-25.48,-54.58,PROERG
+EX0010,2026-02-07,EQ04,Fábio Leal,AT014,Restauração de APP e recuperação de nascentes,ha,3,CONCLUÍDO,,Zona ripária Itacorá,-25.515,-54.62,PROERG
+EX0011,2026-02-20,EQ06,Marcos Ribeiro,AT021,Programa ambiental em escolas da BP3,escola,4,CONCLUÍDO,,Fazenda São Cristóvão — área A,-25.485,-54.575,PROERG
+EX0012,2026-02-06,EQ06,Marcos Ribeiro,AT022,Trilhas interpretativas e visitas guiadas,participante,50,PARCIAL,Chuvas — algumas trilhas canceladas,Bacia de contenção BC-07 — área industrial,-25.475,-54.615,PROERG
+EX0013,2026-03-05,EQ02,Ricardo Mendes,AT005,Inventário florestal e fitossociologia,ha,2,PARCIAL,Chuvas moderadas — janelas aproveitadas,Área de coleta sementes AC-02,-25.505,-54.6,PROERG
+EX0014,2026-03-16,EQ02,Ricardo Mendes,AT006,Controle de espécies exóticas invasoras,ha,4,PARCIAL,Chuvas moderadas,Escola Municipal Carlos Drumond — Santa Helena,-25.46,-54.61,PROERG
+EX0015,2026-03-19,EQ03,Camila Torres,AT009,Monitoramento de qualidade da água,h,60,CONCLUÍDO,,Fazenda São Cristóvão — área A,-25.43,-54.6,PROERG
+EX0016,2026-03-24,EQ03,Camila Torres,AT010,Controle de macrófitas aquáticas,ha,4,CONCLUÍDO,,Escola Municipal Carlos Drumond — Santa Helena,-25.485,-54.575,PROERG
+EX0017,2026-03-16,EQ04,Fábio Leal,AT013,Plantio de mudas nativas,mudas,250,PARCIAL,Chuvas moderadas — metade do plantio realizado,APP Rio Ocoí — km 12,-25.47,-54.595,PROERG
+EX0018,2026-03-10,EQ04,Fábio Leal,AT014,Restauração de APP e recuperação de nascentes,ha,3,CONCLUÍDO,,Escola Municipal Carlos Drumond — Santa Helena,-25.48,-54.58,PROERG
+EX0019,2026-03-10,EQ05,Juliana Costa,AT017,Controle de voçorocas e erosão,m³,100,PARCIAL,Chuvas moderadas — obras parciais,Ponto de câmera-trap CT-09,-25.47,-54.595,PROERG
+EX0020,2026-03-06,EQ05,Juliana Costa,AT018,Instalação de bacias de contenção,un,2,PARCIAL,Chuvas moderadas,Voçoroca da Estrada Velha — PR-495,-25.485,-54.575,PROERG
+EX0021,2026-03-10,EQ06,Marcos Ribeiro,AT021,Programa ambiental em escolas da BP3,escola,4,CONCLUÍDO,,Margem direita reservatório — setor norte,-25.468,-54.605,PROERG
+EX0022,2026-03-07,EQ06,Marcos Ribeiro,AT022,Trilhas interpretativas e visitas guiadas,participante,100,CONCLUÍDO,,Focos erosivos margem sul,-25.5,-54.605,PROERG
+EX0023,2026-04-09,EQ01,Ana Paula Ferreira,AT001,Monitoramento de avifauna (transecto),h,80,CONCLUÍDO,,Fazenda São Cristóvão — área A,-25.46,-54.61,PROERG
+EX0024,2026-04-05,EQ01,Ana Paula Ferreira,AT002,Monitoramento de mastofauna e câmeras-trap,h,60,CONCLUÍDO,,Ponto de câmera-trap CT-09,-25.49,-54.565,PROERG
+EX0025,2026-04-09,EQ02,Ricardo Mendes,AT005,Inventário florestal e fitossociologia,ha,2,PARCIAL,Veículo quebrado — logística comprometida,Zona ripária Itacorá,-25.44,-54.58,PROERG
+EX0026,2026-04-11,EQ02,Ricardo Mendes,AT006,Controle de espécies exóticas invasoras,ha,8,CONCLUÍDO,,Bacia de contenção BC-07 — área industrial,-25.485,-54.575,PROERG
+EX0027,2026-04-19,EQ03,Camila Torres,AT009,Monitoramento de qualidade da água,h,60,CONCLUÍDO,,Escola Municipal Carlos Drumond — Santa Helena,-25.435,-54.61,PROERG
+EX0028,2026-04-17,EQ03,Camila Torres,AT010,Controle de macrófitas aquáticas,ha,4,CONCLUÍDO,,Área de coleta sementes AC-02,-25.505,-54.6,PROERG
+EX0029,2026-04-20,EQ04,Fábio Leal,AT014,Restauração de APP e recuperação de nascentes,ha,3,CONCLUÍDO,,Lago de Itaipu — setor leste,-25.48,-54.58,PROERG
+EX0030,2026-04-24,EQ05,Juliana Costa,AT017,Controle de voçorocas e erosão,m³,200,CONCLUÍDO,,Reflorestamento Eixo Leste — talhão 3,-25.435,-54.61,PROERG
+EX0031,2026-04-18,EQ05,Juliana Costa,AT018,Instalação de bacias de contenção,un,5,CONCLUÍDO,,Ponto de câmera-trap CT-09,-25.48,-54.58,PROERG
+EX0032,2026-04-08,EQ06,Marcos Ribeiro,AT021,Programa ambiental em escolas da BP3,escola,4,CONCLUÍDO,,Fazenda São Cristóvão — área B,-25.468,-54.605,PROERG
+EX0033,2026-04-10,EQ06,Marcos Ribeiro,AT022,Trilhas interpretativas e visitas guiadas,participante,100,CONCLUÍDO,,Talude Rodovia PR-182 — km 8,-25.48,-54.58,PROERG
+EX0034,2026-05-09,EQ01,Ana Paula Ferreira,AT001,Monitoramento de avifauna (transecto),h,80,CONCLUÍDO,,Focos erosivos margem sul,-25.492,-54.62,PROERG
+EX0035,2026-05-15,EQ01,Ana Paula Ferreira,AT002,Monitoramento de mastofauna e câmeras-trap,h,60,CONCLUÍDO,,Área de coleta sementes AC-02,-25.51,-54.57,PROERG
+EX0036,2026-05-13,EQ02,Ricardo Mendes,AT005,Inventário florestal e fitossociologia,ha,5,CONCLUÍDO,,Trilha Ecológica Bela Vista — Guaíra,-25.5,-54.605,PROERG
+EX0037,2026-05-10,EQ02,Ricardo Mendes,AT006,Controle de espécies exóticas invasoras,ha,8,CONCLUÍDO,,Lago de Itaipu — setor leste,-25.468,-54.605,PROERG
+EX0038,2026-05-14,EQ03,Camila Torres,AT010,Controle de macrófitas aquáticas,ha,4,CONCLUÍDO,,Escola Estadual Adílio Pipino — Medianeira,-25.452,-54.599,PROERG
+EX0039,2026-05-06,EQ04,Fábio Leal,AT014,Restauração de APP e recuperação de nascentes,ha,3,CONCLUÍDO,,Nascente N-14 — APP prioritária,-25.4082,-54.5882,PROERG
+EX0040,2026-05-17,EQ05,Juliana Costa,AT017,Controle de voçorocas e erosão,m³,200,CONCLUÍDO,,Escola Municipal Carlos Drumond — Santa Helena,-25.475,-54.615,PROERG
+EX0041,2026-05-17,EQ05,Juliana Costa,AT018,Instalação de bacias de contenção,un,5,CONCLUÍDO,,Zona ripária Itacorá,-25.44,-54.58,PROERG
+EX0042,2026-05-16,EQ06,Marcos Ribeiro,AT021,Programa ambiental em escolas da BP3,escola,4,CONCLUÍDO,,Focos erosivos margem sul,-25.44,-54.58,PROERG
+EX0043,2026-05-10,EQ06,Marcos Ribeiro,AT022,Trilhas interpretativas e visitas guiadas,participante,100,CONCLUÍDO,,Fazenda São Cristóvão — área A,-25.43,-54.6,PROERG
+EX0044,2026-06-17,EQ01,Ana Paula Ferreira,AT001,Monitoramento de avifauna (transecto),h,80,CONCLUÍDO,,Lago de Itaipu — setor leste,-25.435,-54.61,PROERG
+EX0045,2026-06-14,EQ01,Ana Paula Ferreira,AT002,Monitoramento de mastofauna e câmeras-trap,h,60,CONCLUÍDO,,Trilha Ecológica Bela Vista — Guaíra,-25.47,-54.595,PROERG
+EX0046,2026-06-08,EQ02,Ricardo Mendes,AT005,Inventário florestal e fitossociologia,ha,5,CONCLUÍDO,,Talude Rodovia PR-182 — km 8,-25.52,-54.63,PROERG
+EX0047,2026-06-12,EQ02,Ricardo Mendes,AT006,Controle de espécies exóticas invasoras,ha,8,CONCLUÍDO,,Escola Municipal Carlos Drumond — Santa Helena,-25.475,-54.615,PROERG
+EX0048,2026-06-19,EQ03,Camila Torres,AT009,Monitoramento de qualidade da água,h,60,CONCLUÍDO,,Talude Rodovia PR-182 — km 8,-25.44,-54.58,PROERG
+EX0049,2026-06-18,EQ03,Camila Torres,AT010,Controle de macrófitas aquáticas,ha,2,PARCIAL,Nível baixo — macrófitas retraídas,Viveiro municipal — recebimento mudas,-25.452,-54.599,PROERG
+EX0050,2026-06-21,EQ04,Fábio Leal,AT014,Restauração de APP e recuperação de nascentes,ha,3,CONCLUÍDO,,Fazenda São Cristóvão — área A,-25.505,-54.6,PROERG
+EX0051,2026-06-20,EQ05,Juliana Costa,AT017,Controle de voçorocas e erosão,m³,200,CONCLUÍDO,,Zona ripária Itacorá,-25.49,-54.565,PROERG
+EX0052,2026-06-13,EQ05,Juliana Costa,AT018,Instalação de bacias de contenção,un,5,CONCLUÍDO,,Reflorestamento Eixo Leste — talhão 3,-25.43,-54.6,PROERG
+EX0053,2026-06-18,EQ06,Marcos Ribeiro,AT021,Programa ambiental em escolas da BP3,escola,4,CONCLUÍDO,,Talude Rodovia PR-182 — km 8,-25.46,-54.61,PROERG
+EX0054,2026-06-14,EQ06,Marcos Ribeiro,AT022,Trilhas interpretativas e visitas guiadas,participante,100,CONCLUÍDO,,Voçoroca da Estrada Velha — PR-495,-25.495,-54.585,PROERG
+EX0055,2026-07-24,EQ01,Ana Paula Ferreira,AT001,Monitoramento de avifauna (transecto),h,80,CONCLUÍDO,,Ponto de câmera-trap CT-09,-25.44,-54.58,PROERG
+EX0056,2026-07-17,EQ01,Ana Paula Ferreira,AT002,Monitoramento de mastofauna e câmeras-trap,h,60,CONCLUÍDO,,Escola Municipal Carlos Drumond — Santa Helena,-25.47,-54.595,PROERG
+EX0057,2026-07-16,EQ02,Ricardo Mendes,AT005,Inventário florestal e fitossociologia,ha,5,CONCLUÍDO,,Escola Municipal Carlos Drumond — Santa Helena,-25.475,-54.615,PROERG
+EX0058,2026-07-14,EQ02,Ricardo Mendes,AT006,Controle de espécies exóticas invasoras,ha,8,CONCLUÍDO,,Lago de Itaipu — setor leste,-25.4082,-54.5882,PROERG
+EX0059,2026-07-25,EQ03,Camila Torres,AT009,Monitoramento de qualidade da água,h,60,CONCLUÍDO,,Voçoroca da Estrada Velha — PR-495,-25.51,-54.57,PROERG
+EX0060,2026-07-12,EQ04,Fábio Leal,AT014,Restauração de APP e recuperação de nascentes,ha,3,CONCLUÍDO,,Focos erosivos margem sul,-25.505,-54.6,PROERG
+EX0061,2026-07-17,EQ05,Juliana Costa,AT017,Controle de voçorocas e erosão,m³,200,CONCLUÍDO,,Lago de Itaipu — setor leste,-25.46,-54.61,PROERG
+EX0062,2026-07-21,EQ06,Marcos Ribeiro,AT021,Programa ambiental em escolas da BP3,escola,4,CONCLUÍDO,,Fazenda São Cristóvão — área B,-25.4082,-54.5882,PROERG
+EX0063,2026-07-05,EQ06,Marcos Ribeiro,AT022,Trilhas interpretativas e visitas guiadas,participante,100,CONCLUÍDO,,Escola Municipal Carlos Drumond — Santa Helena,-25.43,-54.6,PROERG
+EX0064,2026-08-10,EQ01,Ana Paula Ferreira,AT001,Monitoramento de avifauna (transecto),h,80,CONCLUÍDO,,Talude Rodovia PR-182 — km 8,-25.485,-54.575,PROERG
+EX0065,2026-08-11,EQ02,Ricardo Mendes,AT005,Inventário florestal e fitossociologia,ha,5,CONCLUÍDO,,Viveiro municipal — recebimento mudas,-25.485,-54.575,PROERG
+EX0066,2026-08-19,EQ02,Ricardo Mendes,AT006,Controle de espécies exóticas invasoras,ha,4,PARCIAL,Incêndio próximo — área interditada 15 dias,Focos erosivos margem sul,-25.505,-54.6,PROERG
+EX0067,2026-08-25,EQ04,Fábio Leal,AT014,Restauração de APP e recuperação de nascentes,ha,3,CONCLUÍDO,,Escola Estadual Adílio Pipino — Medianeira,-25.43,-54.6,PROERG
+EX0068,2026-08-14,EQ05,Juliana Costa,AT017,Controle de voçorocas e erosão,m³,200,CONCLUÍDO,,Ponto de câmera-trap CT-09,-25.495,-54.585,PROERG
+EX0069,2026-08-08,EQ05,Juliana Costa,AT018,Instalação de bacias de contenção,un,5,CONCLUÍDO,,Margem direita reservatório — setor norte,-25.51,-54.57,PROERG
+EX0070,2026-08-23,EQ06,Marcos Ribeiro,AT022,Trilhas interpretativas e visitas guiadas,participante,100,CONCLUÍDO,,Fazenda São Cristóvão — área A,-25.49,-54.565,PROERG
+EX0071,2026-09-18,EQ01,Ana Paula Ferreira,AT001,Monitoramento de avifauna (transecto),h,48,EM ANDAMENTO,,APP Rio Ocoí — km 12,-25.435,-54.61,PROERG
+EX0072,2026-09-22,EQ01,Ana Paula Ferreira,AT002,Monitoramento de mastofauna e câmeras-trap,h,36,EM ANDAMENTO,,Lago de Itaipu — setor leste,-25.49,-54.565,PROERG
+EX0073,2026-09-14,EQ02,Ricardo Mendes,AT005,Inventário florestal e fitossociologia,ha,3,EM ANDAMENTO,,Nascente N-14 — APP prioritária,-25.515,-54.62,PROERG
+EX0074,2026-09-17,EQ02,Ricardo Mendes,AT006,Controle de espécies exóticas invasoras,ha,4,EM ANDAMENTO,,Fazenda São Cristóvão — área B,-25.51,-54.57,PROERG
+EX0075,2026-09-13,EQ03,Camila Torres,AT009,Monitoramento de qualidade da água,h,36,EM ANDAMENTO,,Voçoroca da Estrada Velha — PR-495,-25.44,-54.58,PROERG
+EX0076,2026-09-09,EQ03,Camila Torres,AT010,Controle de macrófitas aquáticas,ha,2,EM ANDAMENTO,,Zona ripária Itacorá,-25.47,-54.595,PROERG
+EX0077,2026-09-17,EQ04,Fábio Leal,AT013,Plantio de mudas nativas,mudas,300,EM ANDAMENTO,,Viveiro municipal — recebimento mudas,-25.48,-54.58,PROERG
+EX0078,2026-09-10,EQ04,Fábio Leal,AT014,Restauração de APP e recuperação de nascentes,ha,1,EM ANDAMENTO,,Área de coleta sementes AC-02,-25.46,-54.61,PROERG
+EX0079,2026-09-11,EQ05,Juliana Costa,AT017,Controle de voçorocas e erosão,m³,120,EM ANDAMENTO,,APP Córrego Guanabara,-25.53,-54.59,PROERG
+EX0080,2026-09-23,EQ05,Juliana Costa,AT018,Instalação de bacias de contenção,un,3,EM ANDAMENTO,,Viveiro municipal — recebimento mudas,-25.505,-54.6,PROERG
+EX0081,2026-09-20,EQ06,Marcos Ribeiro,AT021,Programa ambiental em escolas da BP3,escola,2,EM ANDAMENTO,,Voçoroca da Estrada Velha — PR-495,-25.44,-54.58,PROERG
+EX0082,2026-09-10,EQ06,Marcos Ribeiro,AT022,Trilhas interpretativas e visitas guiadas,participante,60,EM ANDAMENTO,,Setor de amostragem hídrica H-03,-25.515,-54.62,PROERG
