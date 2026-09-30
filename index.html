@@ -1280,18 +1280,20 @@ function renderAttention(){
 function renderBlockerChartFull(){ buildBlockerChart('blockerChartFull'); }
 
 function renderActivityTypeChart(){
-  // Usa metrics (aba 09_Metricas) se disponível; senão, agrega execução por atividade
-  const src=state.metrics&&state.metrics.length?state.metrics:null;
   const m=Number(state.month);
   const exec=byTeam(state.execution).filter(r=>monthOf(r)===m);
+  // Tabela de referência: atividade → unidade (de 09_Metricas)
+  const unitMap=Object.fromEntries((state.metrics||[]).map(r=>[r.atividade,r.unidade]));
   const map={};
-  if(src){
-    src.forEach(r=>{const a=r.atividade||r.tipo||r.Atividade||'';if(!a)return;if(!map[a])map[a]={qty:0,unit:r.unidade||r.Unidade||''};map[a].qty+=Number(r.executado||r.Executado||0);});
-    document.getElementById('activityChartSub').textContent='Quantidade realizada por tipo de atividade (Métricas)';
-  } else {
-    exec.forEach(r=>{const a=r.atividade||'(sem tipo)';if(!map[a])map[a]={qty:0,unit:r.unidade||'h'};map[a].qty+=Number(r.quantidade_executada||0);});
-    document.getElementById('activityChartSub').textContent=`Registros de execução por atividade — ${mesNumLabel(m)}`;
-  }
+  exec.forEach(r=>{
+    const a=r.atividade||'(sem tipo)';
+    if(!map[a])map[a]={qty:0,unit:unitMap[a]||r.unidade||'h'};
+    map[a].qty+=Number(r.quantidade_executada||0);
+  });
+  const hasMetrics=state.metrics&&state.metrics.length>0;
+  document.getElementById('activityChartSub').textContent=
+    hasMetrics?`Quantidade executada por atividade — ${mesNumLabel(m)} (unidades de 09_Métricas)`
+              :`Quantidade executada por atividade — ${mesNumLabel(m)}`;
   const entries=Object.entries(map).filter(([,v])=>v.qty>0).sort((a,b)=>b[1].qty-a[1].qty);
   const palette=[cssVar('--green'),cssVar('--blue'),cssVar('--ochre'),cssVar('--red'),cssVar('--purple'),cssVar('--amber')];
   const bgColors=entries.map((_,i)=>palette[i%palette.length]);
