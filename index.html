@@ -661,7 +661,11 @@ function parseDate(s){ return s ? new Date(`${s}T12:00:00`) : null; }
 function monthOf(row, field='data'){
   const d=parseDate(row[field]);
   if(d){ const m=d.getMonth()+1,y=d.getFullYear(); const n=(y-PROJECT_START_YEAR)*12+m-PROJECT_START_MONTH+1; return n>0?n:0; }
-  return Number(row.mes_num)||0;
+  // Fallback: mes_num é mês calendário (1-12) → converte para sequencial
+  const raw=Number(row.mes_num)||0; if(!raw)return 0;
+  let seq=raw-PROJECT_START_MONTH+1;
+  if(seq<=0)seq+=12; // meses antes de out/2026 passam para ano seguinte
+  return (seq>=1&&seq<=PROJECT_MONTHS)?seq:0;
 }
 function byTeam(rows, team=state.team){ return team==='ALL' ? rows : rows.filter(r=>r.equipe_id===team); }
 function currentMonth(rows, dateField='data'){ const m=Number(state.month); return rows.filter(r=>{const rm=monthOf(r,dateField);return rm===m||rm===0;}); }
