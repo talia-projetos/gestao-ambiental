@@ -1002,11 +1002,11 @@ function renderImpactChart(){
 }
 
 function makeStripe(color){
-  // padrão de pontos ~30% de preenchimento: tile 8×8, raio 2.47 → π r²/64 ≈ 30%
-  const size=8,r=2.47;
+  // pontos ~10% preenchimento: tile 10×10, raio 1.3 → π r²/100 ≈ 5%
+  const size=10,r=1.3;
   const c=document.createElement('canvas'); c.width=size;c.height=size;
   const x=c.getContext('2d');
-  x.globalAlpha=0.85; x.fillStyle=color;
+  x.globalAlpha=0.45; x.fillStyle=color;
   x.beginPath(); x.arc(size/2,size/2,r,0,Math.PI*2); x.fill();
   return c;
 }
