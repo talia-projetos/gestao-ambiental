@@ -424,9 +424,10 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 const DATA_BASE = 'data/sample/';
 const IAT_BP3_URL = 'https://geopr.iat.pr.gov.br/server/rest/services/00_PUBLICACOES/pbpar_limite/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&f=geojson';
 const IAT_HIDRO_BP3_BASE = 'https://geopr.iat.pr.gov.br/server/rest/services/00_PUBLICACOES/pbpar_hidrografia_integrada/FeatureServer/0/query';
-const BP3_STATE_CODES = [41,35,50,42,43,52,31]; // PR, SP, MS, SC, MG, GO, RS
-const IBGE_STATE_BASE = 'https://servicodados.ibge.gov.br/api/v3/malhas/estados/';
-const IBGE_STATE_SUFFIX = '?formato=application/vnd.geo%2Bjson&qualidade=minima';
+// Regiões Sul(4)+Sudeste(3)+CentroOeste(5) cobrem todos os estados da BP3 em 3 requests
+const IBGE_REGIONS_BP3 = [4,3,5]; // Sul, Sudeste, CentroOeste
+const IBGE_REGION_BASE = 'https://servicodados.ibge.gov.br/api/v3/malhas/regioes/';
+const IBGE_REGION_SUFFIX = '?formato=application/vnd.geo%2Bjson&qualidade=minima&divisao=estados';
 const PARAGUAY_GEOJSON_URL = 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/PRY.geo.json';
 
 const state = {
@@ -464,10 +465,14 @@ async function csv(path){
 
 async function fetchOpenMeteoWeather(){
   const url='https://api.open-meteo.com/v1/forecast?latitude=-25.5478&longitude=-54.5882&current=temperature_2m,precipitation,wind_speed_10m,wind_gusts_10m,weather_code&daily=precipitation_probability_max,precipitation_sum,wind_gusts_10m_max&timezone=America%2FSao_Paulo&forecast_days=5';
-  const r=await fetch(url,{cache:'no-store'}); if(!r.ok)throw new Error('Open-Meteo indisponível');
-  const d=await r.json(); const c=d.current||{},daily=d.daily||{};
-  const forecast=(daily.time||[]).map((date,i)=>({date,rain_probability_pct:daily.precipitation_probability_max?.[i]??0,precipitation_mm:daily.precipitation_sum?.[i]??0,gust_kmh:daily.wind_gusts_10m_max?.[i]??0}));
-  return {source:'Open-Meteo',location:'Foz do Iguaçu/PR',observed_at:(c.time||new Date().toISOString().slice(0,16))+':00',current:{temperature_c:c.temperature_2m??0,precipitation_mm:c.precipitation??0,wind_kmh:c.wind_speed_10m??0,gust_kmh:c.wind_gusts_10m??0},forecast};
+  const ctrl=new AbortController(); const tid=setTimeout(()=>ctrl.abort(),5000);
+  try{
+    const r=await fetch(url,{cache:'no-store',signal:ctrl.signal}); clearTimeout(tid);
+    if(!r.ok)throw new Error('Open-Meteo indisponível');
+    const d=await r.json(); const c=d.current||{},daily=d.daily||{};
+    const forecast=(daily.time||[]).map((date,i)=>({date,rain_probability_pct:daily.precipitation_probability_max?.[i]??0,precipitation_mm:daily.precipitation_sum?.[i]??0,gust_kmh:daily.wind_gusts_10m_max?.[i]??0}));
+    return {source:'Open-Meteo',location:'Foz do Iguaçu/PR',observed_at:(c.time||new Date().toISOString().slice(0,16))+':00',current:{temperature_c:c.temperature_2m??0,precipitation_mm:c.precipitation??0,wind_kmh:c.wind_speed_10m??0,gust_kmh:c.wind_gusts_10m??0},forecast};
+  }catch(e){clearTimeout(tid);throw e;}
 }
 function addNotification(type,title,msg){
   const n={id:Date.now(),type,title,msg,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),unread:true};
@@ -498,21 +503,30 @@ function checkWeatherAlerts(weather){
 }
 async function loadData(){
   const stamp=Date.now();
-  let base=null;
-  try{
-    const r=await fetch(`data/dashboard_data.json?v=${stamp}`,{cache:'no-store'});
-    if(!r.ok) throw new Error(`Base consolidada HTTP ${r.status}`);
-    base=await r.json();
-  }catch(err){
-    console.warn('Falha na base consolidada; usando CSVs como contingência.',err);
-    const [teams,planning,execution,demands,blockers,climate,impact]=await Promise.all([
-      csv(`${DATA_BASE}equipes.csv?v=${stamp}`), csv(`${DATA_BASE}programacao_mensal.csv?v=${stamp}`), csv(`${DATA_BASE}execucao_campo.csv?v=${stamp}`),
-      csv(`${DATA_BASE}demandas_nao_previstas.csv?v=${stamp}`), csv(`${DATA_BASE}bloqueadores.csv?v=${stamp}`), csv(`${DATA_BASE}clima_simulado.csv?v=${stamp}`),
-      csv(`${DATA_BASE}impacto_demandas.csv?v=${stamp}`).catch(()=>[])
-    ]);
-    base={teams,planning,execution,demands,blockers,climate,impact};
+  const lu=document.getElementById('lastUpdate');
+  if(lu)lu.textContent='Carregando dados…';
+
+  async function fetchBase(){
+    try{
+      const r=await fetch(`data/dashboard_data.json?v=${stamp}`,{cache:'no-store'});
+      if(!r.ok)throw new Error(`HTTP ${r.status}`);
+      return await r.json();
+    }catch(err){
+      console.warn('Contingência CSV:',err);
+      const [teams,planning,execution,demands,blockers,climate,impact]=await Promise.all([
+        csv(`${DATA_BASE}equipes.csv?v=${stamp}`),csv(`${DATA_BASE}programacao_mensal.csv?v=${stamp}`),csv(`${DATA_BASE}execucao_campo.csv?v=${stamp}`),
+        csv(`${DATA_BASE}demandas_nao_previstas.csv?v=${stamp}`),csv(`${DATA_BASE}bloqueadores.csv?v=${stamp}`),csv(`${DATA_BASE}clima_simulado.csv?v=${stamp}`),
+        csv(`${DATA_BASE}impacto_demandas.csv?v=${stamp}`).catch(()=>[])
+      ]);
+      return {teams,planning,execution,demands,blockers,climate,impact};
+    }
   }
-  const weather=await fetchOpenMeteoWeather().catch(()=>fetch(`data/weather/foz_simepar.json?v=${stamp}`,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null));
+
+  const weatherFallback=()=>fetch(`data/weather/foz_simepar.json?v=${stamp}`,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null);
+  const [baseR,wxR]=await Promise.allSettled([fetchBase(),fetchOpenMeteoWeather().catch(weatherFallback)]);
+  const base=baseR.status==='fulfilled'?baseR.value:null;
+  const weather=wxR.status==='fulfilled'?wxR.value:null;
+
   const {teams=[],planning=[],execution=[],demands=[],blockers=[],climate=[],impact=[]}=base||{};
   Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact,weather});
   if(weather)checkWeatherAlerts(weather);
@@ -520,7 +534,7 @@ async function loadData(){
   state.demands=[...state.demands,...(local.demands||[])];
   state.impact=[...state.impact,...(local.impact||[])];
   populateTeamFilter(); renderAll(); updateDemandMarkers();
-  document.getElementById('lastUpdate').textContent = `${state.teams.length} equipes · ${state.demands.length} demandas · atualizado às ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
+  if(lu)lu.textContent=`${state.teams.length} equipes · ${state.demands.length} demandas · atualizado às ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
 }
 
 function populateTeamFilter(){
@@ -889,8 +903,9 @@ function setupMap(){
   }).catch(()=>{ state.map.fitBounds([[-25.5926,-54.6199],[-23.9889,-53.4399]]); });
   const stateGroup=L.featureGroup().addTo(state.map);
   state.stateLayer=stateGroup;
-  BP3_STATE_CODES.forEach(code=>{
-    fetch(`${IBGE_STATE_BASE}${code}${IBGE_STATE_SUFFIX}`).then(r=>r.json()).then(g=>{
+  // 3 region requests (Sul+Sudeste+CentroOeste) ao invés de 7 individuais
+  IBGE_REGIONS_BP3.forEach(reg=>{
+    fetch(`${IBGE_REGION_BASE}${reg}${IBGE_REGION_SUFFIX}`).then(r=>r.json()).then(g=>{
       L.geoJSON(g,{style:bp3StateStyle}).addTo(stateGroup);
       if(state.bp3Layer) state.bp3Layer.bringToFront();
     }).catch(()=>{});
@@ -898,7 +913,7 @@ function setupMap(){
   fetch(PARAGUAY_GEOJSON_URL).then(r=>r.json()).then(g=>{
     L.geoJSON(g,{style:bp3StateStyle}).addTo(stateGroup);
     if(state.bp3Layer) state.bp3Layer.bringToFront();
-  }).catch(()=>console.warn('Limite Paraguai indisponível'));
+  }).catch(()=>{});
   fetchArcGISGeoJSON(IAT_HIDRO_BP3_BASE).then(g=>{
     state.hydroFeatures=g.features||[];
     state.hydroLayer=L.geoJSON(g,{style:hydroStyle}).addTo(state.map);
