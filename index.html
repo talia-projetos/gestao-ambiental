@@ -57,7 +57,18 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .form-note{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:12px;color:var(--muted)}
 .form-note.success{background:color-mix(in srgb,var(--green) 14%,var(--surface));color:var(--text)}
 
-@media(max-width:760px){.leader-form-grid,.form-secondary.visible{grid-template-columns:1fr}}
+@media(max-width:760px){
+  .leader-form-grid,.form-secondary.visible{grid-template-columns:1fr}
+  .leader-modal{padding:0!important;align-items:flex-end!important}
+  .leader-form-panel{width:100%!important;max-height:96vh!important;border-radius:20px 20px 0 0!important;padding:20px 18px 24px!important}
+  .field-label input,.field-label select,.field-label textarea{font-size:16px!important;padding:13px 12px!important}
+  .field-label textarea{min-height:100px!important}
+  .secondary-action.capture-gps{width:100%!important;padding:14px!important;font-size:15px!important;margin-top:4px!important;border:2px dashed var(--border)!important;border-radius:14px!important;background:var(--surface-2)!important}
+  .primary-action.submit-btn{width:100%!important;padding:16px!important;font-size:16px!important;border-radius:16px!important;margin-top:4px!important}
+  .form-actions{flex-direction:column-reverse!important;gap:8px!important}
+  .secondary-action.cancel-btn{width:100%!important;padding:14px!important;font-size:14px!important}
+  .form-note{font-size:11px!important}
+}
 .report-modal{position:fixed;inset:0;background:rgba(14,18,16,.48);display:none;align-items:center;justify-content:center;padding:20px;z-index:1350}
 .report-modal.open{display:flex}
 .report-panel{width:min(1120px,97vw);max-height:94vh;overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.25);padding:24px}
@@ -188,7 +199,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
   .brand-mark,.brand-text,.sidebar-label,.sidebar-divider,.sidebar-bottom{display:none!important}
   .sidebar-nav{flex-direction:row!important;width:100%!important;gap:0!important;align-items:stretch!important;padding:0!important}
   .nav-btn{display:none!important}
-  .nav-btn[data-page="page-map"],.nav-btn#leaderFormBtn{display:flex!important;flex-direction:column!important;height:100%!important;width:auto!important;flex:1!important;justify-content:center!important;padding:6px 2px!important;gap:2px!important;border-radius:0!important}
+  .nav-btn[data-page="page-map"],.nav-btn[data-page="page-planning"],.nav-btn#leaderFormBtn{display:flex!important;flex-direction:column!important;height:100%!important;width:auto!important;flex:1!important;justify-content:center!important;padding:6px 2px!important;gap:2px!important;border-radius:0!important}
   .nav-btn#leaderFormBtn{background:color-mix(in srgb,var(--green) 14%,var(--surface))!important;color:var(--green)!important}
   .nav-btn span{display:block!important;font-size:9px!important;font-weight:500!important;letter-spacing:.01em!important}
   .nav-btn svg{width:20px!important;height:20px!important}
@@ -547,15 +558,15 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
         <label class="field-label full">Localização
           <div class="form-inline">
             <input id="leaderCoords" type="text" readonly placeholder="Não capturada" />
-            <button type="button" class="secondary-action" id="captureLocation">Capturar GPS</button>
+            <button type="button" class="secondary-action capture-gps" id="captureLocation"><i data-lucide="locate"></i> Capturar GPS</button>
           </div>
         </label>
       </div>
 
       <div class="form-note" id="leaderFormNote">Data, hora, status e identificadores são automáticos. Classificação de impacto, prioridade gerencial e alterações no planejamento não são definidas pelo líder técnico.</div>
       <div class="form-actions">
-        <button type="button" class="secondary-action" id="cancelLeaderForm">Cancelar</button>
-        <button type="submit" class="primary-action">Registrar demanda</button>
+        <button type="button" class="secondary-action cancel-btn" id="cancelLeaderForm">Cancelar</button>
+        <button type="submit" class="primary-action submit-btn">Registrar demanda</button>
       </div>
     </form>
   </div>
@@ -739,7 +750,7 @@ function populateTeamFilter(){
 
 function filtered(){
   return {
-    planning: byTeam(state.planning.filter(r=>Number(r.mes_num)===Number(state.month))),
+    planning: byTeam(state.planning.filter(r=>Number(r.mes_num)===mesNumToCalendar(state.month).month)),
     execution: byTeam(currentMonth(state.execution)),
     demands: byTeam(currentMonth(state.demands)),
     blockers: byTeam(state.blockers),
@@ -751,7 +762,7 @@ function filtered(){
 }
 
 function metricsForTeam(teamId, month=state.month){
-  const plan=state.planning.filter(r=>Number(r.mes_num)===Number(month)&&r.equipe_id===teamId);
+  const plan=state.planning.filter(r=>Number(r.mes_num)===mesNumToCalendar(Number(month)).month&&r.equipe_id===teamId);
   const exec=state.execution.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
   const dem=state.demands.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
   const blq=state.blockers.filter(r=>r.equipe_id===teamId);
