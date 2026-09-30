@@ -702,7 +702,7 @@ async function loadData(){
   const weather=wxR.status==='fulfilled'?wxR.value:null;
 
   const {teams=[],planning=[],execution=[],demands=[],blockers=[],climate=[],impact=[]}=base||{};
-  Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact,weather});
+  Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact,weather,scriptUrl:base?.script_url||''});
   if(weather)checkWeatherAlerts(weather);
   const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
   state.demands=[...state.demands,...(local.demands||[])];
@@ -1286,17 +1286,42 @@ function saveLocalLeaderRecord(e){
     nova_data_prevista:'',
     origem_dado:'SIMULADO_LOCAL'
   };
-  const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
-  local.demands.push(demand); local.impact.push(impact);
-  localStorage.setItem('ga-local-records',JSON.stringify(local));
-  state.demands.push(demand); state.impact.push(impact);
-  renderAll(); updateDemandMarkers();
-  const descPreview=(demand.descricao||'').slice(0,80)+(demand.descricao?.length>80?'…':'');
-  addNotification('form',`Demanda registrada — ${team?.lider_tecnico||teamId}`,`${demand.atividade_sugerida}${descPreview?' · '+descPreview:''}`);
+  // tenta enviar para o Apps Script; fallback para localStorage
+  const scriptUrl=state.scriptUrl||'';
+  const payload={
+    equipe_id:demand.equipe_id, data:demand.data, tipo:'DEMANDA',
+    descricao:demand.descricao, latitude:demand.latitude, longitude:demand.longitude,
+    lider:demand.lider_tecnico, observacoes:demand.atividade_sugerida,
+  };
   const note=document.getElementById('leaderFormNote');
-  note.classList.add('success');
-  note.textContent='Demanda registrada. O sistema fará a leitura gerencial sem alterar o planejamento a partir deste formulário.';
-  setTimeout(()=>{e.target.reset();closeLeaderForm();},850);
+  note.classList.remove('success');
+  note.textContent='Enviando…';
+  const finalize=(ok)=>{
+    state.demands.push(demand); state.impact.push(impact);
+    renderAll(); updateDemandMarkers();
+    const descPreview=(demand.descricao||'').slice(0,80)+(demand.descricao?.length>80?'…':'');
+    addNotification('form',`Demanda registrada — ${team?.lider_tecnico||teamId}`,`${demand.atividade_sugerida}${descPreview?' · '+descPreview:''}`);
+    note.classList.add('success');
+    note.textContent=ok
+      ?'Registrado na planilha. Aparecerá no dashboard na próxima publicação.'
+      :'Salvo localmente (sem conexão). Será sincronizado ao publicar.';
+    setTimeout(()=>{e.target.reset();closeLeaderForm();},1200);
+  };
+  if(scriptUrl){
+    fetch(scriptUrl,{method:'POST',body:JSON.stringify(payload)})
+      .then(r=>r.json()).then(r=>finalize(r.ok)).catch(()=>{
+        // fallback local se POST falhar
+        const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
+        local.demands.push(demand); local.impact.push(impact);
+        localStorage.setItem('ga-local-records',JSON.stringify(local));
+        finalize(false);
+      });
+  } else {
+    const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
+    local.demands.push(demand); local.impact.push(impact);
+    localStorage.setItem('ga-local-records',JSON.stringify(local));
+    finalize(false);
+  }
 }
 
 function setupUI(){
