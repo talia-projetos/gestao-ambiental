@@ -1043,8 +1043,11 @@ function renderHoursChart(){
   options.scales.x={beginAtZero:true,max:maxX,ticks:{callback:v=>`${v}%`,color:cssVar('--muted'),font:{size:10}},grid:{color:'rgba(150,160,155,0.12)'}};
   options.scales.y={ticks:{color:cssVar('--muted'),font:{size:11,weight:'600'}},grid:{display:false}};
   options.plugins.tooltip={callbacks:{label:ctx=>{const i=ctx.dataIndex;return ` ${ratios[i]}% — ${executadas[i]}h exec. / ${planejadas[i]}h plan.`;}}};
+  destroyChart('hoursChart');
+  const ctx=document.getElementById('hoursChart'); if(!ctx)return;
   const config={type:'bar',data:{labels:eqIds,datasets:[{data:ratios,backgroundColor:bgColors,borderRadius:6,barPercentage:.6}]},options,plugins:[refLinePlugin]};
-  setChart('hoursChart',config,'Aderência ao planejamento','% executado vs. planejado por equipe no período');
+  state.chartSpecs['hoursChart']={config:{type:'bar',data:{labels:eqIds,datasets:[{data:ratios,backgroundColor:bgColors.slice(),borderRadius:6,barPercentage:.6}]},options:JSON.parse(JSON.stringify(options))},title:'Aderência ao planejamento',subtitle:'% executado vs. planejado por equipe no período'};
+  state.charts['hoursChart']=new Chart(ctx,config);
 }
 
 function renderWeather(){
