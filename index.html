@@ -1298,6 +1298,13 @@ function saveLocalLeaderRecord(e){
   note.textContent='Enviando…';
   const finalize=(ok)=>{
     state.demands.push(demand); state.impact.push(impact);
+    // Garante que o mês exibido corresponde ao mês da nova demanda
+    const dm=monthOf(demand);
+    if(dm>0 && dm!==Number(state.month)){
+      state.month=dm;
+      const mf=document.getElementById('monthFilter');
+      if(mf)mf.value=dm;
+    }
     renderAll(); updateDemandMarkers();
     const descPreview=(demand.descricao||'').slice(0,80)+(demand.descricao?.length>80?'…':'');
     addNotification('form',`Demanda registrada — ${team?.lider_tecnico||teamId}`,`${demand.atividade_sugerida}${descPreview?' · '+descPreview:''}`);
