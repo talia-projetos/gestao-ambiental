@@ -1576,6 +1576,13 @@ function setupUI(){
   document.getElementById('densitySetting').addEventListener('change',e=>applyDensity(e.target.value));
   document.getElementById('refreshSetting').addEventListener('change',e=>{state.refreshMinutes=Number(e.target.value);setupRefresh();});
   document.getElementById('fullscreenBtn').addEventListener('click',()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen());
+  document.addEventListener('fullscreenchange',()=>{
+    const fs=!!document.fullscreenElement;
+    applyPresentation(fs);
+    const btn=document.getElementById('fullscreenBtn');
+    if(btn)btn.innerHTML=`<i data-lucide="${fs?'minimize':'maximize'}"></i> ${fs?'Sair da tela cheia':'Usar tela cheia'}`;
+    setTimeout(()=>{state.map?.invalidateSize();lucide.createIcons();},120);
+  });
   document.getElementById('resetSettings').addEventListener('click',()=>{applyTheme('light');applyPresentation(false);applyDensity('comfortable');applyNames(true);state.animations=true;document.getElementById('animationSetting').checked=true;state.refreshMinutes=5;document.getElementById('refreshSetting').value='5';setupRefresh();});
   document.getElementById('bp3Toggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.bp3Layer)return;const on=state.map.hasLayer(state.bp3Layer);on?state.map.removeLayer(state.bp3Layer):state.bp3Layer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('hydroToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.hydroLayer)return;const on=state.map.hasLayer(state.hydroLayer);on?state.map.removeLayer(state.hydroLayer):state.hydroLayer.addTo(state.map);b.classList.toggle('active',!on);});
