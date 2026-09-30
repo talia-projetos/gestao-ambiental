@@ -449,10 +449,10 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
             <div class="chart-wrap" style="height:220px"><canvas id="teamPressureChart"></canvas></div>
           </article>
 
-          <!-- Balanço de horas por equipe -->
+          <!-- Aderência ao planejamento -->
           <article class="card chart-card span-12">
             <div class="card-header">
-              <div><h2>Balanço de horas por equipe</h2><p>Horas disponíveis no mês vs. executadas, demandas não previstas e bloqueios</p></div>
+              <div><h2>Aderência ao planejamento por equipe</h2><p>% de horas executadas em relação ao planejado no período — referência 100 %</p></div>
               <button class="icon-btn ghost expand-btn" data-chart="hoursChart" title="Ampliar"><i data-lucide="maximize-2"></i></button>
             </div>
             <div class="chart-wrap" style="height:200px"><canvas id="hoursChart"></canvas></div>
@@ -1019,36 +1019,22 @@ function workDaysInMonth(mesNum){
 }
 
 function renderHoursChart(){
-  const wdays=workDaysInMonth(Number(state.month));
   const eqIds=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
   const m=Number(state.month);
+  const calMonth=mesNumToCalendar(m).month;
   const executadas=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.quantidade_executada||0),0));
-  const demandas=eqIds.map(id=>state.demands.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_consumidas||0),0));
-  const bloqueadas=eqIds.map(id=>state.blockers.filter(r=>r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_impactadas||0),0));
-  const planejadas=eqIds.map(id=>state.planning.filter(r=>mesNumToCalendar(m).month===Number(r.mes_num)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.meta_planejada||0),0));
-  // capacidade: usa planejado como referência; fallback para membros×jornada×diasúteis
-  const disponivel=eqIds.map((id,i)=>{
-    if(planejadas[i]>0)return planejadas[i];
-    const t=state.teams.find(x=>x.equipe_id===id);
-    return t?Number(t.qtd_colaboradores||0)*6*wdays:0;
-  });
-  const naoAtuadas=eqIds.map((_,i)=>Math.max(0,disponivel[i]-executadas[i]-demandas[i]-bloqueadas[i]));
-  const temDados=executadas.some(v=>v>0)||planejadas.some(v=>v>0)||bloqueadas.some(v=>v>0);
+  const planejadas=eqIds.map(id=>state.planning.filter(r=>Number(r.mes_num)===calMonth&&r.equipe_id===id).reduce((s,x)=>s+Number(x.meta_planejada||0),0));
+  const ratios=eqIds.map((_,i)=>planejadas[i]>0?Math.round(executadas[i]/planejadas[i]*100):0);
+  const bgColors=ratios.map(r=>r>=80?cssVar('--green'):r>=50?cssVar('--amber'):cssVar('--red'));
   const options=chartBase();
-  options.plugins.legend.position='bottom';
-  options.plugins.legend.align='center';
-  options.scales.x.stacked=true;
-  options.scales.y.stacked=true;
-  options.scales.y.beginAtZero=true;
-  options.scales.y.ticks={...options.scales.y.ticks,callback:v=>`${v}h`};
-  const datasets=temDados?[
-    {label:'Executadas',data:executadas,backgroundColor:cssVar('--green'),borderRadius:3,stack:'s'},
-    {label:'Demandas',data:demandas,backgroundColor:cssVar('--ochre'),borderRadius:0,stack:'s'},
-    {label:'Bloqueadas',data:bloqueadas,backgroundColor:cssVar('--red'),borderRadius:0,stack:'s'},
-    {label:'Sem registro',data:naoAtuadas,backgroundColor:'rgba(180,190,184,0.28)',borderRadius:3,stack:'s'},
-  ]:[{label:'Sem dados',data:eqIds.map(()=>1),backgroundColor:'rgba(180,190,184,0.18)',stack:'s'}];
-  const config={type:'bar',data:{labels:eqIds,datasets},options};
-  setChart('hoursChart',config,'Balanço de horas por equipe','Horas executadas, demandas e bloqueios vs. planejado');
+  options.indexAxis='y';
+  options.plugins.legend.display=false;
+  options.scales.x={...options.scales.x,min:0,max:Math.max(130,Math.max(...ratios)+20),ticks:{...options.scales.x?.ticks,callback:v=>`${v}%`,color:cssVar('--muted'),font:{size:10}},grid:{color:'rgba(150,160,155,0.12)'}};
+  options.scales.y={...options.scales.y,ticks:{color:cssVar('--muted'),font:{size:11}}};
+  options.plugins.tooltip={callbacks:{label:ctx=>{const i=ctx.dataIndex;return ` ${ratios[i]}% — ${executadas[i]}h exec. / ${planejadas[i]}h plan.`;}}};
+  options.plugins.annotation={annotations:{ref:{type:'line',scaleID:'x',value:100,borderColor:'rgba(46,125,79,.45)',borderWidth:1.5,borderDash:[4,3],label:{content:'meta',display:true,position:'end',color:cssVar('--muted'),font:{size:9}}}}};
+  const config={type:'bar',data:{labels:eqIds,datasets:[{data:ratios,backgroundColor:bgColors,borderRadius:5,barPercentage:.65}]},options};
+  setChart('hoursChart',config,'Aderência ao planejamento','% executado vs. planejado por equipe no período');
 }
 
 function renderWeather(){
