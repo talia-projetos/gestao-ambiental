@@ -728,7 +728,7 @@ function filtered(){
     planning: byTeam(state.planning.filter(r=>Number(r.mes_num)===Number(state.month))),
     execution: byTeam(currentMonth(state.execution)),
     demands: byTeam(currentMonth(state.demands)),
-    blockers: byTeam(currentMonth(state.blockers)),
+    blockers: byTeam(state.blockers),
     impact: state.impact.filter(i=>{
       const d=state.demands.find(x=>x.demanda_id===i.demanda_id);
       return d && monthOf(d)===Number(state.month) && (state.team==='ALL'||d.equipe_id===state.team);
@@ -740,7 +740,7 @@ function metricsForTeam(teamId, month=state.month){
   const plan=state.planning.filter(r=>Number(r.mes_num)===Number(month)&&r.equipe_id===teamId);
   const exec=state.execution.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
   const dem=state.demands.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
-  const blq=state.blockers.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
+  const blq=state.blockers.filter(r=>r.equipe_id===teamId);
   const impacted=state.impact.filter(i=>i.impactou_planejamento==='SIM'&&dem.some(d=>d.demanda_id===i.demanda_id));
   const planActs=uniq(plan.map(x=>x.atividade_id));
   const execActs=uniq(exec.map(x=>x.atividade_id));
@@ -918,7 +918,7 @@ function renderHoursChart(){
   const disponivel=eqIds.map(id=>{const t=state.teams.find(x=>x.equipe_id===id);return t?(Number(t.qtd_colaboradores||0)*Number(t.jornada_horas_dia||6)*wdays):0;});
   const executadas=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.quantidade_executada||0),0));
   const demandas=eqIds.map(id=>state.demands.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_consumidas||0),0));
-  const bloqueadas=eqIds.map(id=>state.blockers.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_impactadas||0),0));
+  const bloqueadas=eqIds.map(id=>state.blockers.filter(r=>r.equipe_id===id).reduce((s,x)=>s+Number(x.horas_impactadas||0),0));
   const naoAtuadas=eqIds.map((_,i)=>Math.max(0,disponivel[i]-executadas[i]-demandas[i]-bloqueadas[i]));
   const options=chartBase();
   options.plugins.legend.position='bottom';
