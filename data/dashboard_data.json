@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T19:18:56.870Z",
+  "generated_at": "2026-09-30T19:49:04.730Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1587,6 +1587,23 @@
       "local_referencia": "Análise laboratorial de amostras d'água",
       "equipe_apoio": "",
       "origem_dado": "CAMPO"
+    },
+    {
+      "demanda_id": "DC008",
+      "data": "2026-09-30",
+      "equipe_id": "EQ05",
+      "lider_tecnico": "Fernanda Lima Rocha",
+      "atividade_id": "",
+      "atividade_sugerida": "Testando",
+      "descricao": "Testando",
+      "prioridade": "MÉDIA",
+      "status": "ABERTA",
+      "horas_consumidas": 0,
+      "latitude": "-25513470",
+      "longitude": "-54595113",
+      "local_referencia": "Elaboração de mapas de focos erosivos",
+      "equipe_apoio": "",
+      "origem_dado": "CAMPO"
     }
   ],
   "blockers": [
@@ -1914,6 +1931,17 @@
       "horas_desviadas": "0",
       "qtd_planejada_afetada": "1",
       "destino_planejamento": "CANCELADO",
+      "nova_data_prevista": "",
+      "origem_dado": "CAMPO"
+    },
+    {
+      "demanda_id": "DC008",
+      "impactou_planejamento": "NÃO",
+      "plano_afetado_id": "",
+      "tipo_impacto": "REPROGRAMAÇÃO",
+      "horas_desviadas": "0",
+      "qtd_planejada_afetada": "1",
+      "destino_planejamento": "EM ANÁLISE",
       "nova_data_prevista": "",
       "origem_dado": "CAMPO"
     }
