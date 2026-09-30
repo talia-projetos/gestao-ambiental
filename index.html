@@ -999,15 +999,15 @@ function renderImpactChart(){
   setChart('impactChart',config,'Impacto das demandas','Destino das demandas não previstas no planejamento');
 }
 
-function makeStripe(color,bg='transparent',size=10,angle=45){
+function makeStripe(color,bg='transparent',size=16,angle=45){
   const c=document.createElement('canvas'); c.width=size;c.height=size;
   const x=c.getContext('2d');
   if(bg!=='transparent'){x.fillStyle=bg;x.fillRect(0,0,size,size);}
-  x.strokeStyle=color; x.lineWidth=2.5;
-  const rad=angle*Math.PI/180;
-  for(let i=-size;i<size*2;i+=size/2){
+  x.globalAlpha=0.7; x.strokeStyle=color; x.lineWidth=2;
+  const rad=angle*Math.PI/180; const step=size;
+  for(let i=-size*2;i<size*4;i+=step){
     x.beginPath();x.moveTo(i*Math.cos(rad)-size*Math.sin(rad),i*Math.sin(rad)+size*Math.cos(rad));
-    x.lineTo((i+size)*Math.cos(rad)-(-size)*Math.sin(rad),(i+size)*Math.sin(rad)+(-size)*Math.cos(rad));
+    x.lineTo((i+size*2)*Math.cos(rad)+size*Math.sin(rad),(i+size*2)*Math.sin(rad)-size*Math.cos(rad));
     x.stroke();
   }
   return c;
