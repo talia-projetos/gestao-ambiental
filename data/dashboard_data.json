@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T18:37:41.634Z",
+  "generated_at": "2026-09-30T18:46:58.476Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1570,6 +1570,23 @@
       "local_referencia": "Escola Estadual Péricles não estava no cronograma anual",
       "equipe_apoio": "",
       "origem_dado": "PROERG"
+    },
+    {
+      "demanda_id": "DC007",
+      "data": "2026-09-30",
+      "equipe_id": "EQ03",
+      "lider_tecnico": "Ana Paula Costa Ribeiro",
+      "atividade_id": "",
+      "atividade_sugerida": "Testando aqui.",
+      "descricao": "Testando aqui.",
+      "prioridade": "MÉDIA",
+      "status": "ABERTA",
+      "horas_consumidas": 0,
+      "latitude": "-25513483",
+      "longitude": "-54595150",
+      "local_referencia": "Análise laboratorial de amostras d'água",
+      "equipe_apoio": "",
+      "origem_dado": "CAMPO"
     }
   ],
   "blockers": [
@@ -1888,6 +1905,17 @@
       "destino_planejamento": "ABSORVIDO",
       "nova_data_prevista": "",
       "origem_dado": "PROERG"
+    },
+    {
+      "demanda_id": "DC007",
+      "impactou_planejamento": "NÃO",
+      "plano_afetado_id": "",
+      "tipo_impacto": "INTERRUPÇÃO",
+      "horas_desviadas": "0",
+      "qtd_planejada_afetada": "1",
+      "destino_planejamento": "CANCELADO",
+      "nova_data_prevista": "",
+      "origem_dado": "CAMPO"
     }
   ]
 }
