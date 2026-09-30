@@ -78,6 +78,13 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
   #teamReportModal .report-table th,#teamReportModal .report-table td{border-color:#ddd!important}
 }
 
+/* ── Tabela de equipes compacta (sem scroll horizontal) ─────── */
+.table-wrap table{white-space:normal}
+.table-wrap th,.table-wrap td{padding:9px 10px!important;font-size:10.5px!important;white-space:nowrap}
+.table-wrap th:first-child,.table-wrap td:first-child{white-space:normal;min-width:160px;max-width:200px}
+.table-wrap td:nth-child(2){white-space:normal;min-width:110px}
+.team-row-action{display:inline-flex;align-items:center;color:var(--muted);cursor:pointer}
+.team-row-action svg{width:15px;height:15px;stroke-width:2}
 /* ── KPI cards sem barra colorida ───────────────────────────── */
 .kpi-card:before{display:none!important}
 /* ── Sidebar redesign ────────────────────────────────────────── */
@@ -287,7 +294,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
             </div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th>Equipe</th><th>Líder técnico</th><th>Colaboradores</th><th>Cobertura</th><th>Demandas</th><th>Taxa de bloqueio</th><th>Interferência demandas</th><th>Impacto total</th><th>Nível automático</th><th></th></tr></thead>
+                <thead><tr><th>Equipe</th><th>Líder</th><th>Colabs.</th><th>Cobertura</th><th>Demandas</th><th>Bloqueio</th><th>Interferência</th><th>Impacto</th><th>Nível</th><th></th></tr></thead>
                 <tbody id="teamTableBody"></tbody>
               </table>
             </div>
@@ -808,7 +815,7 @@ function closeTeamReport(){
 
 function renderTeamTable(){
   const body=document.getElementById('teamTableBody');
-  body.innerHTML=state.teams.map(t=>{const m=metricsForTeam(t.equipe_id); const lvl=automaticImpactLevel(m.planImpactRate); return `<tr data-team="${t.equipe_id}"><td><span class="team-name">${t.equipe_id} · ${t.equipe}</span><span class="team-sub">${t.frente_atuacao}</span></td><td class="leader-name">${t.lider_tecnico}</td><td>${t.qtd_colaboradores}</td><td>${fmtPct(m.coverage)}</td><td>${m.dem.length}</td><td>${fmtPct(m.blockRate)}</td><td>${fmtPct(m.impactRatio)}</td><td>${fmtPct(m.planImpactRate)}</td><td><span class="status-pill ${lvl[1]}">${lvl[0]}</span></td><td><span class="team-row-action">Ver relatório</span></td></tr>`;}).join('');
+  body.innerHTML=state.teams.map(t=>{const m=metricsForTeam(t.equipe_id); const lvl=automaticImpactLevel(m.planImpactRate); return `<tr data-team="${t.equipe_id}"><td><span class="team-name">${t.equipe_id} · ${t.equipe}</span><span class="team-sub">${t.frente_atuacao}</span></td><td class="leader-name">${t.lider_tecnico}</td><td>${t.qtd_colaboradores}</td><td>${fmtPct(m.coverage)}</td><td>${m.dem.length}</td><td>${fmtPct(m.blockRate)}</td><td>${fmtPct(m.impactRatio)}</td><td>${fmtPct(m.planImpactRate)}</td><td><span class="status-pill ${lvl[1]}">${lvl[0]}</span></td><td><span class="team-row-action"><i data-lucide="chevron-right"></i></span></td></tr>`;}).join('');
   body.querySelectorAll('tr').forEach(row=>row.addEventListener('click',()=>openTeamReport(row.dataset.team)));
 }
 
