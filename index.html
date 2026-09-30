@@ -915,8 +915,9 @@ function renderKPIs(){
   const nd=m.demands.length;
   document.getElementById('kpiDemands').textContent=nd;
   const prevM=Number(state.month)-1;
-  const prevNd=prevM>0?state.demands.filter(r=>monthOf(r)===prevM).length:null;
-  const delta=prevNd!==null?nd-prevNd:null;
+  const prevNd=prevM>=1?state.demands.filter(r=>monthOf(r)===prevM).length:null;
+  // só mostra comparação se o mês anterior tiver pelo menos 1 demanda registrada
+  const delta=(prevNd!==null&&prevNd>0)?nd-prevNd:null;
   const trendEl=document.getElementById('demandTrend');
   const arrowEl=document.getElementById('demandTrendArrow');
   const deltaEl=document.getElementById('demandTrendDelta');
@@ -924,7 +925,8 @@ function renderKPIs(){
     const cls=delta===null||delta===0?'trend-flat':delta>0?'trend-up':'trend-down';
     trendEl.className='kpi-trend '+cls;
     arrowEl.textContent=delta===null?'—':delta>0?'↑':delta<0?'↓':'→';
-    deltaEl.textContent=delta===null?'':`${delta>0?'+':''}${delta} vs ${months[prevM-1]||''}`;
+    // mesNumLabel converte sequencial para "Outubro 2026" etc.
+    deltaEl.textContent=delta===null?'':`${delta>0?'+':''}${delta} vs ${mesNumLabel(prevM)}`;
   }
   document.getElementById('kpiDemandNote').textContent=`${m.demands.filter(x=>['EM ANDAMENTO','ABERTA','PENDENTE'].includes(x.status)).length} em andamento · ${m.demands.filter(x=>x.prioridade==='ALTA'||x.prioridade==='CRÍTICA').length} alta prioridade`;
   document.getElementById('kpiImpact').textContent=fmtPct(m.impactRatio);
