@@ -735,6 +735,17 @@ function automaticImpactLevel(rate){
   if(r<.60)return ['ALTO','status-alert'];
   return ['CRÍTICO','status-alert'];
 }
+function levelIcon(lvlName){
+  const cfg={
+    'SEM IMPACTO': {arrow:'→', color:'#6b9e7e', title:'Sem impacto identificado'},
+    'BAIXO':       {arrow:'↓', color:'#31855c', title:'Impacto baixo'},
+    'MODERADO':    {arrow:'↗', color:'#a26e1d', title:'Impacto moderado'},
+    'ALTO':        {arrow:'↑', color:'#c0622a', title:'Impacto alto'},
+    'CRÍTICO':     {arrow:'↑↑',color:'#b94e4e', title:'Impacto crítico'},
+  };
+  const c=cfg[lvlName]||{arrow:'—',color:'#999',title:lvlName};
+  return `<span title="${c.title}" style="font-weight:800;font-size:1.1em;color:${c.color};letter-spacing:-.05em">${c.arrow}</span>`;
+}
 
 async function csv(path){
   return new Promise((resolve,reject)=>Papa.parse(path,{download:true,header:true,skipEmptyLines:true,dynamicTyping:false,complete:r=>resolve(r.data),error:reject}));
@@ -1153,14 +1164,14 @@ function openTeamReport(teamId){
   report.innerHTML=`
     <div class="report-hero">
       <div><h3>${t.equipe_id} · ${t.equipe}</h3><p>${t.frente_atuacao}</p><p>${state.names?t.lider_tecnico:'Líder técnico oculto'} · ${t.qtd_colaboradores} colaboradores</p></div>
-      <span class="status-pill ${lvl[1]}">${lvl[0]}</span>
+      <span class="status-pill ${lvl[1]}">${levelIcon(lvl[0])} ${lvl[0]}</span>
     </div>
     <div class="report-kpis">
       <div class="report-kpi"><span>Cobertura de atividades</span><strong>${fmtPct(m.coverage)}</strong></div>
       <div class="report-kpi"><span>Demandas não previstas</span><strong>${m.dem.length}</strong></div>
       <div class="report-kpi"><span>Taxa de bloqueio</span><strong>${fmtPct(m.blockRate)}</strong></div>
       <div class="report-kpi"><span>Interferência por demandas</span><strong>${fmtPct(m.impactRatio)}</strong></div>
-      <div class="report-kpi"><span>Impacto total</span><strong>${fmtPct(m.planImpactRate)}</strong></div>
+      <div class="report-kpi"><span>Impacto total</span><strong>${fmtPct(m.planImpactRate)} ${levelIcon(lvl[0])}</strong></div>
     </div>
     <div class="report-section"><h4>Planejamento do período</h4>${reportRows(m.plan,[
       {label:'Atividade',value:r=>r.atividade},
@@ -1173,13 +1184,14 @@ function openTeamReport(teamId){
       {label:'Data',value:r=>parseDate(r.data)?.toLocaleDateString('pt-BR')||r.data},
       {label:'Atividade',value:r=>r.atividade_sugerida||'—'},
       {label:'Descrição',value:r=>{const d=(r.descricao||'').trim(),a=(r.atividade_sugerida||'').trim();return d&&d!==a?d:'—';}},
-      {label:'Prioridade',value:r=>r.prioridade},
+      {label:'Prioridade',value:r=>{const p=r.prioridade||'MÉDIA';const map={'CRÍTICA':'CRÍTICO','ALTA':'ALTO','MÉDIA':'MODERADO','BAIXA':'BAIXO'};return `${levelIcon(map[p]||p)} ${p}`;}},
       {label:'Status',value:r=>r.status},
       {label:'Efeito no plano',value:r=>{const x=impactMap.get(r.demanda_id);return x?`${x.destino_planejamento||x.tipo_impacto} · ${x.horas_desviadas||0} h`:'Sem impacto identificado';}}
     ])}</div>
     <div class="report-section"><h4>Bloqueadores</h4>${reportRows(m.blq,[
       {label:'Data',value:r=>parseDate(r.data)?.toLocaleDateString('pt-BR')||r.data},
       {label:'Bloqueador',value:r=>r.tipo_bloqueador},
+      {label:'Impacto',value:r=>{const lvl=r.impacto||'MÉDIO';const map={'ALTO':'ALTO','MÉDIO':'MODERADO','BAIXO':'BAIXO'};return `${levelIcon(map[lvl]||lvl)} ${lvl}`;}},
       {label:'Horas',value:r=>`${r.horas_impactadas} h`},
       {label:'Atividade afetada',value:r=>r.atividade_planejada_afetada||'—'}
     ])}</div>
