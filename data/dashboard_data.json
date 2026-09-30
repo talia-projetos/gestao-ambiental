@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T19:02:48.818Z",
+  "generated_at": "2026-09-30T19:18:56.870Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1471,7 +1471,7 @@
   "demands": [
     {
       "demanda_id": "DN001",
-      "data": "2026-02-10",
+      "data": "2026-10-10",
       "equipe_id": "EQ02",
       "lider_tecnico": "Renata Souza Oliveira",
       "atividade_id": "",
@@ -1488,7 +1488,7 @@
     },
     {
       "demanda_id": "DN002",
-      "data": "2026-03-22",
+      "data": "2026-10-22",
       "equipe_id": "EQ05",
       "lider_tecnico": "Fernanda Lima Rocha",
       "atividade_id": "",
@@ -1505,7 +1505,7 @@
     },
     {
       "demanda_id": "DN003",
-      "data": "2026-04-14",
+      "data": "2026-10-14",
       "equipe_id": "EQ03",
       "lider_tecnico": "Ana Paula Costa Ribeiro",
       "atividade_id": "",
@@ -1522,7 +1522,7 @@
     },
     {
       "demanda_id": "DN004",
-      "data": "2026-06-03",
+      "data": "2026-10-03",
       "equipe_id": "EQ04",
       "lider_tecnico": "Diego Henrique Mendes",
       "atividade_id": "",
@@ -1539,7 +1539,7 @@
     },
     {
       "demanda_id": "DN005",
-      "data": "2026-07-18",
+      "data": "2026-10-18",
       "equipe_id": "EQ01",
       "lider_tecnico": "Renata Souza Oliveira",
       "atividade_id": "",
@@ -1556,7 +1556,7 @@
     },
     {
       "demanda_id": "DN006",
-      "data": "2026-08-05",
+      "data": "2026-10-05",
       "equipe_id": "EQ06",
       "lider_tecnico": "Carlos Eduardo Pinto",
       "atividade_id": "",
@@ -1602,7 +1602,7 @@
       "atividade_planejada_afetada": "Chuva forte impediu transecto de avifauna",
       "observacao": "Chuva forte impediu transecto de avifauna",
       "resolvido": "SIM",
-      "data_resolucao": "2026-03-16",
+      "data_resolucao": "2026-10-16",
       "origem_dado": "PROERG"
     },
     {
@@ -1617,7 +1617,7 @@
       "atividade_planejada_afetada": "Veículo da equipe em manutenção não programada",
       "observacao": "Veículo da equipe em manutenção não programada",
       "resolvido": "SIM",
-      "data_resolucao": "2026-04-04",
+      "data_resolucao": "2026-10-04",
       "origem_dado": "PROERG"
     },
     {
@@ -1632,7 +1632,7 @@
       "atividade_planejada_afetada": "Aguardo de autorização IBAMA para coleta de amostras",
       "observacao": "Aguardo de autorização IBAMA para coleta de amostras",
       "resolvido": "SIM",
-      "data_resolucao": "2026-05-30",
+      "data_resolucao": "2026-10-30",
       "origem_dado": "PROERG"
     },
     {
@@ -1647,7 +1647,7 @@
       "atividade_planejada_afetada": "Geada causou mortalidade em mudas recém-plantadas",
       "observacao": "Geada causou mortalidade em mudas recém-plantadas",
       "resolvido": "SIM",
-      "data_resolucao": "2026-06-20",
+      "data_resolucao": "2026-10-20",
       "origem_dado": "PROERG"
     },
     {
@@ -1662,7 +1662,7 @@
       "atividade_planejada_afetada": "Falta de EPI adequado para trabalho em voçoroca profunda",
       "observacao": "Falta de EPI adequado para trabalho em voçoroca profunda",
       "resolvido": "SIM",
-      "data_resolucao": "2026-07-15",
+      "data_resolucao": "2026-10-15",
       "origem_dado": "PROERG"
     },
     {
@@ -1707,7 +1707,7 @@
       "atividade_planejada_afetada": "Escola parceira cancelou visita sem aviso prévio",
       "observacao": "Escola parceira cancelou visita sem aviso prévio",
       "resolvido": "SIM",
-      "data_resolucao": "2026-08-13",
+      "data_resolucao": "2026-10-13",
       "origem_dado": "PROERG"
     },
     {
