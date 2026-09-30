@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light dark" />
   <title>Gestão Ambiental</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="assets/logo-header.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -750,9 +751,11 @@ function metricsForTeam(teamId, month=state.month){
 function currentAggregate(){
   const f=filtered();
   const planActs=uniq(f.planning.map(x=>`${x.equipe_id}:${x.atividade_id}`));
-  const execActs=uniq(f.execution.map(x=>`${x.equipe_id}:${x.atividade_id}`));
-  const covered=planActs.filter(x=>execActs.includes(x)).length;
-  const coverage=planActs.length?covered/planActs.length:0;
+  // Cobertura: equipes com pelo menos 1 execução no período (atividade_id pode estar vazia)
+  const planTeams=uniq(f.planning.map(x=>x.equipe_id));
+  const execTeams=uniq(f.execution.map(x=>x.equipe_id));
+  const covered=planTeams.filter(t=>execTeams.includes(t)).length;
+  const coverage=planTeams.length?covered/planTeams.length:0;
   const impacted=f.impact.filter(x=>x.impactou_planejamento==='SIM');
   const impactedPlans=uniq(impacted.map(x=>x.plano_afetado_id));
   const blockedPlanIds=uniq(f.blockers.filter(x=>x.impactou_planejamento==='SIM').map(x=>x.plano_afetado_id));
