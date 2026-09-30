@@ -1320,19 +1320,14 @@ function saveLocalLeaderRecord(e){
       :'Salvo localmente (sem conexão). Será sincronizado ao publicar.';
     setTimeout(()=>{e.target.reset();closeLeaderForm();},1200);
   };
+  // Sempre persiste no localStorage (garante visibilidade nos gráficos mesmo após reload)
+  const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
+  local.demands.push(demand); local.impact.push(impact);
+  localStorage.setItem('ga-local-records',JSON.stringify(local));
   if(scriptUrl){
     fetch(scriptUrl,{method:'POST',body:JSON.stringify(payload)})
-      .then(r=>r.json()).then(r=>finalize(r.ok)).catch(()=>{
-        // fallback local se POST falhar
-        const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
-        local.demands.push(demand); local.impact.push(impact);
-        localStorage.setItem('ga-local-records',JSON.stringify(local));
-        finalize(false);
-      });
+      .then(r=>r.json()).then(r=>finalize(r.ok)).catch(()=>finalize(false));
   } else {
-    const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
-    local.demands.push(demand); local.impact.push(impact);
-    localStorage.setItem('ga-local-records',JSON.stringify(local));
     finalize(false);
   }
 }
