@@ -106,12 +106,19 @@ html[data-theme="dark"] .card,html[data-theme="dark"] .kpi-card{background:var(-
 .status-strip{background:var(--surface-2)!important;border:1px solid var(--border)!important}
 html[data-theme="dark"] .status-strip{background:var(--surface-2)!important;border-color:var(--border)!important}
 
-/* ── KPI cards: barra lateral colorida visível ───────────────── */
-.kpi-card:before{display:block!important;width:3px!important;border-radius:0 3px 3px 0!important}
-.kpi-head span{font-size:10px!important;font-weight:600!important;letter-spacing:.07em!important;text-transform:uppercase!important;color:var(--muted)}
-.kpi-head svg{width:16px!important;height:16px!important;color:var(--faint)}
-.kpi-card>strong{font-size:34px!important;font-weight:800!important;letter-spacing:-.038em!important;margin-top:10px!important;display:block}
-.kpi-foot{font-size:10.5px!important;font-weight:400!important;color:var(--faint);margin-top:8px!important}
+/* ── KPI cards v2: layout horizontal com gauge circular ──────── */
+.kpi-card:before{display:none!important}
+.kpi-v2{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:18px 20px!important;min-height:100px!important}
+.kpi-v2-left{flex:1;min-width:0}
+.kpi-v2-label{display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.kpi-v2-left>strong{font-size:30px!important;font-weight:800!important;letter-spacing:-.04em!important;line-height:1!important;margin:0!important;display:block!important}
+.kpi-v2-note{display:block;font-size:10px;color:var(--faint);margin-top:6px;line-height:1.4}
+/* Ring gauge */
+.kpi-ring{width:54px;height:54px;flex:none}
+.kpi-ring-bg{fill:none;stroke:var(--border);stroke-width:4.5}
+.kpi-ring-fill{fill:none;stroke:var(--green);stroke-width:4.5;stroke-linecap:round;stroke-dasharray:0 138.23;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dasharray .7s cubic-bezier(.4,0,.2,1),stroke .4s}
+/* Demand badge */
+.kpi-demand-badge{width:54px;height:54px;flex:none;border-radius:50%;background:color-mix(in srgb,var(--ochre) 12%,transparent);border:2px solid color-mix(in srgb,var(--ochre) 30%,transparent);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--ochre);letter-spacing:-.04em}
 
 /* ── Cards: tipografia ───────────────────────────────────────── */
 .card h2{font-size:13px!important;font-weight:700!important;letter-spacing:.005em!important}
@@ -135,8 +142,7 @@ html[data-theme="dark"] .status-strip{background:var(--surface-2)!important;bord
 
 /* ── Sidebar redesign ────────────────────────────────────────── */
 .brand-mark{height:auto!important;width:100%!important;display:flex!important;align-items:center!important;gap:10px!important;margin-bottom:20px!important;padding:0 6px!important}
-.logo-badge{background:#fff;border-radius:10px;padding:5px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 5px rgba(0,0,0,.12);flex:none;border:1px solid rgba(0,0,0,.06)}
-.logo-badge img{width:30px;height:30px;object-fit:contain;display:block}
+.brand-logo{width:36px;height:36px;flex:none;object-fit:contain}
 .brand-text{display:flex;flex-direction:column;min-width:0;overflow:hidden}
 .brand-text strong{font-size:12px!important;font-weight:800!important;letter-spacing:.02em!important;color:var(--text);line-height:1.2}
 .brand-text span{font-size:9.5px;color:var(--muted);font-weight:400;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -241,7 +247,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
   <div class="app-shell">
     <aside class="sidebar" aria-label="Navegação principal">
       <div class="brand-mark">
-        <div class="logo-badge"><img src="assets/logo-header.png" alt="Logotipo" /></div>
+        <img src="assets/logo-header.png" alt="Logotipo" class="brand-logo" />
         <div class="brand-text"><strong>PROERG</strong><span>Gestão Ambiental</span></div>
       </div>
       <nav class="sidebar-nav">
@@ -308,30 +314,45 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
       </section>
 
       <section class="kpi-grid" id="planning-section">
-        <article class="kpi-card">
-          <div class="kpi-head"><span>Cobertura de atividades</span><i data-lucide="target"></i></div>
-          <strong id="kpiCoverage">—</strong>
-          <div class="kpi-foot"><span id="kpiCoverageNote">—</span></div>
+        <article class="kpi-card kpi-v2 accent-green">
+          <div class="kpi-v2-left">
+            <span class="kpi-v2-label">Cobertura</span>
+            <strong id="kpiCoverage">—</strong>
+            <span class="kpi-v2-note" id="kpiCoverageNote">—</span>
+          </div>
+          <svg class="kpi-ring" viewBox="0 0 56 56" aria-hidden="true"><circle class="kpi-ring-bg" cx="28" cy="28" r="22"/><circle class="kpi-ring-fill" id="ringCoverage" cx="28" cy="28" r="22"/></svg>
         </article>
-        <article class="kpi-card">
-          <div class="kpi-head"><span>Demandas não previstas</span><i data-lucide="git-pull-request-arrow"></i></div>
-          <strong id="kpiDemands">—</strong>
-          <div class="kpi-foot"><span id="kpiDemandNote">—</span></div>
+        <article class="kpi-card kpi-v2 accent-ochre">
+          <div class="kpi-v2-left">
+            <span class="kpi-v2-label">Demandas não previstas</span>
+            <strong id="kpiDemands">—</strong>
+            <span class="kpi-v2-note" id="kpiDemandNote">—</span>
+          </div>
+          <div class="kpi-demand-badge" id="demandBadge">0</div>
         </article>
-        <article class="kpi-card">
-          <div class="kpi-head"><span>Interferência no plano</span><i data-lucide="workflow"></i></div>
-          <strong id="kpiImpact">—</strong>
-          <div class="kpi-foot"><span id="kpiImpactNote">Índice de interferência não planejada</span></div>
+        <article class="kpi-card kpi-v2 accent-red">
+          <div class="kpi-v2-left">
+            <span class="kpi-v2-label">Interferência no plano</span>
+            <strong id="kpiImpact">—</strong>
+            <span class="kpi-v2-note" id="kpiImpactNote">—</span>
+          </div>
+          <svg class="kpi-ring" viewBox="0 0 56 56" aria-hidden="true"><circle class="kpi-ring-bg" cx="28" cy="28" r="22"/><circle class="kpi-ring-fill" id="ringImpact" cx="28" cy="28" r="22"/></svg>
         </article>
-        <article class="kpi-card">
-          <div class="kpi-head"><span>Taxa de bloqueio</span><i data-lucide="timer-off"></i></div>
-          <strong id="kpiBlocked">—</strong>
-          <div class="kpi-foot"><span id="kpiBlockedNote">—</span></div>
+        <article class="kpi-card kpi-v2 accent-red">
+          <div class="kpi-v2-left">
+            <span class="kpi-v2-label">Taxa de bloqueio</span>
+            <strong id="kpiBlocked">—</strong>
+            <span class="kpi-v2-note" id="kpiBlockedNote">—</span>
+          </div>
+          <svg class="kpi-ring" viewBox="0 0 56 56" aria-hidden="true"><circle class="kpi-ring-bg" cx="28" cy="28" r="22"/><circle class="kpi-ring-fill" id="ringBlocked" cx="28" cy="28" r="22"/></svg>
         </article>
-        <article class="kpi-card">
-          <div class="kpi-head"><span>Impacto total no planejamento</span><i data-lucide="scan-search"></i></div>
-          <strong id="kpiAttention">—</strong>
-          <div class="kpi-foot"><span>Atividades planejadas afetadas</span></div>
+        <article class="kpi-card kpi-v2 accent-purple">
+          <div class="kpi-v2-left">
+            <span class="kpi-v2-label">Impacto no planejamento</span>
+            <strong id="kpiAttention">—</strong>
+            <span class="kpi-v2-note" id="kpiAttentionNote">—</span>
+          </div>
+          <svg class="kpi-ring" viewBox="0 0 56 56" aria-hidden="true"><circle class="kpi-ring-bg" cx="28" cy="28" r="22"/><circle class="kpi-ring-fill" id="ringAttention" cx="28" cy="28" r="22"/></svg>
         </article>
       </section>
 
@@ -595,7 +616,7 @@ function fmtNum(n, max=0){ return new Intl.NumberFormat('pt-BR',{maximumFraction
 function parseDate(s){ return s ? new Date(`${s}T12:00:00`) : null; }
 function monthOf(row, field='data'){ const d=parseDate(row[field]); return d ? d.getMonth()+1 : Number(row.mes_num)||0; }
 function byTeam(rows, team=state.team){ return team==='ALL' ? rows : rows.filter(r=>r.equipe_id===team); }
-function currentMonth(rows, dateField='data'){ return rows.filter(r=>monthOf(r,dateField)===Number(state.month)); }
+function currentMonth(rows, dateField='data'){ const m=Number(state.month); return rows.filter(r=>{const rm=monthOf(r,dateField);return rm===m||rm===0;}); }
 function uniq(arr){ return [...new Set(arr.filter(Boolean))]; }
 function automaticImpactLevel(rate){
   const r=Number(rate)||0;
@@ -751,21 +772,34 @@ function currentAggregate(){
   return {...f,coverage,covered,totalPlan:planActs.length,impactRatio,blockRate,planImpactRate,blockedPlanIds,allAffectedPlanIds,blockedHours,attention,impacted,ytdAffActsSet,ytdTotalActTypes};
 }
 
+function setRing(id,pct,invert){
+  const el=document.getElementById(id); if(!el)return;
+  const C=138.23,v=Math.max(0,Math.min(1,(invert?1-(pct||0):pct||0)));
+  el.style.strokeDasharray=`${v*C} ${C}`;
+  el.style.stroke=v>=.7?'var(--green)':v>=.35?'var(--amber)':'var(--red)';
+}
 function renderKPIs(){
   const m=currentAggregate();
   const diverted=m.impacted.reduce((s,x)=>s+Number(x.horas_desviadas||0),0);
   const gap=Math.max(0,m.totalPlan-m.covered);
   document.getElementById('kpiCoverage').textContent=fmtPct(m.coverage);
-  document.getElementById('kpiCoverageNote').textContent=`${m.covered} executadas · ${gap} ainda sem execução registrada`;
-  document.getElementById('kpiDemands').textContent=fmtNum(m.demands.length);
-  document.getElementById('kpiDemandNote').textContent=`${m.demands.filter(x=>['EM ANDAMENTO','ABERTA','PENDENTE'].includes(x.status)).length} em andamento · ${m.demands.filter(x=>x.prioridade==='ALTA'||x.prioridade==='CRÍTICA').length} de alta prioridade`;
+  document.getElementById('kpiCoverageNote').textContent=`${m.covered} exec. · ${gap} sem registro`;
+  setRing('ringCoverage',m.coverage);
+  const nd=m.demands.length;
+  document.getElementById('kpiDemands').textContent=nd;
+  document.getElementById('demandBadge').textContent=nd;
+  document.getElementById('kpiDemandNote').textContent=`${m.demands.filter(x=>['EM ANDAMENTO','ABERTA','PENDENTE'].includes(x.status)).length} em andamento · ${m.demands.filter(x=>x.prioridade==='ALTA'||x.prioridade==='CRÍTICA').length} alta prioridade`;
   document.getElementById('kpiImpact').textContent=fmtPct(m.impactRatio);
-  document.getElementById('kpiImpactNote').textContent=`${uniq(m.impacted.map(x=>x.plano_afetado_id)).length} atividades afetadas · ${fmtNum(diverted)} h desviadas`;
+  document.getElementById('kpiImpactNote').textContent=`${uniq(m.impacted.map(x=>x.plano_afetado_id)).length} ativ. afetadas · ${fmtNum(diverted)} h desviadas`;
+  setRing('ringImpact',m.impactRatio,true);
   document.getElementById('kpiBlocked').textContent=fmtPct(m.blockRate);
-  document.getElementById('kpiBlockedNote').textContent=`${m.blockedPlanIds.length} de ${m.totalPlan} atividades · ${fmtNum(m.blockedHours)} h bloqueadas`;
+  document.getElementById('kpiBlockedNote').textContent=`${m.blockedPlanIds.length} de ${m.totalPlan} ativ. · ${fmtNum(m.blockedHours)} h bloqueadas`;
+  setRing('ringBlocked',m.blockRate,true);
   document.getElementById('kpiAttention').textContent=fmtPct(m.planImpactRate);
-  const el=document.querySelector('#kpiAttention').closest('.kpi-card').querySelector('.kpi-foot span');
-  if(el){ const lvl=automaticImpactLevel(m.planImpactRate); el.textContent=`${m.ytdAffActsSet?m.ytdAffActsSet.size:m.allAffectedPlanIds.length} de ${m.ytdTotalActTypes||m.totalPlan} tipos de atividade afetados no ano · nível ${lvl[0]}`; }
+  const lvl=automaticImpactLevel(m.planImpactRate);
+  const an=document.getElementById('kpiAttentionNote');
+  if(an) an.textContent=`${m.ytdAffActsSet?m.ytdAffActsSet.size:m.allAffectedPlanIds.length} de ${m.ytdTotalActTypes||m.totalPlan} tipos afetados · nível ${lvl[0]}`;
+  setRing('ringAttention',m.planImpactRate,true);
 }
 
 function destroyChart(id){ if(state.charts[id]){state.charts[id].destroy(); delete state.charts[id];} }
