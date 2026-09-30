@@ -1157,7 +1157,7 @@ async function fetchArcGISGeoJSON(baseUrl){
 }
 
 function setupMap(){
-  state.map=L.map('map',{zoomControl:true,attributionControl:true}).setView([-24.8,-54.05],8);
+  state.map=L.map('map',{zoomControl:true,attributionControl:true}).setView([-25.408,-54.588],12);
   state.baseLight=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',{attribution:'Tiles © Esri',maxZoom:16});
   state.labelsLight=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',{maxZoom:16,pane:'overlayPane'});
   state.baseDark=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',{attribution:'Tiles © Esri',maxZoom:16});
