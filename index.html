@@ -187,7 +187,9 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
   .sidebar{display:flex!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100%!important;height:62px!important;border-radius:0!important;flex-direction:row!important;padding:0 8px!important;align-items:stretch!important;z-index:50!important;border-top:1px solid rgba(0,0,0,.08)!important;border-left:0!important;border-right:0!important;border-bottom:0!important}
   .brand-mark,.brand-text,.sidebar-label,.sidebar-divider,.sidebar-bottom{display:none!important}
   .sidebar-nav{flex-direction:row!important;width:100%!important;gap:0!important;align-items:stretch!important;padding:0!important}
-  .nav-btn{flex-direction:column!important;height:100%!important;width:auto!important;flex:1!important;justify-content:center!important;padding:6px 2px!important;gap:2px!important;border-radius:0!important}
+  .nav-btn{display:none!important}
+  .nav-btn[data-page="page-map"],.nav-btn#leaderFormBtn{display:flex!important;flex-direction:column!important;height:100%!important;width:auto!important;flex:1!important;justify-content:center!important;padding:6px 2px!important;gap:2px!important;border-radius:0!important}
+  .nav-btn#leaderFormBtn{background:color-mix(in srgb,var(--green) 14%,var(--surface))!important;color:var(--green)!important}
   .nav-btn span{display:block!important;font-size:9px!important;font-weight:500!important;letter-spacing:.01em!important}
   .nav-btn svg{width:20px!important;height:20px!important}
   .main-content{margin-left:0!important;padding:14px 14px 78px!important}
@@ -198,6 +200,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
   .span-4,.span-5,.span-7,.span-8{grid-column:span 12!important}
   .filter-wide{display:none!important}
 }
+@media(max-width:760px){.notif-panel{position:fixed!important;top:auto!important;bottom:72px!important;left:12px!important;right:12px!important;width:auto!important}}
 @media(min-width:761px) and (max-width:960px){
   :root{--sidebar:64px}
   .main-content{margin-left:96px!important}
@@ -361,15 +364,6 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
 
       <!-- PAGE: Visão Geral -->
       <div id="page-overview" class="page active">
-        <!-- Card de navegação — visível apenas em mobile -->
-        <div class="mobile-nav-card" aria-label="Navegação rápida">
-          <button data-page="page-teams"><i data-lucide="users"></i><span>Equipes</span></button>
-          <button data-page="page-planning"><i data-lucide="calendar-range"></i><span>Demandas</span></button>
-          <button data-page="page-map"><i data-lucide="map"></i><span>Mapa</span></button>
-          <button data-page="page-blockers"><i data-lucide="triangle-alert"></i><span>Bloqueadores</span></button>
-          <button id="mobileLeaderBtn" class="accent"><i data-lucide="clipboard-pen-line"></i><span>Registrar</span></button>
-          <button id="mobileSettingsBtn"><i data-lucide="settings-2"></i><span>Config.</span></button>
-        </div>
         <section class="dashboard-grid">
 
           <!-- Execução vs Planejado — gráfico principal, full width -->
@@ -1314,7 +1308,6 @@ function setupUI(){
   });
   document.getElementById('leaderFormBtn').addEventListener('click',openLeaderForm);
   document.getElementById('mobileLeaderBtn')?.addEventListener('click',openLeaderForm);
-  document.getElementById('mobileSettingsBtn')?.addEventListener('click',()=>document.getElementById('settingsBtn').click());
   // botões do card mobile que navegam para páginas
   document.querySelectorAll('.mobile-nav-card [data-page]').forEach(btn=>{
     btn.addEventListener('click',()=>{
