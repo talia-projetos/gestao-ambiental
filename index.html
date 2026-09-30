@@ -56,6 +56,15 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .primary-action{background:var(--blue);color:#fff}.secondary-action{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}
 .form-note{margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:12px;color:var(--muted)}
 .form-note.success{background:color-mix(in srgb,var(--green) 14%,var(--surface));color:var(--text)}
+.demand-filter-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.demand-search-box{display:flex;align-items:center;gap:7px;height:34px;padding:0 8px 0 10px;background:var(--surface-3);border:1px solid var(--border);border-radius:12px;flex:1;min-width:200px}
+.demand-search-box svg{width:14px;height:14px;color:var(--muted);flex:none}
+.demand-search-box input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--text);font:inherit;font-size:11.5px}
+.demand-status-chips{display:flex;gap:6px;flex-wrap:wrap}
+.origin-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:650}
+.origin-campo{background:color-mix(in srgb,var(--green) 15%,transparent);color:#2e7d4f}
+.origin-plan{background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue)}
+.origin-local{background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
 
 @media(max-width:760px){
   .leader-form-grid,.form-secondary.visible{grid-template-columns:1fr}
@@ -444,12 +453,30 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
       <!-- PAGE: Demandas -->
       <div id="page-planning" class="page">
         <section class="dashboard-grid">
-          <article class="card chart-card span-12">
+          <article class="card span-12">
             <div class="card-header">
-              <div><h2>Perfil das demandas não previstas</h2><p>Status acumulado por equipe — todas as demandas do ano</p></div>
-              <button class="icon-btn ghost expand-btn" data-chart="demandStatusChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
+              <div><h2>Feed de demandas</h2><p>Todas as demandas não previstas registradas no projeto</p></div>
+              <span id="demandCount" style="font-size:12px;color:var(--muted);white-space:nowrap"></span>
             </div>
-            <div class="chart-wrap tall"><canvas id="demandStatusChart"></canvas></div>
+            <div class="demand-filter-bar">
+              <div class="demand-search-box">
+                <i data-lucide="search"></i>
+                <input id="demandSearch" type="text" placeholder="Buscar equipe, tipo ou descrição…" />
+              </div>
+              <div class="demand-status-chips" id="demandStatusChips">
+                <button class="chip-btn active" data-status="ALL">Todas</button>
+                <button class="chip-btn" data-status="ABERTA">Abertas</button>
+                <button class="chip-btn" data-status="ANDAMENTO">Em andamento</button>
+                <button class="chip-btn" data-status="CONCLUIDA">Resolvidas</button>
+              </div>
+            </div>
+            <div class="table-wrap" id="demandTableWrap">
+              <table>
+                <thead><tr><th>Data</th><th>Equipe</th><th>Tipo</th><th>Descrição</th><th>Status</th><th>Origem</th></tr></thead>
+                <tbody id="demandTableBody"></tbody>
+              </table>
+            </div>
+            <div id="demandTableEmpty" style="display:none;padding:36px;text-align:center;color:var(--muted);font-size:13px;">Nenhuma demanda encontrada para os filtros selecionados.</div>
           </article>
         </section>
       </div>
@@ -1091,29 +1118,47 @@ function renderTeamPressureChart(){
   setChart('teamPressureChart',config,'Pressão operacional por equipe','Índice sintético composto por lacuna de execução, impacto total, bloqueios e demandas abertas');
 }
 
-function renderDemandStatusChart(){
-  const labels=state.teams.map(t=>t.equipe_id);
-  // Mostra TODAS as demandas do ano (não só o mês selecionado) e aceita statuses Proerg
-  const allDem=state.team==='ALL'?state.demands:state.demands.filter(d=>d.equipe_id===state.team);
-  const byEq=id=>allDem.filter(d=>d.equipe_id===id);
+function renderDemandTable(){
+  const tbody=document.getElementById('demandTableBody');
+  const wrap=document.getElementById('demandTableWrap');
+  const empty=document.getElementById('demandTableEmpty');
+  const countEl=document.getElementById('demandCount');
+  if(!tbody)return;
+  const statusFilter=(document.querySelector('#demandStatusChips .chip-btn.active')||{}).dataset?.status||'ALL';
+  const search=(document.getElementById('demandSearch')?.value||'').toLowerCase().trim();
+  const allDem=byTeam(state.demands).slice().sort((a,b)=>(parseDate(b.data)||0)-(parseDate(a.data)||0));
   const isAberta=d=>['ABERTA','PENDENTE'].includes(d.status);
   const isAndamento=d=>['EM ANDAMENTO','EM ATENDIMENTO'].includes(d.status);
   const isConcluida=d=>['CONCLUÍDA','RESOLVIDA','CANCELADA'].includes(d.status);
-  const counts=fn=>labels.map(id=>byEq(id).filter(fn).length);
-  const options=chartBase();
-  options.plugins.legend.position='bottom';
-  options.scales.x.stacked=true;
-  options.scales.y.stacked=true;
-  options.scales.y.ticks.stepSize=1;
-  const config={type:'bar',data:{labels,datasets:[
-    {label:'Pendentes',data:counts(isAberta),backgroundColor:'rgba(180,190,184,0.65)',stack:'s',borderRadius:5},
-    {label:'Em atendimento',data:counts(isAndamento),backgroundColor:'rgba(72,179,129,0.42)',stack:'s',borderRadius:5},
-    {label:'Resolvidas',data:counts(isConcluida),backgroundColor:cssVar('--green'),stack:'s',borderRadius:5}
-  ]},options};
-  setChart('demandStatusChart',config,'Perfil das demandas não previstas','Status por equipe — acumulado anual');
-  // Replica no canvas da página bloqueadores (se existir)
-  const ctx2=document.getElementById('blockerChartFull');
-  if(ctx2) setTimeout(()=>renderBlockerChartFull(),50);
+  const rows=allDem.filter(d=>{
+    if(statusFilter==='ABERTA'&&!isAberta(d))return false;
+    if(statusFilter==='ANDAMENTO'&&!isAndamento(d))return false;
+    if(statusFilter==='CONCLUIDA'&&!isConcluida(d))return false;
+    if(search){const h=`${d.descricao||''} ${d.equipe_id||''} ${d.atividade_sugerida||''} ${d.lider_tecnico||''}`.toLowerCase();if(!h.includes(search))return false;}
+    return true;
+  });
+  if(countEl)countEl.textContent=`${rows.length} demanda${rows.length!==1?'s':''}`;
+  if(!rows.length){wrap.style.display='none';if(empty)empty.style.display='block';return;}
+  wrap.style.display='';if(empty)empty.style.display='none';
+  const originBadge=o=>{
+    if(o==='CAMPO')return '<span class="origin-badge origin-campo">Campo</span>';
+    if(o==='SIMULADO_LOCAL')return '<span class="origin-badge origin-local">Local</span>';
+    return '<span class="origin-badge origin-plan">Planilha</span>';
+  };
+  const sPill=d=>{
+    if(isAberta(d))return '<span class="status-pill status-alert">Aberta</span>';
+    if(isAndamento(d))return '<span class="status-pill status-watch">Em andamento</span>';
+    if(isConcluida(d))return '<span class="status-pill status-normal">Resolvida</span>';
+    return `<span class="status-pill">${d.status||'—'}</span>`;
+  };
+  tbody.innerHTML=rows.map(d=>`<tr>
+    <td style="white-space:nowrap;font-size:11px">${d.data||'—'}</td>
+    <td><strong style="font-size:11.5px">${d.equipe_id||'—'}</strong>${d.lider_tecnico?`<span class="team-sub leader-name">${d.lider_tecnico}</span>`:''}</td>
+    <td style="font-size:11px;color:var(--muted);max-width:130px;white-space:normal">${d.atividade_sugerida||'—'}</td>
+    <td style="max-width:280px;white-space:normal;font-size:11.5px">${(d.descricao||'—').slice(0,120)}</td>
+    <td>${sPill(d)}</td>
+    <td>${originBadge(d.origem_dado)}</td>
+  </tr>`).join('');
 }
 
 function renderAttention(){
@@ -1144,7 +1189,7 @@ function showPage(id){
   },50);
 }
 function renderAll(){
-  [renderKPIs,renderPlanChart,renderHoursChart,renderImpactChart,renderBlockerChart,renderPressureChart,renderTeamPressureChart,renderDemandStatusChart,renderWeather,renderTeamTable,renderAttention]
+  [renderKPIs,renderPlanChart,renderHoursChart,renderImpactChart,renderBlockerChart,renderPressureChart,renderTeamPressureChart,renderDemandTable,renderWeather,renderTeamTable,renderAttention]
     .forEach(fn=>{try{fn();}catch(e){console.error('[render]',fn.name,e);}});
   try{lucide.createIcons();}catch(e){}
 }
@@ -1392,6 +1437,11 @@ function setupUI(){
   document.getElementById('teamFilter').addEventListener('change',e=>{state.team=e.target.value;renderAll();updateDemandMarkers();});
   document.getElementById('clearTeamFilter').addEventListener('click',()=>{state.team='ALL';document.getElementById('teamFilter').value='ALL';renderAll();updateDemandMarkers();});
   document.getElementById('refreshBtn').addEventListener('click',loadData);
+  document.querySelectorAll('#demandStatusChips .chip-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('#demandStatusChips .chip-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); renderDemandTable();
+  }));
+  document.getElementById('demandSearch')?.addEventListener('input',renderDemandTable);
   document.querySelectorAll('.nav-btn[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
   const drawer=document.getElementById('settingsDrawer'),back=document.getElementById('drawerBackdrop'); const open=()=>{drawer.classList.add('open');back.classList.add('open');drawer.setAttribute('aria-hidden','false')},close=()=>{drawer.classList.remove('open');back.classList.remove('open');drawer.setAttribute('aria-hidden','true')};
   document.getElementById('settingsBtn').addEventListener('click',open);document.getElementById('closeSettings').addEventListener('click',close);back.addEventListener('click',close);
