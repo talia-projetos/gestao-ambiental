@@ -270,7 +270,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
             <div class="card-header compact">
               <div><h2>Destino das demandas</h2><p>Como foram tratadas no planejamento</p></div>
             </div>
-            <div class="chart-wrap" style="height:160px"><canvas id="impactChart"></canvas></div>
+            <div class="chart-wrap" style="height:210px"><canvas id="impactChart"></canvas></div>
           </article>
 
         </section>
@@ -315,7 +315,6 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
               <div><h2>Mapa operacional</h2><p>BP3 oficial · hidrografia IAT/PR · demandas não previstas</p></div>
               <div class="map-actions">
                 <button class="chip-btn active" id="bp3Toggle"><i data-lucide="layers-3"></i> BP3</button>
-                <button class="chip-btn active" id="stateToggle"><i data-lucide="map"></i> Estados BP3</button>
                 <button class="chip-btn active" id="hydroToggle"><i data-lucide="waves"></i> Hidrografia</button>
                 <button class="chip-btn active" id="demandToggle"><i data-lucide="map-pin"></i> Demandas</button>
               </div>
@@ -691,7 +690,7 @@ function renderImpactChart(){
   if(noImpact>0){labels.push('Sem impacto identificado');data.push(noImpact);colors.push(cssVar('--surface-2'));}
   Object.entries(counts).forEach(([k,v],idx)=>{if(v>0){labels.push(k);data.push(v);colors.push([cssVar('--ochre'),cssVar('--blue'),cssVar('--green'),cssVar('--red')][idx]);}});
   if(!data.length){labels.push('Sem demandas');data.push(1);colors.push(cssVar('--surface-2'));}
-  const options={responsive:true,maintainAspectRatio:false,cutout:'70%',animation:state.animations?{duration:500}:false,plugins:{legend:{position:'bottom',labels:{color:cssVar('--muted'),boxWidth:10,usePointStyle:true,font:{size:10}}},tooltip:{backgroundColor:cssVar('--text'),titleColor:cssVar('--surface'),bodyColor:cssVar('--surface')}}};
+  const options={responsive:true,maintainAspectRatio:false,cutout:'68%',animation:state.animations?{duration:500}:false,plugins:{legend:{position:'right',align:'center',labels:{color:cssVar('--muted'),boxWidth:8,usePointStyle:true,pointStyle:'circle',font:{size:10.5},padding:10}},tooltip:{backgroundColor:cssVar('--text'),titleColor:cssVar('--surface'),bodyColor:cssVar('--surface')}}};
   const config={type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0}]},options};
   setChart('impactChart',config,'Impacto das demandas','Destino das demandas não previstas no planejamento');
 }
@@ -932,19 +931,6 @@ function setupMap(){
     state.bp3Layer=L.geoJSON(g,{style:{color:cssVar('--green'),weight:1.8,fillColor:cssVar('--green'),fillOpacity:.04}}).addTo(state.map);
     try{state.map.fitBounds(state.bp3Layer.getBounds(),{padding:[18,18]});}catch(e){}
   }).catch(()=>{ state.map.fitBounds([[-25.5926,-54.6199],[-23.9889,-53.4399]]); });
-  const stateGroup=L.featureGroup().addTo(state.map);
-  state.stateLayer=stateGroup;
-  // 3 region requests (Sul+Sudeste+CentroOeste) ao invés de 7 individuais
-  IBGE_REGIONS_BP3.forEach(reg=>{
-    fetch(`${IBGE_REGION_BASE}${reg}${IBGE_REGION_SUFFIX}`).then(r=>r.json()).then(g=>{
-      L.geoJSON(g,{style:bp3StateStyle}).addTo(stateGroup);
-      if(state.bp3Layer) state.bp3Layer.bringToFront();
-    }).catch(()=>{});
-  });
-  fetch(PARAGUAY_GEOJSON_URL).then(r=>r.json()).then(g=>{
-    L.geoJSON(g,{style:bp3StateStyle}).addTo(stateGroup);
-    if(state.bp3Layer) state.bp3Layer.bringToFront();
-  }).catch(()=>{});
   fetchArcGISGeoJSON(IAT_HIDRO_BP3_BASE).then(g=>{
     state.hydroFeatures=g.features||[];
     state.hydroLayer=L.geoJSON(g,{style:hydroStyle}).addTo(state.map);
@@ -1104,7 +1090,6 @@ function setupUI(){
   document.getElementById('fullscreenBtn').addEventListener('click',()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen());
   document.getElementById('resetSettings').addEventListener('click',()=>{applyTheme('light');applyPresentation(false);applyDensity('comfortable');applyNames(true);state.animations=true;document.getElementById('animationSetting').checked=true;state.refreshMinutes=5;document.getElementById('refreshSetting').value='5';setupRefresh();});
   document.getElementById('bp3Toggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.bp3Layer)return;const on=state.map.hasLayer(state.bp3Layer);on?state.map.removeLayer(state.bp3Layer):state.bp3Layer.addTo(state.map);b.classList.toggle('active',!on);});
-  document.getElementById('stateToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.stateLayer)return;const on=state.map.hasLayer(state.stateLayer);on?state.map.removeLayer(state.stateLayer):state.stateLayer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('hydroToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.hydroLayer)return;const on=state.map.hasLayer(state.hydroLayer);on?state.map.removeLayer(state.hydroLayer):state.hydroLayer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('demandToggle').addEventListener('click',e=>{const b=e.currentTarget;const on=state.map.hasLayer(state.demandLayer);on?state.map.removeLayer(state.demandLayer):state.demandLayer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('bhoFilterInput').addEventListener('input',applyBhoFilter);
