@@ -78,6 +78,32 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
   #teamReportModal .report-table th,#teamReportModal .report-table td{border-color:#ddd!important}
 }
 
+/* ── Notification system ─────────────────────────────────────── */
+.notif-wrap{position:relative}
+.notif-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:none;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--surface);line-height:1;pointer-events:none}
+.notif-badge.visible{display:flex}
+.notif-panel{position:absolute;top:calc(100% + 8px);right:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:0 16px 50px rgba(0,0,0,.16);z-index:200;overflow:hidden;display:none}
+.notif-panel.open{display:block}
+.notif-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px 8px;border-bottom:1px solid var(--border)}
+.notif-head h3{margin:0;font-size:13px;font-weight:700}
+.notif-list{max-height:340px;overflow:auto}
+.notif-item{display:flex;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);transition:.15s;cursor:default}
+.notif-item:last-child{border-bottom:0}
+.notif-item:hover{background:var(--surface-3)}
+.notif-item.unread{background:color-mix(in srgb,var(--blue) 5%,var(--surface))}
+.notif-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;flex:none}
+.notif-icon svg{width:15px;height:15px}
+.notif-icon.form{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green)}
+.notif-icon.rain{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue)}
+.notif-icon.wind{background:color-mix(in srgb,var(--amber) 16%,transparent);color:var(--amber)}
+.notif-body{min-width:0}
+.notif-body strong{display:block;font-size:12px;font-weight:700}
+.notif-body p{margin:2px 0 0;font-size:11px;color:var(--muted);line-height:1.4;white-space:normal}
+.notif-body time{display:block;font-size:10px;color:var(--faint);margin-top:3px}
+.notif-empty{padding:24px;text-align:center;color:var(--faint);font-size:12px;margin:0}
+@keyframes notif-pulse{0%,100%{transform:scale(1)}30%{transform:scale(1.2)}65%{transform:scale(.94)}}
+.notif-pulse{animation:notif-pulse .45s ease}
+
 </style>
 </head>
 <body>
@@ -125,6 +151,17 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
           <button class="icon-btn" id="themeQuickBtn" title="Alternar tema"><i data-lucide="moon"></i></button>
           <button class="icon-btn" id="presentQuickBtn" title="Modo apresentação"><i data-lucide="presentation"></i></button>
           <button class="icon-btn" id="refreshBtn" title="Atualizar dados"><i data-lucide="refresh-cw"></i></button>
+          <div class="notif-wrap">
+            <button class="icon-btn" id="notifBtn" title="Notificações"><i data-lucide="bell"></i></button>
+            <span class="notif-badge" id="notifBadge"></span>
+            <div class="notif-panel" id="notifPanel">
+              <div class="notif-head">
+                <h3>Notificações</h3>
+                <button class="icon-btn ghost" id="clearNotifBtn" style="width:32px;height:32px" title="Limpar tudo"><i data-lucide="trash-2"></i></button>
+              </div>
+              <div class="notif-list" id="notifList"><p class="notif-empty">Sem notificações</p></div>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -164,38 +201,46 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
       <!-- PAGE: Visão Geral -->
       <div id="page-overview" class="page active">
         <section class="dashboard-grid">
-          <article class="card chart-card span-8">
+
+          <!-- Execução vs Planejado — gráfico principal, full width -->
+          <article class="card chart-card span-12">
             <div class="card-header">
-              <div><h2>Carga operacional e interferências</h2><p>Planejado, executado e demandas por equipe no período</p></div>
-              <button class="icon-btn ghost expand-btn" data-chart="planChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
+              <div><h2>Execução vs planejamento por equipe</h2><p>Atividades planejadas, executadas e demandas não previstas no período</p></div>
+              <button class="icon-btn ghost expand-btn" data-chart="planChart" title="Ampliar"><i data-lucide="maximize-2"></i></button>
             </div>
-            <div class="chart-wrap tall"><canvas id="planChart"></canvas></div>
+            <div class="chart-wrap" style="height:240px"><canvas id="planChart"></canvas></div>
           </article>
-          <article class="card chart-card span-4">
+
+          <!-- Evolução mensal — área suave -->
+          <article class="card chart-card span-7">
             <div class="card-header">
-              <div><h2>Impacto das demandas</h2><p>Destino do planejamento afetado</p></div>
-              <button class="icon-btn ghost expand-btn" data-chart="impactChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
+              <div><h2>Evolução mensal de demandas</h2><p>Demandas não previstas registradas mês a mês — 2026</p></div>
+              <button class="icon-btn ghost expand-btn" data-chart="pressureChart" title="Ampliar"><i data-lucide="maximize-2"></i></button>
             </div>
-            <div class="chart-wrap tall"><canvas id="impactChart"></canvas></div>
+            <div class="chart-wrap" style="height:220px"><canvas id="pressureChart"></canvas></div>
           </article>
-          <article class="card chart-card span-6">
+
+          <!-- Atenção por equipe -->
+          <article class="card chart-card span-5">
             <div class="card-header">
-              <div><h2>Pressão não planejada</h2><p>Demandas e horas desviadas ao longo do ano</p></div>
-              <button class="icon-btn ghost expand-btn" data-chart="pressureChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
+              <div><h2>Atenção por equipe</h2><p>Índice composto: execução, bloqueios e demandas abertas</p></div>
+              <button class="icon-btn ghost expand-btn" data-chart="teamPressureChart" title="Ampliar"><i data-lucide="maximize-2"></i></button>
             </div>
-            <div class="chart-wrap medium"><canvas id="pressureChart"></canvas></div>
+            <div class="chart-wrap" style="height:220px"><canvas id="teamPressureChart"></canvas></div>
           </article>
-          <article class="card chart-card span-6">
-            <div class="card-header">
-              <div><h2>Pressão operacional por equipe</h2><p>Índice sintético de atenção gerencial (0–100)</p></div>
-              <button class="icon-btn ghost expand-btn" data-chart="teamPressureChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
-            </div>
-            <div class="chart-wrap medium"><canvas id="teamPressureChart"></canvas></div>
-          </article>
-          <article class="card attention-card span-12">
-            <div class="card-header compact"><div><h2>Para onde olhar agora?</h2><p>Leitura automática da operação no período selecionado</p></div><i data-lucide="crosshair" class="section-icon"></i></div>
+
+          <!-- Para onde olhar + Impacto side by side -->
+          <article class="card attention-card span-8">
+            <div class="card-header compact"><div><h2>Para onde olhar agora?</h2><p>Leitura automática — equipe com maior índice de atenção no período</p></div><i data-lucide="crosshair" class="section-icon"></i></div>
             <div id="attentionInsight" class="attention-insight">Carregando análise...</div>
           </article>
+          <article class="card chart-card span-4">
+            <div class="card-header compact">
+              <div><h2>Destino das demandas</h2><p>Como foram tratadas no planejamento</p></div>
+            </div>
+            <div class="chart-wrap" style="height:160px"><canvas id="impactChart"></canvas></div>
+          </article>
+
         </section>
       </div>
 
@@ -238,7 +283,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
               <div><h2>Mapa operacional</h2><p>BP3 oficial · hidrografia IAT/PR · demandas não previstas</p></div>
               <div class="map-actions">
                 <button class="chip-btn active" id="bp3Toggle"><i data-lucide="layers-3"></i> BP3</button>
-                <button class="chip-btn active" id="stateToggle"><i data-lucide="map"></i> Estado</button>
+                <button class="chip-btn active" id="stateToggle"><i data-lucide="map"></i> Estados BP3</button>
                 <button class="chip-btn active" id="hydroToggle"><i data-lucide="waves"></i> Hidrografia</button>
                 <button class="chip-btn active" id="demandToggle"><i data-lucide="map-pin"></i> Demandas</button>
               </div>
@@ -251,7 +296,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
               </div>
             </div>
             <div id="map" style="height:420px" aria-label="Mapa operacional"></div>
-            <div class="map-caption"><span>BP3 e hidrografia: IAT/PR · Estado: IBGE</span><span>Basemap: Esri</span></div>
+            <div class="map-caption"><span>BP3 e hidrografia: IAT/PR · Estados BP3 + Paraguai: IBGE / Natural Earth</span><span>Basemap: Esri</span></div>
           </article>
           <article class="card climate-card span-5">
             <div class="card-header compact"><div><h2>Meteorologia operacional</h2><p id="weatherLocation">Open-Meteo · Foz do Iguaçu/PR</p></div><i data-lucide="cloud-sun" class="section-icon"></i></div>
@@ -379,10 +424,13 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 const DATA_BASE = 'data/sample/';
 const IAT_BP3_URL = 'https://geopr.iat.pr.gov.br/server/rest/services/00_PUBLICACOES/pbpar_limite/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=true&f=geojson';
 const IAT_HIDRO_BP3_BASE = 'https://geopr.iat.pr.gov.br/server/rest/services/00_PUBLICACOES/pbpar_hidrografia_integrada/FeatureServer/0/query';
-const IBGE_PR_URL = 'https://servicodados.ibge.gov.br/api/v3/malhas/estados/41?formato=application/vnd.geo%2Bjson&qualidade=minima';
+const BP3_STATE_CODES = [41,35,50,42,43,52,31]; // PR, SP, MS, SC, MG, GO, RS
+const IBGE_STATE_BASE = 'https://servicodados.ibge.gov.br/api/v3/malhas/estados/';
+const IBGE_STATE_SUFFIX = '?formato=application/vnd.geo%2Bjson&qualidade=minima';
+const PARAGUAY_GEOJSON_URL = 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/PRY.geo.json';
 
 const state = {
-  teams: [], planning: [], execution: [], demands: [], blockers: [], climate: [], impact: [], weather: null,
+  teams: [], planning: [], execution: [], demands: [], blockers: [], climate: [], impact: [], weather: null, notifications: [],
   month: 9, team: 'ALL', theme: localStorage.getItem('ga-theme') || 'light',
   animations: localStorage.getItem('ga-animations') !== 'false', names: localStorage.getItem('ga-names') !== 'false',
   presentation: localStorage.getItem('ga-presentation') === 'true', density: localStorage.getItem('ga-density') || 'comfortable',
@@ -421,6 +469,33 @@ async function fetchOpenMeteoWeather(){
   const forecast=(daily.time||[]).map((date,i)=>({date,rain_probability_pct:daily.precipitation_probability_max?.[i]??0,precipitation_mm:daily.precipitation_sum?.[i]??0,gust_kmh:daily.wind_gusts_10m_max?.[i]??0}));
   return {source:'Open-Meteo',location:'Foz do Iguaçu/PR',observed_at:(c.time||new Date().toISOString().slice(0,16))+':00',current:{temperature_c:c.temperature_2m??0,precipitation_mm:c.precipitation??0,wind_kmh:c.wind_speed_10m??0,gust_kmh:c.wind_gusts_10m??0},forecast};
 }
+function addNotification(type,title,msg){
+  const n={id:Date.now(),type,title,msg,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),unread:true};
+  state.notifications.unshift(n);
+  if(state.notifications.length>30)state.notifications.length=30;
+  renderNotifications();
+  const btn=document.getElementById('notifBtn');
+  if(btn){btn.classList.add('notif-pulse');setTimeout(()=>btn.classList.remove('notif-pulse'),500);}
+}
+function renderNotifications(){
+  const badge=document.getElementById('notifBadge');
+  const list=document.getElementById('notifList');
+  if(!badge||!list)return;
+  const unread=state.notifications.filter(n=>n.unread).length;
+  badge.textContent=unread>9?'9+':String(unread);
+  badge.classList.toggle('visible',unread>0);
+  if(!state.notifications.length){list.innerHTML='<p class="notif-empty">Sem notificações</p>';return;}
+  const iconMap={form:'clipboard-pen-line',rain:'cloud-rain',wind:'wind'};
+  list.innerHTML=state.notifications.map(n=>`<div class="notif-item${n.unread?' unread':''}"><div class="notif-icon ${n.type}"><i data-lucide="${iconMap[n.type]||'bell'}"></i></div><div class="notif-body"><strong>${n.title}</strong><p>${n.msg}</p><time>${n.time}</time></div></div>`).join('');
+  lucide.createIcons();
+}
+function checkWeatherAlerts(weather){
+  if(!weather)return;
+  const c=weather.current||{};
+  if(c.precipitation_mm>=5)addNotification('rain','Chuva significativa em curso',`Precipitação atual: ${c.precipitation_mm}mm em Foz do Iguaçu. Avaliar condições de campo.`);
+  if(c.wind_kmh>=40||c.gust_kmh>=60)addNotification('wind','Ventos fortes detectados',`Velocidade: ${Math.round(c.wind_kmh)} km/h · Rajadas: ${Math.round(c.gust_kmh)} km/h. Verificar segurança das equipes.`);
+  (weather.forecast||[]).slice(0,3).forEach(f=>{if(f.precipitation_mm>=25)addNotification('rain','Previsão de chuva intensa',`${f.date}: ${f.precipitation_mm}mm previstos para a região.`);});
+}
 async function loadData(){
   const stamp=Date.now();
   let base=null;
@@ -440,6 +515,7 @@ async function loadData(){
   const weather=await fetchOpenMeteoWeather().catch(()=>fetch(`data/weather/foz_simepar.json?v=${stamp}`,{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null));
   const {teams=[],planning=[],execution=[],demands=[],blockers=[],climate=[],impact=[]}=base||{};
   Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact,weather});
+  if(weather)checkWeatherAlerts(weather);
   const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
   state.demands=[...state.demands,...(local.demands||[])];
   state.impact=[...state.impact,...(local.impact||[])];
@@ -539,21 +615,28 @@ function setChart(id,config,title,subtitle){
 }
 
 function renderPlanChart(){
-  const labels=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
-  const planned=labels.map(id=>metricsForTeam(id).totalPlan);
-  const executed=labels.map(id=>metricsForTeam(id).covered);
-  const demands=labels.map(id=>metricsForTeam(id).dem.length);
-  const affected=labels.map(id=>uniq(metricsForTeam(id).impacted.map(x=>x.plano_afetado_id)).length);
-  const blocked=labels.map(id=>metricsForTeam(id).blockedPlanIds.length);
-  const options=chartBase(); options.plugins.legend.position='bottom';
-  const config={type:'bar',data:{labels,datasets:[
-    {label:'Planejado',data:planned,backgroundColor:cssVar('--surface-2'),borderColor:cssVar('--border'),borderWidth:1,borderRadius:7},
-    {label:'Com execução',data:executed,backgroundColor:cssVar('--green'),borderRadius:7},
-    {label:'Demandas não previstas',data:demands,backgroundColor:'rgba(76,119,187,.28)',borderColor:cssVar('--blue'),borderWidth:2,borderRadius:7,minBarLength:5,barPercentage:.9,categoryPercentage:.8},
-    {label:'Plano afetado por demanda',data:affected,backgroundColor:cssVar('--red'),borderRadius:7},
-    {label:'Plano afetado por bloqueador',data:blocked,backgroundColor:cssVar('--ochre'),borderRadius:7}
+  const eqIds=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
+  const eqNames=eqIds.map(id=>{const t=state.teams.find(x=>x.equipe_id===id); return t?t.equipe:id;});
+  const planned=eqIds.map(id=>metricsForTeam(id).totalPlan);
+  const executed=eqIds.map(id=>metricsForTeam(id).covered);
+  const demands=eqIds.map(id=>metricsForTeam(id).dem.length);
+  const options=chartBase();
+  options.plugins.legend.position='top';
+  options.plugins.legend.align='end';
+  options.scales.x.ticks.maxRotation=0;
+  options.plugins.tooltip={
+    ...options.plugins.tooltip,
+    callbacks:{
+      title:ctx=>eqNames[ctx[0].dataIndex]||ctx[0].label,
+    }
+  };
+  const config={type:'bar',data:{labels:eqIds,datasets:[
+    {label:'Planejado',data:planned,backgroundColor:'rgba(180,188,190,.28)',borderColor:'rgba(180,188,190,.6)',borderWidth:1,borderRadius:6,barPercentage:.75},
+    {label:'Executado',data:executed,backgroundColor:cssVar('--green'),borderRadius:6,barPercentage:.75},
+    {label:'Demandas não previstas',data:demands,type:'line',borderColor:cssVar('--red'),backgroundColor:'rgba(185,78,78,.08)',fill:true,tension:.35,pointRadius:5,pointBackgroundColor:cssVar('--red'),yAxisID:'y2',order:0}
   ]},options};
-  setChart('planChart',config,'Carga operacional e interferências','Planejado, execução, demandas não previstas e efeitos efetivamente identificados no plano');
+  options.scales.y2={beginAtZero:true,position:'right',title:{display:true,text:'Demandas',color:cssVar('--muted'),font:{size:9}},grid:{drawOnChartArea:false},ticks:{color:cssVar('--muted'),font:{size:9},precision:0}};
+  setChart('planChart',config,'Execução vs planejamento','Atividades planejadas, executadas e demandas não previstas');
 }
 
 function renderImpactChart(){
@@ -760,8 +843,7 @@ function showPage(id){
 function renderAll(){ renderKPIs(); renderPlanChart(); renderImpactChart(); renderBlockerChart(); renderPressureChart(); renderTeamPressureChart(); renderDemandStatusChart(); renderWeather(); renderTeamTable(); renderAttention(); lucide.createIcons(); }
 
 
-function earthColor(){ return '#BA8044'; }
-function stateStyle(){ return {color:earthColor(),weight:1.6,opacity:.50,fillColor:earthColor(),fillOpacity:.01}; }
+function bp3StateStyle(){ return {color:'#27ae60',weight:1.0,opacity:.8,fillOpacity:0}; }
 function hydroStyle(){ return {color:cssVar('--blue-2'),weight:1.15,opacity:.50}; }
 function hydroBhoText(feature){
   const p=feature?.properties||{};
@@ -802,13 +884,21 @@ function setupMap(){
   state.labelsDark=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',{maxZoom:16,pane:'overlayPane'});
   setMapTheme();
   fetch(IAT_BP3_URL).then(r=>r.json()).then(g=>{
-    state.bp3Layer=L.geoJSON(g,{style:{color:cssVar('--blue'),weight:2,fillColor:cssVar('--blue'),fillOpacity:.07}}).addTo(state.map);
+    state.bp3Layer=L.geoJSON(g,{style:{color:cssVar('--green'),weight:1.8,fillColor:cssVar('--green'),fillOpacity:.04}}).addTo(state.map);
     try{state.map.fitBounds(state.bp3Layer.getBounds(),{padding:[18,18]});}catch(e){}
   }).catch(()=>{ state.map.fitBounds([[-25.5926,-54.6199],[-23.9889,-53.4399]]); });
-  fetch(IBGE_PR_URL).then(r=>r.json()).then(g=>{
-    state.stateLayer=L.geoJSON(g,{style:stateStyle}).addTo(state.map);
+  const stateGroup=L.featureGroup().addTo(state.map);
+  state.stateLayer=stateGroup;
+  BP3_STATE_CODES.forEach(code=>{
+    fetch(`${IBGE_STATE_BASE}${code}${IBGE_STATE_SUFFIX}`).then(r=>r.json()).then(g=>{
+      L.geoJSON(g,{style:bp3StateStyle}).addTo(stateGroup);
+      if(state.bp3Layer) state.bp3Layer.bringToFront();
+    }).catch(()=>{});
+  });
+  fetch(PARAGUAY_GEOJSON_URL).then(r=>r.json()).then(g=>{
+    L.geoJSON(g,{style:bp3StateStyle}).addTo(stateGroup);
     if(state.bp3Layer) state.bp3Layer.bringToFront();
-  }).catch(err=>console.warn('Limite estadual indisponível',err));
+  }).catch(()=>console.warn('Limite Paraguai indisponível'));
   fetchArcGISGeoJSON(IAT_HIDRO_BP3_BASE).then(g=>{
     state.hydroFeatures=g.features||[];
     state.hydroLayer=L.geoJSON(g,{style:hydroStyle}).addTo(state.map);
@@ -817,8 +907,35 @@ function setupMap(){
   }).catch(err=>console.warn('Hidrografia BP3 indisponível',err));
   state.demandLayer=L.layerGroup().addTo(state.map); updateDemandMarkers();
 }
-function setMapTheme(){ if(!state.map)return; [state.baseLight,state.labelsLight,state.baseDark,state.labelsDark].forEach(l=>l&&state.map.hasLayer(l)&&state.map.removeLayer(l)); const dark=document.documentElement.dataset.theme==='dark'; (dark?state.baseDark:state.baseLight).addTo(state.map); (dark?state.labelsDark:state.labelsLight).addTo(state.map); if(state.bp3Layer)state.bp3Layer.setStyle({color:cssVar('--blue'),fillColor:cssVar('--blue')}); if(state.stateLayer)state.stateLayer.setStyle(stateStyle()); if(state.hydroLayer)state.hydroLayer.setStyle(hydroStyle()); }
-function updateDemandMarkers(){ if(!state.demandLayer)return; state.demandLayer.clearLayers(); const rows=byTeam(currentMonth(state.demands)); rows.forEach(d=>{const color=teamColors[d.equipe_id]||cssVar('--blue'); const icon=L.divIcon({className:'',html:`<div class="map-demand-dot" style="width:13px;height:13px;background:${color}"></div>`,iconSize:[13,13],iconAnchor:[6,6]}); L.marker([Number(d.latitude),Number(d.longitude)],{icon}).bindPopup(`<strong>${d.demanda_id}</strong><br>${d.equipe_id} · ${d.atividade_sugerida}<br><small>${d.status}</small>`).addTo(state.demandLayer);}); }
+function setMapTheme(){ if(!state.map)return; [state.baseLight,state.labelsLight,state.baseDark,state.labelsDark].forEach(l=>l&&state.map.hasLayer(l)&&state.map.removeLayer(l)); const dark=document.documentElement.dataset.theme==='dark'; (dark?state.baseDark:state.baseLight).addTo(state.map); (dark?state.labelsDark:state.labelsLight).addTo(state.map); if(state.bp3Layer)state.bp3Layer.setStyle({color:cssVar('--green'),weight:1.8,fillColor:cssVar('--green'),fillOpacity:.04}); if(state.stateLayer)state.stateLayer.setStyle(bp3StateStyle()); if(state.hydroLayer)state.hydroLayer.setStyle(hydroStyle()); }
+function updateDemandMarkers(){
+  if(!state.demandLayer)return;
+  state.demandLayer.clearLayers();
+  const rows=byTeam(state.demands).filter(d=>d.latitude&&d.longitude);
+  rows.forEach(d=>{
+    const color=teamColors[d.equipe_id]||cssVar('--blue');
+    const team=state.teams.find(t=>t.equipe_id===d.equipe_id);
+    const teamName=team?team.equipe:d.equipe_id;
+    const leader=team?team.lider_tecnico:'—';
+    const prioC={'ALTA':'#d96b6b','MÉDIA':'#e2a84a','BAIXA':'#48b381'}[d.prioridade]||'#888';
+    const stC={'RESOLVIDA':'#48b381','EM ATENDIMENTO':'#e2a84a','PENDENTE':'#d96b6b'}[d.status]||'#888';
+    const desc=(d.descricao||'').length>90?d.descricao.slice(0,90)+'…':d.descricao||'';
+    const popup=`<div style="min-width:230px;font-family:Inter,system-ui,sans-serif;font-size:12px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:2px">${d.demanda_id}</div>
+      <div style="color:#999;font-size:10px;margin-bottom:8px">${d.data||''}</div>
+      <div style="font-weight:700;margin-bottom:1px">${teamName}</div>
+      <div style="color:#888;font-size:11px;margin-bottom:7px">${leader}</div>
+      <div style="margin-bottom:7px;font-size:12px;line-height:1.4">${d.atividade_sugerida||''}</div>
+      <div style="color:#666;font-size:11px;margin-bottom:10px;line-height:1.45;border-left:3px solid ${color};padding-left:7px">${desc}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
+        <span style="background:${prioC};color:#fff;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700">${d.prioridade||'?'}</span>
+        <span style="color:${stC};padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;border:1px solid ${stC}55;background:${stC}18">${d.status||'?'}</span>
+      </div>
+    </div>`;
+    const icon=L.divIcon({className:'',html:`<div class="map-demand-dot" style="width:14px;height:14px;background:${color}"></div>`,iconSize:[14,14],iconAnchor:[7,7]});
+    L.marker([Number(d.latitude),Number(d.longitude)],{icon}).bindPopup(popup,{maxWidth:280}).addTo(state.demandLayer);
+  });
+}
 
 function applyTheme(value){
   state.theme=value; localStorage.setItem('ga-theme',value); const resolved=value==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):value; document.documentElement.dataset.theme=resolved;
@@ -894,6 +1011,8 @@ function saveLocalLeaderRecord(e){
   localStorage.setItem('ga-local-records',JSON.stringify(local));
   state.demands.push(demand); state.impact.push(impact);
   renderAll(); updateDemandMarkers();
+  const descPreview=(demand.descricao||'').slice(0,80)+(demand.descricao?.length>80?'…':'');
+  addNotification('form',`Demanda registrada — ${team?.lider_tecnico||teamId}`,`${demand.atividade_sugerida}${descPreview?' · '+descPreview:''}`);
   const note=document.getElementById('leaderFormNote');
   note.classList.add('success');
   note.textContent='Demanda registrada. O sistema fará a leitura gerencial sem alterar o planejamento a partir deste formulário.';
@@ -944,6 +1063,24 @@ function setupUI(){
   document.getElementById('demandToggle').addEventListener('click',e=>{const b=e.currentTarget;const on=state.map.hasLayer(state.demandLayer);on?state.map.removeLayer(state.demandLayer):state.demandLayer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('bhoFilterInput').addEventListener('input',applyBhoFilter);
   document.getElementById('clearBhoFilter').addEventListener('click',()=>{document.getElementById('bhoFilterInput').value='';applyBhoFilter();});
+  // Notification bell
+  document.getElementById('notifBtn').addEventListener('click',e=>{
+    e.stopPropagation();
+    const panel=document.getElementById('notifPanel');
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open')){
+      state.notifications.forEach(n=>n.unread=false);
+      renderNotifications();
+      lucide.createIcons();
+    }
+  });
+  document.getElementById('clearNotifBtn').addEventListener('click',e=>{
+    e.stopPropagation();
+    state.notifications=[];
+    renderNotifications();
+    document.getElementById('notifPanel').classList.remove('open');
+  });
+  document.addEventListener('click',()=>document.getElementById('notifPanel')?.classList.remove('open'));
   setupChartModal();
 }
 
