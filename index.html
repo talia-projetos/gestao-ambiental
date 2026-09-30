@@ -427,7 +427,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
           <!-- Execução vs Planejado — gráfico principal, full width -->
           <article class="card chart-card span-12">
             <div class="card-header">
-              <div><h2>Execução vs planejamento por equipe</h2><p>Atividades planejadas, executadas e demandas não previstas no período</p></div>
+              <div><h2>Execução vs planejamento por equipe</h2><p>Quantidade de atividades planejadas, executadas e demandas não previstas — horas no tooltip</p></div>
               <button class="icon-btn ghost expand-btn" data-chart="planChart" title="Ampliar"><i data-lucide="maximize-2"></i></button>
             </div>
             <div class="chart-wrap" style="height:240px"><canvas id="planChart"></canvas></div>
@@ -951,22 +951,31 @@ function renderPlanChart(){
   const eqIds=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
   const m=Number(state.month);
   const calMonth=mesNumToCalendar(m).month;
-  const planned=eqIds.map(id=>state.planning.filter(r=>Number(r.mes_num)===calMonth&&r.equipe_id===id).reduce((s,r)=>s+Number(r.meta_planejada||0),0));
-  const executed=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,r)=>s+Number(r.quantidade_executada||0),0));
+  // contagens de atividades (não horas)
+  const planned=eqIds.map(id=>state.planning.filter(r=>Number(r.mes_num)===calMonth&&r.equipe_id===id).length);
+  const executed=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).length);
   const demands=eqIds.map(id=>state.demands.filter(r=>monthOf(r)===m&&r.equipe_id===id).length);
+  // horas para tooltip
+  const plannedH=eqIds.map(id=>state.planning.filter(r=>Number(r.mes_num)===calMonth&&r.equipe_id===id).reduce((s,r)=>s+Number(r.meta_planejada||0),0));
+  const executedH=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,r)=>s+Number(r.quantidade_executada||0),0));
   const options=chartBase();
   options.plugins.legend.position='top';
   options.plugins.legend.align='end';
   options.scales.x.ticks.maxRotation=0;
-  options.scales.y={...options.scales.y,title:{display:true,text:'Horas',color:cssVar('--muted'),font:{size:9}}};
-
+  options.scales.y={...options.scales.y,beginAtZero:true,ticks:{...options.scales.y?.ticks,precision:0,color:cssVar('--muted')},title:{display:true,text:'Atividades',color:cssVar('--muted'),font:{size:9}}};
+  options.scales.y2={beginAtZero:true,position:'right',title:{display:true,text:'Demandas',color:cssVar('--muted'),font:{size:9}},grid:{drawOnChartArea:false},ticks:{color:cssVar('--muted'),font:{size:9},precision:0}};
+  options.plugins.tooltip={callbacks:{label:ctx=>{
+    const i=ctx.dataIndex,ds=ctx.dataset.label;
+    if(ds==='Planejado')return ` ${ctx.parsed.y} atividades · ${plannedH[i]}h previstas`;
+    if(ds==='Executado')return ` ${ctx.parsed.y} registros · ${executedH[i]}h executadas`;
+    return ` ${ctx.parsed.y} demandas`;
+  }}};
   const config={type:'bar',data:{labels:eqIds,datasets:[
     {label:'Planejado',data:planned,backgroundColor:'rgba(180,188,190,.28)',borderColor:'rgba(180,188,190,.6)',borderWidth:1,borderRadius:6,barPercentage:.75},
     {label:'Executado',data:executed,backgroundColor:cssVar('--green'),borderRadius:6,barPercentage:.75},
     {label:'Demandas não previstas',data:demands,type:'line',borderColor:cssVar('--red'),backgroundColor:'rgba(185,78,78,.08)',fill:true,tension:.35,pointRadius:5,pointBackgroundColor:cssVar('--red'),yAxisID:'y2',order:0}
   ]},options};
-  options.scales.y2={beginAtZero:true,position:'right',title:{display:true,text:'Demandas',color:cssVar('--muted'),font:{size:9}},grid:{drawOnChartArea:false},ticks:{color:cssVar('--muted'),font:{size:9},precision:0}};
-  setChart('planChart',config,'Execução vs planejamento','Horas planejadas vs executadas e demandas não previstas');
+  setChart('planChart',config,'Execução vs planejamento','Atividades planejadas vs executadas e demandas não previstas — horas no tooltip');
 }
 
 function renderImpactChart(){
