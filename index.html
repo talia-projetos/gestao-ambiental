@@ -999,17 +999,13 @@ function renderImpactChart(){
   setChart('impactChart',config,'Impacto das demandas','Destino das demandas não previstas no planejamento');
 }
 
-function makeStripe(color,bg='transparent',size=16,angle=45){
+function makeStripe(color){
+  // padrão de pontos ~30% de preenchimento: tile 8×8, raio 2.47 → π r²/64 ≈ 30%
+  const size=8,r=2.47;
   const c=document.createElement('canvas'); c.width=size;c.height=size;
   const x=c.getContext('2d');
-  if(bg!=='transparent'){x.fillStyle=bg;x.fillRect(0,0,size,size);}
-  x.globalAlpha=0.7; x.strokeStyle=color; x.lineWidth=2;
-  const rad=angle*Math.PI/180; const step=size;
-  for(let i=-size*2;i<size*4;i+=step){
-    x.beginPath();x.moveTo(i*Math.cos(rad)-size*Math.sin(rad),i*Math.sin(rad)+size*Math.cos(rad));
-    x.lineTo((i+size*2)*Math.cos(rad)+size*Math.sin(rad),(i+size*2)*Math.sin(rad)-size*Math.cos(rad));
-    x.stroke();
-  }
+  x.globalAlpha=0.85; x.fillStyle=color;
+  x.beginPath(); x.arc(size/2,size/2,r,0,Math.PI*2); x.fill();
   return c;
 }
 function buildBlockerChart(canvasId){
