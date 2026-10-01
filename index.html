@@ -939,19 +939,23 @@ async function loadData(){
   const {teams=[],planning=[],execution=[],demands=[],blockers=[],climate=[],impact=[],metrics=[],weather_api=null,reservatorio=null}=base||{};
   Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact,metrics,weather_api,reservatorio,weather,scriptUrl:base?.script_url||''});
   if(weather)checkWeatherAlerts(weather);
-  const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
-  // Dedup: ignora registros locais já absorvidos pelo JSON (mesmo equipe_id+data+descricao)
-  const jsonKeys=new Set(state.demands.map(d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`));
-  const localDems=(local.demands||[]).filter(d=>!jsonKeys.has(`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`));
+  const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
+  // Dedup demandas
+  const jsonDemKeys=new Set(state.demands.map(d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`));
+  const localDems=(local.demands||[]).filter(d=>!jsonDemKeys.has(`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`));
   const keptIds=new Set(localDems.map(d=>d.demanda_id));
   const localImps=(local.impact||[]).filter(i=>keptIds.has(i.demanda_id));
   state.demands=[...state.demands,...localDems];
   state.impact=[...state.impact,...localImps];
+  // Dedup execuções locais
+  const jsonExecKeys=new Set(state.execution.map(e=>`${e.equipe_id}|${e.data}|${(e.atividade||'').trim()}`));
+  const localExecs=(local.execution||[]).filter(e=>!jsonExecKeys.has(`${e.equipe_id}|${e.data}|${(e.atividade||'').trim()}`));
+  state.execution=[...state.execution,...localExecs];
   // Limpa do localStorage os que foram absorvidos pelo JSON
-  if(localDems.length<(local.demands||[]).length){
-    local.demands=localDems; local.impact=localImps;
-    localStorage.setItem('ga-local-records',JSON.stringify(local));
-  }
+  let changed=false;
+  if(localDems.length<(local.demands||[]).length){local.demands=localDems;local.impact=localImps;changed=true;}
+  if(localExecs.length<(local.execution||[]).length){local.execution=localExecs;changed=true;}
+  if(changed) localStorage.setItem('ga-local-records',JSON.stringify(local));
   // auto-detectar o mês mais recente com execução (fallback: qualquer dado operacional)
   const execMs=execution.map(r=>monthOf(r)).filter(m=>m>0);
   const allOpMs=[...execution,...state.demands,...blockers].map(r=>monthOf(r)).filter(m=>m>0);
