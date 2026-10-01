@@ -949,7 +949,7 @@ function populateTeamFilter(){
 
 function filtered(){
   return {
-    planning: byTeam(state.planning.filter(r=>Number(r.mes_num)===mesNumToCalendar(state.month).month)),
+    planning: byTeam(state.planning.filter(r=>Number(r.mes_num)===mesNumToCalendar(Number(state.month)).month)),
     execution: byTeam(currentMonth(state.execution)),
     demands: byTeam(currentMonth(state.demands)),
     blockers: byTeam(state.blockers),
