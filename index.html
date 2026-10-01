@@ -630,11 +630,18 @@ body{font-size:15px}
             </div>
             <div id="ctxBody"></div>
           </article>
-          <article class="card chart-card span-12">
-            <div class="card-header">
+          <article class="card chart-card span-7">
+            <div class="card-header compact">
               <div><h2>Impacto dos bloqueadores</h2><p>Horas afetadas por tipo de causa — acumulado anual</p></div>
             </div>
             <div class="chart-wrap medium"><canvas id="blockerChartFull"></canvas></div>
+          </article>
+          <article class="card chart-card span-5">
+            <div class="card-header compact">
+              <div><h2>Resolução</h2><p>Bloqueadores resolvidos vs pendentes</p></div>
+            </div>
+            <div class="chart-wrap" style="height:220px"><canvas id="blockerResolvedChart"></canvas></div>
+            <div id="blockerResolvedLegend" style="display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:12px"></div>
           </article>
         </section>
       </div>
@@ -1021,16 +1028,15 @@ function currentAggregate(){
   const demTeams=uniq(f.demands.map(x=>x.equipe_id));
   const impactedTeams=planTeams.filter(t=>demTeams.includes(t));
   const blockedTeams=planTeams.filter(t=>blqTeams.includes(t));
-  // Impacto total: atividades bloqueadas + com demanda de impacto / total planejado
-  const affectedPairs=new Set([
-    ...blockedPlanning.map(x=>`${x.equipe_id}:${x.atividade_id}`),
-    ...f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO'&&demTeams.includes(x.equipe_id)).map(x=>`${x.equipe_id}:${x.atividade_id}`),
-  ]);
-  const ytdTotalActTypes=new Set(state.planning.map(p=>`${p.equipe_id}:${p.atividade_id}`)).size||1;
-  const planImpactRate=affectedPairs.size>0?Math.min(affectedPairs.size/ytdTotalActTypes,1):Math.max(impactRatio,blockRate);
+  // Impacto no planejamento: % horas não entregues (status ≠ EXECUTADO)
+  const naoEntregues=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()!=='EXECUTADO');
+  const horasNaoEntregues=naoEntregues.reduce((s,x)=>s+Number(x.meta_planejada||0),0);
+  const planImpactRate=horasPlanejadas>0?Math.min(horasNaoEntregues/horasPlanejadas,1):0;
+  const nBlq=blockedPlanning.length;
+  const nAndamento=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO').length;
   const blockedHours=blockedHoursTotal;
   const attention=state.teams.map(t=>metricsForTeam(t.equipe_id)).filter(m=>m.score>=45).length;
-  return {...f,coverage,covered,totalPlan:planPairs.length,impactRatio,blockRate,planImpactRate,blockedPlanIds,allAffectedPlanIds,blockedHours,attention,impacted,ytdAffActsSet,ytdTotalActTypes,blockedTeamCount:blockedTeams.length,impactedTeamCount:impactedTeams.length,planTeamCount:planTeams.length};
+  return {...f,coverage,covered,totalPlan:planPairs.length,impactRatio,blockRate,planImpactRate,blockedPlanIds,allAffectedPlanIds,blockedHours,attention,impacted,nBlq,nAndamento,blockedTeamCount:blockedTeams.length,impactedTeamCount:impactedTeams.length,planTeamCount:planTeams.length};
 }
 
 function setRing(id,pct,invert){
@@ -1072,9 +1078,8 @@ function renderKPIs(){
   document.getElementById('kpiBlockedNote').textContent=`${fmtNum(m.blockedHours)} h bloqueadas · ${_hPlanNote}`;
   setRing('ringBlocked',m.blockRate,true);
   document.getElementById('kpiAttention').textContent=fmtPct(m.planImpactRate);
-  const lvl=automaticImpactLevel(m.planImpactRate);
   const an=document.getElementById('kpiAttentionNote');
-  if(an) an.textContent=`bloqueio e demandas em ${m.planTeamCount} equipes · nível ${lvl[0]}`;
+  if(an) an.textContent=`${m.nBlq} bloqueadas · ${m.nAndamento} em andamento`;
   setRing('ringAttention',m.planImpactRate,true);
 }
 
@@ -1588,7 +1593,35 @@ function renderAttention(){
   lucide.createIcons({el});
 }
 
-function renderBlockerChartFull(){ buildBlockerChart('blockerChartFull'); }
+function renderBlockerChartFull(){
+  buildBlockerChart('blockerChartFull');
+  // Gráfico de resolução: Sim / Não da coluna Resolvido (07_Bloqueadores)
+  const blq=state.blockers;
+  const sim=blq.filter(b=>(b.resolvido||'').toUpperCase()==='SIM').length;
+  const nao=blq.length-sim;
+  destroyChart('blockerResolvedChart');
+  const ctx=document.getElementById('blockerResolvedChart');
+  if(!ctx||!blq.length) return;
+  const GREEN=cssVar('--green'), RED=cssVar('--ochre');
+  state.charts['blockerResolvedChart']=new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:['Resolvido','Pendente'],
+      datasets:[{data:[sim,nao],backgroundColor:[GREEN,RED],borderWidth:0,hoverOffset:4}]
+    },
+    options:{
+      cutout:'68%',maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:c=>`${c.label}: ${c.parsed} (${Math.round(c.parsed/blq.length*100)}%)`}}
+      }
+    }
+  });
+  const leg=document.getElementById('blockerResolvedLegend');
+  if(leg) leg.innerHTML=
+    `<span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:${GREEN};flex:none"></span>${sim} resolvidos</span>`+
+    `<span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:${RED};flex:none"></span>${nao} pendentes</span>`;
+}
 
 function renderActivityTypeChart(){
   const m=Number(state.month);
