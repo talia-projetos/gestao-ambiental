@@ -299,6 +299,16 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
 .map-legend-item{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--muted)}
 .map-legend-dot{width:10px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,.7);box-shadow:0 1px 3px rgba(0,0,0,.22)}
 
+.impact-tiles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:16px}
+.impact-tile{background:var(--surface-2);border:1px solid var(--border);border-radius:18px;padding:18px 16px 14px;display:flex;flex-direction:column;gap:6px;transition:box-shadow .18s,transform .18s}
+.impact-tile:hover{box-shadow:var(--shadow-hover);transform:translateY(-1px)}
+.impact-tile-qty{font-size:36px;font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--text)}
+.impact-tile-unit{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.impact-tile-label{font-size:12px;color:var(--faint);margin-top:4px;line-height:1.35}
+.impact-tile-bar{height:5px;border-radius:4px;background:var(--border);margin-top:8px;overflow:hidden}
+.impact-tile-bar-fill{height:100%;border-radius:4px;transition:width .4s ease}
+.impact-tile-meta{font-size:10px;color:var(--faint);margin-top:4px}
+.impact-empty{color:var(--faint);font-size:13px;padding:32px 0;text-align:center;grid-column:1/-1}
 </style>
 </head>
 <body>
@@ -314,6 +324,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
         <button class="nav-btn" data-page="page-planning" title="Demandas"><i data-lucide="calendar-range"></i><span>Demandas</span></button>
         <button class="nav-btn" data-page="page-map" title="Mapa operacional"><i data-lucide="map"></i><span>Mapa</span></button>
         <button class="nav-btn" data-page="page-blockers" title="Bloqueadores"><i data-lucide="triangle-alert"></i><span>Bloqueadores</span></button>
+        <button class="nav-btn" data-page="page-impact" title="Impacto operacional"><i data-lucide="bar-chart-big"></i><span>Impacto</span></button>
       </nav>
       <div class="sidebar-bottom">
         <button class="nav-btn" id="settingsBtn" title="Configurações"><i data-lucide="settings-2"></i><span>Configurações</span></button>
@@ -582,6 +593,24 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
               <div><h2>Produção por tipo de atividade</h2><p id="activityChartSub">Quantidade executada por atividade no período</p></div>
             </div>
             <div class="chart-wrap medium"><canvas id="activityTypeChart"></canvas></div>
+          </article>
+        </section>
+      </div>
+
+      <!-- PAGE: Impacto operacional -->
+      <div id="page-impact" class="page">
+        <section class="dashboard-grid">
+          <article class="card span-12" style="padding:20px 24px">
+            <div class="card-header" style="margin-bottom:4px">
+              <div><h2>Impacto operacional</h2><p id="impactPageSub">Produção acumulada por tipo de atividade no período selecionado</p></div>
+            </div>
+            <div id="impactTilesGrid" class="impact-tiles-grid"></div>
+          </article>
+          <article class="card chart-card span-12">
+            <div class="card-header">
+              <div><h2>Progresso por atividade</h2><p>Realizado vs. meta — todas as equipes</p></div>
+            </div>
+            <div class="chart-wrap tall"><canvas id="impactProgressChart"></canvas></div>
           </article>
         </section>
       </div>
@@ -1047,6 +1076,78 @@ function buildBlockerChart(canvasId){
 }
 function renderBlockerChart(){ buildBlockerChart('blockerChart'); }
 
+function renderImpactPage(){
+  const m=Number(state.month);
+  const exec=byTeam(state.execution).filter(r=>monthOf(r)===m);
+
+  // Agrupa por atividade — soma quantidade e horas
+  const map={};
+  exec.forEach(r=>{
+    const a=(r.atividade||'(sem tipo)').trim();
+    if(!map[a]) map[a]={qty:0,hrs:0,unit:r.unidade||'h'};
+    map[a].qty+=Number(r.quantidade_executada)||0;
+    map[a].hrs+=Number(r.horas_executadas||r.quantidade_executada)||0;
+  });
+
+  // Overlay de unidade e meta da 09_Metricas
+  const metaMap=Object.fromEntries((state.metrics||[]).map(r=>[r.atividade,r]));
+  Object.keys(map).forEach(a=>{
+    const ref=metaMap[a];
+    if(ref){ map[a].unit=ref.unidade||map[a].unit; map[a].meta=Number(ref.meta)||0; }
+  });
+
+  const entries=Object.entries(map).sort((a,b)=>b[1].qty-a[1].qty);
+  const grid=document.getElementById('impactTilesGrid');
+
+  const fmtQty=n=>n>=1000000?(n/1000000).toFixed(1)+'M':n>=1000?(n/1000).toFixed(1)+'k':n%1===0?String(n):n.toFixed(1);
+
+  if(!entries.length){
+    grid.innerHTML='<p class="impact-empty">Nenhum registro de execução no período selecionado.</p>';
+    destroyChart('impactProgressChart'); return;
+  }
+
+  grid.innerHTML=entries.map(([a,d])=>{
+    const pct=d.meta>0?Math.min(d.qty/d.meta*100,100):0;
+    const barColor=pct>=80?cssVar('--green'):pct>=50?cssVar('--ochre'):cssVar('--blue');
+    const metaLine=d.meta>0?`<div class="impact-tile-meta">${fmtQty(d.qty)} de ${fmtQty(d.meta)} · ${Math.round(pct)}%</div>`
+                            :`<div class="impact-tile-meta">${d.hrs>0?d.hrs+' h registradas':''}</div>`;
+    const bar=d.meta>0?`<div class="impact-tile-bar"><div class="impact-tile-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>`:
+                       `<div class="impact-tile-bar"><div class="impact-tile-bar-fill" style="width:0%;background:${barColor}"></div></div>`;
+    return `<div class="impact-tile">
+      <div class="impact-tile-qty">${fmtQty(d.qty)}</div>
+      <div class="impact-tile-unit">${d.unit}</div>
+      <div class="impact-tile-label">${a}</div>
+      ${bar}${metaLine}
+    </div>`;
+  }).join('');
+
+  // Gráfico de progresso
+  const labels=entries.map(([a])=>a.length>30?a.slice(0,28)+'…':a);
+  const qtys=entries.map(([,d])=>d.qty);
+  const metas=entries.map(([,d])=>d.meta||0);
+  const hasMeta=metas.some(v=>v>0);
+  const bgColors=entries.map(([,d])=>{
+    const pct=d.meta>0?d.qty/d.meta*100:50;
+    return pct>=80?cssVar('--green'):pct>=50?cssVar('--ochre'):cssVar('--blue');
+  });
+  const opts=chartBase();
+  opts.indexAxis='y';
+  opts.plugins.legend.display=hasMeta;
+  opts.plugins.legend.position='top';
+  opts.plugins.tooltip={callbacks:{label:ctx=>{
+    const i=ctx.dataIndex;const [,d]=entries[i];
+    return ctx.dataset.label==='Executado'?` ${fmtQty(d.qty)} ${d.unit} (${d.hrs}h registradas)`:` Meta: ${fmtQty(d.meta)} ${d.unit}`;
+  }}};
+  opts.scales.x={beginAtZero:true,ticks:{color:cssVar('--muted'),font:{size:10}},grid:{color:cssVar('--chart-grid')}};
+  opts.scales.y={ticks:{color:cssVar('--muted'),font:{size:11,weight:'600'}},grid:{display:false}};
+  destroyChart('impactProgressChart');
+  const ctx=document.getElementById('impactProgressChart'); if(!ctx)return;
+  const datasets=[{label:'Executado',data:qtys,backgroundColor:bgColors,borderRadius:6,barPercentage:.6}];
+  if(hasMeta) datasets.push({label:'Meta',data:metas,backgroundColor:'rgba(150,160,155,0.18)',borderColor:'rgba(150,160,155,0.5)',borderWidth:1,borderRadius:6,barPercentage:.6});
+  state.charts['impactProgressChart']=new Chart(ctx,{type:'bar',data:{labels,datasets},options:opts});
+  document.getElementById('impactPageSub').textContent=`Produção acumulada por atividade — ${mesNumLabel(m)}`;
+}
+
 function renderPressureChart(){
   const projectMs=Array.from({length:PROJECT_MONTHS},(_,i)=>i+1);
   const labels=projectMs.map(n=>{ const {month,year}=mesNumToCalendar(n); return months[month-1].slice(0,3)+(n===1||month===1?` ${year}`:''); });
@@ -1332,6 +1433,7 @@ function showPage(id){
     renderAll();
     if(id==='page-map'&&state.map){ state.map.invalidateSize(); updateDemandMarkers(); }
     if(id==='page-blockers'){ renderBlockerChartFull(); renderActivityTypeChart(); }
+    if(id==='page-impact'){ renderImpactPage(); }
   },50);
 }
 function renderAll(){
