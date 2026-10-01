@@ -818,6 +818,8 @@ const PROJECT_START_MONTH = 10; // Outubro
 const PROJECT_MONTHS = 25; // Out/2026 → Out/2028
 function mesNumToCalendar(n){ const t=PROJECT_START_MONTH-1+n-1; return {month:(t%12)+1, year:PROJECT_START_YEAR+Math.floor(t/12)}; }
 function mesNumLabel(n){ const {month,year}=mesNumToCalendar(n); return `${months[month-1]} ${year}`; }
+// aceita mes_num como mês calendário (10) OU mês sequencial do projeto (1)
+function planMesMatch(r, projectMonth){ const n=Number(r.mes_num); return n===projectMonth||n===mesNumToCalendar(projectMonth).month; }
 const teamColors = { EQ01:'#4C77BB', EQ02:'#48B381', EQ03:'#BA8044', EQ04:'#7F82B8', EQ05:'#598CC7', EQ06:'#7B9383' };
 
 function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
@@ -958,7 +960,7 @@ function populateTeamFilter(){
 
 function filtered(){
   return {
-    planning: byTeam(state.planning.filter(r=>Number(r.mes_num)===mesNumToCalendar(Number(state.month)).month)),
+    planning: byTeam(state.planning.filter(r=>planMesMatch(r,Number(state.month)))),
     execution: byTeam(currentMonth(state.execution)),
     demands: byTeam(currentMonth(state.demands)),
     blockers: byTeam(state.blockers),
@@ -970,7 +972,7 @@ function filtered(){
 }
 
 function metricsForTeam(teamId, month=state.month){
-  const plan=state.planning.filter(r=>Number(r.mes_num)===mesNumToCalendar(Number(month)).month&&r.equipe_id===teamId);
+  const plan=state.planning.filter(r=>planMesMatch(r,Number(month))&&r.equipe_id===teamId);
   const exec=state.execution.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
   const dem=state.demands.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
   const blq=state.blockers.filter(r=>r.equipe_id===teamId);
@@ -1086,13 +1088,12 @@ function setChart(id,config,title,subtitle){
 function renderPlanChart(){
   const eqIds=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
   const m=Number(state.month);
-  const calMonth=mesNumToCalendar(m).month;
   // contagens de atividades (não horas)
-  const planned=eqIds.map(id=>state.planning.filter(r=>Number(r.mes_num)===calMonth&&r.equipe_id===id).length);
+  const planned=eqIds.map(id=>state.planning.filter(r=>planMesMatch(r,m)&&r.equipe_id===id).length);
   const executed=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).length);
   const demands=eqIds.map(id=>state.demands.filter(r=>monthOf(r)===m&&r.equipe_id===id).length);
   // horas para tooltip
-  const plannedH=eqIds.map(id=>state.planning.filter(r=>Number(r.mes_num)===calMonth&&r.equipe_id===id).reduce((s,r)=>s+Number(r.meta_planejada||0),0));
+  const plannedH=eqIds.map(id=>state.planning.filter(r=>planMesMatch(r,m)&&r.equipe_id===id).reduce((s,r)=>s+Number(r.meta_planejada||0),0));
   const executedH=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,r)=>s+Number(r.quantidade_executada||0),0));
   const options=chartBase();
   options.plugins.legend.position='top';
@@ -1251,8 +1252,7 @@ function renderImpactPage(){
   } // end else entries.length
 
   // Gráfico de barras horizontais — top atividades por horas planejadas
-  const calMonth=mesNumToCalendar(m).month;
-  const planFiltered=byTeam(state.planning).filter(r=>Number(r.mes_num)===calMonth);
+  const planFiltered=byTeam(state.planning).filter(r=>planMesMatch(r,m));
   const planMap={};
   planFiltered.forEach(r=>{
     const a=(r.atividade||'(sem tipo)').trim();
@@ -1333,9 +1333,8 @@ function workDaysInMonth(mesNum){
 function renderHoursChart(){
   const eqIds=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
   const m=Number(state.month);
-  const calMonth=mesNumToCalendar(m).month;
   const executadas=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.quantidade_executada||0),0));
-  const planejadas=eqIds.map(id=>state.planning.filter(r=>Number(r.mes_num)===calMonth&&r.equipe_id===id).reduce((s,x)=>s+Number(x.meta_planejada||0),0));
+  const planejadas=eqIds.map(id=>state.planning.filter(r=>planMesMatch(r,m)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.meta_planejada||0),0));
   const ratios=eqIds.map((_,i)=>planejadas[i]>0?Math.round(executadas[i]/planejadas[i]*100):executadas[i]>0?100:0);
   const teamColorMap=Object.fromEntries(state.teams.map(t=>[t.equipe_id,t.cor||cssVar('--muted')]));
   const bgColors=eqIds.map((id,i)=>ratios[i]>=80?cssVar('--green'):ratios[i]>=50?cssVar('--ochre'):(teamColorMap[id]||cssVar('--muted')));
@@ -1764,8 +1763,7 @@ function updateLeaderDependentFields(){
   document.getElementById('leaderActivity').innerHTML=acts.map(a=>`<option value="${a}">${a}</option>`).join('')+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
   // Execução: lista de checkboxes com atividades do mês
   const m=Number(state.month);
-  const calM=mesNumToCalendar(m).month;
-  const pendentes=state.planning.filter(p=>p.equipe_id===teamId&&Number(p.mes_num)===calM&&p.status_planejamento!=='EXECUTADO');
+  const pendentes=state.planning.filter(p=>p.equipe_id===teamId&&planMesMatch(p,m)&&p.status_planejamento!=='EXECUTADO');
   const pool=(pendentes.length?pendentes:state.planning.filter(p=>p.equipe_id===teamId));
   const metaMap=Object.fromEntries((state.metrics||[]).map(r=>[r.atividade,r]));
   const uniqActs=[...new Map(pool.map(p=>[p.atividade,p])).values()];
