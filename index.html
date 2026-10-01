@@ -593,12 +593,6 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
       <!-- PAGE: Bloqueadores -->
       <div id="page-blockers" class="page">
         <section class="dashboard-grid">
-          <article class="card span-12" id="ctxPanel" style="padding:18px 20px 16px">
-            <div class="card-header compact">
-              <div><h2>Contexto externo</h2><p id="ctxDate">Sem dados de contexto — preencha a aba 02_Contexto_Externo</p></div>
-            </div>
-            <div id="ctxBody"></div>
-          </article>
           <article class="card chart-card span-12">
             <div class="card-header">
               <div><h2>Impacto dos bloqueadores</h2><p>Horas afetadas por tipo de causa — acumulado anual</p></div>
@@ -1502,7 +1496,7 @@ function showPage(id){
   setTimeout(()=>{
     renderAll();
     if(id==='page-map'&&state.map){ state.map.invalidateSize(); updateDemandMarkers(); }
-    if(id==='page-blockers'){ renderContextPanel(); renderBlockerChartFull(); renderActivityTypeChart(); }
+    if(id==='page-blockers'){ renderBlockerChartFull(); renderActivityTypeChart(); }
     if(id==='page-impact'){ renderImpactPage(); }
   },50);
 }
