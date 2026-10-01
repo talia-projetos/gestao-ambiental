@@ -599,12 +599,6 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
             </div>
             <div class="chart-wrap medium"><canvas id="blockerChartFull"></canvas></div>
           </article>
-          <article class="card chart-card span-12">
-            <div class="card-header">
-              <div><h2>Produção por tipo de atividade</h2><p id="activityChartSub">Quantidade executada por atividade no período</p></div>
-            </div>
-            <div class="chart-wrap medium"><canvas id="activityTypeChart"></canvas></div>
-          </article>
         </section>
       </div>
 
@@ -1496,7 +1490,7 @@ function showPage(id){
   setTimeout(()=>{
     renderAll();
     if(id==='page-map'&&state.map){ state.map.invalidateSize(); updateDemandMarkers(); }
-    if(id==='page-blockers'){ renderBlockerChartFull(); renderActivityTypeChart(); }
+    if(id==='page-blockers'){ renderBlockerChartFull(); }
     if(id==='page-impact'){ renderImpactPage(); }
   },50);
 }
