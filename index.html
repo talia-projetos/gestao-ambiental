@@ -1455,15 +1455,55 @@ function renderAttention(){
   const top=state.team==='ALL'?ranked[0]:ranked.find(x=>x.team.equipe_id===state.team);
   const el=document.getElementById('attentionInsight');
   if(!top){el.innerHTML='<span class="attention-empty">Sem dados no período selecionado.</span>';return;}
+
   const reasons=[];
-  if(top.coverage<.8)reasons.push({label:`cobertura ${fmtPct(top.coverage)}`,type:'coverage'});
-  if(top.blockedHours>=8)reasons.push({label:`${top.blockedHours} h bloqueadas`,type:'blocked'});
-  if(top.impactRatio>.15)reasons.push({label:`interferência ${fmtPct(top.impactRatio)}`,type:'impact'});
-  if(top.openDem>=2)reasons.push({label:`${top.openDem} demandas abertas`,type:'demand'});
+  if(top.coverage<.8)  reasons.push({label:`cobertura ${fmtPct(top.coverage)}`,  type:'coverage',icon:'shield-off'});
+  if(top.blockedHours>=8) reasons.push({label:`${top.blockedHours} h bloqueadas`,type:'blocked', icon:'clock-alert'});
+  if(top.impactRatio>.15) reasons.push({label:`interferência ${fmtPct(top.impactRatio)}`,type:'impact',icon:'zap'});
+  if(top.openDem>=2)   reasons.push({label:`${top.openDem} demandas abertas`,    type:'demand',  icon:'clipboard-list'});
+
   const chipClass={coverage:'risk-chip chip-green',blocked:'risk-chip chip-amber',impact:'risk-chip chip-red',demand:'risk-chip chip-blue'};
-  const msgLabel=top.score>=45?'Concentra os principais sinais de atenção no período.':top.score>=25?'Apresenta sinais que merecem acompanhamento.':'Operação sem sinal crítico no recorte selecionado.';
-  const chips=(reasons.length?reasons:[{label:'sem bloqueador dominante',type:'neutral'}]).map(r=>`<span class="${chipClass[r.type]||'risk-chip'}">${r.label}</span>`).join('');
-  el.innerHTML=`<div class="attention-inner-card"><div class="attention-inner-header"><strong>${top.team.equipe_id} · ${top.team.equipe}</strong></div><p class="attention-msg">${msgLabel}</p><div class="risk-reasons">${chips}</div><div class="attention-cta-row"><button class="attention-cta-btn" onclick="openTeamReport('${top.team.equipe_id}')">Ver detalhes <span>&rsaquo;</span></button></div></div>`;
+  const chips=(reasons.length?reasons:[{label:'nenhum sinal crítico',type:'neutral',icon:'check-circle'}])
+    .map(r=>`<span class="${chipClass[r.type]||'risk-chip'}"><i data-lucide="${r.icon}" style="width:11px;height:11px;stroke-width:2.2;display:inline;vertical-align:-1px;margin-right:3px"></i>${r.label}</span>`)
+    .join('');
+
+  const score=Math.round(top.score);
+  const scoreColor=score>=60?cssVar('--red'):score>=35?cssVar('--ochre'):cssVar('--green');
+  const msgLabel=score>=45?'Concentra os principais sinais de atenção no período.'
+    :score>=25?'Apresenta sinais que merecem acompanhamento.'
+    :'Operação dentro do esperado no recorte selecionado.';
+  const teamColor=top.team.cor||cssVar('--blue');
+
+  const allRanked=state.team==='ALL'?ranked:[];
+  const rankInfo=allRanked.length>1?`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap">
+    ${allRanked.slice(0,4).map((r,i)=>`<span style="font-size:10px;color:var(--faint);display:flex;align-items:center;gap:4px">
+      <span style="width:7px;height:7px;border-radius:50%;background:${r.team.cor||cssVar('--muted')};flex:none;opacity:${i===0?1:.55}"></span>${r.team.equipe_id} <strong style="color:var(--muted)">${Math.round(r.score)}</strong>
+    </span>`).join('')}
+  </div>`:'';
+
+  el.innerHTML=`<div class="attention-inner-card">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px">
+      <div>
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
+          <span style="width:9px;height:9px;border-radius:50%;background:${teamColor};flex:none;box-shadow:0 0 0 3px color-mix(in srgb,${teamColor} 22%,transparent)"></span>
+          <strong style="font-size:13.5px;font-weight:750">${top.team.equipe_id} · ${top.team.equipe}</strong>
+        </div>
+        <p class="attention-msg" style="margin:0">${msgLabel}</p>
+      </div>
+      <div style="flex:none;text-align:center;padding:7px 11px;border-radius:12px;background:color-mix(in srgb,${scoreColor} 10%,var(--surface-2));border:1px solid color-mix(in srgb,${scoreColor} 22%,var(--border))">
+        <span style="display:block;font-size:20px;font-weight:800;color:${scoreColor};line-height:1;letter-spacing:-.03em">${score}</span>
+        <span style="font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em">índice</span>
+      </div>
+    </div>
+    <div class="risk-reasons">${chips}</div>
+    ${rankInfo}
+    <div class="attention-cta-row">
+      <button class="attention-cta-btn" onclick="openTeamReport('${top.team.equipe_id}')">
+        <i data-lucide="file-text" style="width:13px;height:13px;stroke-width:2"></i> Ver relatório
+      </button>
+    </div>
+  </div>`;
+  lucide.createIcons({el});
 }
 
 function renderBlockerChartFull(){ buildBlockerChart('blockerChartFull'); }
