@@ -788,6 +788,7 @@ body{font-size:15px}
     <label class="toggle-row"><span><strong>Exibir nomes dos líderes</strong><small>Oculta identificação nominal quando necessário</small></span><input type="checkbox" id="namesSetting" checked /></label>
     <button class="drawer-action" id="fullscreenBtn"><i data-lucide="maximize"></i> Usar tela cheia</button>
     <button class="drawer-action secondary" id="resetSettings"><i data-lucide="rotate-ccw"></i> Restaurar visualização padrão</button>
+    <button class="drawer-action secondary" id="clearLocalBtn" style="margin-top:4px;border-color:var(--ochre);color:var(--ochre)"><i data-lucide="trash-2"></i> Limpar registros locais</button>
   </aside>
   <div class="drawer-backdrop" id="drawerBackdrop"></div>
 
@@ -2064,6 +2065,7 @@ function setupUI(){
     setTimeout(()=>{state.map?.invalidateSize();lucide.createIcons();},120);
   });
   document.getElementById('resetSettings').addEventListener('click',()=>{applyTheme('light');applyPresentation(false);applyDensity('comfortable');applyNames(true);state.animations=true;document.getElementById('animationSetting').checked=true;state.refreshMinutes=5;document.getElementById('refreshSetting').value='5';setupRefresh();});
+  document.getElementById('clearLocalBtn').addEventListener('click',()=>{if(!confirm('Apagar todos os registros salvos localmente neste navegador?\n\nRegistros já publicados na planilha não são afetados.'))return;localStorage.removeItem('ga-local-records');location.reload();});
   document.getElementById('bp3Toggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.bp3Layer)return;const on=state.map.hasLayer(state.bp3Layer);on?state.map.removeLayer(state.bp3Layer):state.bp3Layer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('hydroToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.hydroLayer)return;const on=state.map.hasLayer(state.hydroLayer);on?state.map.removeLayer(state.hydroLayer):state.hydroLayer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('demandToggle').addEventListener('click',e=>{const b=e.currentTarget;const on=state.map.hasLayer(state.demandLayer);on?state.map.removeLayer(state.demandLayer):state.demandLayer.addTo(state.map);b.classList.toggle('active',!on);});
