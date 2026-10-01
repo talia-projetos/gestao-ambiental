@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T18:20:09.902Z",
+  "generated_at": "2026-10-01T18:33:47.694Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1220,7 +1220,7 @@
       "atividade": "Programa ambiental em escolas",
       "unidade": "horas",
       "meta_planejada": "40",
-      "status_planejamento": "PARCIAL",
+      "status_planejamento": "EXECUTADO",
       "restricao_principal": "SECA",
       "alternativa_id": "",
       "atividade_alternativa": "Capacitação de agentes ambientais",
@@ -1297,7 +1297,25 @@
     }
   ],
   "execution": [],
-  "demands": [],
+  "demands": [
+    {
+      "demanda_id": "DC001",
+      "data": "2026-10-01",
+      "equipe_id": "EQ01",
+      "lider_tecnico": "Renata Souza Oliveira",
+      "atividade_id": "",
+      "atividade_sugerida": "Testando demanda não planejada 1.",
+      "descricao": "Testando demanda não planejada 1.",
+      "prioridade": "CRÍTICA",
+      "status": "ABERTA",
+      "horas_consumidas": 0,
+      "latitude": "-25513446",
+      "longitude": "-54595183",
+      "local_referencia": "Monitoramento de avifauna + câmeras-trap",
+      "equipe_apoio": "",
+      "origem_dado": "DEMANDA"
+    }
+  ],
   "blockers": [
     {
       "bloqueador_id": "BL001",
@@ -1473,7 +1491,19 @@
       "orientacao_operacional_simulada": ""
     }
   ],
-  "impact": [],
+  "impact": [
+    {
+      "demanda_id": "DC001",
+      "impactou_planejamento": "NÃO",
+      "plano_afetado_id": "",
+      "tipo_impacto": "ADIAMENTO",
+      "horas_desviadas": "0",
+      "qtd_planejada_afetada": "1",
+      "destino_planejamento": "REPROGRAMADO",
+      "nova_data_prevista": "",
+      "origem_dado": "DEMANDA"
+    }
+  ],
   "metrics": [
     {
       "atividade": "Plantio de mudas",
@@ -1513,20 +1543,20 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-01T15:15",
-    "temperatura": 27.9,
-    "sensacao": 27.9,
-    "precipitacao": 0,
-    "vento_kmh": 15,
-    "codigo_tempo": 3,
-    "condicao": "Nublado",
+    "atualizado": "2026-10-01T15:30",
+    "temperatura": 25.7,
+    "sensacao": 27.4,
+    "precipitacao": 0.1,
+    "vento_kmh": 11,
+    "codigo_tempo": 51,
+    "condicao": "Chuvisco",
     "previsao": [
       {
         "data": "2026-10-01",
-        "chuva_mm": 2.4,
+        "chuva_mm": 3.4,
         "prob_chuva": 86,
-        "tmax": 28,
-        "tmin": 19.7,
+        "tmax": 26.6,
+        "tmin": 19.9,
         "codigo": 53,
         "condicao": "Chuvisco"
       },
@@ -1534,28 +1564,28 @@
         "data": "2026-10-02",
         "chuva_mm": 0,
         "prob_chuva": 0,
-        "tmax": 25.8,
-        "tmin": 15.2,
+        "tmax": 26.1,
+        "tmin": 15.4,
         "codigo": 3,
         "condicao": "Nublado"
       },
       {
         "data": "2026-10-03",
-        "chuva_mm": 12.4,
+        "chuva_mm": 22.4,
         "prob_chuva": 72,
-        "tmax": 28.4,
-        "tmin": 17.3,
-        "codigo": 96,
+        "tmax": 28.1,
+        "tmin": 18.9,
+        "codigo": 95,
         "condicao": "Tempestade"
       },
       {
         "data": "2026-10-04",
-        "chuva_mm": 5.7,
+        "chuva_mm": 3.1,
         "prob_chuva": 88,
-        "tmax": 26.3,
-        "tmin": 19.2,
-        "codigo": 95,
-        "condicao": "Tempestade"
+        "tmax": 25.7,
+        "tmin": 20.3,
+        "codigo": 80,
+        "condicao": "Aguaceiro"
       }
     ]
   },
