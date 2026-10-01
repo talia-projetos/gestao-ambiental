@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T15:45:19.664Z",
+  "generated_at": "2026-10-01T16:41:15.592Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -11,7 +11,7 @@
       "qtd_colaboradores": 20,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
-      "cor": "#48b381",
+      "cor": "#48B381",
       "origem_dado": "PROERG"
     },
     {
@@ -22,7 +22,7 @@
       "qtd_colaboradores": 20,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
-      "cor": "#4c77bb",
+      "cor": "#4C77BB",
       "origem_dado": "PROERG"
     },
     {
@@ -33,7 +33,7 @@
       "qtd_colaboradores": 19,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
-      "cor": "#ba8044",
+      "cor": "#BA8044",
       "origem_dado": "PROERG"
     },
     {
@@ -44,7 +44,7 @@
       "qtd_colaboradores": 19,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
-      "cor": "#7b5ea7",
+      "cor": "#7B5EA7",
       "origem_dado": "PROERG"
     },
     {
@@ -55,7 +55,7 @@
       "qtd_colaboradores": 19,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
-      "cor": "#c0704a",
+      "cor": "#C0704A",
       "origem_dado": "PROERG"
     },
     {
@@ -66,7 +66,7 @@
       "qtd_colaboradores": 18,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
-      "cor": "#3a9eaf",
+      "cor": "#3A9EAF",
       "origem_dado": "PROERG"
     }
   ],
@@ -1580,74 +1580,6 @@
       "local_referencia": "Escola Estadual Péricles não estava no cronograma anual",
       "equipe_apoio": "",
       "origem_dado": "PROERG"
-    },
-    {
-      "demanda_id": "DC007",
-      "data": "2026-09-30",
-      "equipe_id": "EQ03",
-      "lider_tecnico": "Ana Paula Costa Ribeiro",
-      "atividade_id": "",
-      "atividade_sugerida": "Testando aqui.",
-      "descricao": "Testando aqui.",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "-25513483",
-      "longitude": "-54595150",
-      "local_referencia": "Análise laboratorial de amostras d'água",
-      "equipe_apoio": "",
-      "origem_dado": "CAMPO"
-    },
-    {
-      "demanda_id": "DC008",
-      "data": "2026-09-30",
-      "equipe_id": "EQ05",
-      "lider_tecnico": "Fernanda Lima Rocha",
-      "atividade_id": "",
-      "atividade_sugerida": "Testando",
-      "descricao": "Testando",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "-25513470",
-      "longitude": "-54595113",
-      "local_referencia": "Elaboração de mapas de focos erosivos",
-      "equipe_apoio": "",
-      "origem_dado": "CAMPO"
-    },
-    {
-      "demanda_id": "DC009",
-      "data": "2026-09-30",
-      "equipe_id": "EQ01",
-      "lider_tecnico": "Renata Souza Oliveira",
-      "atividade_id": "",
-      "atividade_sugerida": "Teste",
-      "descricao": "Teste",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "-25513483",
-      "longitude": "-54595150",
-      "local_referencia": "Análise de dados de câmeras-trap",
-      "equipe_apoio": "",
-      "origem_dado": "CAMPO"
-    },
-    {
-      "demanda_id": "DC010",
-      "data": "2026-09-30",
-      "equipe_id": "EQ01",
-      "lider_tecnico": "Renata Souza Oliveira",
-      "atividade_id": "",
-      "atividade_sugerida": "Teste 3.",
-      "descricao": "Teste 3.",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "-25513483",
-      "longitude": "-54595150",
-      "local_referencia": "Análise de dados de câmeras-trap",
-      "equipe_apoio": "",
-      "origem_dado": "CAMPO"
     }
   ],
   "blockers": [
@@ -1966,50 +1898,6 @@
       "destino_planejamento": "ABSORVIDO",
       "nova_data_prevista": "",
       "origem_dado": "PROERG"
-    },
-    {
-      "demanda_id": "DC007",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "INTERRUPÇÃO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "CANCELADO",
-      "nova_data_prevista": "",
-      "origem_dado": "CAMPO"
-    },
-    {
-      "demanda_id": "DC008",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "REPROGRAMAÇÃO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "EM ANÁLISE",
-      "nova_data_prevista": "",
-      "origem_dado": "CAMPO"
-    },
-    {
-      "demanda_id": "DC009",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "ADIAMENTO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "REPROGRAMADO",
-      "nova_data_prevista": "",
-      "origem_dado": "CAMPO"
-    },
-    {
-      "demanda_id": "DC010",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "SUBSTITUIÇÃO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "ABSORVIDO",
-      "nova_data_prevista": "",
-      "origem_dado": "CAMPO"
     }
   ],
   "metrics": [
@@ -2051,11 +1939,11 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-01T12:45",
-    "temperatura": 27.2,
-    "sensacao": 29.8,
+    "atualizado": "2026-10-01T13:30",
+    "temperatura": 27.5,
+    "sensacao": 28.7,
     "precipitacao": 0,
-    "vento_kmh": 11,
+    "vento_kmh": 13,
     "codigo_tempo": 3,
     "condicao": "Nublado",
     "previsao": [
