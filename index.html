@@ -714,6 +714,15 @@ body{font-size:15px}
           <label class="field-label full">Descrição objetiva
             <textarea id="leaderDescription" placeholder="O que surgiu e o que precisa ser feito?" required></textarea>
           </label>
+          <label class="field-label">Urgência
+            <select id="demandUrgency">
+              <option value="BAIXA">Baixa — pode aguardar</option>
+              <option value="MÉDIA" selected>Média — resolver esta semana</option>
+              <option value="ALTA">Alta — resolver hoje</option>
+              <option value="CRÍTICA">Crítica — paralisa o trabalho</option>
+            </select>
+          </label>
+          <div></div>
           <label class="field-label full">Localização
             <div class="gps-capture-area">
               <button type="button" class="gps-btn" id="captureLocation">
@@ -747,7 +756,7 @@ body{font-size:15px}
         </div>
       </div>
 
-      <div class="form-note" id="leaderFormNote">Data, hora, status e identificadores são automáticos. Classificação de impacto, prioridade gerencial e alterações no planejamento não são definidas pelo líder técnico.</div>
+      <div class="form-note" id="leaderFormNote">Data, hora, status e identificadores são automáticos. Análise de impacto e alterações no planejamento são definidas pela gestão.</div>
       <div class="form-actions">
         <button type="button" class="secondary-action cancel-btn" id="cancelLeaderForm">Cancelar</button>
         <button type="submit" class="primary-action submit-btn" id="leaderSubmitBtn">Registrar demanda</button>
@@ -1755,7 +1764,8 @@ function updateLeaderDependentFields(){
   document.getElementById('leaderActivity').innerHTML=acts.map(a=>`<option value="${a}">${a}</option>`).join('')+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
   // Execução: lista de checkboxes com atividades do mês
   const m=Number(state.month);
-  const pendentes=state.planning.filter(p=>p.equipe_id===teamId&&Number(p.mes_num)===m&&p.status_planejamento!=='EXECUTADO');
+  const calM=mesNumToCalendar(m).month;
+  const pendentes=state.planning.filter(p=>p.equipe_id===teamId&&Number(p.mes_num)===calM&&p.status_planejamento!=='EXECUTADO');
   const pool=(pendentes.length?pendentes:state.planning.filter(p=>p.equipe_id===teamId));
   const metaMap=Object.fromEntries((state.metrics||[]).map(r=>[r.atividade,r]));
   const uniqActs=[...new Map(pool.map(p=>[p.atividade,p])).values()];
@@ -1869,7 +1879,7 @@ function saveLocalLeaderRecord(e){
     atividade_id:'LOCAL',
     atividade_sugerida:document.getElementById('leaderActivity').value,
     descricao:document.getElementById('leaderDescription').value.trim(),
-    prioridade:'A CLASSIFICAR',
+    prioridade:document.getElementById('demandUrgency').value||'MÉDIA',
     status:'ABERTA',
     latitude:coords.lat||'',
     longitude:coords.lon||'',
@@ -1892,6 +1902,7 @@ function saveLocalLeaderRecord(e){
     equipe_id:demand.equipe_id, data:demand.data, tipo:'DEMANDA',
     descricao:demand.descricao, latitude:demand.latitude, longitude:demand.longitude,
     lider:demand.lider_tecnico, observacoes:demand.atividade_sugerida,
+    prioridade:demand.prioridade,
   };
   const note=document.getElementById('leaderFormNote');
   note.classList.remove('success');
