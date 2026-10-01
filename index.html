@@ -1051,10 +1051,13 @@ function renderKPIs(){
   document.getElementById('kpiCoverage').textContent=fmtPct(m.coverage);
   document.getElementById('kpiCoverageNote').textContent=`${m.covered} de ${m.totalPlan} atividades · ${m.totalPlan-m.covered} sem registro`;
   setRing('ringCoverage',m.coverage);
-  const nd=m.demands.length;
+  const ACTIVE_STATUS=['EM ANDAMENTO','CANCELADA','ABERTA','PENDENTE'];
+  const DONE_STATUS=['CONCLUÍDA','CONCLUIDA','RESOLVIDA','REGISTRADA'];
+  const nd=m.demands.filter(x=>ACTIVE_STATUS.includes((x.status||'').toUpperCase())).length;
+  const ndDone=m.demands.filter(x=>DONE_STATUS.includes((x.status||'').toUpperCase())).length;
   document.getElementById('kpiDemands').textContent=nd;
   const prevM=Number(state.month)-1;
-  const prevNd=prevM>=1?state.demands.filter(r=>monthOf(r)===prevM).length:null;
+  const prevNd=prevM>=1?state.demands.filter(r=>monthOf(r)===prevM&&ACTIVE_STATUS.includes((r.status||'').toUpperCase())).length:null;
   // só mostra comparação se o mês anterior tiver pelo menos 1 demanda registrada
   const delta=(prevNd!==null&&prevNd>0)?nd-prevNd:null;
   const trendEl=document.getElementById('demandTrend');
@@ -1067,7 +1070,8 @@ function renderKPIs(){
     // mesNumLabel converte sequencial para "Outubro 2026" etc.
     deltaEl.textContent=delta===null?'':`${delta>0?'+':''}${delta} vs ${mesNumLabel(prevM)}`;
   }
-  document.getElementById('kpiDemandNote').textContent=`${m.demands.filter(x=>['EM ANDAMENTO','ABERTA','PENDENTE'].includes(x.status)).length} em andamento · ${m.demands.filter(x=>x.prioridade==='ALTA'||x.prioridade==='CRÍTICA').length} alta prioridade`;
+  const ndAlta=m.demands.filter(x=>['ALTA','CRÍTICA'].includes((x.prioridade||'').toUpperCase())).length;
+  document.getElementById('kpiDemandNote').textContent=`${ndAlta} alta prioridade · ${ndDone} concluídas`;
   document.getElementById('kpiImpact').textContent=fmtPct(m.impactRatio);
   const _hDesv=m.demands.reduce((s,x)=>s+Number(x.horas_consumidas||0),0);
   const _hPlan=m.planning.reduce((s,x)=>s+Number(x.meta_planejada||0),0);
