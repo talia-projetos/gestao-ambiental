@@ -299,17 +299,23 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
 .map-legend-item{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--muted)}
 .map-legend-dot{width:10px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,.7);box-shadow:0 1px 3px rgba(0,0,0,.22)}
 
-.ctx-panel{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:4px}
-.ctx-indicator{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:12px 13px;display:flex;flex-direction:column;gap:3px}
-.ctx-indicator-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
-.ctx-indicator-value{font-size:17px;font-weight:800;letter-spacing:-.025em;line-height:1.1}
-.ctx-indicator-sub{font-size:10px;color:var(--faint);margin-top:2px}
+.ctx-now{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:0;padding:10px 0 20px}
+.ctx-tile{padding:4px 24px 4px 0;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:4px}
+.ctx-tile:last-child{border-right:0;padding-right:0}
+.ctx-tile-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--faint)}
+.ctx-tile-value{font-size:22px;font-weight:800;letter-spacing:-.035em;line-height:1}
+.ctx-tile-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.ctx-forecast{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--border);padding-top:16px}
+.ctx-fc-tile{padding:2px 20px 2px 0;border-right:1px solid var(--border)}
+.ctx-fc-tile:last-child{border-right:0;padding-right:0}
+.ctx-fc-label{font-size:10px;font-weight:600;color:var(--faint);margin-bottom:5px;text-transform:capitalize}
+.ctx-fc-value{font-size:15px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.ctx-fc-sub{font-size:10.5px;color:var(--faint);margin-top:4px}
 .ctx-status-normal{color:var(--green)}.ctx-status-atencao{color:var(--ochre)}.ctx-status-critico{color:var(--red)}
-.ctx-bar-wrap{height:6px;background:var(--border);border-radius:4px;margin-top:6px;overflow:hidden}
+.ctx-bar-wrap{height:5px;background:var(--border);border-radius:4px;margin-top:8px;overflow:hidden}
 .ctx-bar-fill{height:100%;border-radius:4px}
 .ctx-alert-box{background:color-mix(in srgb,var(--amber) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--amber) 30%,var(--border));border-radius:12px;padding:9px 12px;font-size:11.5px;color:var(--text);margin-top:6px;display:none}
 .ctx-alert-box.visible{display:block}
-.ctx-section-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 6px}
 .impact-tiles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:16px}
 .impact-tile{background:var(--surface-2);border:1px solid var(--border);border-radius:18px;padding:18px 16px 14px;display:flex;flex-direction:column;gap:6px;transition:box-shadow .18s,transform .18s}
 .impact-tile:hover{box-shadow:var(--shadow-hover);transform:translateY(-1px)}
@@ -1159,31 +1165,32 @@ function renderContextPanel(){
   if(dateEl)dateEl.textContent=`Atualizado em ${fmtTs(wx?.atualizado||res?.atualizado||'')} · Foz do Iguaçu`;
 
   const barColor=p=>p>=70?cssVar('--green'):p>=40?cssVar('--ochre'):cssVar('--red');
-  const tile=(label,value,sub,cls,bar)=>`<div class="ctx-indicator"><span class="ctx-indicator-label">${label}</span><span class="ctx-indicator-value ${cls||''}">${value}</span>${sub?`<span class="ctx-indicator-sub">${sub}</span>`:''}${bar||''}</div>`;
+  const tile=(label,value,sub,cls,bar)=>
+    `<div class="ctx-tile"><span class="ctx-tile-label">${label}</span><span class="ctx-tile-value ${cls||''}">${value}</span>${sub?`<span class="ctx-tile-sub">${sub}</span>`:''}${bar||''}</div>`;
 
-  const wxTiles=wx?[
+  const wxNow=wx?[
     tile('Condição',wx.condicao||'—','Foz do Iguaçu',wx.precipitacao>5?'ctx-status-critico':wx.precipitacao>1?'ctx-status-atencao':'ctx-status-normal'),
-    tile('Temperatura',wx.temperatura!=null?`${wx.temperatura}°C`:'—',wx.sensacao!=null?`Sensação ${wx.sensacao}°C`:'',''),
-    tile('Precipitação',wx.precipitacao!=null?`${wx.precipitacao} mm`:'—','Atual',''),
-    tile('Vento',wx.vento_kmh!=null?`${wx.vento_kmh} km/h`:'—','',''),
-  ].join(''):[];
+    tile('Temperatura',wx.temperatura!=null?`${wx.temperatura}°C`:'—',wx.sensacao!=null?`Sensação ${wx.sensacao}°C`:''),
+    tile('Precipitação',wx.precipitacao!=null?`${wx.precipitacao} mm`:'—','Atual'),
+    tile('Vento',wx.vento_kmh!=null?`${wx.vento_kmh} km/h`:'—',''),
+  ].join(''):'';
 
-  const resTiles=res?[
+  const resNow=res?[
     tile('Nível Itaipu',res.nivel_m!=null?`${res.nivel_m} m`:'—','Nível montante','',
       res.armazenamento_pct!=null?`<div class="ctx-bar-wrap"><div class="ctx-bar-fill" style="width:${Math.min(100,res.armazenamento_pct)}%;background:${barColor(res.armazenamento_pct)}"></div></div>`:''),
-    tile('Armazenamento',res.armazenamento_pct!=null?`${res.armazenamento_pct.toFixed(1)}%`:'—','% do volume útil',''),
-    tile('Vazão defluente',res.vazao_defluente!=null?`${(res.vazao_defluente/1000).toFixed(1)}k m³/s`:'—','Descarga',''),
-    tile('Vazão afluente',res.vazao_afluente!=null?`${(res.vazao_afluente/1000).toFixed(1)}k m³/s`:'—','Entrada',''),
-  ].join(''):[];
+    tile('Armazenamento',res.armazenamento_pct!=null?`${res.armazenamento_pct.toFixed(1)}%`:'—','% volume útil'),
+    tile('Defluente',res.vazao_defluente!=null?`${(res.vazao_defluente/1000).toFixed(1)}k`:'—','m³/s saída'),
+    tile('Afluente',res.vazao_afluente!=null?`${(res.vazao_afluente/1000).toFixed(1)}k`:'—','m³/s entrada'),
+  ].join(''):'';
 
-  // Previsão 4 dias
   const prev=wx?.previsao||[];
-  const prevRow=prev.length?`<div class="ctx-section-title">Previsão — próximos dias</div><div class="ctx-panel">${prev.map(d=>{
+  const prevRow=prev.length?`<div class="ctx-forecast">${prev.map(d=>{
     const dt=d.data?new Date(d.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'}):'';
-    return tile(dt,d.condicao||'—',`${d.tmin!=null?d.tmin+'°':''} – ${d.tmax!=null?d.tmax+'°':''} · ${d.prob_chuva!=null?d.prob_chuva+'%':''}`,d.prob_chuva>=70?'ctx-status-critico':d.prob_chuva>=40?'ctx-status-atencao':'');
+    const cls=d.prob_chuva>=70?'ctx-status-critico':d.prob_chuva>=40?'ctx-status-atencao':'';
+    return `<div class="ctx-fc-tile"><div class="ctx-fc-label">${dt}</div><div class="ctx-fc-value ${cls}">${d.condicao||'—'}</div><div class="ctx-fc-sub">${d.tmin!=null?d.tmin+'°':''} – ${d.tmax!=null?d.tmax+'°':''} · ${d.prob_chuva!=null?d.prob_chuva+'%':''}</div></div>`;
   }).join('')}</div>`:'';
 
-  body.innerHTML=`<div class="ctx-panel">${wxTiles}${resTiles}</div>${prevRow}`;
+  body.innerHTML=`<div class="ctx-now">${wxNow}${resNow}</div>${prevRow}`;
 }
 
 function renderImpactPage(){
