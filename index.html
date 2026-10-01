@@ -1805,6 +1805,13 @@ function populateLeaderForm(){
   teamSelect.value=preferred;
   const coords=document.getElementById('leaderCoords');
   coords.value=''; delete coords.dataset.lat; delete coords.dataset.lon;
+  // Limpa campos de demanda
+  const desc=document.getElementById('leaderDescription'); if(desc) desc.value='';
+  const urg=document.getElementById('demandUrgency'); if(urg) urg.value='MÉDIA';
+  const note=document.getElementById('leaderFormNote'); if(note){note.textContent='';note.classList.remove('success');}
+  // Limpa campos de execução
+  const execObs=document.getElementById('execObs'); if(execObs) execObs.value='';
+  const execDate=document.getElementById('execDate'); if(execDate) execDate.value=new Date().toISOString().slice(0,10);
   updateLeaderDependentFields();
 }
 function updateLeaderDependentFields(){
