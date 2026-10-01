@@ -1898,10 +1898,13 @@ function saveExecRecord(e){
   const scriptUrl=state.scriptUrl||'';
   const finalize=(ok)=>{
     records.forEach(r=>state.execution.push(r));
-    const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
-    if(!local.execution) local.execution=[];
-    records.forEach(r=>local.execution.push(r));
-    localStorage.setItem('ga-local-records',JSON.stringify(local));
+    if(!ok){
+      // POST falhou → salva localmente como backup
+      const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
+      if(!local.execution) local.execution=[];
+      records.forEach(r=>local.execution.push(r));
+      localStorage.setItem('ga-local-records',JSON.stringify(local));
+    }
     renderAll();
     addNotification('form',`${records.length} execuç${records.length===1?'ão':'ões'} registrada${records.length===1?'':'s'} — ${team?.lider_tecnico||teamId}`,
       records.map(r=>r.atividade).join(' · '));
