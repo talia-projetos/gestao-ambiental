@@ -1534,14 +1534,27 @@ function renderDemandTable(){
     if(isConcluida(d))return '<span class="status-pill status-normal">Resolvida</span>';
     return `<span class="status-pill">${d.status||'—'}</span>`;
   };
-  tbody.innerHTML=rows.map(d=>`<tr>
+  tbody.innerHTML=rows.map(d=>`<tr data-did="${d.demanda_id||''}">
     <td style="white-space:nowrap;font-size:11px">${d.data||'—'}</td>
     <td><strong style="font-size:11.5px">${d.equipe_id||'—'}</strong>${d.lider_tecnico?`<span class="team-sub leader-name">${d.lider_tecnico}</span>`:''}</td>
     <td style="font-size:11px;color:var(--muted);max-width:130px;white-space:normal">${d.atividade_sugerida||'—'}</td>
     <td style="max-width:280px;white-space:normal;font-size:11.5px">${(d.descricao||'—').slice(0,120)}</td>
     <td>${sPill(d)}</td>
     <td>${originBadge(d.origem_dado)}</td>
+    <td style="width:32px;text-align:center"><button class="icon-btn ghost demand-del-btn" data-did="${d.demanda_id||''}" data-key="${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}" title="Apagar registro local" style="opacity:.5;color:var(--ochre)"><i data-lucide="x"></i></button></td>
   </tr>`).join('');
+  lucide.createIcons({nodes:[...tbody.querySelectorAll('[data-lucide]')]});
+  tbody.querySelectorAll('.demand-del-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    const key=btn.dataset.key;
+    const did=btn.dataset.did;
+    // Remove da memória
+    state.demands=state.demands.filter(d=>d.demanda_id!==did);
+    // Remove do localStorage
+    const local=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
+    if(Array.isArray(local.demands)) local.demands=local.demands.filter(d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`!==key);
+    localStorage.setItem('ga-local-records',JSON.stringify(local));
+    renderDemandTable(); renderKPIs();
+  }));
 }
 
 function renderAttention(){
