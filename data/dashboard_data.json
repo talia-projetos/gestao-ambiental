@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T21:26:05.931Z",
+  "generated_at": "2026-10-01T14:30:20.380Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1304,8 +1304,9 @@
       "lider_tecnico": "Renata Souza Oliveira",
       "atividade_id": "AT001",
       "atividade": "Análise de dados de câmeras-trap",
+      "horas_executadas": 8,
       "unidade": "horas",
-      "quantidade_executada": "8",
+      "quantidade_executada": 8,
       "status_execucao": "EXECUTADO",
       "bloqueador": "Chuva",
       "local_referencia": "",
@@ -1321,8 +1322,9 @@
       "lider_tecnico": "Marcelo Ferreira Santos",
       "atividade_id": "AT013",
       "atividade": "Elaboração de laudos de supressão",
+      "horas_executadas": 8,
       "unidade": "horas",
-      "quantidade_executada": "8",
+      "quantidade_executada": 8,
       "status_execucao": "EXECUTADO",
       "bloqueador": "Chuva",
       "local_referencia": "",
@@ -1338,8 +1340,9 @@
       "lider_tecnico": "Ana Paula Costa Ribeiro",
       "atividade_id": "AT025",
       "atividade": "Análise laboratorial de amostras d'água",
+      "horas_executadas": 8,
       "unidade": "horas",
-      "quantidade_executada": "8",
+      "quantidade_executada": 8,
       "status_execucao": "EXECUTADO",
       "bloqueador": "Chuva",
       "local_referencia": "",
@@ -1355,8 +1358,9 @@
       "lider_tecnico": "Diego Henrique Mendes",
       "atividade_id": "AT037",
       "atividade": "Manutenção de plantios no viveiro",
+      "horas_executadas": 8,
       "unidade": "horas",
-      "quantidade_executada": "8",
+      "quantidade_executada": 8,
       "status_execucao": "EXECUTADO",
       "bloqueador": "Nublado",
       "local_referencia": "",
@@ -1372,8 +1376,9 @@
       "lider_tecnico": "Fernanda Lima Rocha",
       "atividade_id": "AT049",
       "atividade": "Análise de imagens de drone",
+      "horas_executadas": 8,
       "unidade": "horas",
-      "quantidade_executada": "8",
+      "quantidade_executada": 8,
       "status_execucao": "EXECUTADO",
       "bloqueador": "Chuva",
       "local_referencia": "",
@@ -1387,10 +1392,11 @@
       "data": "2026-10-05",
       "equipe_id": "EQ06",
       "lider_tecnico": "Carlos Eduardo Pinto",
-      "atividade_id": "AT061",
+      "atividade_id": "AT062",
       "atividade": "Produção de materiais educativos",
+      "horas_executadas": 8,
       "unidade": "horas",
-      "quantidade_executada": "8",
+      "quantidade_executada": 8,
       "status_execucao": "EXECUTADO",
       "bloqueador": "Nublado",
       "local_referencia": "",
@@ -1406,8 +1412,9 @@
       "lider_tecnico": "Rafael Santos Pereira",
       "atividade_id": "AT001",
       "atividade": "Monitoramento de avifauna - Transecto T1",
+      "horas_executadas": 8,
       "unidade": "horas",
-      "quantidade_executada": "8",
+      "quantidade_executada": 8,
       "status_execucao": "EXECUTADO",
       "bloqueador": "Ensolarado",
       "local_referencia": "",
@@ -1423,8 +1430,9 @@
       "lider_tecnico": "Diego Henrique Mendes",
       "atividade_id": "AT037",
       "atividade": "Plantio de mudas nativas - APP Rio Paraná",
+      "horas_executadas": 8,
       "unidade": "horas",
-      "quantidade_executada": "8",
+      "quantidade_executada": 8,
       "status_execucao": "EXECUTADO",
       "bloqueador": "Parcialmente nublado",
       "local_referencia": "",
@@ -1440,8 +1448,9 @@
       "lider_tecnico": "Leticia Ferreira Mendes",
       "atividade_id": "AT025",
       "atividade": "Controle de macrófitas - Setor A",
+      "horas_executadas": 8,
       "unidade": "horas",
-      "quantidade_executada": "8",
+      "quantidade_executada": 8,
       "status_execucao": "EXECUTADO",
       "bloqueador": "Ensolarado",
       "local_referencia": "",
@@ -1457,8 +1466,9 @@
       "lider_tecnico": "Kleber Rodrigues Lima",
       "atividade_id": "AT049",
       "atividade": "Controle de voçoroca km 24",
+      "horas_executadas": 8,
       "unidade": "horas",
-      "quantidade_executada": "8",
+      "quantidade_executada": 8,
       "status_execucao": "EXECUTADO",
       "bloqueador": "Ensolarado",
       "local_referencia": "",
@@ -2002,5 +2012,90 @@
       "origem_dado": "CAMPO"
     }
   ],
-  "metrics": []
+  "metrics": [
+    {
+      "atividade": "Plantio de mudas",
+      "unidade": "mudas",
+      "meta": 5000
+    },
+    {
+      "atividade": "Revegetação de taludes",
+      "unidade": "ha",
+      "meta": 120
+    },
+    {
+      "atividade": "Monitoramento de fauna",
+      "unidade": "registros",
+      "meta": 200
+    },
+    {
+      "atividade": "Análise de amostras de água",
+      "unidade": "amostras",
+      "meta": 48
+    },
+    {
+      "atividade": "Elaboração de laudos",
+      "unidade": "laudos",
+      "meta": 36
+    },
+    {
+      "atividade": "Educação ambiental",
+      "unidade": "pessoas",
+      "meta": 1500
+    },
+    {
+      "atividade": "Controle de erosão",
+      "unidade": "m²",
+      "meta": 3000
+    }
+  ],
+  "weather_api": {
+    "fonte": "Open-Meteo",
+    "atualizado": "2026-10-01T11:30",
+    "temperatura": 25.8,
+    "sensacao": 28.1,
+    "precipitacao": 0,
+    "vento_kmh": 10,
+    "codigo_tempo": 3,
+    "condicao": "Nublado",
+    "previsao": [
+      {
+        "data": "2026-10-01",
+        "chuva_mm": 2.4,
+        "prob_chuva": 86,
+        "tmax": 28,
+        "tmin": 19.7,
+        "codigo": 53,
+        "condicao": "Chuvisco"
+      },
+      {
+        "data": "2026-10-02",
+        "chuva_mm": 0,
+        "prob_chuva": 0,
+        "tmax": 25.8,
+        "tmin": 15.2,
+        "codigo": 3,
+        "condicao": "Nublado"
+      },
+      {
+        "data": "2026-10-03",
+        "chuva_mm": 12.4,
+        "prob_chuva": 69,
+        "tmax": 28.4,
+        "tmin": 17.3,
+        "codigo": 96,
+        "condicao": "Tempestade"
+      },
+      {
+        "data": "2026-10-04",
+        "chuva_mm": 5.7,
+        "prob_chuva": 90,
+        "tmax": 26.3,
+        "tmin": 19.2,
+        "codigo": 95,
+        "condicao": "Tempestade"
+      }
+    ]
+  },
+  "reservatorio": null
 }
