@@ -593,6 +593,12 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
       <!-- PAGE: Bloqueadores -->
       <div id="page-blockers" class="page">
         <section class="dashboard-grid">
+          <article class="card span-12" style="padding:18px 20px 16px">
+            <div class="card-header compact">
+              <div><h2>Contexto operacional</h2><p id="ctxDate" style="color:var(--faint);font-size:11px"></p></div>
+            </div>
+            <div id="ctxBody"></div>
+          </article>
           <article class="card chart-card span-12">
             <div class="card-header">
               <div><h2>Impacto dos bloqueadores</h2><p>Horas afetadas por tipo de causa — acumulado anual</p></div>
@@ -852,8 +858,8 @@ async function loadData(){
   const base=baseR.status==='fulfilled'?baseR.value:null;
   const weather=wxR.status==='fulfilled'?wxR.value:null;
 
-  const {teams=[],planning=[],execution=[],demands=[],blockers=[],climate=[],impact=[],metrics=[],contexto=null}=base||{};
-  Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact,metrics,contexto,weather,scriptUrl:base?.script_url||''});
+  const {teams=[],planning=[],execution=[],demands=[],blockers=[],climate=[],impact=[],metrics=[],weather_api=null,reservatorio=null}=base||{};
+  Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact,metrics,weather_api,reservatorio,weather,scriptUrl:base?.script_url||''});
   if(weather)checkWeatherAlerts(weather);
   const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
   // Dedup: ignora registros locais já absorvidos pelo JSON (mesmo equipe_id+data+descricao)
@@ -1085,44 +1091,44 @@ function buildBlockerChart(canvasId){
 function renderBlockerChart(){ buildBlockerChart('blockerChart'); }
 
 function renderContextPanel(){
-  const c=state.contexto;
+  const wx=state.weather_api;
+  const res=state.reservatorio;
   const body=document.getElementById('ctxBody');
-  if(!c||!c.data_referencia){body.innerHTML='';return;}
-  document.getElementById('ctxDate').textContent=
-    `Referência: ${c.data_referencia ? new Date(c.data_referencia+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'}) : '—'}`;
+  const dateEl=document.getElementById('ctxDate');
+  if(!wx&&!res){
+    body.innerHTML='<p style="color:var(--faint);font-size:12px;padding:8px 0">Dados de contexto disponíveis após o próximo push da planilha.</p>';
+    if(dateEl)dateEl.textContent='';
+    return;
+  }
+  const fmtTs=ts=>{try{return new Date(ts).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch{return ts||'';}};
+  if(dateEl)dateEl.textContent=`Atualizado em ${fmtTs(wx?.atualizado||res?.atualizado||'')} · Foz do Iguaçu`;
 
-  const statusCls=s=>s==='NORMAL'||s==='FLUINDO'||s==='BOA'?'ctx-status-normal':s==='BAIXO'?'ctx-status-normal':s==='ALTO'||s==='CRÍTICO'||s==='BLOQUEADO'||s==='INTRANSITÁVEL'?'ctx-status-critico':'ctx-status-atencao';
   const barColor=p=>p>=70?cssVar('--green'):p>=40?cssVar('--ochre'):cssVar('--red');
+  const tile=(label,value,sub,cls,bar)=>`<div class="ctx-indicator"><span class="ctx-indicator-label">${label}</span><span class="ctx-indicator-value ${cls||''}">${value}</span>${sub?`<span class="ctx-indicator-sub">${sub}</span>`:''}${bar||''}</div>`;
 
-  const nivelPct=c.pct_reservatorio;
-  const nivelBar=nivelPct!=null?`<div class="ctx-bar-wrap"><div class="ctx-bar-fill" style="width:${Math.max(0,Math.min(100,nivelPct))}%;background:${barColor(nivelPct)}"></div></div>`:'';
+  const wxTiles=wx?[
+    tile('Condição',wx.condicao||'—','Foz do Iguaçu',wx.precipitacao>5?'ctx-status-critico':wx.precipitacao>1?'ctx-status-atencao':'ctx-status-normal'),
+    tile('Temperatura',wx.temperatura!=null?`${wx.temperatura}°C`:'—',wx.sensacao!=null?`Sensação ${wx.sensacao}°C`:'',''),
+    tile('Precipitação',wx.precipitacao!=null?`${wx.precipitacao} mm`:'—','Atual',''),
+    tile('Vento',wx.vento_kmh!=null?`${wx.vento_kmh} km/h`:'—','',''),
+  ].join(''):[];
 
-  const indicadores=[
-    // Hidrológico
-    {label:'Reservatório Itaipu',value:c.nivel_reservatorio?`${c.nivel_reservatorio} m`:'—',sub:nivelPct!=null?`${nivelPct}% da cota operacional`:'',cls:statusCls(c.status_reservatorio),bar:nivelBar},
-    {label:'Vazão defluente',value:c.vazao_defluente?`${(c.vazao_defluente/1000).toFixed(1)}k m³/s`:'—',sub:'Descarga atual',cls:''},
-    // Acesso / Mobilidade
-    {label:'Acesso geral',value:c.condicao_acesso,sub:'',cls:statusCls(c.condicao_acesso)},
-    {label:'Trânsito Foz–Guaíra',value:c.transito_foz_guaira,sub:'BR-277 / MS-272',cls:statusCls(c.transito_foz_guaira)},
-    {label:'Trânsito Foz–Toledo',value:c.transito_foz_toledo,sub:'PR-182',cls:statusCls(c.transito_foz_toledo)},
-    {label:'Estradas vicinais',value:c.estradas_vicinais,sub:'Acesso às frentes',cls:statusCls(c.estradas_vicinais)},
-    // Risco
-    {label:'Risco alagamento',value:c.risco_alagamento,sub:'',cls:statusCls(c.risco_alagamento)},
-    {label:'Risco deslizamento',value:c.risco_deslizamento,sub:'',cls:statusCls(c.risco_deslizamento)},
-  ].filter(x=>x.value&&x.value!=='—'||x.bar);
+  const resTiles=res?[
+    tile('Nível Itaipu',res.nivel_m!=null?`${res.nivel_m} m`:'—','Nível montante','',
+      res.armazenamento_pct!=null?`<div class="ctx-bar-wrap"><div class="ctx-bar-fill" style="width:${Math.min(100,res.armazenamento_pct)}%;background:${barColor(res.armazenamento_pct)}"></div></div>`:''),
+    tile('Armazenamento',res.armazenamento_pct!=null?`${res.armazenamento_pct.toFixed(1)}%`:'—','% do volume útil',''),
+    tile('Vazão defluente',res.vazao_defluente!=null?`${(res.vazao_defluente/1000).toFixed(1)}k m³/s`:'—','Descarga',''),
+    tile('Vazão afluente',res.vazao_afluente!=null?`${(res.vazao_afluente/1000).toFixed(1)}k m³/s`:'—','Entrada',''),
+  ].join(''):[];
 
-  body.innerHTML=`<div class="ctx-panel">${indicadores.map(ind=>`
-    <div class="ctx-indicator">
-      <span class="ctx-indicator-label">${ind.label}</span>
-      <span class="ctx-indicator-value ${ind.cls||''}">${ind.value||'—'}</span>
-      ${ind.sub?`<span class="ctx-indicator-sub">${ind.sub}</span>`:''}
-      ${ind.bar||''}
-    </div>`).join('')}</div>
-  ${c.alerta_inmet?`<div class="ctx-alert-box visible"><strong>Alerta INMET:</strong> ${c.alerta_inmet}</div>`:''}
-  ${c.restricao_itaipu?`<div class="ctx-alert-box visible" style="margin-top:6px"><strong>Restrição Itaipu:</strong> ${c.restricao_itaipu}</div>`:''}
-  ${(c.reuniao_itaipu&&c.reuniao_itaipu!=='NÃO')?`<div class="ctx-section-title">Agenda institucional</div><div style="font-size:11.5px;color:var(--muted);display:flex;gap:16px">${c.reuniao_itaipu?`<span>Reunião Itaipu: <strong>${c.reuniao_itaipu}</strong></span>`:''} ${c.vistoria_ibama&&c.vistoria_ibama!=='NÃO'?`<span>Vistoria IBAMA: <strong>${c.vistoria_ibama}</strong></span>`:''}</div>`:
-    (c.vistoria_ibama&&c.vistoria_ibama!=='NÃO')?`<div class="ctx-section-title">Agenda institucional</div><div style="font-size:11.5px;color:var(--muted)">Vistoria IBAMA: <strong>${c.vistoria_ibama}</strong></div>`:''}
-  ${c.observacoes?`<div style="font-size:11px;color:var(--faint);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">${c.observacoes}</div>`:''}`;
+  // Previsão 4 dias
+  const prev=wx?.previsao||[];
+  const prevRow=prev.length?`<div class="ctx-section-title">Previsão — próximos dias</div><div class="ctx-panel">${prev.map(d=>{
+    const dt=d.data?new Date(d.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'}):'';
+    return tile(dt,d.condicao||'—',`${d.tmin!=null?d.tmin+'°':''} – ${d.tmax!=null?d.tmax+'°':''} · ${d.prob_chuva!=null?d.prob_chuva+'%':''}`,d.prob_chuva>=70?'ctx-status-critico':d.prob_chuva>=40?'ctx-status-atencao':'');
+  }).join('')}</div>`:'';
+
+  body.innerHTML=`<div class="ctx-panel">${wxTiles}${resTiles}</div>${prevRow}`;
 }
 
 function renderImpactPage(){
@@ -1490,7 +1496,7 @@ function showPage(id){
   setTimeout(()=>{
     renderAll();
     if(id==='page-map'&&state.map){ state.map.invalidateSize(); updateDemandMarkers(); }
-    if(id==='page-blockers'){ renderBlockerChartFull(); }
+    if(id==='page-blockers'){ renderContextPanel(); renderBlockerChartFull(); }
     if(id==='page-impact'){ renderImpactPage(); }
   },50);
 }
