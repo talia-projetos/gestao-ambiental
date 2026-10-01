@@ -1197,18 +1197,29 @@ function renderImpactPage(){
   state.charts['impactDonutChart']=new Chart(dCtx,{type:'doughnut',
     data:{labels:planEntries.map(([a])=>a),datasets:[{data:planEntries.map(([,v])=>v),backgroundColor:palette,borderWidth:2,borderColor:'var(--surface)',hoverOffset:6}]},
     options:donutOpts});
-  // Legenda manual
+  // Legenda: destaque para os maiores, agrupa os menores
   const leg=document.getElementById('impactDonutLegend');
-  leg.innerHTML=planEntries.map(([a,v],i)=>{
+  const THRESHOLD=3; // % mínimo para aparecer individualmente
+  const shown=planEntries.filter(([,v])=>Math.round(v/total*100)>=THRESHOLD);
+  const others=planEntries.filter(([,v])=>Math.round(v/total*100)<THRESHOLD);
+  const othersTotal=others.reduce((s,[,v])=>s+v,0);
+  const othersPct=Math.round(othersTotal/total*100);
+  const legItem=(a,v,col,muted)=>{
     const pct=Math.round(v/total*100);
-    const col=palette[i%palette.length];
-    const short=a.length>42?a.slice(0,40)+'…':a;
-    return `<div style="display:flex;align-items:center;gap:8px;min-width:0">
-      <span style="flex:none;width:11px;height:11px;border-radius:3px;background:${col}"></span>
-      <span style="flex:1;font-size:11.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${a}">${short}</span>
+    const short=a.length>38?a.slice(0,36)+'…':a;
+    return `<div style="display:flex;align-items:center;gap:8px;min-width:0;padding:2px 0">
+      <span style="flex:none;width:10px;height:10px;border-radius:3px;background:${col};opacity:${muted?.8:1}"></span>
+      <span style="flex:1;font-size:11.5px;color:${muted?'var(--faint)':'var(--text)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${a}">${short}</span>
       <span style="flex:none;font-size:11px;font-weight:700;color:var(--muted)">${pct}%</span>
     </div>`;
-  }).join('');
+  };
+  const othersLabel=others.map(([a])=>a).join(', ');
+  leg.innerHTML=
+    shown.map(([a,v],i)=>legItem(a,v,palette[planEntries.findIndex(([x])=>x===a)%palette.length],false)).join('')+
+    (others.length?`<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border)">`+
+      legItem(`Outras ${others.length} atividades`,othersTotal,'var(--muted)',true)+
+      `<div style="font-size:10px;color:var(--faint);padding-left:18px;margin-top:2px;line-height:1.5">${othersLabel.length>120?othersLabel.slice(0,118)+'…':othersLabel}</div></div>`:
+    '');
   document.getElementById('impactPageSub').textContent=`Produção acumulada por atividade — ${mesNumLabel(m)}`;
 }
 
