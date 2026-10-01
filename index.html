@@ -300,8 +300,9 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
 .map-legend-dot{width:10px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,.7);box-shadow:0 1px 3px rgba(0,0,0,.22)}
 
 .ctx-now{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:0;padding:10px 0 20px}
-.ctx-tile{padding:4px 24px 4px 0;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:4px}
-.ctx-tile:last-child{border-right:0;padding-right:0}
+.ctx-tile{padding:6px 28px 6px 0;border-right:0;display:flex;flex-direction:column;gap:4px;position:relative}
+.ctx-tile:not(:last-child)::after{content:'';position:absolute;right:0;top:15%;bottom:15%;width:1px;background:var(--border)}
+.ctx-tile:last-child{padding-right:0}
 .ctx-tile-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--faint)}
 .ctx-tile-value{font-size:22px;font-weight:800;letter-spacing:-.035em;line-height:1}
 .ctx-tile-sub{font-size:11px;color:var(--muted);margin-top:1px}
@@ -334,6 +335,16 @@ body{font-size:15px}
 .card h2{font-size:14px!important}
 .title-wrap h1{font-size:18px!important}
 .card-header p{font-size:11px!important}
+/* Execução multi-atividade */
+.exec-activity-row{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;transition:border-color .15s,background .15s}
+.exec-activity-row.row-checked{background:color-mix(in srgb,var(--green) 8%,var(--surface));border-color:color-mix(in srgb,var(--green) 30%,var(--border))}
+.exec-row-check{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.exec-row-check input[type="checkbox"]{width:17px;height:17px;accent-color:var(--green);cursor:pointer;flex:none}
+.exec-row-check span{font-size:12.5px;font-weight:500;color:var(--text);flex:1;line-height:1.35}
+.exec-row-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.exec-row-mini-label{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.exec-row-inputs input,.exec-row-inputs select{width:100%;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:10px;padding:7px 10px;font:inherit;font-size:12px;outline:none}
+.exec-row-inputs input:focus,.exec-row-inputs select:focus{border-color:var(--blue)}
 /* Medium sidebar: ícones sem texto (reforço após redesign CSS) */
 @media(min-width:761px) and (max-width:960px){
   .nav-btn span,.brand-text,.sidebar-label,.sidebar-divider{display:none!important}
@@ -722,24 +733,17 @@ body{font-size:15px}
       </div>
 
       <div id="execSection" style="display:none">
-        <div class="leader-form-grid">
-          <label class="field-label full">Atividade concluída
-            <select id="execActivity"></select>
-          </label>
+        <div class="leader-form-grid" style="margin-bottom:10px">
           <label class="field-label">Data de conclusão
             <input id="execDate" type="date" />
           </label>
-          <label class="field-label">Horas executadas
-            <input id="execHoras" type="number" min="0" step="0.5" placeholder="ex: 48" />
-          </label>
-          <label class="field-label">Quantidade realizada
-            <input id="execQtd" type="number" min="0" step="0.1" placeholder="ex: 12" />
-          </label>
-          <label class="field-label">Unidade
-            <input id="execUnidade" type="text" placeholder="ha, m², mudas…" />
-          </label>
-          <label class="field-label full">Observações
-            <textarea id="execObs" placeholder="Condições do campo, pontos de atenção…" rows="3"></textarea>
+          <div></div>
+        </div>
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Atividades concluídas na semana</div>
+        <div id="execActivityList" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;padding-right:2px;margin-bottom:14px"></div>
+        <div class="leader-form-grid">
+          <label class="field-label full">Observações gerais
+            <textarea id="execObs" placeholder="Condições do campo, pontos de atenção…" rows="2"></textarea>
           </label>
         </div>
       </div>
@@ -1122,8 +1126,7 @@ function renderImpactChart(){
 }
 
 function makeStripe(color){
-  // pontos ~10% preenchimento: tile 10×10, raio 1.3 → π r²/100 ≈ 5%
-  const size=10,r=1.3;
+  const size=16,r=0.65;
   const c=document.createElement('canvas'); c.width=size;c.height=size;
   const x=c.getContext('2d');
   x.globalAlpha=0.45; x.fillStyle=color;
@@ -1749,20 +1752,39 @@ function updateLeaderDependentFields(){
   // Demanda: todas as atividades da equipe
   const acts=uniq(state.planning.filter(p=>p.equipe_id===teamId).map(p=>p.atividade));
   document.getElementById('leaderActivity').innerHTML=acts.map(a=>`<option value="${a}">${a}</option>`).join('')+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
-  // Execução: atividades do mês atual ainda não executadas
+  // Execução: lista de checkboxes com atividades do mês
   const m=Number(state.month);
   const pendentes=state.planning.filter(p=>p.equipe_id===teamId&&Number(p.mes_num)===m&&p.status_planejamento!=='EXECUTADO');
-  const execOpts=(pendentes.length?pendentes:state.planning.filter(p=>p.equipe_id===teamId))
-    .map(p=>`<option value="${p.atividade}">${p.atividade}</option>`).join('');
-  document.getElementById('execActivity').innerHTML=execOpts||'<option value="">Nenhuma atividade planejada</option>';
-  fillExecUnit(document.getElementById('execActivity').value);
-}
-function fillExecUnit(atNome){
-  const m=state.metrics.find(x=>x.atividade===atNome);
-  const p=state.planning.find(x=>x.atividade===atNome);
-  const unit=m?.unidade||p?.unidade||'';
-  const el=document.getElementById('execUnidade');
-  if(el&&unit&&!el.value) el.value=unit;
+  const pool=(pendentes.length?pendentes:state.planning.filter(p=>p.equipe_id===teamId));
+  const metaMap=Object.fromEntries((state.metrics||[]).map(r=>[r.atividade,r]));
+  const uniqActs=[...new Map(pool.map(p=>[p.atividade,p])).values()];
+  const listEl=document.getElementById('execActivityList');
+  if(!listEl) return;
+  const UNITS=['horas','ha','km','m²','km²','mudas','animais','armadilhas','pontos','amostras','relatórios','unidades'];
+  const unitOpts=UNITS.map(u=>`<option value="${u}">${u}</option>`).join('');
+  if(!uniqActs.length){
+    listEl.innerHTML='<p style="color:var(--faint);font-size:12px;padding:8px 0">Nenhuma atividade planejada para este mês.</p>';
+  } else {
+    listEl.innerHTML=uniqActs.map(p=>`<div class="exec-activity-row" data-activity="${p.atividade}">
+      <label class="exec-row-check">
+        <input type="checkbox" value="${p.atividade}" />
+        <span>${p.atividade}</span>
+      </label>
+      <div class="exec-row-inputs" style="display:none">
+        <div><div class="exec-row-mini-label">Horas</div><input type="number" class="exec-row-horas" min="0" step="0.5" placeholder="ex: 8" /></div>
+        <div><div class="exec-row-mini-label">Quantidade</div><input type="number" class="exec-row-qtd" min="0" step="0.1" placeholder="ex: 12" /></div>
+        <div><div class="exec-row-mini-label">Unidade</div><select class="exec-row-unidade">${unitOpts}</select></div>
+      </div>
+    </div>`).join('');
+    listEl.querySelectorAll('.exec-activity-row').forEach((row,i)=>{
+      const def=metaMap[uniqActs[i].atividade]?.unidade||uniqActs[i].unidade||'horas';
+      const sel=row.querySelector('.exec-row-unidade'); if(sel) sel.value=def;
+      row.querySelector('input[type="checkbox"]').addEventListener('change',ev=>{
+        row.classList.toggle('row-checked',ev.target.checked);
+        row.querySelector('.exec-row-inputs').style.display=ev.target.checked?'grid':'none';
+      });
+    });
+  }
 }
 function toggleLeaderMode(mode){
   const isDem=mode==='demanda';
@@ -1782,41 +1804,43 @@ function saveExecRecord(e){
   const now=new Date();
   const teamId=document.getElementById('leaderTeam').value;
   const team=state.teams.find(t=>t.equipe_id===teamId);
-  const atividade=document.getElementById('execActivity').value;
   const data=document.getElementById('execDate').value||now.toISOString().slice(0,10);
-  const horas=Number(document.getElementById('execHoras').value)||0;
-  const qtd=Number(document.getElementById('execQtd').value)||0;
-  const unidade=document.getElementById('execUnidade').value.trim();
   const obs=document.getElementById('execObs').value.trim();
-  const id='EXEC-'+Date.now();
   const m=Number(state.month);
-  const linked=state.planning.find(p=>p.equipe_id===teamId&&Number(p.mes_num)===m&&p.atividade===atividade);
-  const execRecord={
-    execucao_id:id, data, equipe_id:teamId,
-    lider_tecnico:team?.lider_tecnico||'',
-    atividade_id:linked?.atividade_id||'LOCAL',
-    atividade, horas_executadas:horas,
-    quantidade_executada:qtd, unidade:unidade||'horas',
-    status_execucao:'EXECUTADO', observacoes:obs, origem_dado:'CAMPO_LOCAL',
-  };
+  const checked=[...document.querySelectorAll('#execActivityList .exec-activity-row.row-checked')];
   const note=document.getElementById('leaderFormNote');
+  if(!checked.length){note.textContent='Selecione ao menos uma atividade.';return;}
+  const records=checked.map((row,idx)=>{
+    const atividade=row.dataset.activity;
+    const horas=Number(row.querySelector('.exec-row-horas').value)||0;
+    const qtd=Number(row.querySelector('.exec-row-qtd').value)||0;
+    const unidade=row.querySelector('.exec-row-unidade').value||'horas';
+    const linked=state.planning.find(p=>p.equipe_id===teamId&&Number(p.mes_num)===m&&p.atividade===atividade);
+    return {execucao_id:'EXEC-'+Date.now()+idx,data,equipe_id:teamId,lider_tecnico:team?.lider_tecnico||'',
+      atividade_id:linked?.atividade_id||'LOCAL',atividade,horas_executadas:horas,
+      quantidade_executada:qtd,unidade,status_execucao:'EXECUTADO',observacoes:obs,origem_dado:'CAMPO_LOCAL'};
+  });
   note.classList.remove('success'); note.textContent='Enviando…';
   const scriptUrl=state.scriptUrl||'';
-  const payload={equipe_id:teamId,data,tipo:'EXECUCAO',atividade,horas_executadas:horas,quantidade:qtd,unidade,lider:team?.lider_tecnico||'',observacoes:obs};
   const finalize=(ok)=>{
-    state.execution.push(execRecord);
+    records.forEach(r=>state.execution.push(r));
     const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
     if(!local.execution) local.execution=[];
-    local.execution.push(execRecord);
+    records.forEach(r=>local.execution.push(r));
     localStorage.setItem('ga-local-records',JSON.stringify(local));
     renderAll();
-    addNotification('form',`Execução registrada — ${team?.lider_tecnico||teamId}`,`${atividade}${qtd?` · ${qtd} ${unidade}`:''}${horas?` · ${horas}h`:''}`);
+    addNotification('form',`${records.length} execuç${records.length===1?'ão':'ões'} registrada${records.length===1?'':'s'} — ${team?.lider_tecnico||teamId}`,
+      records.map(r=>r.atividade).join(' · '));
     note.classList.add('success');
-    note.textContent=ok?'Registrado na planilha. Aparecerá no dashboard na próxima publicação.':'Salvo localmente (sem conexão). Será sincronizado ao publicar.';
-    setTimeout(()=>{e.target.reset();closeLeaderForm();},1400);
+    note.textContent=ok?`${records.length} registro(s) enviado(s) à planilha.`:'Salvo localmente. Será sincronizado ao publicar.';
+    setTimeout(()=>{e.target.reset();closeLeaderForm();},1600);
   };
-  if(scriptUrl){fetch(scriptUrl,{method:'POST',body:JSON.stringify(payload)}).then(r=>r.json()).then(r=>finalize(r.ok)).catch(()=>finalize(false));}
-  else finalize(false);
+  if(scriptUrl){
+    Promise.all(records.map(r=>fetch(scriptUrl,{method:'POST',body:JSON.stringify({tipo:'EXECUCAO',equipe_id:teamId,data,
+      atividade:r.atividade,horas_executadas:r.horas_executadas,quantidade:r.quantidade_executada,
+      unidade:r.unidade,lider:team?.lider_tecnico||'',observacoes:obs})}).then(x=>x.json()).catch(()=>({ok:false}))))
+    .then(res=>finalize(res.every(r=>r.ok))).catch(()=>finalize(false));
+  } else finalize(false);
 }
 function openLeaderForm(){
   populateLeaderForm();
@@ -1928,7 +1952,6 @@ function setupUI(){
   document.getElementById('leaderTeam').addEventListener('change',updateLeaderDependentFields);
   document.getElementById('leaderDemandForm').addEventListener('submit',saveLocalLeaderRecord);
   document.querySelectorAll('#leaderModeToggle button').forEach(b=>b.addEventListener('click',()=>toggleLeaderMode(b.dataset.mode)));
-  document.getElementById('execActivity').addEventListener('change',()=>{document.getElementById('execUnidade').value='';fillExecUnit(document.getElementById('execActivity').value);});
   const gpsBtn=document.getElementById('captureLocation');
   const gpsLabel=document.getElementById('gpsBtnLabel');
   const gpsHidden=document.getElementById('leaderCoords');
