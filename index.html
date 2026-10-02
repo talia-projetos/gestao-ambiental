@@ -1894,12 +1894,12 @@ function saveExecRecord(e){
       atividade_id:linked?.atividade_id||'LOCAL',atividade,horas_executadas:horas,dias_campo:dias,
       quantidade_executada:qtd,unidade,status_execucao:'EXECUTADO',observacoes:obs,origem_dado:'CAMPO_LOCAL'};
   });
-  note.classList.remove('success'); note.textContent='Enviando…';
+  note.classList.remove('success','error'); note.textContent='Enviando…';
   const scriptUrl=state.scriptUrl||'';
-  const finalize=(ok)=>{
+  if(!scriptUrl){note.textContent='Web App não configurado — publique o dashboard via Apps Script primeiro.';return;}
+  const finalize=(ok,err)=>{
     records.forEach(r=>state.execution.push(r));
     if(!ok){
-      // POST falhou → salva localmente como backup
       const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
       if(!local.execution) local.execution=[];
       records.forEach(r=>local.execution.push(r));
@@ -1908,17 +1908,17 @@ function saveExecRecord(e){
     renderAll();
     addNotification('form',`${records.length} execuç${records.length===1?'ão':'ões'} registrada${records.length===1?'':'s'} — ${team?.lider_tecnico||teamId}`,
       records.map(r=>r.atividade).join(' · '));
-    note.classList.add('success');
-    note.textContent=ok?`${records.length} registro(s) enviado(s) à planilha.`:'Salvo localmente. Será sincronizado ao publicar.';
+    note.classList.toggle('success',ok);
+    note.textContent=ok?`${records.length} registro(s) enviado(s) à planilha.`:`Salvo localmente (erro: ${err||'sem resposta'}).`;
     setTimeout(()=>{e.target.reset();closeLeaderForm();},1600);
   };
-  if(scriptUrl){
-    const postOpts=(body)=>({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    Promise.all(records.map(r=>fetch(scriptUrl+'?tipo=EXECUCAO',postOpts({tipo:'EXECUCAO',equipe_id:teamId,data,
-      atividade:r.atividade,horas_executadas:r.horas_executadas,dias_campo:r.dias_campo,quantidade:r.quantidade_executada,
-      unidade:r.unidade,lider:team?.lider_tecnico||'',observacoes:obs})).then(x=>x.json()).catch(()=>({ok:false}))))
-    .then(res=>finalize(res.every(r=>r.ok))).catch(()=>finalize(false));
-  } else finalize(false);
+  const postOpts=(body)=>({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  Promise.all(records.map(r=>fetch(scriptUrl+'?tipo=EXECUCAO',postOpts({tipo:'EXECUCAO',equipe_id:teamId,data,
+    atividade:r.atividade,horas_executadas:r.horas_executadas,dias_campo:r.dias_campo,quantidade:r.quantidade_executada,
+    unidade:r.unidade,lider:team?.lider_tecnico||'',observacoes:obs}))
+    .then(x=>x.json()).catch(err=>({ok:false,error:String(err)}))))
+  .then(res=>{const fail=res.find(r=>!r.ok);finalize(res.every(r=>r.ok),fail?.error);})
+  .catch(err=>finalize(false,String(err)));
 }
 function openLeaderForm(){
   populateLeaderForm();
