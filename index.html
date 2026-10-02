@@ -1913,9 +1913,10 @@ function saveExecRecord(e){
     setTimeout(()=>{e.target.reset();closeLeaderForm();},1600);
   };
   if(scriptUrl){
-    Promise.all(records.map(r=>fetch(scriptUrl,{method:'POST',body:JSON.stringify({tipo:'EXECUCAO',equipe_id:teamId,data,
+    const postOpts=(body)=>({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    Promise.all(records.map(r=>fetch(scriptUrl+'?tipo=EXECUCAO',postOpts({tipo:'EXECUCAO',equipe_id:teamId,data,
       atividade:r.atividade,horas_executadas:r.horas_executadas,dias_campo:r.dias_campo,quantidade:r.quantidade_executada,
-      unidade:r.unidade,lider:team?.lider_tecnico||'',observacoes:obs})}).then(x=>x.json()).catch(()=>({ok:false}))))
+      unidade:r.unidade,lider:team?.lider_tecnico||'',observacoes:obs})).then(x=>x.json()).catch(()=>({ok:false}))))
     .then(res=>finalize(res.every(r=>r.ok))).catch(()=>finalize(false));
   } else finalize(false);
 }
@@ -1996,7 +1997,7 @@ function saveLocalLeaderRecord(e){
   local.demands.push(demand); local.impact.push(impact);
   localStorage.setItem('ga-local-records',JSON.stringify(local));
   if(scriptUrl){
-    fetch(scriptUrl,{method:'POST',body:JSON.stringify(payload)})
+    fetch(scriptUrl+'?tipo=CAMPO',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
       .then(r=>r.json()).then(r=>finalize(r.ok)).catch(()=>finalize(false));
   } else {
     finalize(false);
