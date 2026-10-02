@@ -1874,6 +1874,8 @@ function toggleLeaderMode(mode){
   }
 }
 function saveExecRecord(e){
+  const note=document.getElementById('leaderFormNote');
+  try{
   const now=new Date();
   const teamId=document.getElementById('leaderTeam').value;
   const team=state.teams.find(t=>t.equipe_id===teamId);
@@ -1881,7 +1883,6 @@ function saveExecRecord(e){
   const obs=document.getElementById('execObs').value.trim();
   const m=Number(state.month);
   const checked=[...document.querySelectorAll('#execActivityList .exec-activity-row.row-checked')];
-  const note=document.getElementById('leaderFormNote');
   if(!checked.length){note.textContent='Selecione ao menos uma atividade.';return;}
   const records=checked.map((row,idx)=>{
     const atividade=row.dataset.activity;
@@ -1919,6 +1920,7 @@ function saveExecRecord(e){
     .then(x=>x.json()).catch(err=>({ok:false,error:String(err)}))))
   .then(res=>{const fail=res.find(r=>!r.ok);finalize(res.every(r=>r.ok),fail?.error);})
   .catch(err=>finalize(false,String(err)));
+  }catch(err){if(note)note.textContent='Erro JS: '+err.message;console.error('saveExecRecord:',err);}
 }
 function openLeaderForm(){
   populateLeaderForm();
