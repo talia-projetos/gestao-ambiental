@@ -81,7 +81,46 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
   .gps-btn{padding:17px;font-size:15px}
   .gps-btn svg{width:22px;height:22px}
 }
-.mobile-home-hub{display:none;flex-direction:column;gap:14px;padding:4px 0 8px}
+/* ── Loading screen ─────────────────────────────────────── */
+#loadingScreen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .45s}
+#loadingScreen.hidden{opacity:0;pointer-events:none}
+#loadingScreen img{width:72px;height:72px;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,.12)}
+#loadingScreen .ls-title{font-size:17px;font-weight:700;color:var(--text)}
+#loadingScreen .ls-sub{font-size:12px;color:var(--muted)}
+.ls-dots{display:flex;gap:6px}.ls-dots span{width:7px;height:7px;border-radius:50%;background:var(--green);animation:lsDot 1.2s infinite ease-in-out}
+.ls-dots span:nth-child(2){animation-delay:.2s}.ls-dots span:nth-child(3){animation-delay:.4s}
+@keyframes lsDot{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
+/* ── Mobile hub ─────────────────────────────────────────── */
+.mobile-home-hub{display:none;flex-direction:column;gap:0;padding:4px 0 8px}
+.mobile-hub-team{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:14px 16px;margin-bottom:14px}
+.mobile-hub-team label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);display:block;margin-bottom:6px}
+.mobile-hub-team select{width:100%;border:none;background:none;font:inherit;font-size:16px;font-weight:600;color:var(--text);outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}
+.hub-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.hub-action-btn{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;cursor:pointer;font:inherit;color:var(--text);text-align:left;box-shadow:var(--shadow);transition:.14s}
+.hub-action-btn .ha-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.hub-action-btn .ha-icon svg{width:22px;height:22px;stroke-width:1.7}
+.hub-action-btn strong{font-size:13px;font-weight:700;line-height:1.2}
+.hub-action-btn small{font-size:11px;color:var(--muted);line-height:1.3}
+.hub-action-btn:active{transform:scale(.97);background:var(--surface-2)}
+.hub-action-btn.exec{border-color:color-mix(in srgb,var(--green) 30%,var(--border));background:color-mix(in srgb,var(--green) 6%,var(--surface))}
+.hub-action-btn.exec .ha-icon{background:color-mix(in srgb,var(--green) 14%,var(--surface));color:var(--green)}
+.hub-action-btn.dem{border-color:color-mix(in srgb,var(--ochre) 30%,var(--border));background:color-mix(in srgb,var(--ochre) 6%,var(--surface))}
+.hub-action-btn.dem .ha-icon{background:color-mix(in srgb,var(--ochre) 14%,var(--surface));color:var(--ochre)}
+.hub-section{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:12px}
+.hub-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:12px}
+.hub-plan-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.hub-plan-item:last-child{border-bottom:0;padding-bottom:0}
+.hub-plan-dot{width:8px;height:8px;border-radius:50%;flex:none}
+.hub-plan-name{flex:1;font-size:13px;font-weight:500}
+.hub-plan-status{font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px}
+.hub-plan-status.ok{background:color-mix(in srgb,var(--green) 14%,transparent);color:var(--green)}
+.hub-plan-status.blq{background:color-mix(in srgb,var(--ochre) 14%,transparent);color:var(--ochre)}
+.hub-plan-status.pend{background:var(--surface-2);color:var(--muted)}
+.hub-kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.hub-kpi{background:var(--surface-2);border-radius:12px;padding:12px}
+.hub-kpi .hk-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.hub-kpi .hk-val{font-size:22px;font-weight:800;line-height:1;margin-top:4px}
+.hub-kpi .hk-sub{font-size:11px;color:var(--muted);margin-top:2px}
 .mobile-hub-btn{display:flex;align-items:center;gap:18px;width:100%;padding:22px 20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;cursor:pointer;font:inherit;color:var(--text);text-align:left;box-shadow:var(--shadow);transition:.14s}
 .mobile-hub-btn svg{width:30px;height:30px;flex:none;stroke-width:1.6}
 .mobile-hub-btn .hub-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex:none}
@@ -356,6 +395,12 @@ body{font-size:15px}
 </style>
 </head>
 <body>
+  <div id="loadingScreen">
+    <img src="assets/favicon.png" alt="Logo" />
+    <div class="ls-dots"><span></span><span></span><span></span></div>
+    <div class="ls-title">Sala de Situação</div>
+    <div class="ls-sub">Carregando dados operacionais…</div>
+  </div>
   <div class="app-shell">
     <aside class="sidebar" aria-label="Navegação principal">
       <nav class="sidebar-nav">
@@ -464,18 +509,34 @@ body{font-size:15px}
       <div id="page-overview" class="page active">
         <!-- Hub de navegação — visível só no mobile -->
         <div class="mobile-home-hub">
-          <button class="mobile-hub-btn" id="mobileHubRegBtn">
-            <div class="hub-icon" style="background:color-mix(in srgb,var(--green) 14%,var(--surface))"><i data-lucide="clipboard-pen-line" style="width:26px;height:26px;color:var(--green)"></i></div>
-            <div class="hub-texts"><span>Registrar</span><small>Registrar demanda não planejada</small></div>
-          </button>
-          <button class="mobile-hub-btn" id="mobileHubDemBtn">
-            <div class="hub-icon" style="background:color-mix(in srgb,var(--blue) 12%,var(--surface))"><i data-lucide="list" style="width:26px;height:26px;color:var(--blue)"></i></div>
-            <div class="hub-texts"><span>Demandas</span><small>Feed de demandas registradas</small></div>
-          </button>
-          <button class="mobile-hub-btn" id="mobileHubMapBtn">
-            <div class="hub-icon" style="background:color-mix(in srgb,var(--ochre) 14%,var(--surface))"><i data-lucide="map" style="width:26px;height:26px;color:var(--ochre)"></i></div>
-            <div class="hub-texts"><span>Mapa</span><small>Mapa operacional das equipes</small></div>
-          </button>
+          <!-- Seletor de equipe -->
+          <div class="mobile-hub-team">
+            <label>Minha equipe</label>
+            <select id="mobileHubTeam"></select>
+          </div>
+          <!-- Ações rápidas -->
+          <div class="hub-actions">
+            <button class="hub-action-btn exec" id="mobileHubExecBtn">
+              <div class="ha-icon"><i data-lucide="check-square"></i></div>
+              <strong>Registrar execução</strong>
+              <small>Informe o que foi concluído esta semana</small>
+            </button>
+            <button class="hub-action-btn dem" id="mobileHubRegBtn">
+              <div class="ha-icon"><i data-lucide="alert-circle"></i></div>
+              <strong>Demanda não planejada</strong>
+              <small>Registrar ocorrência ou solicitação</small>
+            </button>
+          </div>
+          <!-- Planejamento do mês -->
+          <div class="hub-section">
+            <div class="hub-section-title">Planejamento do mês</div>
+            <div id="hubPlanList"><p style="font-size:12px;color:var(--muted)">Selecione sua equipe acima.</p></div>
+          </div>
+          <!-- Métricas da equipe -->
+          <div class="hub-section">
+            <div class="hub-section-title">Minhas métricas</div>
+            <div id="hubMetrics"><p style="font-size:12px;color:var(--muted)">Selecione sua equipe acima.</p></div>
+          </div>
         </div>
         <section class="dashboard-grid">
 
@@ -961,7 +1022,8 @@ async function loadData(){
   const allOpMs=[...execution,...state.demands,...blockers].map(r=>monthOf(r)).filter(m=>m>0);
   const srcMs=execMs.length?execMs:allOpMs;
   if(srcMs.length){state.month=Math.max(...srcMs);const mf=document.getElementById('monthFilter');if(mf)mf.value=state.month;}
-  populateTeamFilter(); renderAll(); updateDemandMarkers();
+  populateTeamFilter(); renderAll(); updateDemandMarkers(); renderMobileHub();
+  const ls=document.getElementById('loadingScreen'); if(ls){ls.classList.add('hidden');setTimeout(()=>ls.remove(),500);}
   if(lu)lu.textContent=`${state.teams.length} equipes · ${state.demands.length} demandas · atualizado às ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
 }
 
@@ -1922,6 +1984,37 @@ function saveExecRecord(e){
   .catch(err=>finalize(false,String(err)));
   }catch(err){if(note)note.textContent='Erro JS: '+err.message;console.error('saveExecRecord:',err);}
 }
+function renderMobileHub(){
+  // Popula seletor de equipe
+  const sel=document.getElementById('mobileHubTeam'); if(!sel)return;
+  const cur=sel.value||state.team||state.teams[0]?.equipe_id||'';
+  sel.innerHTML=state.teams.map(t=>`<option value="${t.equipe_id}"${t.equipe_id===cur?' selected':''}>${t.equipe_id} · ${t.equipe}</option>`).join('');
+  const teamId=sel.value||cur;
+  const m=Number(state.month);
+  // Planejamento do mês
+  const plan=state.planning.filter(p=>p.equipe_id===teamId&&planMesMatch(p,m));
+  const planEl=document.getElementById('hubPlanList');
+  if(planEl){
+    const statusColor=s=>{const u=(s||'').toUpperCase();return u==='EXECUTADO'?'ok':u==='BLOQUEADO'?'blq':'pend';};
+    const statusLabel=s=>{const u=(s||'').toUpperCase();return u==='EXECUTADO'?'Executado':u==='BLOQUEADO'?'Bloqueado':u||'Pendente';};
+    planEl.innerHTML=plan.length
+      ?plan.map(p=>`<div class="hub-plan-item"><div class="hub-plan-dot" style="background:var(--${p.status_planejamento?.toUpperCase()==='EXECUTADO'?'green':p.status_planejamento?.toUpperCase()==='BLOQUEADO'?'ochre':'blue'})"></div><span class="hub-plan-name">${p.atividade||'—'}</span><span class="hub-plan-status ${statusColor(p.status_planejamento)}">${statusLabel(p.status_planejamento)}</span></div>`).join('')
+      :'<p style="font-size:12px;color:var(--muted)">Nenhuma atividade planejada para este mês.</p>';
+  }
+  // Métricas
+  const mt=metricsForTeam(teamId,state.month);
+  const metEl=document.getElementById('hubMetrics');
+  if(metEl) metEl.innerHTML=`
+    <div class="hub-kpi-row">
+      <div class="hub-kpi"><div class="hk-label">Cobertura</div><div class="hk-val">${fmtPct(mt.coverage)}</div><div class="hk-sub">${mt.covered} de ${mt.totalPlan} ativ.</div></div>
+      <div class="hub-kpi"><div class="hk-label">Demandas</div><div class="hk-val">${mt.openDem}</div><div class="hk-sub">abertas</div></div>
+    </div>
+    <div class="hub-kpi-row">
+      <div class="hub-kpi"><div class="hk-label">Bloqueio</div><div class="hk-val">${fmtPct(mt.blockRate)}</div><div class="hk-sub">horas bloqueadas</div></div>
+      <div class="hub-kpi"><div class="hk-label">Impacto</div><div class="hk-val">${fmtPct(mt.planImpactRate)}</div><div class="hk-sub">não entregues</div></div>
+    </div>`;
+  lucide.createIcons({nodes:[...document.querySelectorAll('.mobile-home-hub [data-lucide]')]});
+}
 function openLeaderForm(){
   populateLeaderForm();
   const modal=document.getElementById('leaderFormModal');
@@ -2015,9 +2108,13 @@ function setupUI(){
   });
   document.getElementById('leaderFormBtn').addEventListener('click',openLeaderForm);
   document.getElementById('mobileLeaderBtn')?.addEventListener('click',openLeaderForm);
-  document.getElementById('mobileHubRegBtn')?.addEventListener('click',openLeaderForm);
-  document.getElementById('mobileHubDemBtn')?.addEventListener('click',()=>showPage('page-planning'));
-  document.getElementById('mobileHubMapBtn')?.addEventListener('click',()=>showPage('page-map'));
+  document.getElementById('mobileHubRegBtn')?.addEventListener('click',()=>{toggleLeaderMode('demanda');openLeaderForm();});
+  document.getElementById('mobileHubExecBtn')?.addEventListener('click',()=>{toggleLeaderMode('execucao');openLeaderForm();});
+  document.getElementById('mobileHubTeam')?.addEventListener('change',e=>{
+    const t=e.target.value;
+    state.team=t; document.getElementById('teamFilter').value=t;
+    renderAll(); updateDemandMarkers(); renderMobileHub();
+  });
   // botões do card mobile que navegam para páginas
   document.querySelectorAll('.mobile-nav-card [data-page]').forEach(btn=>{
     btn.addEventListener('click',()=>{
@@ -2030,7 +2127,7 @@ function setupUI(){
   });
   document.getElementById('closeLeaderForm').addEventListener('click',closeLeaderForm);
   document.getElementById('cancelLeaderForm').addEventListener('click',closeLeaderForm);
-  document.getElementById('leaderTeam').addEventListener('change',updateLeaderDependentFields);
+  document.getElementById('leaderTeam').addEventListener('change',e=>{updateLeaderDependentFields();const mhs=document.getElementById('mobileHubTeam');if(mhs)mhs.value=e.target.value;});
   document.getElementById('leaderDemandForm').addEventListener('submit',saveLocalLeaderRecord);
   document.querySelectorAll('#leaderModeToggle button').forEach(b=>b.addEventListener('click',()=>toggleLeaderMode(b.dataset.mode)));
   const gpsBtn=document.getElementById('captureLocation');
