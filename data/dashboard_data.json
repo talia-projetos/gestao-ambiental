@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T18:04:01.659Z",
+  "generated_at": "2026-10-03T18:15:01.181Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1297,7 +1297,59 @@
     }
   ],
   "execution": [],
-  "demands": [],
+  "demands": [
+    {
+      "demanda_id": "DC001",
+      "data": "2026-10-03",
+      "equipe_id": "EQ01",
+      "lider_tecnico": "Renata Souza Oliveira",
+      "atividade_id": "",
+      "atividade_sugerida": "",
+      "descricao": "",
+      "prioridade": "MÉDIA",
+      "status": "ABERTA",
+      "horas_consumidas": 0,
+      "latitude": "-25513251",
+      "longitude": "-54594991",
+      "local_referencia": "Relatório anual de fauna",
+      "equipe_apoio": "",
+      "origem_dado": "DEMANDA"
+    },
+    {
+      "demanda_id": "DC002",
+      "data": "2026-10-03",
+      "equipe_id": "EQ02",
+      "lider_tecnico": "Marcelo Ferreira Santos",
+      "atividade_id": "",
+      "atividade_sugerida": "",
+      "descricao": "",
+      "prioridade": "MÉDIA",
+      "status": "ABERTA",
+      "horas_consumidas": 0,
+      "latitude": "-25513251",
+      "longitude": "-54594991",
+      "local_referencia": "Inventário florestal",
+      "equipe_apoio": "",
+      "origem_dado": "DEMANDA"
+    },
+    {
+      "demanda_id": "DC003",
+      "data": "2026-10-03",
+      "equipe_id": "EQ03",
+      "lider_tecnico": "Ana Paula Costa Ribeiro",
+      "atividade_id": "",
+      "atividade_sugerida": "",
+      "descricao": "",
+      "prioridade": "BAIXA",
+      "status": "ABERTA",
+      "horas_consumidas": 0,
+      "latitude": "-25513145",
+      "longitude": "-54594847",
+      "local_referencia": "Análise laboratorial de amostras d'água",
+      "equipe_apoio": "",
+      "origem_dado": "DEMANDA"
+    }
+  ],
   "blockers": [
     {
       "bloqueador_id": "BL001",
@@ -1387,6 +1439,21 @@
       "observacao": "",
       "resolvido": "SIM",
       "data_resolucao": "2026-10-07",
+      "origem_dado": "PROERG"
+    },
+    {
+      "bloqueador_id": "BL007",
+      "data": "2026-10-06",
+      "equipe_id": "EQ01",
+      "tipo_bloqueador": "Financeiro",
+      "impacto": "BAIXO",
+      "horas_impactadas": "4",
+      "impactou_planejamento": "SIM",
+      "plano_afetado_id": "",
+      "atividade_planejada_afetada": "",
+      "observacao": "",
+      "resolvido": "NÃO",
+      "data_resolucao": "",
       "origem_dado": "PROERG"
     }
   ],
@@ -1488,7 +1555,41 @@
       "orientacao_operacional_simulada": "Alta pluviosidade — planejar alternativas de escritório"
     }
   ],
-  "impact": [],
+  "impact": [
+    {
+      "demanda_id": "DC001",
+      "impactou_planejamento": "NÃO",
+      "plano_afetado_id": "",
+      "tipo_impacto": "ADIAMENTO",
+      "horas_desviadas": "0",
+      "qtd_planejada_afetada": "1",
+      "destino_planejamento": "REPROGRAMADO",
+      "nova_data_prevista": "",
+      "origem_dado": "DEMANDA"
+    },
+    {
+      "demanda_id": "DC002",
+      "impactou_planejamento": "NÃO",
+      "plano_afetado_id": "",
+      "tipo_impacto": "SUBSTITUIÇÃO",
+      "horas_desviadas": "0",
+      "qtd_planejada_afetada": "1",
+      "destino_planejamento": "ABSORVIDO",
+      "nova_data_prevista": "",
+      "origem_dado": "DEMANDA"
+    },
+    {
+      "demanda_id": "DC003",
+      "impactou_planejamento": "NÃO",
+      "plano_afetado_id": "",
+      "tipo_impacto": "INTERRUPÇÃO",
+      "horas_desviadas": "0",
+      "qtd_planejada_afetada": "1",
+      "destino_planejamento": "CANCELADO",
+      "nova_data_prevista": "",
+      "origem_dado": "DEMANDA"
+    }
+  ],
   "metrics": [
     {
       "atividade": "Plantio de mudas",
@@ -1528,9 +1629,9 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-03T15:00",
+    "atualizado": "2026-10-03T15:15",
     "temperatura": 27.7,
-    "sensacao": 28.5,
+    "sensacao": 28.4,
     "precipitacao": 0,
     "vento_kmh": 25,
     "codigo_tempo": 1,
