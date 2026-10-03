@@ -2485,6 +2485,14 @@ function initSettings(){
 
 window.addEventListener('DOMContentLoaded',async()=>{lucide.createIcons();setupUI();initSettings();setupMap();try{await loadData();}catch(err){console.error(err);document.getElementById('lastUpdate').textContent='Falha ao carregar a base simulada';}});
 
+// Recarrega ao retornar à aba (mobile congela setInterval em segundo plano)
+let _lastVisible=Date.now();
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'){_lastVisible=Date.now();return;}
+  const away=Date.now()-_lastVisible;
+  if(away>60000)loadData(); // recarrega se ficou >1 min em segundo plano
+});
+
   </script>
 </body>
 </html>
