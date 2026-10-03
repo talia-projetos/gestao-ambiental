@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T18:59:25.367Z",
+  "generated_at": "2026-10-03T19:13:25.168Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -183,7 +183,7 @@
       "atividade": "Monitoramento de avifauna + câmeras-trap",
       "unidade": "horas",
       "meta_planejada": "30",
-      "status_planejamento": "PLANEJADO",
+      "status_planejamento": "PARCIAL",
       "restricao_principal": "GEADA POSSÍVEL",
       "alternativa_id": "",
       "atividade_alternativa": "Elaboração de laudos técnicos",
@@ -1526,6 +1526,23 @@
       "local_referencia": "Análise de dados de câmeras-trap",
       "equipe_apoio": "",
       "origem_dado": "DEMANDA"
+    },
+    {
+      "demanda_id": "DC007",
+      "data": "2026-10-03",
+      "equipe_id": "EQ04",
+      "lider_tecnico": "Diego Henrique Mendes",
+      "atividade_id": "",
+      "atividade_sugerida": "",
+      "descricao": "",
+      "prioridade": "MÉDIA",
+      "status": "ABERTA",
+      "horas_consumidas": 0,
+      "latitude": "",
+      "longitude": "",
+      "local_referencia": "Manutenção de plantios estabelecidos",
+      "equipe_apoio": "",
+      "origem_dado": "DEMANDA"
     }
   ],
   "blockers": [
@@ -1799,6 +1816,17 @@
       "destino_planejamento": "ABSORVIDO",
       "nova_data_prevista": "",
       "origem_dado": "DEMANDA"
+    },
+    {
+      "demanda_id": "DC007",
+      "impactou_planejamento": "NÃO",
+      "plano_afetado_id": "",
+      "tipo_impacto": "INTERRUPÇÃO",
+      "horas_desviadas": "0",
+      "qtd_planejada_afetada": "1",
+      "destino_planejamento": "CANCELADO",
+      "nova_data_prevista": "",
+      "origem_dado": "DEMANDA"
     }
   ],
   "metrics": [
@@ -1840,9 +1868,9 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-03T15:45",
+    "atualizado": "2026-10-03T16:00",
     "temperatura": 27,
-    "sensacao": 28.3,
+    "sensacao": 28.2,
     "precipitacao": 0,
     "vento_kmh": 19,
     "codigo_tempo": 3,
