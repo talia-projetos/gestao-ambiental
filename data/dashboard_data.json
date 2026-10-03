@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T19:13:25.168Z",
+  "generated_at": "2026-10-03T19:15:16.462Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1434,7 +1434,7 @@
       "atividade_sugerida": "",
       "descricao": "",
       "prioridade": "MÉDIA",
-      "status": "ABERTA",
+      "status": "EM ANDAMENTO",
       "horas_consumidas": 0,
       "latitude": "-25513251",
       "longitude": "-54594991",
@@ -1468,7 +1468,7 @@
       "atividade_sugerida": "",
       "descricao": "",
       "prioridade": "BAIXA",
-      "status": "ABERTA",
+      "status": "EXECUTADO",
       "horas_consumidas": 0,
       "latitude": "-25513145",
       "longitude": "-54594847",
@@ -1868,13 +1868,13 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-03T16:00",
-    "temperatura": 27,
+    "atualizado": "2026-10-03T16:15",
+    "temperatura": 26.8,
     "sensacao": 28.2,
-    "precipitacao": 0,
-    "vento_kmh": 19,
-    "codigo_tempo": 3,
-    "condicao": "Nublado",
+    "precipitacao": 0.1,
+    "vento_kmh": 18,
+    "codigo_tempo": 51,
+    "condicao": "Chuvisco",
     "previsao": [
       {
         "data": "2026-10-03",
