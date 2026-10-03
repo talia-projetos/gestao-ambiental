@@ -413,10 +413,17 @@ body{font-size:15px}
 @media(max-width:760px){
   .status-ops-label{display:none!important}
   .last-update{display:none!important}
+  .notif-wrap{display:none!important}
+  #fullscreenBtn{display:none!important}
+  #presentQuickBtn{display:none!important}
   .segmented button{white-space:normal;line-height:1.3;font-size:12px;padding:8px 4px;min-height:44px}
   #page-planning .demand-filter-bar,#page-planning .table-wrap{display:none!important}
   #page-planning .card-header p{display:none}
   #mob-plan-view{display:flex!important;flex-direction:column;gap:10px}
+  .toolbar{flex-wrap:wrap;gap:6px!important}
+  .filter-control{flex:1 1 auto;min-width:0}
+  .filter-control select{width:100%;box-sizing:border-box}
+  .topbar{gap:6px}
 }
 #mob-plan-view{display:none}
 .mob-list-section{background:var(--surface-2);border-radius:12px;padding:12px 14px}
@@ -1874,7 +1881,14 @@ function renderMobilePlanView(){
   const demCnt=document.getElementById('mobDemCount');
   if(!planEl||!demEl)return;
   const m=Number(state.month);
-  const teamId=state.team==='ALL'?null:state.team;
+  // Usa sempre a equipe salva no dispositivo; se não houver, mostra aviso
+  const teamId=localStorage.getItem('ga-my-team')||null;
+  if(!teamId){
+    planEl.innerHTML='<p class="mob-empty">Selecione sua equipe no início para ver o planejamento.</p>';
+    demEl.innerHTML='<p class="mob-empty">Selecione sua equipe no início para ver as demandas.</p>';
+    if(planCnt)planCnt.textContent='0';if(demCnt)demCnt.textContent='0';
+    return;
+  }
   // Planejamento
   const plan=state.planning.filter(p=>planMesMatch(p,m)&&(teamId?p.equipe_id===teamId:true));
   if(planCnt)planCnt.textContent=plan.length;
