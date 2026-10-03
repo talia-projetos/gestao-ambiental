@@ -924,6 +924,10 @@ const PROJECT_START_MONTH = 10; // Outubro
 const PROJECT_MONTHS = 25; // Out/2026 → Out/2028
 function mesNumToCalendar(n){ const t=PROJECT_START_MONTH-1+n-1; return {month:(t%12)+1, year:PROJECT_START_YEAR+Math.floor(t/12)}; }
 function mesNumLabel(n){ const {month,year}=mesNumToCalendar(n); return `${months[month-1]} ${year}`; }
+// converte mês calendário (1-12) → mês sequencial do projeto (1=Out, 2=Nov…)
+function calToSeq(c){ return ((c-PROJECT_START_MONTH+12)%12)+1; }
+// converte mês sequencial do projeto → mês calendário (para comparar com datas)
+function calMonth(seqN){ return mesNumToCalendar(Number(seqN??state.month)).month; }
 // aceita mes_num como mês calendário (10) OU mês sequencial do projeto (1)
 function planMesMatch(r, projectMonth){ const n=Number(r.mes_num); return n===projectMonth||n===mesNumToCalendar(projectMonth).month; }
 const teamColors = { EQ01:'#4C77BB', EQ02:'#48B381', EQ03:'#BA8044', EQ04:'#7F82B8', EQ05:'#598CC7', EQ06:'#7B9383' };
@@ -942,7 +946,7 @@ function monthOf(row, field='data'){
   return (seq>=1&&seq<=PROJECT_MONTHS)?seq:0;
 }
 function byTeam(rows, team=state.team){ return team==='ALL' ? rows : rows.filter(r=>r.equipe_id===team); }
-function currentMonth(rows, dateField='data'){ const m=Number(state.month); return rows.filter(r=>{const rm=monthOf(r,dateField);return rm===m||rm===0;}); }
+function currentMonth(rows, dateField='data'){ const m=calMonth(); return rows.filter(r=>{const rm=monthOf(r,dateField);return rm===m||rm===0;}); }
 function uniq(arr){ return [...new Set(arr.filter(Boolean))]; }
 function automaticImpactLevel(rate, totalPlan){
   if(totalPlan===0)return ['SEM DADOS','status-muted'];
@@ -1062,12 +1066,12 @@ async function loadData(){
   if(localDems.length<(local.demands||[]).length){local.demands=localDems;local.impact=localImps;changed=true;}
   if(localExecs.length<(local.execution||[]).length){local.execution=localExecs;changed=true;}
   if(changed) localStorage.setItem('ga-local-records',JSON.stringify(local));
-  // auto-detectar mês: execução > demandas > planejamento (seq→cal) > bloqueadores
-  const execMs=execution.map(r=>monthOf(r)).filter(m=>m>0);
-  const demMs=state.demands.map(r=>monthOf(r)).filter(m=>m>0);
-  const planCalMs=state.planning.map(p=>{const n=Number(p.mes_num);if(!n||n<1||n>12)return 0;return((10-1+n-1)%12)+1;}).filter(m=>m>0);
-  const blqMs=blockers.map(r=>monthOf(r)).filter(m=>m>0);
-  const srcMs=execMs.length?execMs:demMs.length?demMs:planCalMs.length?planCalMs:blqMs;
+  // auto-detectar mês (sequencial): execução > demandas > planejamento > bloqueadores
+  const execSeq=execution.map(r=>monthOf(r)).filter(m=>m>0).map(calToSeq);
+  const demSeq=state.demands.map(r=>monthOf(r)).filter(m=>m>0).map(calToSeq);
+  const planSeq=state.planning.map(p=>{const n=Number(p.mes_num);return(n>=1&&n<=PROJECT_MONTHS)?n:0;}).filter(m=>m>0);
+  const blqSeq=blockers.map(r=>monthOf(r)).filter(m=>m>0).map(calToSeq);
+  const srcMs=execSeq.length?execSeq:demSeq.length?demSeq:planSeq.length?planSeq:blqSeq;
   if(srcMs.length){state.month=Math.max(...srcMs);const mf=document.getElementById('monthFilter');if(mf)mf.value=state.month;}
   populateTeamFilter(); renderAll(); updateDemandMarkers(); renderMobileHub();
   const ls=document.getElementById('loadingScreen'); if(ls){const _lsDelay=Math.max(0,5000-(Date.now()-_lsStart));setTimeout(()=>{ls.classList.add('hidden');setTimeout(()=>ls.remove(),500);},_lsDelay);}
@@ -1089,15 +1093,16 @@ function filtered(){
     blockers: byTeam(state.blockers),
     impact: state.impact.filter(i=>{
       const d=state.demands.find(x=>x.demanda_id===i.demanda_id);
-      return d && monthOf(d)===Number(state.month) && (state.team==='ALL'||d.equipe_id===state.team);
+      return d && monthOf(d)===calMonth() && (state.team==='ALL'||d.equipe_id===state.team);
     })
   };
 }
 
 function metricsForTeam(teamId, month=state.month){
   const plan=state.planning.filter(r=>planMesMatch(r,Number(month))&&r.equipe_id===teamId);
-  const exec=state.execution.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
-  const dem=state.demands.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
+  const calMon=calMonth(month);
+  const exec=state.execution.filter(r=>monthOf(r)===calMon&&r.equipe_id===teamId);
+  const dem=state.demands.filter(r=>monthOf(r)===calMon&&r.equipe_id===teamId);
   const blq=state.blockers.filter(r=>r.equipe_id===teamId);
   const impacted=state.impact.filter(i=>i.impactou_planejamento==='SIM'&&dem.some(d=>d.demanda_id===i.demanda_id));
   const planActs=uniq(plan.map(x=>x.atividade_id));
@@ -1180,7 +1185,7 @@ function renderKPIs(){
   const ndDone=m.demands.filter(x=>DONE_STATUS.includes((x.status||'').toUpperCase())).length;
   document.getElementById('kpiDemands').textContent=nd;
   const prevM=Number(state.month)-1;
-  const prevNd=prevM>=1?state.demands.filter(r=>monthOf(r)===prevM&&ACTIVE_STATUS.includes((r.status||'').toUpperCase())).length:null;
+  const prevNd=prevM>=1?state.demands.filter(r=>monthOf(r)===calMonth(prevM)&&ACTIVE_STATUS.includes((r.status||'').toUpperCase())).length:null;
   // só mostra comparação se o mês anterior tiver pelo menos 1 demanda registrada
   const delta=(prevNd!==null&&prevNd>0)?nd-prevNd:null;
   const trendEl=document.getElementById('demandTrend');
@@ -1341,7 +1346,7 @@ function renderContextPanel(){
 
 function renderImpactPage(){
   const m=Number(state.month);
-  const exec=byTeam(state.execution).filter(r=>monthOf(r)===m);
+  const exec=byTeam(state.execution).filter(r=>monthOf(r)===calMonth(m));
 
   // Agrupa por atividade — soma quantidade e horas
   const map={};
@@ -1455,7 +1460,7 @@ function renderImpactPage(){
 function renderPressureChart(){
   const projectMs=Array.from({length:PROJECT_MONTHS},(_,i)=>i+1);
   const labels=projectMs.map(n=>{ const {month,year}=mesNumToCalendar(n); return months[month-1].slice(0,3)+(n===1||month===1?` ${year}`:''); });
-  const demands=projectMs.map(n=>byTeam(state.demands).filter(d=>monthOf(d)===n).length);
+  const demands=projectMs.map(n=>byTeam(state.demands).filter(d=>monthOf(d)===calMonth(n)).length);
   const options=chartBase();
   options.plugins.legend.display=false;
   options.scales.y={beginAtZero:true,ticks:{color:cssVar('--muted'),precision:0,stepSize:1},grid:{color:cssVar('--chart-grid')}};
@@ -1479,7 +1484,7 @@ function workDaysInMonth(mesNum){
 function renderHoursChart(){
   const eqIds=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
   const m=Number(state.month);
-  const executadas=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.quantidade_executada||0),0));
+  const executadas=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===calMonth(m)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.quantidade_executada||0),0));
   const planejadas=eqIds.map(id=>state.planning.filter(r=>planMesMatch(r,m)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.meta_planejada||0),0));
   const ratios=eqIds.map((_,i)=>planejadas[i]>0?Math.round(executadas[i]/planejadas[i]*100):executadas[i]>0?100:0);
   const teamColorMap=Object.fromEntries(state.teams.map(t=>[t.equipe_id,t.cor||cssVar('--muted')]));
@@ -1783,7 +1788,7 @@ function renderBlockerChartFull(){
 
 function renderActivityTypeChart(){
   const m=Number(state.month);
-  const exec=byTeam(state.execution).filter(r=>monthOf(r)===m);
+  const exec=byTeam(state.execution).filter(r=>monthOf(r)===calMonth(m));
   // Tabela de referência: atividade → unidade (de 09_Metricas)
   const unitMap=Object.fromEntries((state.metrics||[]).map(r=>[r.atividade,r.unidade]));
   const map={};
@@ -2153,10 +2158,11 @@ function saveLocalLeaderRecord(e){
     state.demands.push(demand); state.impact.push(impact);
     // Garante que o mês exibido corresponde ao mês da nova demanda
     const dm=monthOf(demand);
-    if(dm>0 && dm!==Number(state.month)){
-      state.month=dm;
+    const dmSeq=dm>0?calToSeq(dm):0;
+    if(dmSeq>0 && dmSeq!==Number(state.month)){
+      state.month=dmSeq;
       const mf=document.getElementById('monthFilter');
-      if(mf)mf.value=dm;
+      if(mf)mf.value=dmSeq;
     }
     renderAll(); updateDemandMarkers();
     const descPreview=(demand.descricao||'').slice(0,80)+(demand.descricao?.length>80?'…':'');
