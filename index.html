@@ -176,14 +176,36 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .report-footer{margin-top:18px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:11px}
 .team-row-action{font-weight:700;color:var(--blue)}
 @media(max-width:900px){.report-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.report-hero{flex-direction:column}}
+/* ── Print header (escondido na tela, visível na impressão) ── */
+.print-header{display:none}
+
 @media print{
+  @page{margin:14mm 14mm 12mm}
   body *{visibility:hidden!important}
   #teamReportModal,#teamReportModal *{visibility:visible!important}
   #teamReportModal{display:block!important;position:absolute!important;inset:0!important;background:#fff!important;padding:0!important}
-  #teamReportModal .report-panel{width:100%!important;max-height:none!important;overflow:visible!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:10mm!important;background:#fff!important;color:#111!important}
-  #teamReportModal .report-toolbar,#teamReportModal .drawer-head button{display:none!important}
-  #teamReportModal .report-kpi{background:#f5f5f5!important;border-color:#ddd!important}
-  #teamReportModal .report-table th,#teamReportModal .report-table td{border-color:#ddd!important}
+  #teamReportModal .report-panel{width:100%!important;max-height:none!important;overflow:visible!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:0!important;background:#fff!important;color:#111!important}
+  #teamReportModal .report-toolbar,#teamReportModal .drawer-head button,#teamReportModal .drawer-head{display:none!important}
+  #teamReportModal .print-header{display:flex!important;align-items:center;justify-content:space-between;padding:0 0 8mm;border-bottom:1.5px solid #bbb;margin-bottom:6mm}
+  #teamReportModal .print-header-left{display:flex;align-items:center;gap:8px}
+  #teamReportModal .print-header img{width:22px;height:22px;filter:grayscale(1) opacity(.65);object-fit:contain}
+  #teamReportModal .print-header-title{font-size:11px;font-weight:700;letter-spacing:.06em;color:#555;text-transform:uppercase}
+  #teamReportModal .print-header-right{font-size:10px;color:#999}
+  #teamReportModal .report-kpis{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;margin:12px 0!important}
+  #teamReportModal .report-kpi{background:#f5f5f5!important;border:1px solid #ddd!important;border-radius:8px!important;padding:10px 12px!important;page-break-inside:avoid}
+  #teamReportModal .report-kpi span{font-size:10px!important;color:#666!important}
+  #teamReportModal .report-kpi strong{font-size:20px!important;color:#111!important}
+  #teamReportModal .report-hero{padding:8px 0 12px!important}
+  #teamReportModal .report-hero h3{font-size:20px!important}
+  #teamReportModal .report-section{page-break-inside:avoid;margin-top:14px!important}
+  #teamReportModal .report-section h4{font-size:12px!important;border-bottom:1px solid #ddd;padding-bottom:4px;margin-bottom:8px!important}
+  #teamReportModal .report-table{font-size:11px!important}
+  #teamReportModal .report-table thead{display:table-header-group}
+  #teamReportModal .report-table th{background:#f0f0f0!important;color:#444!important;padding:7px 8px!important;border-bottom:1.5px solid #bbb!important}
+  #teamReportModal .report-table td{padding:7px 8px!important;border-bottom:1px solid #e0e0e0!important;color:#222!important}
+  #teamReportModal .report-table tr{page-break-inside:avoid}
+  #teamReportModal .report-footer{border-top:1px solid #ccc!important;padding-top:8px!important;margin-top:14px!important;font-size:10px!important;color:#888!important}
+  #teamReportModal .status-pill{border:1px solid #bbb!important;background:#eee!important;color:#333!important;filter:grayscale(1)}
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -421,6 +443,8 @@ body{font-size:15px}
   #mob-plan-view{display:flex!important;flex-direction:column;gap:10px}
   #mob-plan-view #mobPlanSection{overflow-x:auto;-webkit-overflow-scrolling:touch}
   #mob-plan-view #mobPlanList{min-width:max-content}
+  #mob-plan-view #mobDemSection{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  #mob-plan-view #mobDemList{min-width:max-content}
   .toolbar{flex-wrap:wrap;gap:6px!important}
   .filter-control{flex:1 1 auto;min-width:0}
   .filter-control select{width:100%;box-sizing:border-box}
@@ -436,7 +460,7 @@ body{font-size:15px}
 .mob-dem-item:last-child{border-bottom:0;padding-bottom:0}
 .mob-dem-dot{width:8px;height:8px;border-radius:50%;background:var(--ochre);flex:none;margin-top:4px}
 .mob-dem-body{flex:1;min-width:0}
-.mob-dem-desc{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mob-dem-desc{font-size:13px;font-weight:500;white-space:nowrap}
 .mob-dem-meta{font-size:11px;color:var(--muted);margin-top:1px}
 .mob-dem-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;background:color-mix(in srgb,var(--ochre) 16%,transparent);color:var(--ochre);flex:none}
 .mob-empty{font-size:12px;color:var(--muted);padding:4px 0}
@@ -827,6 +851,13 @@ body{font-size:15px}
           <button type="button" class="icon-btn ghost" id="closeTeamReport"><i data-lucide="x"></i></button>
         </div>
       </div>
+      <div class="print-header">
+        <div class="print-header-left">
+          <img src="assets/favicon.png" alt="Proerg" />
+          <span class="print-header-title">PROERG · Gestão Ambiental</span>
+        </div>
+        <span class="print-header-right" id="printHeaderDate"></span>
+      </div>
       <div id="teamReportContent"></div>
     </div>
   </div>
@@ -1049,6 +1080,8 @@ function renderNotifications(){
 }
 function checkWeatherAlerts(weather){
   if(!weather)return;
+  // Remove alertas de clima anteriores para não acumular a cada atualização
+  state.notifications=state.notifications.filter(n=>n.type!=='rain'&&n.type!=='wind');
   const c=weather.current||{};
   if(c.precipitation_mm>=5)addNotification('rain','Chuva significativa em curso',`Precipitação atual: ${c.precipitation_mm}mm em Foz do Iguaçu. Avaliar condições de campo.`);
   if(c.wind_kmh>=40||c.gust_kmh>=60)addNotification('wind','Ventos fortes detectados',`Velocidade: ${Math.round(c.wind_kmh)} km/h · Rajadas: ${Math.round(c.gust_kmh)} km/h. Verificar segurança das equipes.`);
@@ -1650,8 +1683,10 @@ function openTeamReport(teamId){
       {label:'Horas',value:r=>`${r.horas_impactadas} h`},
       {label:'Atividade afetada',value:r=>r.atividade_planejada_afetada||'—'}
     ])}</div>
-    <div class="report-footer"><span>Gestão Ambiental · dados simulados para validação</span><span>Gerado em ${new Date().toLocaleString('pt-BR')}</span></div>`;
+    <div class="report-footer"><span>PROERG · Gestão Ambiental Itaipu BP3 · Período: ${mesNumLabel(state.month)}</span><span>Gerado em ${new Date().toLocaleString('pt-BR')}</span></div>`;
   document.getElementById('reportPeriod').textContent=mesNumLabel(state.month);
+  const phd=document.getElementById('printHeaderDate');
+  if(phd) phd.textContent=`Relatório operacional · ${mesNumLabel(state.month)} · ${new Date().toLocaleDateString('pt-BR')}`;
   document.getElementById('teamReportModal').dataset.team=teamId;
   document.getElementById('teamReportModal').classList.add('open');
   document.getElementById('teamReportModal').setAttribute('aria-hidden','false');
@@ -1911,12 +1946,12 @@ function renderMobilePlanView(){
       const team=state.teams.find(t=>t.equipe_id===d.equipe_id);
       const nm=team?team.equipe:d.equipe_id;
       const st=d.status||'ABERTA';
-      return`<div class="mob-dem-item"><div class="mob-dem-dot"></div><div class="mob-dem-body"><div class="mob-dem-desc">${d.descricao||d.tipo||'—'}</div><div class="mob-dem-meta">${d.data||''}${nm?' · '+nm:''}</div></div><span class="mob-dem-badge">${st}</span></div>`;
+      return`<div class="mob-dem-item"><div class="mob-dem-dot"></div><div class="mob-dem-body"><div class="mob-dem-desc">${d.descricao||d.tipo||'—'}</div><div class="mob-dem-meta">${d.data||''}</div></div><span class="mob-dem-badge">${st}</span></div>`;
     }).join('')
     :'<p class="mob-empty">Nenhuma demanda emergencial no período.</p>';
 }
 function renderAll(){
-  [renderKPIs,renderPlanChart,renderHoursChart,renderImpactChart,renderBlockerChart,renderPressureChart,renderTeamPressureChart,renderDemandTable,renderWeather,renderTeamTable,renderAttention,renderMobilePlanView]
+  [renderKPIs,renderPlanChart,renderHoursChart,renderImpactChart,renderBlockerChart,renderPressureChart,renderTeamPressureChart,renderDemandTable,renderWeather,renderTeamTable,renderAttention,renderMobilePlanView,renderMobileHub]
     .forEach(fn=>{try{fn();}catch(e){console.error('[render]',fn.name,e);}});
   try{lucide.createIcons();}catch(e){}
 }
@@ -2126,6 +2161,11 @@ function saveExecRecord(e){
   if(!scriptUrl){note.textContent='Web App não configurado — publique o dashboard via Apps Script primeiro.';return;}
   const finalize=(ok,err)=>{
     records.forEach(r=>state.execution.push(r));
+    // Atualiza status em state.planning para refletir imediatamente na view mobile
+    records.forEach(r=>{
+      const p=state.planning.find(pl=>pl.equipe_id===r.equipe_id&&pl.atividade===r.atividade&&planMesMatch(pl,m));
+      if(p) p.status_planejamento='EXECUTADO';
+    });
     {
       const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
       if(!local.execution) local.execution=[];
