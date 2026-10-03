@@ -877,7 +877,7 @@ body{font-size:15px}
       </div>
     </div>
     <div class="setting-group"><label>Escala da interface</label><select id="densitySetting"><option value="comfortable">Padrão</option><option value="compact">Compacta</option><option value="large">Ampliada</option></select></div>
-    <div class="setting-group"><label>Atualização automática</label><select id="refreshSetting"><option value="0">Desligada</option><option value="1">1 minuto</option><option value="5" selected>5 minutos</option><option value="10">10 minutos</option><option value="15">15 minutos</option></select></div>
+    <div class="setting-group"><label>Atualização automática</label><select id="refreshSetting"><option value="0">Desligada</option><option value="1" selected>1 minuto</option><option value="5">5 minutos</option><option value="10">10 minutos</option><option value="15">15 minutos</option></select></div>
     <label class="toggle-row"><span><strong>Modo apresentação</strong><small>Amplia a leitura e reduz elementos secundários</small></span><input type="checkbox" id="presentationSetting" /></label>
     <label class="toggle-row"><span><strong>Animações dos gráficos</strong><small>Desative para reuniões longas ou projeção</small></span><input type="checkbox" id="animationSetting" checked /></label>
     <label class="toggle-row"><span><strong>Exibir nomes dos líderes</strong><small>Oculta identificação nominal quando necessário</small></span><input type="checkbox" id="namesSetting" checked /></label>
@@ -914,7 +914,7 @@ const state = {
   month: 1, team: 'ALL', theme: localStorage.getItem('ga-theme') || 'light',
   animations: localStorage.getItem('ga-animations') !== 'false', names: localStorage.getItem('ga-names') !== 'false',
   presentation: localStorage.getItem('ga-presentation') === 'true', density: localStorage.getItem('ga-density') || 'comfortable',
-  refreshMinutes: Number(localStorage.getItem('ga-refresh') || 5), charts: {}, chartSpecs: {}, map: null,
+  refreshMinutes: Number(localStorage.getItem('ga-refresh') || 1), charts: {}, chartSpecs: {}, map: null,
   bp3Layer: null, stateLayer: null, hydroLayer: null, hydroFeatures: [], demandLayer: null, baseLight: null, labelsLight: null, baseDark: null, labelsDark: null, refreshTimer: null
 };
 
@@ -2300,7 +2300,7 @@ function setupUI(){
     if(btn)btn.innerHTML=`<i data-lucide="${fs?'minimize':'maximize'}"></i> ${fs?'Sair da tela cheia':'Usar tela cheia'}`;
     setTimeout(()=>{state.map?.invalidateSize();lucide.createIcons();},120);
   });
-  document.getElementById('resetSettings').addEventListener('click',()=>{applyTheme('light');applyPresentation(false);applyDensity('comfortable');applyNames(true);state.animations=true;document.getElementById('animationSetting').checked=true;state.refreshMinutes=5;document.getElementById('refreshSetting').value='5';setupRefresh();});
+  document.getElementById('resetSettings').addEventListener('click',()=>{applyTheme('light');applyPresentation(false);applyDensity('comfortable');applyNames(true);state.animations=true;document.getElementById('animationSetting').checked=true;state.refreshMinutes=1;document.getElementById('refreshSetting').value='1';setupRefresh();});
   document.getElementById('clearLocalBtn').addEventListener('click',()=>{if(!confirm('Apagar todos os registros salvos localmente neste navegador?\n\nRegistros já publicados na planilha não são afetados.'))return;localStorage.removeItem('ga-local-records');localStorage.removeItem('ga-suppressed-demands');localStorage.removeItem('ga-suppressed-executions');location.reload();});
   document.getElementById('bp3Toggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.bp3Layer)return;const on=state.map.hasLayer(state.bp3Layer);on?state.map.removeLayer(state.bp3Layer):state.bp3Layer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('hydroToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.hydroLayer)return;const on=state.map.hasLayer(state.hydroLayer);on?state.map.removeLayer(state.hydroLayer):state.hydroLayer.addTo(state.map);b.classList.toggle('active',!on);});
