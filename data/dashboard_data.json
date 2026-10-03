@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T17:46:02.582Z",
+  "generated_at": "2026-10-03T17:58:11.571Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1298,7 +1298,38 @@
   ],
   "execution": [],
   "demands": [],
-  "blockers": [],
+  "blockers": [
+    {
+      "bloqueador_id": "BL001",
+      "data": "2026-10-03",
+      "equipe_id": "EQ01",
+      "tipo_bloqueador": "Logístico",
+      "impacto": "BAIXO",
+      "horas_impactadas": "4",
+      "impactou_planejamento": "SIM",
+      "plano_afetado_id": "",
+      "atividade_planejada_afetada": "Caminhão quebrado",
+      "observacao": "Caminhão quebrado",
+      "resolvido": "SIM",
+      "data_resolucao": "2026-10-03",
+      "origem_dado": "PROERG"
+    },
+    {
+      "bloqueador_id": "BL002",
+      "data": "2026-10-03",
+      "equipe_id": "EQ02",
+      "tipo_bloqueador": "Saúde/Segurança",
+      "impacto": "MÉDIO",
+      "horas_impactadas": "8",
+      "impactou_planejamento": "SIM",
+      "plano_afetado_id": "",
+      "atividade_planejada_afetada": "EPI's insuficientes",
+      "observacao": "EPI's insuficientes",
+      "resolvido": "NÃO",
+      "data_resolucao": "2026-10-04",
+      "origem_dado": "PROERG"
+    }
+  ],
   "climate": [
     {
       "mes_num": "1",
