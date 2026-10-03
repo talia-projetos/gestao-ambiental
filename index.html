@@ -409,6 +409,29 @@ body{font-size:15px}
   .nav-btn{justify-content:center!important;padding:0!important;gap:0!important}
   .brand-mark{justify-content:center!important;padding:0!important;width:auto!important}
 }
+/* ── Mobile: ajustes de layout ──────────────────────────────── */
+@media(max-width:760px){
+  .status-ops-label{display:none!important}
+  .last-update{display:none!important}
+  .segmented button{white-space:normal;line-height:1.3;font-size:12px;padding:8px 4px;min-height:44px}
+  #page-planning .demand-filter-bar,#page-planning .table-wrap{display:none!important}
+  #page-planning .card-header p{display:none}
+  #mob-plan-view{display:flex!important;flex-direction:column;gap:10px}
+}
+#mob-plan-view{display:none}
+.mob-list-section{background:var(--surface-2);border-radius:12px;padding:12px 14px}
+.mob-list-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.mob-list-title .mob-count{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1px 7px;font-size:10px;color:var(--text);font-weight:600}
+.mob-dem-section .mob-list-title{color:var(--ochre)}
+.mob-dem-section{border-left:3px solid var(--ochre);background:color-mix(in srgb,var(--ochre) 5%,var(--surface-2))}
+.mob-dem-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+.mob-dem-item:last-child{border-bottom:0;padding-bottom:0}
+.mob-dem-dot{width:8px;height:8px;border-radius:50%;background:var(--ochre);flex:none;margin-top:4px}
+.mob-dem-body{flex:1;min-width:0}
+.mob-dem-desc{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mob-dem-meta{font-size:11px;color:var(--muted);margin-top:1px}
+.mob-dem-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;background:color-mix(in srgb,var(--ochre) 16%,transparent);color:var(--ochre);flex:none}
+.mob-empty{font-size:12px;color:var(--muted);padding:4px 0}
 </style>
 </head>
 <body>
@@ -475,7 +498,7 @@ body{font-size:15px}
       </header>
 
       <section class="status-strip" aria-label="Status da base">
-        <div><span class="status-dot"></span><strong>Proerg · Itaipu</strong><span>Sala de situação operacional</span></div>
+        <div><span class="status-dot"></span><strong>Proerg · Itaipu</strong><span class="status-ops-label">Sala de situação operacional</span></div>
         <div class="last-update"><i data-lucide="clock-3"></i><span id="lastUpdate">Carregando dados...</span></div>
       </section>
 
@@ -645,6 +668,17 @@ body{font-size:15px}
 
       <!-- PAGE: Demandas -->
       <div id="page-planning" class="page">
+        <!-- Mobile: planejamento + emergenciais (substituí a tabela no mobile) -->
+        <div id="mob-plan-view">
+          <div class="mob-list-section" id="mobPlanSection">
+            <div class="mob-list-title">Planejamento do mês <span class="mob-count" id="mobPlanCount">0</span></div>
+            <div id="mobPlanList"><p class="mob-empty">Carregando…</p></div>
+          </div>
+          <div class="mob-list-section mob-dem-section" id="mobDemSection">
+            <div class="mob-list-title">Demandas emergenciais <span class="mob-count" id="mobDemCount">0</span></div>
+            <div id="mobDemList"><p class="mob-empty">Carregando…</p></div>
+          </div>
+        </div>
         <section class="dashboard-grid">
           <article class="card span-12">
             <div class="card-header">
@@ -1162,7 +1196,7 @@ function currentAggregate(){
   const nBloqueadas=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='BLOQUEADO').length;
   const nParciais=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='PARCIAL').length;
   const nAndamento=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO').length;
-  const nDemandas=f.demands.filter(x=>Number(x.horas_consumidas||0)>0).length;
+  const nDemandas=f.demands.length;
   const nBlq=blqAll.filter(x=>(x.resolvido||'').toUpperCase()!=='SIM').length;
   const blockedHours=blockedHoursTotal;
   const attention=state.teams.map(t=>metricsForTeam(t.equipe_id)).filter(m=>m.score>=45).length;
@@ -1831,8 +1865,41 @@ function showPage(id){
     if(id==='page-impact'){ renderImpactPage(); }
   },50);
 }
+function renderMobilePlanView(){
+  const planEl=document.getElementById('mobPlanList');
+  const demEl=document.getElementById('mobDemList');
+  const planCnt=document.getElementById('mobPlanCount');
+  const demCnt=document.getElementById('mobDemCount');
+  if(!planEl||!demEl)return;
+  const m=Number(state.month);
+  const teamId=state.team==='ALL'?null:state.team;
+  // Planejamento
+  const plan=state.planning.filter(p=>planMesMatch(p,m)&&(teamId?p.equipe_id===teamId:true));
+  if(planCnt)planCnt.textContent=plan.length;
+  const stColor=s=>{const u=(s||'').toUpperCase();return u==='EXECUTADO'?'green':u==='BLOQUEADO'?'red':u==='PARCIAL'?'ochre':u==='EM ANDAMENTO'?'blue':'muted';};
+  const stLabel=s=>{const u=(s||'').toUpperCase();return{EXECUTADO:'Feito',BLOQUEADO:'Bloqueado',PARCIAL:'Parcial','EM ANDAMENTO':'Andamento'}[u]||'Pendente';};
+  const stCls=s=>{const u=(s||'').toUpperCase();return u==='EXECUTADO'?'ok':u==='BLOQUEADO'?'blq':'pend';};
+  planEl.innerHTML=plan.length
+    ?plan.map(p=>`<div class="hub-plan-item"><div class="hub-plan-dot" style="background:var(--${stColor(p.status_planejamento)})"></div><span class="hub-plan-name">${p.atividade||'—'}</span><span class="hub-plan-status ${stCls(p.status_planejamento)}">${stLabel(p.status_planejamento)}</span></div>`).join('')
+    :'<p class="mob-empty">Nenhuma atividade planejada para este mês.</p>';
+  // Demandas emergenciais (publicadas + locais)
+  let dems=[...state.demands.filter(d=>(monthOf(d)===m||m===0)&&(teamId?d.equipe_id===teamId:true))];
+  try{
+    const loc=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
+    if(loc.demands){const dk=d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;const keys=new Set(dems.map(dk));loc.demands.forEach(d=>{if(!keys.has(dk(d))&&(teamId?d.equipe_id===teamId:true))dems.push({...d,_local:true});});}
+  }catch(_){}
+  if(demCnt)demCnt.textContent=dems.length;
+  demEl.innerHTML=dems.length
+    ?dems.map(d=>{
+      const team=state.teams.find(t=>t.equipe_id===d.equipe_id);
+      const nm=team?team.equipe:d.equipe_id;
+      const st=d.status||'ABERTA';
+      return`<div class="mob-dem-item"><div class="mob-dem-dot"></div><div class="mob-dem-body"><div class="mob-dem-desc">${d.descricao||d.tipo||'—'}</div><div class="mob-dem-meta">${d.data||''}${nm?' · '+nm:''}</div></div><span class="mob-dem-badge">${st}</span></div>`;
+    }).join('')
+    :'<p class="mob-empty">Nenhuma demanda emergencial no período.</p>';
+}
 function renderAll(){
-  [renderKPIs,renderPlanChart,renderHoursChart,renderImpactChart,renderBlockerChart,renderPressureChart,renderTeamPressureChart,renderDemandTable,renderWeather,renderTeamTable,renderAttention]
+  [renderKPIs,renderPlanChart,renderHoursChart,renderImpactChart,renderBlockerChart,renderPressureChart,renderTeamPressureChart,renderDemandTable,renderWeather,renderTeamTable,renderAttention,renderMobilePlanView]
     .forEach(fn=>{try{fn();}catch(e){console.error('[render]',fn.name,e);}});
   try{lucide.createIcons();}catch(e){}
 }
