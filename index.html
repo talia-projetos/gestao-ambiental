@@ -1155,10 +1155,9 @@ function currentAggregate(){
   const demTeams=uniq(f.demands.map(x=>x.equipe_id));
   const impactedTeams=planTeams.filter(t=>demTeams.includes(t));
   const blockedTeams=planTeams.filter(t=>blqTeams.includes(t));
-  // Impacto no planejamento: % horas não entregues (status ≠ EXECUTADO)
-  const naoEntregues=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()!=='EXECUTADO');
-  const horasNaoEntregues=naoEntregues.reduce((s,x)=>s+Number(x.meta_planejada||0),0);
-  const planImpactRate=horasPlanejadas>0?Math.min(horasNaoEntregues/horasPlanejadas,1):0;
+  // Impacto no planejamento: max(desvio por demandas, horas de bloqueadores) / horas planejadas
+  // Não conta atividades simplesmente "PLANEJADO" — apenas o que tem interferência real
+  const planImpactRate=Math.max(impactRatio,blockRate);
   const nBlq=blqAll.filter(x=>(x.resolvido||'').toUpperCase()!=='SIM').length;
   const nAndamento=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO').length;
   const blockedHours=blockedHoursTotal;
