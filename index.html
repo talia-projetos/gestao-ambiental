@@ -1155,11 +1155,11 @@ function currentAggregate(){
   const demTeams=uniq(f.demands.map(x=>x.equipe_id));
   const impactedTeams=planTeams.filter(t=>demTeams.includes(t));
   const blockedTeams=planTeams.filter(t=>blqTeams.includes(t));
-  // Impacto no planejamento: horas desviadas por demandas de campo / horas planejadas
-  // (Taxa de Bloqueio já cobre os bloqueadores — este KPI é específico de desvio por demanda)
-  const planImpactRate=impactRatio;
-  const nBlq=blqAll.filter(x=>(x.resolvido||'').toUpperCase()!=='SIM').length;
+  // Impacto no planejamento: (bloqueadas + em andamento) / total atividades planejadas
+  const nBloqueadas=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='BLOQUEADO').length;
   const nAndamento=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO').length;
+  const planImpactRate=f.planning.length>0?(nBloqueadas+nAndamento)/f.planning.length:0;
+  const nBlq=blqAll.filter(x=>(x.resolvido||'').toUpperCase()!=='SIM').length;
   const blockedHours=blockedHoursTotal;
   const attention=state.teams.map(t=>metricsForTeam(t.equipe_id)).filter(m=>m.score>=45).length;
   return {...f,coverage,covered,totalPlan:totalPlanGlobal||planPairs.length,impactRatio,blockRate,planImpactRate,blockedPlanIds,allAffectedPlanIds,blockedHours,attention,impacted,nBlq,nAndamento,blockedTeamCount:blockedTeams.length,impactedTeamCount:impactedTeams.length,planTeamCount:planTeams.length};
