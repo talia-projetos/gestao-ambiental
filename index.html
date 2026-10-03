@@ -1330,7 +1330,10 @@ function renderPlanChart(){
     {label:'Executado',data:executed,backgroundColor:cssVar('--green'),borderRadius:6,barPercentage:.75},
     {label:'Demandas não previstas',data:demands,type:'line',borderColor:cssVar('--red'),backgroundColor:'rgba(185,78,78,.08)',fill:true,tension:.35,pointRadius:5,pointBackgroundColor:cssVar('--red'),yAxisID:'y2',order:0}
   ]},options};
-  state.chartSpecs['planChart']={config:{},title:'Execução vs planejamento',subtitle:'Atividades planejadas vs executadas e demandas não previstas'};
+  const _planCfg=config;
+  state.chartSpecs['planChart']={
+    renderFn:(cid)=>{const c=document.getElementById(cid);if(!c)return null;return new Chart(c,{type:_planCfg.type,data:_planCfg.data,options:{..._planCfg.options,responsive:true,maintainAspectRatio:false}});},
+    title:'Execução vs planejamento',subtitle:'Atividades planejadas vs executadas e demandas não previstas'};
   state.charts['planChart']=new Chart(ctx,config);
 }
 
@@ -1377,7 +1380,10 @@ function buildBlockerChart(canvasId){
   destroyChart(canvasId);
   const chart=new Chart(ctx2,{type:'bar',data:{labels:entries.map(x=>x[0]),datasets:[{label:'Horas impactadas',data:entries.map(x=>x[1]),backgroundColor:bgs,borderColor:borderColors,borderWidth:2,borderRadius:6}]},options});
   state.charts[canvasId]=chart;
-  state.chartSpecs[canvasId]={config:{},title:'Impacto dos bloqueadores',subtitle:'Horas operacionais afetadas por causa'};
+  const _blkEntries=entries,_blkBorders=borderColors,_blkOpts=options;
+  state.chartSpecs[canvasId]={
+    renderFn:(cid)=>{const c=document.getElementById(cid);if(!c)return null;return new Chart(c,{type:'bar',data:{labels:_blkEntries.map(x=>x[0]),datasets:[{label:'Horas impactadas',data:_blkEntries.map(x=>x[1]),backgroundColor:_blkBorders,borderColor:_blkBorders,borderWidth:0,borderRadius:6}]},options:{..._blkOpts,responsive:true,maintainAspectRatio:false}});},
+    title:'Impacto dos bloqueadores',subtitle:'Horas operacionais afetadas por causa'};
 }
 function renderBlockerChart(){ buildBlockerChart('blockerChart'); }
 
@@ -1587,7 +1593,10 @@ function renderHoursChart(){
   destroyChart('hoursChart');
   const ctx=document.getElementById('hoursChart'); if(!ctx)return;
   const config={type:'bar',data:{labels:eqIds,datasets:[{data:ratios,backgroundColor:bgColors,borderRadius:6,barPercentage:.6}]},options,plugins:[refLinePlugin]};
-  state.chartSpecs['hoursChart']={config:{type:'bar',data:{labels:eqIds,datasets:[{data:ratios,backgroundColor:bgColors.slice(),borderRadius:6,barPercentage:.6}]},options:JSON.parse(JSON.stringify(options))},title:'Aderência ao planejamento',subtitle:'% executado vs. planejado por equipe no período'};
+  const _hEqIds=eqIds,_hRatios=ratios,_hExec=executadas,_hPlan=planejadas,_hBg=bgColors.slice(),_hOpts=options;
+  state.chartSpecs['hoursChart']={
+    renderFn:(cid)=>{const c=document.getElementById(cid);if(!c)return null;const o={..._hOpts,responsive:true,maintainAspectRatio:false,plugins:{..._hOpts.plugins,tooltip:{callbacks:{label:cx=>{const i=cx.dataIndex;return ` ${_hRatios[i]}% — ${_hExec[i]}h exec. / ${_hPlan[i]}h plan.`;}}}}}; return new Chart(c,{type:'bar',data:{labels:_hEqIds,datasets:[{data:_hRatios,backgroundColor:_hBg,borderRadius:6,barPercentage:.6}]},options:o});},
+    title:'Aderência ao planejamento',subtitle:'% executado vs. planejado por equipe no período'};
   state.charts['hoursChart']=new Chart(ctx,config);
 }
 
@@ -2464,7 +2473,7 @@ function setupUI(){
 
 function setupChartModal(){
   const modal=document.getElementById('chartModal'); let expanded=null;
-  document.querySelectorAll('.expand-btn').forEach(btn=>btn.addEventListener('click',()=>{const id=btn.dataset.chart,s=state.chartSpecs[id]; if(!s)return; document.getElementById('expandedTitle').textContent=s.title;document.getElementById('expandedSubtitle').textContent=s.subtitle;modal.classList.add('open');modal.setAttribute('aria-hidden','false');if(expanded)expanded.destroy();const config=structuredClone(s.config);config.options={...config.options,responsive:true,maintainAspectRatio:false};expanded=new Chart(document.getElementById('expandedChart'),config);}));
+  document.querySelectorAll('.expand-btn').forEach(btn=>btn.addEventListener('click',()=>{const id=btn.dataset.chart,s=state.chartSpecs[id]; if(!s)return; document.getElementById('expandedTitle').textContent=s.title;document.getElementById('expandedSubtitle').textContent=s.subtitle;modal.classList.add('open');modal.setAttribute('aria-hidden','false');if(expanded){expanded.destroy();expanded=null;}requestAnimationFrame(()=>{try{if(s.renderFn){expanded=s.renderFn('expandedChart');}else{const config=structuredClone(s.config);config.options={...config.options,responsive:true,maintainAspectRatio:false};expanded=new Chart(document.getElementById('expandedChart'),config);}}catch(e){console.warn('[expand]',id,e);}});}));
   const close=()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true');if(expanded){expanded.destroy();expanded=null;}}; document.getElementById('closeChartModal').addEventListener('click',close);modal.addEventListener('click',e=>{if(e.target===modal)close();});
 }
 
