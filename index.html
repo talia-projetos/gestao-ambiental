@@ -1049,9 +1049,13 @@ async function loadData(){
   const localImps=(local.impact||[]).filter(i=>keptIds.has(i.demanda_id));
   state.demands=[...state.demands,...localDems];
   state.impact=[...state.impact,...localImps];
+  // Aplica lista de supressão para execuções
+  const suppExec=new Set(JSON.parse(localStorage.getItem('ga-suppressed-executions')||'[]'));
+  const execKey=e=>`${e.equipe_id}|${e.data}|${(e.atividade||'').trim()}`;
+  state.execution=state.execution.filter(e=>!suppExec.has(execKey(e)));
   // Dedup execuções locais
-  const jsonExecKeys=new Set(state.execution.map(e=>`${e.equipe_id}|${e.data}|${(e.atividade||'').trim()}`));
-  const localExecs=(local.execution||[]).filter(e=>!jsonExecKeys.has(`${e.equipe_id}|${e.data}|${(e.atividade||'').trim()}`));
+  const jsonExecKeys=new Set(state.execution.map(execKey));
+  const localExecs=(local.execution||[]).filter(e=>!jsonExecKeys.has(execKey(e))&&!suppExec.has(execKey(e)));
   state.execution=[...state.execution,...localExecs];
   // Limpa do localStorage os que foram absorvidos pelo JSON
   let changed=false;
@@ -1407,18 +1411,31 @@ function renderImpactPage(){
       execList.innerHTML='<p style="color:var(--faint);font-size:12px;padding:16px 0;text-align:center">Nenhum registro neste período.</p>';
     } else {
       execList.innerHTML=execByMonth.map(r=>{
+        const key=execKey(r);
         const hrs=r.horas_executadas?`${r.horas_executadas}h`:'';
         const qty=r.quantidade?`${r.quantidade}${r.unidade?' '+r.unidade:''}`:'' ;
-        const sub=[hrs,qty,r.lider].filter(Boolean).join(' · ');
+        const sub=[hrs,qty,r.lider_tecnico||r.lider].filter(Boolean).join(' · ');
         const dt=r.data?r.data.slice(5).replace('-','/'):'';
         return `<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:9px 11px">
-          <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
+          <div style="display:flex;align-items:flex-start;gap:6px">
             <span style="font-size:11.5px;font-weight:600;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.atividade||'(sem tipo)'}</span>
-            <span style="font-size:10px;color:var(--faint);flex:none">${dt}</span>
+            <span style="font-size:10px;color:var(--faint);flex:none;margin-top:1px">${dt}</span>
+            <button class="exec-del-btn" data-key="${key}" title="Remover registro" style="flex:none;border:none;background:none;cursor:pointer;padding:0;color:var(--ochre);opacity:.55;line-height:1;font-size:14px">&#x2715;</button>
           </div>
           ${sub?`<span style="font-size:10.5px;color:var(--muted);display:block;margin-top:2px">${sub}</span>`:''}
         </div>`;
       }).join('');
+      execList.querySelectorAll('.exec-del-btn').forEach(btn=>btn.addEventListener('click',()=>{
+        const key=btn.dataset.key;
+        state.execution=state.execution.filter(e=>execKey(e)!==key);
+        const local=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
+        if(Array.isArray(local.execution)) local.execution=local.execution.filter(e=>execKey(e)!==key);
+        localStorage.setItem('ga-local-records',JSON.stringify(local));
+        const sup=new Set(JSON.parse(localStorage.getItem('ga-suppressed-executions')||'[]'));
+        sup.add(key);
+        localStorage.setItem('ga-suppressed-executions',JSON.stringify([...sup]));
+        renderAll();
+      }));
     }
   }
 
@@ -2263,7 +2280,7 @@ function setupUI(){
     setTimeout(()=>{state.map?.invalidateSize();lucide.createIcons();},120);
   });
   document.getElementById('resetSettings').addEventListener('click',()=>{applyTheme('light');applyPresentation(false);applyDensity('comfortable');applyNames(true);state.animations=true;document.getElementById('animationSetting').checked=true;state.refreshMinutes=5;document.getElementById('refreshSetting').value='5';setupRefresh();});
-  document.getElementById('clearLocalBtn').addEventListener('click',()=>{if(!confirm('Apagar todos os registros salvos localmente neste navegador?\n\nRegistros já publicados na planilha não são afetados.'))return;localStorage.removeItem('ga-local-records');localStorage.removeItem('ga-suppressed-demands');location.reload();});
+  document.getElementById('clearLocalBtn').addEventListener('click',()=>{if(!confirm('Apagar todos os registros salvos localmente neste navegador?\n\nRegistros já publicados na planilha não são afetados.'))return;localStorage.removeItem('ga-local-records');localStorage.removeItem('ga-suppressed-demands');localStorage.removeItem('ga-suppressed-executions');location.reload();});
   document.getElementById('bp3Toggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.bp3Layer)return;const on=state.map.hasLayer(state.bp3Layer);on?state.map.removeLayer(state.bp3Layer):state.bp3Layer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('hydroToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.hydroLayer)return;const on=state.map.hasLayer(state.hydroLayer);on?state.map.removeLayer(state.hydroLayer):state.hydroLayer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('demandToggle').addEventListener('click',e=>{const b=e.currentTarget;const on=state.map.hasLayer(state.demandLayer);on?state.map.removeLayer(state.demandLayer):state.demandLayer.addTo(state.map);b.classList.toggle('active',!on);});
