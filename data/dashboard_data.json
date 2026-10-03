@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T22:09:31.420Z",
+  "generated_at": "2026-10-03T22:09:58.557Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1388,7 +1388,25 @@
       "origem_dado": "PROERG"
     }
   ],
-  "demands": [],
+  "demands": [
+    {
+      "demanda_id": "DC001",
+      "data": "2026-10-03",
+      "equipe_id": "EQ01",
+      "lider_tecnico": "Renata Souza Oliveira",
+      "atividade_id": "",
+      "atividade_sugerida": "",
+      "descricao": "",
+      "prioridade": "MÉDIA",
+      "status": "ABERTA",
+      "horas_consumidas": 0,
+      "latitude": "-25513578",
+      "longitude": "-54595034",
+      "local_referencia": "Relatório anual de fauna",
+      "equipe_apoio": "",
+      "origem_dado": "DEMANDA"
+    }
+  ],
   "blockers": [
     {
       "bloqueador_id": "BL001",
@@ -1609,7 +1627,19 @@
       "orientacao_operacional_simulada": "Alta pluviosidade — planejar alternativas de escritório"
     }
   ],
-  "impact": [],
+  "impact": [
+    {
+      "demanda_id": "DC001",
+      "impactou_planejamento": "NÃO",
+      "plano_afetado_id": "",
+      "tipo_impacto": "ADIAMENTO",
+      "horas_desviadas": "0",
+      "qtd_planejada_afetada": "1",
+      "destino_planejamento": "REPROGRAMADO",
+      "nova_data_prevista": "",
+      "origem_dado": "DEMANDA"
+    }
+  ],
   "metrics": [
     {
       "atividade": "Plantio de mudas",
