@@ -2040,10 +2040,11 @@ function saveExecRecord(e){
   if(!scriptUrl){note.textContent='Web App não configurado — publique o dashboard via Apps Script primeiro.';return;}
   const finalize=(ok,err)=>{
     records.forEach(r=>state.execution.push(r));
-    if(!ok){
+    {
       const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
       if(!local.execution) local.execution=[];
-      records.forEach(r=>local.execution.push(r));
+      const ek=r=>`${r.equipe_id}|${r.data}|${(r.atividade||'').trim()}`;
+      records.forEach(r=>{if(!local.execution.some(e=>ek(e)===ek(r))) local.execution.push(r);});
       localStorage.setItem('ga-local-records',JSON.stringify(local));
     }
     renderAll();
@@ -2173,17 +2174,19 @@ function saveLocalLeaderRecord(e){
       :'Salvo localmente (sem conexão). Será sincronizado ao publicar.';
     setTimeout(()=>{e.target.reset();closeLeaderForm();},1200);
   };
-  const saveFail=()=>{
+  const saveLocal=()=>{
     const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
     if(!local.demands)local.demands=[];if(!local.impact)local.impact=[];
-    local.demands.push(demand);local.impact.push(impact);
+    const dk=d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;
+    if(!local.demands.some(d=>dk(d)===dk(demand))) local.demands.push(demand);
+    if(!local.impact.some(i=>i.demanda_id===impact.demanda_id)) local.impact.push(impact);
     localStorage.setItem('ga-local-records',JSON.stringify(local));
   };
   if(scriptUrl){
     fetch(scriptUrl+'?tipo=CAMPO',{method:'POST',body:JSON.stringify(payload)})
-      .then(r=>r.json()).then(r=>{if(!r.ok)saveFail();finalize(r.ok);}).catch(()=>{saveFail();finalize(false);});
+      .then(r=>r.json()).then(r=>{saveLocal();finalize(r.ok);}).catch(()=>{saveLocal();finalize(false);});
   } else {
-    saveFail();finalize(false);
+    saveLocal();finalize(false);
   }
 }
 
