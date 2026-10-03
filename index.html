@@ -1155,14 +1155,18 @@ function currentAggregate(){
   const demTeams=uniq(f.demands.map(x=>x.equipe_id));
   const impactedTeams=planTeams.filter(t=>demTeams.includes(t));
   const blockedTeams=planTeams.filter(t=>blqTeams.includes(t));
-  // Impacto no planejamento: (bloqueadas + em andamento) / total atividades planejadas
+  // Impacto no planejamento: (h_bloqueadas + h_parciais + h_desviadas_por_demandas) / h_planejadas
+  const hBloqueadas=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='BLOQUEADO').reduce((s,x)=>s+Number(x.meta_planejada||0),0);
+  const hParciais=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='PARCIAL').reduce((s,x)=>s+Number(x.meta_planejada||0),0);
+  const planImpactRate=horasPlanejadas>0?Math.min((hBloqueadas+hParciais+horasDesviadas)/horasPlanejadas,1):0;
   const nBloqueadas=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='BLOQUEADO').length;
+  const nParciais=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='PARCIAL').length;
   const nAndamento=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO').length;
-  const planImpactRate=f.planning.length>0?(nBloqueadas+nAndamento)/f.planning.length:0;
+  const nDemandas=f.demands.filter(x=>Number(x.horas_consumidas||0)>0).length;
   const nBlq=blqAll.filter(x=>(x.resolvido||'').toUpperCase()!=='SIM').length;
   const blockedHours=blockedHoursTotal;
   const attention=state.teams.map(t=>metricsForTeam(t.equipe_id)).filter(m=>m.score>=45).length;
-  return {...f,coverage,covered,totalPlan:totalPlanGlobal||planPairs.length,impactRatio,blockRate,planImpactRate,blockedPlanIds,allAffectedPlanIds,blockedHours,attention,impacted,nBlq,nAndamento,blockedTeamCount:blockedTeams.length,impactedTeamCount:impactedTeams.length,planTeamCount:planTeams.length};
+  return {...f,coverage,covered,totalPlan:totalPlanGlobal||planPairs.length,impactRatio,blockRate,planImpactRate,blockedPlanIds,allAffectedPlanIds,blockedHours,attention,impacted,nBlq,nBloqueadas,nParciais,nAndamento,nDemandas,blockedTeamCount:blockedTeams.length,impactedTeamCount:impactedTeams.length,planTeamCount:planTeams.length};
 }
 
 function setRing(id,pct,invert){
@@ -1209,7 +1213,7 @@ function renderKPIs(){
   setRing('ringBlocked',m.blockRate,true);
   document.getElementById('kpiAttention').textContent=fmtPct(m.planImpactRate);
   const an=document.getElementById('kpiAttentionNote');
-  if(an) an.textContent=`${m.nBlq} bloqueios pendentes · ${m.nAndamento} em andamento`;
+  if(an) an.textContent=`${m.nBloqueadas} bloqueadas · ${m.nParciais} parciais · ${m.nDemandas} demandas · ${m.nAndamento} em andamento`;
   setRing('ringAttention',m.planImpactRate,true);
 }
 
