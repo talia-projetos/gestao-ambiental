@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T17:05:21.209Z",
+  "generated_at": "2026-10-03T17:45:43.763Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1298,179 +1298,103 @@
   ],
   "execution": [],
   "demands": [],
-  "blockers": [
-    {
-      "bloqueador_id": "BL001",
-      "data": "2026-03-15",
-      "equipe_id": "EQ01",
-      "tipo_bloqueador": "Climático",
-      "impacto": "MÉDIO",
-      "horas_impactadas": "8",
-      "impactou_planejamento": "SIM",
-      "plano_afetado_id": "",
-      "atividade_planejada_afetada": "Chuva forte impediu transecto de avifauna",
-      "observacao": "Chuva forte impediu transecto de avifauna",
-      "resolvido": "SIM",
-      "data_resolucao": "2026-10-16",
-      "origem_dado": "PROERG"
-    },
-    {
-      "bloqueador_id": "BL002",
-      "data": "2026-04-02",
-      "equipe_id": "EQ02",
-      "tipo_bloqueador": "Logístico",
-      "impacto": "ALTO",
-      "horas_impactadas": "16",
-      "impactou_planejamento": "SIM",
-      "plano_afetado_id": "",
-      "atividade_planejada_afetada": "Veículo da equipe em manutenção não programada",
-      "observacao": "Veículo da equipe em manutenção não programada",
-      "resolvido": "NÃO",
-      "data_resolucao": "2026-10-04",
-      "origem_dado": "PROERG"
-    },
-    {
-      "bloqueador_id": "BL003",
-      "data": "2026-05-20",
-      "equipe_id": "EQ03",
-      "tipo_bloqueador": "Regulatório",
-      "impacto": "ALTO",
-      "horas_impactadas": "40",
-      "impactou_planejamento": "SIM",
-      "plano_afetado_id": "",
-      "atividade_planejada_afetada": "Aguardo de autorização IBAMA para coleta de amostras",
-      "observacao": "Aguardo de autorização IBAMA para coleta de amostras",
-      "resolvido": "NÃO",
-      "data_resolucao": "2026-10-30",
-      "origem_dado": "PROERG"
-    },
-    {
-      "bloqueador_id": "BL004",
-      "data": "2026-06-07",
-      "equipe_id": "EQ04",
-      "tipo_bloqueador": "Climático",
-      "impacto": "ALTO",
-      "horas_impactadas": "32",
-      "impactou_planejamento": "SIM",
-      "plano_afetado_id": "",
-      "atividade_planejada_afetada": "Geada causou mortalidade em mudas recém-plantadas",
-      "observacao": "Geada causou mortalidade em mudas recém-plantadas",
-      "resolvido": "SIM",
-      "data_resolucao": "2026-10-20",
-      "origem_dado": "PROERG"
-    },
-    {
-      "bloqueador_id": "BL005",
-      "data": "2026-07-10",
-      "equipe_id": "EQ05",
-      "tipo_bloqueador": "Logístico",
-      "impacto": "ALTO",
-      "horas_impactadas": "24",
-      "impactou_planejamento": "SIM",
-      "plano_afetado_id": "",
-      "atividade_planejada_afetada": "Falta de EPI adequado para trabalho em voçoroca profunda",
-      "observacao": "Falta de EPI adequado para trabalho em voçoroca profunda",
-      "resolvido": "SIM",
-      "data_resolucao": "2026-10-15",
-      "origem_dado": "PROERG"
-    }
-  ],
+  "blockers": [],
   "climate": [
     {
       "mes_num": "1",
       "mes": "Janeiro",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "CHUVOSO",
+      "chuva_simulada": "Alta",
+      "risco_seca_simulado": "Baixo",
+      "orientacao_operacional_simulada": "Alta pluviosidade — priorizar atividades resilientes à chuva"
     },
     {
       "mes_num": "2",
       "mes": "Fevereiro",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "CHUVOSO",
+      "chuva_simulada": "Alta",
+      "risco_seca_simulado": "Baixo",
+      "orientacao_operacional_simulada": "Alta pluviosidade — priorizar atividades resilientes à chuva"
     },
     {
       "mes_num": "3",
       "mes": "Março",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "TRANSIÇÃO",
+      "chuva_simulada": "Média",
+      "risco_seca_simulado": "Baixo",
+      "orientacao_operacional_simulada": "Monitorar previsão antes de saída a campo"
     },
     {
       "mes_num": "4",
       "mes": "Abril",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "TRANSIÇÃO",
+      "chuva_simulada": "Média",
+      "risco_seca_simulado": "Baixo",
+      "orientacao_operacional_simulada": "Monitorar previsão antes de saída a campo"
     },
     {
       "mes_num": "5",
       "mes": "Maio",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "TRANSIÇÃO",
+      "chuva_simulada": "Baixa",
+      "risco_seca_simulado": "Médio",
+      "orientacao_operacional_simulada": "Início do período mais seco — campo operacional"
     },
     {
       "mes_num": "6",
       "mes": "Junho",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "SECO",
+      "chuva_simulada": "Baixa",
+      "risco_seca_simulado": "Alto",
+      "orientacao_operacional_simulada": "Período seco — preferir escritório; monitorar deficit hídrico"
     },
     {
       "mes_num": "7",
       "mes": "Julho",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "SECO",
+      "chuva_simulada": "Baixa",
+      "risco_seca_simulado": "Alto",
+      "orientacao_operacional_simulada": "Período seco — preferir escritório; monitorar deficit hídrico"
     },
     {
       "mes_num": "8",
       "mes": "Agosto",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "SECO",
+      "chuva_simulada": "Baixa",
+      "risco_seca_simulado": "Alto",
+      "orientacao_operacional_simulada": "Monitorar risco de seca; campo restrito"
     },
     {
       "mes_num": "9",
       "mes": "Setembro",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "TRANSIÇÃO",
+      "chuva_simulada": "Baixa",
+      "risco_seca_simulado": "Médio",
+      "orientacao_operacional_simulada": "Início das chuvas — campo com atenção à previsão"
     },
     {
       "mes_num": "10",
       "mes": "Outubro",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "TRANSIÇÃO",
+      "chuva_simulada": "Média",
+      "risco_seca_simulado": "Baixo",
+      "orientacao_operacional_simulada": "Campo operacional — monitorar chuvas crescentes"
     },
     {
       "mes_num": "11",
       "mes": "Novembro",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "CHUVOSO",
+      "chuva_simulada": "Alta",
+      "risco_seca_simulado": "Baixo",
+      "orientacao_operacional_simulada": "Alta pluviosidade — planejar alternativas de escritório"
     },
     {
       "mes_num": "12",
       "mes": "Dezembro",
-      "cenario_operacional": "",
-      "chuva_simulada": "",
-      "risco_seca_simulado": "",
-      "orientacao_operacional_simulada": ""
+      "cenario_operacional": "CHUVOSO",
+      "chuva_simulada": "Alta",
+      "risco_seca_simulado": "Baixo",
+      "orientacao_operacional_simulada": "Alta pluviosidade — planejar alternativas de escritório"
     }
   ],
   "impact": [],
@@ -1513,9 +1437,9 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-03T14:00",
-    "temperatura": 27.3,
-    "sensacao": 27.9,
+    "atualizado": "2026-10-03T14:45",
+    "temperatura": 27.7,
+    "sensacao": 28.5,
     "precipitacao": 0,
     "vento_kmh": 25,
     "codigo_tempo": 1,
