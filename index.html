@@ -1160,7 +1160,7 @@ function currentAggregate(){
   const naoEntregues=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()!=='EXECUTADO');
   const horasNaoEntregues=naoEntregues.reduce((s,x)=>s+Number(x.meta_planejada||0),0);
   const planImpactRate=horasPlanejadas>0?Math.min(horasNaoEntregues/horasPlanejadas,1):0;
-  const nBlq=blqAll.length;
+  const nBlq=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='BLOQUEADO').length;
   const nAndamento=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO').length;
   const blockedHours=blockedHoursTotal;
   const attention=state.teams.map(t=>metricsForTeam(t.equipe_id)).filter(m=>m.score>=45).length;
