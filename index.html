@@ -1159,7 +1159,7 @@ function currentAggregate(){
   const naoEntregues=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()!=='EXECUTADO');
   const horasNaoEntregues=naoEntregues.reduce((s,x)=>s+Number(x.meta_planejada||0),0);
   const planImpactRate=horasPlanejadas>0?Math.min(horasNaoEntregues/horasPlanejadas,1):0;
-  const nBlq=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='BLOQUEADO').length;
+  const nBlq=blqAll.filter(x=>(x.resolvido||'').toUpperCase()!=='SIM').length;
   const nAndamento=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO').length;
   const blockedHours=blockedHoursTotal;
   const attention=state.teams.map(t=>metricsForTeam(t.equipe_id)).filter(m=>m.score>=45).length;
@@ -1210,7 +1210,7 @@ function renderKPIs(){
   setRing('ringBlocked',m.blockRate,true);
   document.getElementById('kpiAttention').textContent=fmtPct(m.planImpactRate);
   const an=document.getElementById('kpiAttentionNote');
-  if(an) an.textContent=`${m.nBlq} bloqueadas · ${m.nAndamento} em andamento`;
+  if(an) an.textContent=`${m.nBlq} bloqueios pendentes · ${m.nAndamento} em andamento`;
   setRing('ringAttention',m.planImpactRate,true);
 }
 
@@ -2176,9 +2176,13 @@ function saveLocalLeaderRecord(e){
     const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[]}');
     if(!local.demands)local.demands=[];if(!local.impact)local.impact=[];
     const dk=d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;
-    if(!local.demands.some(d=>dk(d)===dk(demand))) local.demands.push(demand);
+    const key=dk(demand);
+    if(!local.demands.some(d=>dk(d)===key)) local.demands.push(demand);
     if(!local.impact.some(i=>i.demanda_id===impact.demanda_id)) local.impact.push(impact);
     localStorage.setItem('ga-local-records',JSON.stringify(local));
+    // Se a demanda estava suprimida (X pressionado antes), remove da lista para reaparecer
+    const sup=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
+    if(sup.has(key)){sup.delete(key);localStorage.setItem('ga-suppressed-demands',JSON.stringify([...sup]));}
   };
   if(scriptUrl){
     fetch(scriptUrl+'?tipo=CAMPO',{method:'POST',body:JSON.stringify(payload)})
