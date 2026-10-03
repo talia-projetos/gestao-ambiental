@@ -1062,10 +1062,12 @@ async function loadData(){
   if(localDems.length<(local.demands||[]).length){local.demands=localDems;local.impact=localImps;changed=true;}
   if(localExecs.length<(local.execution||[]).length){local.execution=localExecs;changed=true;}
   if(changed) localStorage.setItem('ga-local-records',JSON.stringify(local));
-  // auto-detectar o mês mais recente com execução (fallback: qualquer dado operacional)
+  // auto-detectar mês: execução > demandas > planejamento (seq→cal) > bloqueadores
   const execMs=execution.map(r=>monthOf(r)).filter(m=>m>0);
-  const allOpMs=[...execution,...state.demands,...blockers].map(r=>monthOf(r)).filter(m=>m>0);
-  const srcMs=execMs.length?execMs:allOpMs;
+  const demMs=state.demands.map(r=>monthOf(r)).filter(m=>m>0);
+  const planCalMs=state.planning.map(p=>{const n=Number(p.mes_num);if(!n||n<1||n>12)return 0;return((10-1+n-1)%12)+1;}).filter(m=>m>0);
+  const blqMs=blockers.map(r=>monthOf(r)).filter(m=>m>0);
+  const srcMs=execMs.length?execMs:demMs.length?demMs:planCalMs.length?planCalMs:blqMs;
   if(srcMs.length){state.month=Math.max(...srcMs);const mf=document.getElementById('monthFilter');if(mf)mf.value=state.month;}
   populateTeamFilter(); renderAll(); updateDemandMarkers(); renderMobileHub();
   const ls=document.getElementById('loadingScreen'); if(ls){const _lsDelay=Math.max(0,5000-(Date.now()-_lsStart));setTimeout(()=>{ls.classList.add('hidden');setTimeout(()=>ls.remove(),500);},_lsDelay);}
@@ -1128,10 +1130,11 @@ function currentAggregate(){
   const planTeams=uniq(f.planning.map(x=>x.equipe_id));
   const execTeams=uniq(f.execution.map(x=>x.equipe_id));
   const planPairs=uniq(f.planning.map(x=>`${x.equipe_id}:${x.atividade_id}`));
-  const execPairSet=new Set(f.execution.filter(x=>x.atividade_id).map(x=>`${x.equipe_id}:${x.atividade_id}`));
-  const statusDoneSet=new Set(f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EXECUTADO').map(x=>`${x.equipe_id}:${x.atividade_id}`));
-  const covered=planPairs.filter(p=>execPairSet.has(p)||statusDoneSet.has(p)).length;
-  const coverage=planPairs.length?covered/planPairs.length:execTeams.length>0?1:0;
+  // Cobertura global: agrega por equipe usando o mesmo fallback de nome de metricsForTeam
+  const teamMs=state.teams.map(t=>metricsForTeam(t.equipe_id));
+  const covered=teamMs.reduce((s,m)=>s+m.covered,0);
+  const totalPlanGlobal=teamMs.reduce((s,m)=>s+m.totalPlan,0);
+  const coverage=totalPlanGlobal?covered/totalPlanGlobal:execTeams.length>0?1:0;
   const impacted=f.impact.filter(x=>x.impactou_planejamento==='SIM');
   const impactedPlans=uniq(impacted.map(x=>x.plano_afetado_id).filter(Boolean));
   // Interferência: horas desviadas por demandas / horas planejadas totais
@@ -1156,7 +1159,7 @@ function currentAggregate(){
   const nAndamento=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO').length;
   const blockedHours=blockedHoursTotal;
   const attention=state.teams.map(t=>metricsForTeam(t.equipe_id)).filter(m=>m.score>=45).length;
-  return {...f,coverage,covered,totalPlan:planPairs.length,impactRatio,blockRate,planImpactRate,blockedPlanIds,allAffectedPlanIds,blockedHours,attention,impacted,nBlq,nAndamento,blockedTeamCount:blockedTeams.length,impactedTeamCount:impactedTeams.length,planTeamCount:planTeams.length};
+  return {...f,coverage,covered,totalPlan:totalPlanGlobal||planPairs.length,impactRatio,blockRate,planImpactRate,blockedPlanIds,allAffectedPlanIds,blockedHours,attention,impacted,nBlq,nAndamento,blockedTeamCount:blockedTeams.length,impactedTeamCount:impactedTeams.length,planTeamCount:planTeams.length};
 }
 
 function setRing(id,pct,invert){
@@ -1626,7 +1629,7 @@ function renderTeamPressureChart(){
   const config={type:'bar',data:{labels,datasets:[{
     label:'Índice de pressão',
     data:values,
-    backgroundColor:cssVar('--red'),
+    backgroundColor:values.map(v=>v>=60?cssVar('--red'):v>=35?cssVar('--ochre'):cssVar('--green')),
     borderRadius:7
   }]},options};
   setChart('teamPressureChart',config,'Pressão operacional por equipe','Índice sintético composto por lacuna de execução, impacto total, bloqueios e demandas abertas');
@@ -2020,7 +2023,7 @@ function saveExecRecord(e){
     const atividade=row.dataset.activity;
     const dias=Number(row.querySelector('.exec-row-dias').value)||0;
     const qtd=Number(row.querySelector('.exec-row-qtd').value)||0;
-    const unidade=row.querySelector('.exec-row-unidade').value||'horas';
+    const unidade=row.querySelector('.exec-row-unidade').value||'unidades';
     const horas=dias*6;
     const linked=state.planning.find(p=>p.equipe_id===teamId&&planMesMatch(p,m)&&p.atividade===atividade);
     return {execucao_id:'EXEC-'+Date.now()+idx,data,equipe_id:teamId,lider_tecnico:team?.lider_tecnico||'',
