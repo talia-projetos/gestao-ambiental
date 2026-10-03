@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T19:28:23.173Z",
+  "generated_at": "2026-10-03T19:35:40.735Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1424,127 +1424,7 @@
       "origem_dado": "PROERG"
     }
   ],
-  "demands": [
-    {
-      "demanda_id": "DC001",
-      "data": "2026-10-03",
-      "equipe_id": "EQ01",
-      "lider_tecnico": "",
-      "atividade_id": "",
-      "atividade_sugerida": "",
-      "descricao": "",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "",
-      "longitude": "",
-      "local_referencia": "",
-      "equipe_apoio": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC002",
-      "data": "2026-10-03",
-      "equipe_id": "EQ02",
-      "lider_tecnico": "",
-      "atividade_id": "",
-      "atividade_sugerida": "",
-      "descricao": "",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "",
-      "longitude": "",
-      "local_referencia": "",
-      "equipe_apoio": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC003",
-      "data": "2026-10-03",
-      "equipe_id": "EQ03",
-      "lider_tecnico": "",
-      "atividade_id": "",
-      "atividade_sugerida": "",
-      "descricao": "",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "",
-      "longitude": "",
-      "local_referencia": "",
-      "equipe_apoio": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC004",
-      "data": "2026-10-03",
-      "equipe_id": "EQ01",
-      "lider_tecnico": "",
-      "atividade_id": "",
-      "atividade_sugerida": "",
-      "descricao": "",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "",
-      "longitude": "",
-      "local_referencia": "",
-      "equipe_apoio": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC005",
-      "data": "2026-10-03",
-      "equipe_id": "EQ06",
-      "lider_tecnico": "",
-      "atividade_id": "",
-      "atividade_sugerida": "",
-      "descricao": "",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "",
-      "longitude": "",
-      "local_referencia": "",
-      "equipe_apoio": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC006",
-      "data": "2026-10-03",
-      "equipe_id": "EQ01",
-      "lider_tecnico": "",
-      "atividade_id": "",
-      "atividade_sugerida": "",
-      "descricao": "",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "",
-      "longitude": "",
-      "local_referencia": "",
-      "equipe_apoio": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC007",
-      "data": "2026-10-03",
-      "equipe_id": "EQ04",
-      "lider_tecnico": "",
-      "atividade_id": "",
-      "atividade_sugerida": "",
-      "descricao": "",
-      "prioridade": "MÉDIA",
-      "status": "ABERTA",
-      "horas_consumidas": 0,
-      "latitude": "",
-      "longitude": "",
-      "local_referencia": "",
-      "equipe_apoio": "",
-      "origem_dado": "DEMANDA"
-    }
-  ],
+  "demands": [],
   "blockers": [
     {
       "bloqueador_id": "BL001",
@@ -1750,85 +1630,7 @@
       "orientacao_operacional_simulada": "Alta pluviosidade — planejar alternativas de escritório"
     }
   ],
-  "impact": [
-    {
-      "demanda_id": "DC001",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "ADIAMENTO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "REPROGRAMADO",
-      "nova_data_prevista": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC002",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "SUBSTITUIÇÃO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "ABSORVIDO",
-      "nova_data_prevista": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC003",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "INTERRUPÇÃO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "CANCELADO",
-      "nova_data_prevista": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC004",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "REPROGRAMAÇÃO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "EM ANÁLISE",
-      "nova_data_prevista": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC005",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "ADIAMENTO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "REPROGRAMADO",
-      "nova_data_prevista": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC006",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "SUBSTITUIÇÃO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "ABSORVIDO",
-      "nova_data_prevista": "",
-      "origem_dado": "DEMANDA"
-    },
-    {
-      "demanda_id": "DC007",
-      "impactou_planejamento": "NÃO",
-      "plano_afetado_id": "",
-      "tipo_impacto": "INTERRUPÇÃO",
-      "horas_desviadas": "0",
-      "qtd_planejada_afetada": "1",
-      "destino_planejamento": "CANCELADO",
-      "nova_data_prevista": "",
-      "origem_dado": "DEMANDA"
-    }
-  ],
+  "impact": [],
   "metrics": [
     {
       "atividade": "Plantio de mudas",
@@ -1868,11 +1670,11 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-03T16:15",
-    "temperatura": 26.8,
-    "sensacao": 28.2,
+    "atualizado": "2026-10-03T16:30",
+    "temperatura": 26.5,
+    "sensacao": 28.1,
     "precipitacao": 0.1,
-    "vento_kmh": 18,
+    "vento_kmh": 17,
     "codigo_tempo": 51,
     "condicao": "Chuvisco",
     "previsao": [
