@@ -1146,12 +1146,12 @@ function currentAggregate(){
   const horasPlanejadas=f.planning.reduce((s,x)=>s+Number(x.meta_planejada||0),0);
   const horasDesviadas=f.demands.reduce((s,x)=>s+Number(x.horas_consumidas||0),0);
   const impactRatio=horasPlanejadas>0?Math.min(horasDesviadas/horasPlanejadas,1):0;
-  // Bloqueio: atividades com status BLOQUEADO no planejamento mensal
-  const blockedPlanning=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='BLOQUEADO');
-  const blockedHoursTotal=blockedPlanning.reduce((s,x)=>s+Number(x.meta_planejada||0),0);
+  // Bloqueio: horas reais de 06_Bloqueadores (não do status do planejamento)
+  const blqAll=byTeam(state.blockers);
+  const blockedHoursTotal=blqAll.reduce((s,x)=>s+Number(x.horas_impactadas||0),0);
   const blockRate=horasPlanejadas>0?Math.min(blockedHoursTotal/horasPlanejadas,1):0;
-  const blqTeams=uniq(blockedPlanning.map(x=>x.equipe_id));
-  const blockedPlanIds=uniq(blockedPlanning.map(x=>x.plano_id).filter(Boolean));
+  const blqTeams=uniq(blqAll.map(x=>x.equipe_id));
+  const blockedPlanIds=uniq(blqAll.map(x=>x.plano_afetado_id).filter(Boolean));
   const allAffectedPlanIds=uniq([...impactedPlans,...blockedPlanIds]);
   const demTeams=uniq(f.demands.map(x=>x.equipe_id));
   const impactedTeams=planTeams.filter(t=>demTeams.includes(t));
@@ -1160,7 +1160,7 @@ function currentAggregate(){
   const naoEntregues=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()!=='EXECUTADO');
   const horasNaoEntregues=naoEntregues.reduce((s,x)=>s+Number(x.meta_planejada||0),0);
   const planImpactRate=horasPlanejadas>0?Math.min(horasNaoEntregues/horasPlanejadas,1):0;
-  const nBlq=blockedPlanning.length;
+  const nBlq=blqAll.length;
   const nAndamento=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO').length;
   const blockedHours=blockedHoursTotal;
   const attention=state.teams.map(t=>metricsForTeam(t.equipe_id)).filter(m=>m.score>=45).length;
