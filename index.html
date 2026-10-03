@@ -1099,8 +1099,14 @@ function metricsForTeam(teamId, month=state.month){
   const blq=state.blockers.filter(r=>r.equipe_id===teamId);
   const impacted=state.impact.filter(i=>i.impactou_planejamento==='SIM'&&dem.some(d=>d.demanda_id===i.demanda_id));
   const planActs=uniq(plan.map(x=>x.atividade_id));
-  const execActs=uniq(exec.map(x=>x.atividade_id));
-  const covered=planActs.filter(a=>execActs.includes(a)).length;
+  // Registros de execução com atividade_id válido
+  const execIdSet=new Set(exec.filter(x=>x.atividade_id&&x.atividade_id!=='LOCAL').map(x=>x.atividade_id));
+  // Planejamento já marcado como EXECUTADO na planilha
+  const statusDoneSet=new Set(plan.filter(x=>(x.status_planejamento||'').toUpperCase()==='EXECUTADO').map(x=>x.atividade_id));
+  // Fallback: nomes de atividades executadas (quando atividade_id não foi linkada)
+  const execNameSet=new Set(exec.map(x=>(x.atividade||'').trim().toLowerCase()));
+  const planActName=new Map(plan.map(x=>[x.atividade_id,(x.atividade||'').trim().toLowerCase()]));
+  const covered=planActs.filter(a=>execIdSet.has(a)||statusDoneSet.has(a)||execNameSet.has(planActName.get(a)||'\x00')).length;
   const coverage=planActs.length?covered/planActs.length:exec.length>0?1:0;
   // Interferência e bloqueio por horas (não por contagem de equipes)
   const hPlan=plan.reduce((s,x)=>s+Number(x.meta_planejada||0),0);
@@ -1410,8 +1416,9 @@ function renderImpactPage(){
     if(!execByMonth.length){
       execList.innerHTML='<p style="color:var(--faint);font-size:12px;padding:16px 0;text-align:center">Nenhum registro neste período.</p>';
     } else {
+      const eKey=r=>`${r.equipe_id}|${r.data}|${(r.atividade||'').trim()}`;
       execList.innerHTML=execByMonth.map(r=>{
-        const key=execKey(r);
+        const key=eKey(r);
         const hrs=r.horas_executadas?`${r.horas_executadas}h`:'';
         const qty=r.quantidade?`${r.quantidade}${r.unidade?' '+r.unidade:''}`:'' ;
         const sub=[hrs,qty,r.lider_tecnico||r.lider].filter(Boolean).join(' · ');
@@ -1427,9 +1434,9 @@ function renderImpactPage(){
       }).join('');
       execList.querySelectorAll('.exec-del-btn').forEach(btn=>btn.addEventListener('click',()=>{
         const key=btn.dataset.key;
-        state.execution=state.execution.filter(e=>execKey(e)!==key);
+        state.execution=state.execution.filter(e=>eKey(e)!==key);
         const local=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
-        if(Array.isArray(local.execution)) local.execution=local.execution.filter(e=>execKey(e)!==key);
+        if(Array.isArray(local.execution)) local.execution=local.execution.filter(e=>eKey(e)!==key);
         localStorage.setItem('ga-local-records',JSON.stringify(local));
         const sup=new Set(JSON.parse(localStorage.getItem('ga-suppressed-executions')||'[]'));
         sup.add(key);
