@@ -398,7 +398,7 @@ body{font-size:15px}
 .exec-row-check{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
 .exec-row-check input[type="checkbox"]{width:17px;height:17px;accent-color:var(--green);cursor:pointer;flex:none}
 .exec-row-check span{font-size:12.5px;font-weight:500;color:var(--text);flex:1;line-height:1.35}
-.exec-row-inputs{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.exec-row-inputs{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
 .exec-row-mini-label{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px}
 .exec-row-inputs input,.exec-row-inputs select{width:100%;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:10px;padding:7px 10px;font:inherit;font-size:12px;outline:none}
 .exec-row-inputs input:focus,.exec-row-inputs select:focus{border-color:var(--blue)}
@@ -1985,6 +1985,7 @@ function updateLeaderDependentFields(){
         <div><div class="exec-row-mini-label">Métrica</div><select class="exec-row-unidade">${unitOpts}</select></div>
         <div><div class="exec-row-mini-label">Quantidade</div><input type="number" class="exec-row-qtd" min="0" step="0.1" placeholder="ex: 12" /></div>
         <div><div class="exec-row-mini-label">Dias campo</div><input type="number" class="exec-row-dias" min="0" step="0.5" placeholder="ex: 2" /></div>
+        <div><div class="exec-row-mini-label">Horas</div><input type="number" class="exec-row-horas" min="0" step="0.5" placeholder="ex: 12" /></div>
       </div>
     </div>`).join('');
     listEl.querySelectorAll('.exec-activity-row').forEach((row,i)=>{
@@ -2027,7 +2028,8 @@ function saveExecRecord(e){
     const dias=Number(row.querySelector('.exec-row-dias').value)||0;
     const qtd=Number(row.querySelector('.exec-row-qtd').value)||0;
     const unidade=row.querySelector('.exec-row-unidade').value||'unidades';
-    const horas=dias*6;
+    const horasField=Number(row.querySelector('.exec-row-horas').value)||0;
+    const horas=horasField||dias*6;
     const linked=state.planning.find(p=>p.equipe_id===teamId&&planMesMatch(p,m)&&p.atividade===atividade);
     return {execucao_id:'EXEC-'+Date.now()+idx,data,equipe_id:teamId,lider_tecnico:team?.lider_tecnico||'',
       atividade_id:linked?.atividade_id||'LOCAL',atividade,horas_executadas:horas,dias_campo:dias,
