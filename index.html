@@ -1079,10 +1079,12 @@ async function loadData(){
   // Aplica lista de supressão (demandas deletadas pelo X mas ainda presentes no JSON)
   const suppressed=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
   const demKey=d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;
-  state.demands=state.demands.filter(d=>!suppressed.has(demKey(d)));
-  // Dedup demandas locais
+  // Remove demandas em branco (sem descrição e sem conteúdo útil) — ruído de testes ou envios acidentais
+  const isBlankDem=d=>!(d.descricao||'').trim()&&!(d.atividade_sugerida||'').trim();
+  state.demands=state.demands.filter(d=>!suppressed.has(demKey(d))&&!isBlankDem(d));
+  // Dedup demandas locais; remove também as em branco do localStorage
   const jsonDemKeys=new Set(state.demands.map(demKey));
-  const localDems=(local.demands||[]).filter(d=>!jsonDemKeys.has(demKey(d))&&!suppressed.has(demKey(d)));
+  const localDems=(local.demands||[]).filter(d=>!jsonDemKeys.has(demKey(d))&&!suppressed.has(demKey(d))&&!isBlankDem(d));
   const keptIds=new Set(localDems.map(d=>d.demanda_id));
   const localImps=(local.impact||[]).filter(i=>keptIds.has(i.demanda_id));
   state.demands=[...state.demands,...localDems];
@@ -2182,6 +2184,13 @@ function closeLeaderForm(){
 function saveLocalLeaderRecord(e){
   e.preventDefault();
   if(document.getElementById('leaderDemandForm').dataset.mode==='execucao'){saveExecRecord(e);return;}
+  const descVal=(document.getElementById('leaderDescription')?.value||'').trim();
+  const actVal=(document.getElementById('leaderActivity')?.value||'').trim();
+  if(!descVal&&!actVal){
+    const note=document.getElementById('leaderFormNote');
+    if(note){note.textContent='Preencha a demanda surgida ou a descrição antes de registrar.';note.style.color='var(--red)';}
+    return;
+  }
   const now=new Date();
   const teamId=document.getElementById('leaderTeam').value;
   const team=state.teams.find(t=>t.equipe_id===teamId);
