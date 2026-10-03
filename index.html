@@ -1155,9 +1155,9 @@ function currentAggregate(){
   const demTeams=uniq(f.demands.map(x=>x.equipe_id));
   const impactedTeams=planTeams.filter(t=>demTeams.includes(t));
   const blockedTeams=planTeams.filter(t=>blqTeams.includes(t));
-  // Impacto no planejamento: max(desvio por demandas, horas de bloqueadores) / horas planejadas
-  // Não conta atividades simplesmente "PLANEJADO" — apenas o que tem interferência real
-  const planImpactRate=Math.max(impactRatio,blockRate);
+  // Impacto no planejamento: horas desviadas por demandas de campo / horas planejadas
+  // (Taxa de Bloqueio já cobre os bloqueadores — este KPI é específico de desvio por demanda)
+  const planImpactRate=impactRatio;
   const nBlq=blqAll.filter(x=>(x.resolvido||'').toUpperCase()!=='SIM').length;
   const nAndamento=f.planning.filter(x=>(x.status_planejamento||'').toUpperCase()==='EM ANDAMENTO').length;
   const blockedHours=blockedHoursTotal;
