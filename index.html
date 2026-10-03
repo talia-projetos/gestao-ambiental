@@ -1038,9 +1038,13 @@ async function loadData(){
   Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact,metrics,weather_api,reservatorio,weather,scriptUrl:base?.script_url||''});
   if(weather)checkWeatherAlerts(weather);
   const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
-  // Dedup demandas
-  const jsonDemKeys=new Set(state.demands.map(d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`));
-  const localDems=(local.demands||[]).filter(d=>!jsonDemKeys.has(`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`));
+  // Aplica lista de supressão (demandas deletadas pelo X mas ainda presentes no JSON)
+  const suppressed=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
+  const demKey=d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;
+  state.demands=state.demands.filter(d=>!suppressed.has(demKey(d)));
+  // Dedup demandas locais
+  const jsonDemKeys=new Set(state.demands.map(demKey));
+  const localDems=(local.demands||[]).filter(d=>!jsonDemKeys.has(demKey(d))&&!suppressed.has(demKey(d)));
   const keptIds=new Set(localDems.map(d=>d.demanda_id));
   const localImps=(local.impact||[]).filter(i=>keptIds.has(i.demanda_id));
   state.demands=[...state.demands,...localDems];
@@ -1652,10 +1656,14 @@ function renderDemandTable(){
     const did=btn.dataset.did;
     // Remove da memória
     state.demands=state.demands.filter(d=>d.demanda_id!==did);
-    // Remove do localStorage
+    // Remove do localStorage (registro local)
     const local=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
     if(Array.isArray(local.demands)) local.demands=local.demands.filter(d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`!==key);
     localStorage.setItem('ga-local-records',JSON.stringify(local));
+    // Suprime dados vindos da planilha (persiste entre reloads até republicar)
+    const sup=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
+    sup.add(key);
+    localStorage.setItem('ga-suppressed-demands',JSON.stringify([...sup]));
     renderDemandTable(); renderKPIs();
   }));
 }
@@ -2255,7 +2263,7 @@ function setupUI(){
     setTimeout(()=>{state.map?.invalidateSize();lucide.createIcons();},120);
   });
   document.getElementById('resetSettings').addEventListener('click',()=>{applyTheme('light');applyPresentation(false);applyDensity('comfortable');applyNames(true);state.animations=true;document.getElementById('animationSetting').checked=true;state.refreshMinutes=5;document.getElementById('refreshSetting').value='5';setupRefresh();});
-  document.getElementById('clearLocalBtn').addEventListener('click',()=>{if(!confirm('Apagar todos os registros salvos localmente neste navegador?\n\nRegistros já publicados na planilha não são afetados.'))return;localStorage.removeItem('ga-local-records');location.reload();});
+  document.getElementById('clearLocalBtn').addEventListener('click',()=>{if(!confirm('Apagar todos os registros salvos localmente neste navegador?\n\nRegistros já publicados na planilha não são afetados.'))return;localStorage.removeItem('ga-local-records');localStorage.removeItem('ga-suppressed-demands');location.reload();});
   document.getElementById('bp3Toggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.bp3Layer)return;const on=state.map.hasLayer(state.bp3Layer);on?state.map.removeLayer(state.bp3Layer):state.bp3Layer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('hydroToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.hydroLayer)return;const on=state.map.hasLayer(state.hydroLayer);on?state.map.removeLayer(state.hydroLayer):state.hydroLayer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('demandToggle').addEventListener('click',e=>{const b=e.currentTarget;const on=state.map.hasLayer(state.demandLayer);on?state.map.removeLayer(state.demandLayer):state.demandLayer.addTo(state.map);b.classList.toggle('active',!on);});
