@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T22:24:02.723Z",
+  "generated_at": "2026-10-04T12:24:56.364Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1297,7 +1297,25 @@
     }
   ],
   "execution": [],
-  "demands": [],
+  "demands": [
+    {
+      "demanda_id": "DC001",
+      "data": "2026-10-04",
+      "equipe_id": "EQ04",
+      "lider_tecnico": "Diego Henrique Mendes",
+      "atividade_id": "",
+      "atividade_sugerida": "",
+      "descricao": "",
+      "prioridade": "MÉDIA",
+      "status": "ABERTA",
+      "horas_consumidas": 0,
+      "latitude": "-25513487",
+      "longitude": "-54595145",
+      "local_referencia": "Manutenção de plantios estabelecidos",
+      "equipe_apoio": "",
+      "origem_dado": "DEMANDA"
+    }
+  ],
   "blockers": [
     {
       "bloqueador_id": "BL001",
@@ -1518,7 +1536,19 @@
       "orientacao_operacional_simulada": "Alta pluviosidade — planejar alternativas de escritório"
     }
   ],
-  "impact": [],
+  "impact": [
+    {
+      "demanda_id": "DC001",
+      "impactou_planejamento": "NÃO",
+      "plano_afetado_id": "",
+      "tipo_impacto": "ADIAMENTO",
+      "horas_desviadas": "0",
+      "qtd_planejada_afetada": "1",
+      "destino_planejamento": "REPROGRAMADO",
+      "nova_data_prevista": "",
+      "origem_dado": "DEMANDA"
+    }
+  ],
   "metrics": [
     {
       "atividade": "Plantio de mudas",
@@ -1558,48 +1588,48 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-03T19:15",
-    "temperatura": 23.4,
-    "sensacao": 25.9,
+    "atualizado": "2026-10-04T09:15",
+    "temperatura": 20.5,
+    "sensacao": 23.3,
     "precipitacao": 0,
-    "vento_kmh": 12,
+    "vento_kmh": 3,
     "codigo_tempo": 3,
     "condicao": "Nublado",
     "previsao": [
       {
-        "data": "2026-10-03",
-        "chuva_mm": 5.7,
-        "prob_chuva": 77,
-        "tmax": 27,
-        "tmin": 18.8,
-        "codigo": 95,
-        "condicao": "Tempestade"
-      },
-      {
         "data": "2026-10-04",
-        "chuva_mm": 43.9,
+        "chuva_mm": 26.4,
         "prob_chuva": 100,
-        "tmax": 25.7,
-        "tmin": 18.7,
+        "tmax": 26.1,
+        "tmin": 16,
         "codigo": 95,
         "condicao": "Tempestade"
       },
       {
         "data": "2026-10-05",
-        "chuva_mm": 25.4,
+        "chuva_mm": 24.9,
         "prob_chuva": 98,
-        "tmax": 22.6,
-        "tmin": 19.6,
-        "codigo": 95,
+        "tmax": 25.3,
+        "tmin": 20.2,
+        "codigo": 96,
         "condicao": "Tempestade"
       },
       {
         "data": "2026-10-06",
-        "chuva_mm": 1.4,
-        "prob_chuva": 65,
-        "tmax": 28,
-        "tmin": 20.8,
-        "codigo": 53,
+        "chuva_mm": 0.6,
+        "prob_chuva": 69,
+        "tmax": 26.8,
+        "tmin": 20.3,
+        "codigo": 51,
+        "condicao": "Chuvisco"
+      },
+      {
+        "data": "2026-10-07",
+        "chuva_mm": 2.7,
+        "prob_chuva": 53,
+        "tmax": 27,
+        "tmin": 22.1,
+        "codigo": 55,
         "condicao": "Chuvisco"
       }
     ]
