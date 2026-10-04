@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-04T13:09:54.496Z",
+  "generated_at": "2026-10-04T13:10:48.553Z",
   "source": "PROERG",
-  "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
+  "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
     {
       "equipe_id": "EQ01",
@@ -1551,7 +1551,7 @@
       "bloqueador_id": "BL008",
       "data": "2026-10-06",
       "equipe_id": "EQ02",
-      "tipo_bloqueador": "Logístico",
+      "tipo_bloqueador": "Demanda não planejada",
       "impacto": "BAIXO",
       "horas_impactadas": "6",
       "impactou_planejamento": "SIM",
