@@ -385,7 +385,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
 .ctx-tile-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--faint)}
 .ctx-tile-value{font-size:22px;font-weight:800;letter-spacing:-.035em;line-height:1}
 .ctx-tile-sub{font-size:11px;color:var(--muted);margin-top:1px}
-.ctx-forecast{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--border);padding-top:16px}
+.ctx-forecast{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:0;border-top:1px solid var(--border);padding-top:16px}
 .ctx-fc-tile{padding:2px 20px 2px 16px;border-right:1px solid var(--border)}
 .ctx-fc-tile:first-child{padding-left:0}
 .ctx-fc-tile:last-child{border-right:0;padding-right:0}
@@ -1427,7 +1427,8 @@ function renderContextPanel(){
   const prevRow=prev.length?`<div class="ctx-forecast">${prev.slice(0,5).map(d=>{
     const dt=d.data?new Date(d.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'}):'';
     const cls=d.prob_chuva>=70?'ctx-status-critico':d.prob_chuva>=40?'ctx-status-atencao':'';
-    return `<div class="ctx-fc-tile"><div class="ctx-fc-label">${dt}</div><div class="ctx-fc-value ${cls}">${d.condicao||'—'}</div><div class="ctx-fc-sub">${d.tmin!=null?d.tmin+'°':''} – ${d.tmax!=null?d.tmax+'°':''} · ${d.prob_chuva!=null?d.prob_chuva+'%':''}</div></div>`;
+    const _subP=[];if(d.tmin!=null||d.tmax!=null)_subP.push(`${d.tmin!=null?d.tmin+'°':'?'}–${d.tmax!=null?d.tmax+'°':'?'}`);if(d.prob_chuva!=null)_subP.push(`prob. ${d.prob_chuva}%`);
+    return `<div class="ctx-fc-tile"><div class="ctx-fc-label">${dt}</div><div class="ctx-fc-value ${cls}">${d.condicao||'—'}</div><div class="ctx-fc-sub">${_subP.join(' · ')}</div></div>`;
   }).join('')}</div>`:'';
 
   body.innerHTML=`<div class="ctx-now">${wxNow}${resNow}</div>${prevRow}`;
