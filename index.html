@@ -2162,7 +2162,7 @@ function saveExecRecord(e){
     const dias=Number(row.querySelector('.exec-row-dias').value)||0;
     const qtd=Number(row.querySelector('.exec-row-qtd').value)||0;
     const unidade=row.querySelector('.exec-row-unidade').value||'unidades';
-    const horas=dias*6;
+    const horas=unidade==='horas'?qtd:dias*6;
     const linked=state.planning.find(p=>p.equipe_id===teamId&&planMesMatch(p,m)&&p.atividade===atividade);
     return {execucao_id:'EXEC-'+Date.now()+idx,data,equipe_id:teamId,lider_tecnico:team?.lider_tecnico||'',
       atividade_id:linked?.atividade_id||'LOCAL',atividade,horas_executadas:horas,dias_campo:dias,
