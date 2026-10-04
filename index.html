@@ -660,13 +660,13 @@ body{font-size:15px}
             <div class="chart-wrap" style="height:220px"><canvas id="teamPressureChart"></canvas></div>
           </article>
 
-          <!-- Aderência ao planejamento -->
+          <!-- Cascata de capacidade operacional -->
           <article class="card chart-card span-12">
             <div class="card-header">
-              <div><h2>Aderência ao planejamento por equipe</h2><p>% de horas executadas em relação ao planejado no período — referência 100 %</p></div>
-              <button class="icon-btn ghost expand-btn" data-chart="hoursChart" title="Ampliar"><i data-lucide="maximize-2"></i></button>
+              <div><h2>Cascata de capacidade operacional</h2><p>Destino das horas planejadas: executadas · perdidas em bloqueadores · desvio por demandas</p></div>
+              <button class="icon-btn ghost expand-btn" data-chart="capacityChart" title="Ampliar"><i data-lucide="maximize-2"></i></button>
             </div>
-            <div class="chart-wrap" style="height:200px"><canvas id="hoursChart"></canvas></div>
+            <div class="chart-wrap" style="height:200px"><canvas id="capacityChart"></canvas></div>
           </article>
 
           <!-- Para onde olhar + Impacto side by side -->
@@ -780,10 +780,10 @@ body{font-size:15px}
           </article>
           <article class="card chart-card span-7">
             <div class="card-header">
-              <div><h2>Impacto dos bloqueadores</h2><p>Horas operacionais afetadas por causa — acumulado anual</p></div>
-              <button class="icon-btn ghost expand-btn" data-chart="blockerChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
+              <div><h2>Tendência de cobertura mensal</h2><p>% de horas executadas vs. planejadas por mês — evolução do projeto por equipe</p></div>
+              <button class="icon-btn ghost expand-btn" data-chart="trendChart" title="Ampliar gráfico"><i data-lucide="maximize-2"></i></button>
             </div>
-            <div class="chart-wrap medium"><canvas id="blockerChart"></canvas></div>
+            <div class="chart-wrap medium"><canvas id="trendChart"></canvas></div>
           </article>
         </section>
       </div>
@@ -1308,36 +1308,31 @@ function setChart(id,config,title,subtitle){
 function renderPlanChart(){
   const eqIds=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
   const m=Number(state.month);
-  // contagens de atividades (não horas)
-  const planned=eqIds.map(id=>state.planning.filter(r=>planMesMatch(r,m)&&r.equipe_id===id).length);
-  const executed=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).length);
-  const demands=eqIds.map(id=>state.demands.filter(r=>monthOf(r)===m&&r.equipe_id===id).length);
-  // horas para tooltip
   const plannedH=eqIds.map(id=>state.planning.filter(r=>planMesMatch(r,m)&&r.equipe_id===id).reduce((s,r)=>s+Number(r.meta_planejada||0),0));
-  const executedH=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,r)=>s+Number(r.quantidade_executada||0),0));
+  const executedH=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,r)=>s+Number(r.horas_executadas||r.quantidade_executada||0),0));
+  const adherence=eqIds.map((_,i)=>plannedH[i]>0?Math.round(executedH[i]/plannedH[i]*100):executedH[i]>0?100:0);
   const options=chartBase();
   options.plugins.legend.position='top';
   options.plugins.legend.align='end';
   options.scales.x.ticks.maxRotation=0;
-  options.scales.y={...options.scales.y,beginAtZero:true,ticks:{...options.scales.y?.ticks,precision:0,color:cssVar('--muted')},title:{display:true,text:'Atividades',color:cssVar('--muted'),font:{size:9}}};
-  options.scales.y2={beginAtZero:true,position:'right',title:{display:true,text:'Demandas',color:cssVar('--muted'),font:{size:9}},grid:{drawOnChartArea:false},ticks:{color:cssVar('--muted'),font:{size:9},precision:0}};
-  options.plugins.tooltip.callbacks={label:ctx=>{
+  options.scales.y={...options.scales.y,beginAtZero:true,ticks:{precision:0,color:cssVar('--muted')},title:{display:true,text:'Horas',color:cssVar('--muted'),font:{size:9}}};
+  options.scales.y2={beginAtZero:true,max:130,position:'right',title:{display:true,text:'Aderência %',color:cssVar('--muted'),font:{size:9}},grid:{drawOnChartArea:false},ticks:{color:cssVar('--muted'),font:{size:9},callback:v=>`${v}%`}};
+  options.plugins.tooltip={callbacks:{label:ctx=>{
     const i=ctx.dataIndex,ds=ctx.dataset.label;
-    if(ds==='Planejado')return ` ${ctx.parsed.y} atividades · ${plannedH[i]}h previstas`;
-    if(ds==='Executado')return ` ${ctx.parsed.y} registros · ${executedH[i]}h executadas`;
-    return ` ${ctx.parsed.y} demandas`;
-  }};
+    if(ds==='Planejado')return ` ${plannedH[i]}h previstas`;
+    if(ds==='Executado')return ` ${executedH[i]}h executadas`;
+    return ` Aderência: ${adherence[i]}%`;
+  }}};
   destroyChart('planChart');
   const ctx=document.getElementById('planChart'); if(!ctx)return;
   const config={type:'bar',data:{labels:eqIds,datasets:[
-    {label:'Planejado',data:planned,backgroundColor:'rgba(180,188,190,.28)',borderColor:'rgba(180,188,190,.6)',borderWidth:1,borderRadius:6,barPercentage:.75},
-    {label:'Executado',data:executed,backgroundColor:cssVar('--green'),borderRadius:6,barPercentage:.75},
-    {label:'Demandas não previstas',data:demands,type:'line',borderColor:cssVar('--red'),backgroundColor:'rgba(185,78,78,.08)',fill:true,tension:.35,pointRadius:5,pointBackgroundColor:cssVar('--red'),yAxisID:'y2',order:0}
+    {label:'Planejado',data:plannedH,backgroundColor:'rgba(180,188,190,.28)',borderColor:'rgba(180,188,190,.6)',borderWidth:1,borderRadius:6,barPercentage:.75},
+    {label:'Executado',data:executedH,backgroundColor:cssVar('--green'),borderRadius:6,barPercentage:.75},
+    {label:'Aderência',data:adherence,type:'line',borderColor:cssVar('--blue'),backgroundColor:'transparent',tension:.3,pointRadius:5,pointBackgroundColor:cssVar('--blue'),yAxisID:'y2',order:0,borderDash:[4,3]},
   ]},options};
-  const _planCfg=config;
   state.chartSpecs['planChart']={
-    renderFn:(cid)=>{const c=document.getElementById(cid);if(!c)return null;return new Chart(c,{type:_planCfg.type,data:_planCfg.data,options:{..._planCfg.options,responsive:true,maintainAspectRatio:false}});},
-    title:'Execução vs planejamento',subtitle:'Atividades planejadas vs executadas e demandas não previstas'};
+    renderFn:(cid)=>{const c=document.getElementById(cid);if(!c)return null;return new Chart(c,{type:config.type,data:config.data,options:{...options,responsive:true,maintainAspectRatio:false}});},
+    title:'Execução vs planejamento',subtitle:'Horas planejadas vs executadas + aderência % por equipe'};
   state.charts['planChart']=new Chart(ctx,config);
 }
 
@@ -1386,7 +1381,6 @@ function buildBlockerChart(canvasId){
     renderFn:(cid)=>{const c=document.getElementById(cid);if(!c)return null;return new Chart(c,{type:'bar',data:{labels:_blkEntries.map(x=>x[0]),datasets:[{label:'Horas impactadas',data:_blkEntries.map(x=>x[1]),backgroundColor:_blkBorders,borderColor:_blkBorders,borderWidth:0,borderRadius:6}]},options:{..._blkOpts,responsive:true,maintainAspectRatio:false}});},
     title:'Impacto dos bloqueadores',subtitle:'Horas operacionais afetadas por causa'};
 }
-function renderBlockerChart(){ buildBlockerChart('blockerChart'); }
 
 function renderContextPanel(){
   // Prefer Apps Script weather_api; fall back to live Open-Meteo data
@@ -1576,38 +1570,81 @@ function workDaysInMonth(mesNum){
   return count;
 }
 
-function renderHoursChart(){
+function renderCapacityChart(){
   const eqIds=state.team==='ALL'?state.teams.map(t=>t.equipe_id):[state.team];
   const m=Number(state.month);
-  const executadas=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,x)=>s+Number(x.quantidade_executada||0),0));
-  const planejadas=eqIds.map(id=>state.planning.filter(r=>planMesMatch(r,m)&&r.equipe_id===id).reduce((s,x)=>s+Number(x.meta_planejada||0),0));
-  const ratios=eqIds.map((_,i)=>planejadas[i]>0?Math.round(executadas[i]/planejadas[i]*100):executadas[i]>0?100:0);
-  const teamColorMap=Object.fromEntries(state.teams.map(t=>[t.equipe_id,t.cor||cssVar('--muted')]));
-  const bgColors=eqIds.map((id,i)=>ratios[i]>=80?cssVar('--green'):ratios[i]>=50?cssVar('--ochre'):(teamColorMap[id]||cssVar('--muted')));
-  const maxX=Math.max(130,Math.max(...ratios,100)+15);
-  const refLinePlugin={id:'refLine',afterDraw(chart){
-    const {ctx,chartArea:{top,bottom},scales:{x}}=chart;
-    if(!x)return;
-    const xPos=x.getPixelForValue(100);
-    ctx.save();ctx.strokeStyle='rgba(46,125,79,.5)';ctx.lineWidth=1.5;ctx.setLineDash([5,4]);
-    ctx.beginPath();ctx.moveTo(xPos,top);ctx.lineTo(xPos,bottom);ctx.stroke();
-    ctx.setLineDash([]);ctx.fillStyle='rgba(46,125,79,.6)';ctx.font='10px Inter,sans-serif';
-    ctx.fillText('100%',xPos+4,top+12);ctx.restore();
-  }};
+  const plannedH=eqIds.map(id=>state.planning.filter(r=>planMesMatch(r,m)&&r.equipe_id===id).reduce((s,r)=>s+Number(r.meta_planejada||0),0));
+  const executedH=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,r)=>s+Number(r.horas_executadas||r.quantidade_executada||0),0));
+  const blockedH=eqIds.map(id=>state.blockers.filter(r=>r.equipe_id===id&&monthOf(r)===m).reduce((s,r)=>s+Number(r.horas_impactadas||0),0));
+  const demandsH=eqIds.map(id=>state.impact.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,r)=>s+Number(r.horas_consumidas||0),0));
+  const residualH=eqIds.map((_,i)=>Math.max(0,plannedH[i]-executedH[i]-blockedH[i]-demandsH[i]));
   const options=chartBase();
   options.indexAxis='y';
-  options.plugins.legend.display=false;
-  options.scales.x={beginAtZero:true,max:maxX,ticks:{callback:v=>`${v}%`,color:cssVar('--muted'),font:{size:10}},grid:{color:'rgba(150,160,155,0.12)'}};
-  options.scales.y={ticks:{color:cssVar('--muted'),font:{size:11,weight:'600'}},grid:{display:false}};
-  options.plugins.tooltip={callbacks:{label:ctx=>{const i=ctx.dataIndex;return ` ${ratios[i]}% — ${executadas[i]}h exec. / ${planejadas[i]}h plan.`;}}};
-  destroyChart('hoursChart');
-  const ctx=document.getElementById('hoursChart'); if(!ctx)return;
-  const config={type:'bar',data:{labels:eqIds,datasets:[{data:ratios,backgroundColor:bgColors,borderRadius:6,barPercentage:.6}]},options,plugins:[refLinePlugin]};
-  const _hEqIds=eqIds,_hRatios=ratios,_hExec=executadas,_hPlan=planejadas,_hBg=bgColors.slice(),_hOpts=options;
-  state.chartSpecs['hoursChart']={
-    renderFn:(cid)=>{const c=document.getElementById(cid);if(!c)return null;const o={..._hOpts,responsive:true,maintainAspectRatio:false,plugins:{..._hOpts.plugins,tooltip:{callbacks:{label:cx=>{const i=cx.dataIndex;return ` ${_hRatios[i]}% — ${_hExec[i]}h exec. / ${_hPlan[i]}h plan.`;}}}}}; return new Chart(c,{type:'bar',data:{labels:_hEqIds,datasets:[{data:_hRatios,backgroundColor:_hBg,borderRadius:6,barPercentage:.6}]},options:o});},
-    title:'Aderência ao planejamento',subtitle:'% executado vs. planejado por equipe no período'};
-  state.charts['hoursChart']=new Chart(ctx,config);
+  options.plugins.legend.position='top';
+  options.plugins.legend.align='end';
+  options.scales.x={beginAtZero:true,stacked:true,ticks:{color:cssVar('--muted'),font:{size:10}},grid:{color:cssVar('--chart-grid')},title:{display:true,text:'Horas',color:cssVar('--muted'),font:{size:9}}};
+  options.scales.y={stacked:true,ticks:{color:cssVar('--muted'),font:{size:11,weight:'600'}},grid:{display:false}};
+  options.plugins.tooltip={callbacks:{label:ctx=>{
+    const i=ctx.dataIndex,v=ctx.parsed.x,plan=plannedH[i]||1;
+    return ` ${ctx.dataset.label}: ${v}h (${Math.round(v/plan*100)}% do planejado)`;
+  }}};
+  destroyChart('capacityChart');
+  const ctx=document.getElementById('capacityChart'); if(!ctx)return;
+  const config={type:'bar',data:{labels:eqIds,datasets:[
+    {label:'Executado',data:executedH,backgroundColor:cssVar('--green'),stack:'cap'},
+    {label:'Perdido (bloqueadores)',data:blockedH,backgroundColor:'rgba(185,78,78,.75)',stack:'cap'},
+    {label:'Desvio (demandas)',data:demandsH,backgroundColor:'rgba(226,168,74,.8)',stack:'cap'},
+    {label:'Não executado',data:residualH,backgroundColor:'rgba(150,158,160,.22)',borderColor:'rgba(150,158,160,.4)',borderWidth:1,stack:'cap'},
+  ]},options};
+  state.chartSpecs['capacityChart']={
+    renderFn:(cid)=>{const c=document.getElementById(cid);if(!c)return null;return new Chart(c,{type:config.type,data:config.data,options:{...options,responsive:true,maintainAspectRatio:false}});},
+    title:'Cascata de capacidade operacional',subtitle:'Destino das horas planejadas por equipe no mês'};
+  state.charts['capacityChart']=new Chart(ctx,config);
+}
+
+function renderTrendChart(){
+  const maxM=Number(state.month);
+  if(maxM<1){destroyChart('trendChart');return;}
+  const projectMonths=Array.from({length:maxM},(_,i)=>i+1);
+  const labels=projectMonths.map(pm=>{try{const c=mesNumToCalendar(pm);return new Date(c.year,c.month-1,1).toLocaleDateString('pt-BR',{month:'short',year:'2-digit'});}catch{return `M${pm}`;}});
+  const teams=state.team==='ALL'?state.teams:state.teams.filter(t=>t.equipe_id===state.team);
+  const datasets=teams.map(team=>{
+    const id=team.equipe_id;
+    const data=projectMonths.map(pm=>{
+      const ph=state.planning.filter(r=>planMesMatch(r,pm)&&r.equipe_id===id).reduce((s,r)=>s+Number(r.meta_planejada||0),0);
+      const eh=state.execution.filter(r=>monthOf(r)===pm&&r.equipe_id===id).reduce((s,r)=>s+Number(r.horas_executadas||r.quantidade_executada||0),0);
+      return ph>0?Math.round(eh/ph*100):null;
+    });
+    const color=teamColors[id]||cssVar('--blue');
+    return {label:id,data,borderColor:color,backgroundColor:color+'22',tension:.35,spanGaps:true,pointRadius:4,pointHoverRadius:6,borderWidth:2,fill:false};
+  });
+  const refPlugin={id:'trendRef',afterDraw(chart){
+    const {ctx,chartArea:{left,right},scales:{y}}=chart;
+    if(!y)return;
+    const yp=y.getPixelForValue(100);
+    ctx.save();ctx.strokeStyle='rgba(46,125,79,.4)';ctx.lineWidth=1.5;ctx.setLineDash([5,4]);
+    ctx.beginPath();ctx.moveTo(left,yp);ctx.lineTo(right,yp);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='rgba(46,125,79,.55)';ctx.font='9px Inter,sans-serif';
+    ctx.fillText('100%',right-28,yp-4);ctx.restore();
+  }};
+  const options=chartBase();
+  options.plugins.legend.position='top';
+  options.plugins.legend.align='end';
+  options.scales.y={...options.scales.y,beginAtZero:true,max:130,ticks:{color:cssVar('--muted'),font:{size:10},callback:v=>`${v}%`}};
+  options.plugins.tooltip={callbacks:{label:ctx=>{
+    const team=teams[ctx.datasetIndex];if(!team)return '';
+    const m=projectMonths[ctx.dataIndex];
+    const ph=state.planning.filter(r=>planMesMatch(r,m)&&r.equipe_id===team.equipe_id).reduce((s,r)=>s+Number(r.meta_planejada||0),0);
+    const eh=state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===team.equipe_id).reduce((s,r)=>s+Number(r.horas_executadas||r.quantidade_executada||0),0);
+    return ` ${team.equipe_id}: ${ctx.parsed.y??'—'}% — ${eh}h exec. / ${ph}h plan.`;
+  }}};
+  destroyChart('trendChart');
+  const ctx=document.getElementById('trendChart'); if(!ctx)return;
+  const config={type:'line',data:{labels,datasets},options,plugins:[refPlugin]};
+  state.chartSpecs['trendChart']={
+    renderFn:(cid)=>{const c=document.getElementById(cid);if(!c)return null;return new Chart(c,{type:'line',data:config.data,options:{...options,responsive:true,maintainAspectRatio:false}});},
+    title:'Tendência de cobertura mensal',subtitle:'% de horas executadas vs. planejadas — evolução por equipe'};
+  state.charts['trendChart']=new Chart(ctx,config);
 }
 
 function renderWeather(){
@@ -1976,7 +2013,7 @@ function renderMobilePlanView(){
     :'<p class="mob-empty">Nenhuma demanda emergencial no período.</p>';
 }
 function renderAll(){
-  [renderKPIs,renderPlanChart,renderHoursChart,renderImpactChart,renderBlockerChart,renderPressureChart,renderTeamPressureChart,renderDemandTable,renderWeather,renderTeamTable,renderAttention,renderMobilePlanView,renderMobileHub]
+  [renderKPIs,renderPlanChart,renderCapacityChart,renderTrendChart,renderImpactChart,renderPressureChart,renderTeamPressureChart,renderDemandTable,renderWeather,renderTeamTable,renderAttention,renderMobilePlanView,renderMobileHub]
     .forEach(fn=>{try{fn();}catch(e){console.error('[render]',fn.name,e);}});
   try{lucide.createIcons();}catch(e){}
 }
