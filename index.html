@@ -1288,9 +1288,10 @@ function renderKPIs(){
   document.getElementById('kpiImpact').textContent=fmtPct(m.blockRate);
   document.getElementById('kpiImpactNote').textContent=`${fmtNum(m.blockedHours)} h afetadas · ${_hPlanNote}`;
   setRing('ringImpact',m.blockRate,true);
-  document.getElementById('kpiBlocked').textContent=fmtPct(m.blockRate);
-  document.getElementById('kpiBlockedNote').textContent=`${fmtNum(m.blockedHours)} h bloqueadas · ${_hPlanNote}`;
-  setRing('ringBlocked',m.blockRate,true);
+  const _blockActRate=m.totalPlan>0?m.nBloqueadas/m.totalPlan:0;
+  document.getElementById('kpiBlocked').textContent=fmtPct(_blockActRate);
+  document.getElementById('kpiBlockedNote').textContent=`${m.nBloqueadas} de ${m.totalPlan} atividades bloqueadas`;
+  setRing('ringBlocked',_blockActRate,true);
   document.getElementById('kpiAttention').textContent=fmtPct(m.planImpactRate);
   const an=document.getElementById('kpiAttentionNote');
   if(an) an.textContent=`${m.nBloqueadas} bloqueadas · ${m.nParciais} parciais · ${m.nDemandas} demandas · ${m.nAndamento} em andamento`;
@@ -1388,12 +1389,20 @@ function buildBlockerChart(canvasId){
 function renderBlockerChart(){ buildBlockerChart('blockerChart'); }
 
 function renderContextPanel(){
-  const wx=state.weather_api;
+  // Prefer Apps Script weather_api; fall back to live Open-Meteo data
+  let wx=state.weather_api;
+  let livePreview=null;
+  if(!wx&&state.weather){
+    const c=state.weather.current||{};
+    const cond=c.precipitation_mm>5?'Chuva':c.precipitation_mm>0.5?'Chuva fraca':'Sem precipitação';
+    wx={condicao:cond,temperatura:c.temperature_c!=null?Math.round(c.temperature_c):null,sensacao:null,precipitacao:c.precipitation_mm!=null?Math.round(c.precipitation_mm*10)/10:null,vento_kmh:c.wind_kmh!=null?Math.round(c.wind_kmh):null,atualizado:state.weather.observed_at||''};
+    livePreview=state.weather.forecast||[];
+  }
   const res=state.reservatorio;
   const body=document.getElementById('ctxBody');
   const dateEl=document.getElementById('ctxDate');
   if(!wx&&!res){
-    body.innerHTML='<p style="color:var(--faint);font-size:12px;padding:8px 0">Dados de contexto disponíveis após o próximo push da planilha.</p>';
+    body.innerHTML='<p style="color:var(--faint);font-size:12px;padding:8px 0">Clima indisponível no momento. Verifique a conexão.</p>';
     if(dateEl)dateEl.textContent='';
     return;
   }
@@ -1419,8 +1428,9 @@ function renderContextPanel(){
     tile('Afluente',res.vazao_afluente!=null?`${(res.vazao_afluente/1000).toFixed(1)}k`:'—','m³/s entrada'),
   ].join(''):'';
 
-  const prev=wx?.previsao||[];
-  const prevRow=prev.length?`<div class="ctx-forecast">${prev.map(d=>{
+  // Previsão: prefer Apps Script data, fall back to Open-Meteo forecast
+  const prev=wx?.previsao||(livePreview||[]).map(f=>({data:f.date,condicao:f.precipitation_mm>5?'Chuva':f.precipitation_mm>0.5?'Chuva fraca':'Sol/Nublado',prob_chuva:f.rain_probability_pct,tmin:null,tmax:null}));
+  const prevRow=prev.length?`<div class="ctx-forecast">${prev.slice(0,5).map(d=>{
     const dt=d.data?new Date(d.data+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'}):'';
     const cls=d.prob_chuva>=70?'ctx-status-critico':d.prob_chuva>=40?'ctx-status-atencao':'';
     return `<div class="ctx-fc-tile"><div class="ctx-fc-label">${dt}</div><div class="ctx-fc-value ${cls}">${d.condicao||'—'}</div><div class="ctx-fc-sub">${d.tmin!=null?d.tmin+'°':''} – ${d.tmax!=null?d.tmax+'°':''} · ${d.prob_chuva!=null?d.prob_chuva+'%':''}</div></div>`;
@@ -2040,8 +2050,11 @@ function updateDemandMarkers(){
   if(!state.demandLayer)return;
   state.demandLayer.clearLayers();
   renderMapLegend();
+  const fixCoord=(lat,lon)=>{let la=Number(lat),lo=Number(lon);if(Math.abs(la)>90)la=la/1e6;if(Math.abs(lo)>180)lo=lo/1e6;return[la,lo];};
   const rows=byTeam(state.demands).filter(d=>d.latitude&&d.longitude);
   rows.forEach(d=>{
+    const [la,lo]=fixCoord(d.latitude,d.longitude);
+    if(isNaN(la)||isNaN(lo)||Math.abs(la)>90||Math.abs(lo)>180)return;
     const color=teamColors[d.equipe_id]||cssVar('--blue');
     const team=state.teams.find(t=>t.equipe_id===d.equipe_id);
     const teamName=team?team.equipe:d.equipe_id;
@@ -2062,7 +2075,7 @@ function updateDemandMarkers(){
       </div>
     </div>`;
     const icon=L.divIcon({className:'',html:`<div class="map-demand-dot" style="width:14px;height:14px;background:${color}"></div>`,iconSize:[14,14],iconAnchor:[7,7]});
-    L.marker([Number(d.latitude),Number(d.longitude)],{icon}).bindPopup(popup,{maxWidth:280}).addTo(state.demandLayer);
+    L.marker([la,lo],{icon}).bindPopup(popup,{maxWidth:280}).addTo(state.demandLayer);
   });
 }
 
