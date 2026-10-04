@@ -1125,7 +1125,7 @@ async function loadData(){
   const suppressed=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
   const demKey=d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;
   // Remove demandas em branco (sem descrição e sem conteúdo útil) — ruído de testes ou envios acidentais
-  const isBlankDem=d=>!(d.descricao||'').trim()&&!(d.atividade_sugerida||'').trim();
+  const isBlankDem=d=>!(d.descricao||'').trim()&&!(d.atividade_sugerida||'').trim()&&!(d.local_referencia||'').trim();
   state.demands=state.demands.filter(d=>!suppressed.has(demKey(d))&&!isBlankDem(d));
   // Dedup demandas locais; remove também as em branco do localStorage
   const jsonDemKeys=new Set(state.demands.map(demKey));
