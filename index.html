@@ -676,7 +676,7 @@ body{font-size:15px}
           </article>
           <article class="card chart-card span-4">
             <div class="card-header compact">
-              <div><h2>Destino das demandas</h2><p>Como foram tratadas no planejamento</p></div>
+              <div><h2>Situação das ocorrências</h2><p>Status atual das demandas não planejadas</p></div>
             </div>
             <div class="chart-wrap" style="height:210px"><canvas id="impactChart"></canvas></div>
           </article>
@@ -1352,7 +1352,7 @@ function renderImpactChart(){
   if(!data.length){labels.push('Sem demandas');data.push(1);colors.push(cssVar('--border'));}
   const options={responsive:true,maintainAspectRatio:false,cutout:'68%',animation:state.animations?{duration:500}:false,plugins:{legend:{position:'bottom',align:'center',labels:{color:cssVar('--muted'),boxWidth:7,boxHeight:7,usePointStyle:true,pointStyle:'circle',font:{size:9},padding:10}},tooltip:{backgroundColor:cssVar('--text'),titleColor:cssVar('--surface'),bodyColor:cssVar('--surface')}}};
   const config={type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0}]},options};
-  setChart('impactChart',config,'Impacto das demandas','Destino das demandas não previstas no planejamento');
+  setChart('impactChart',config,'Situação das ocorrências','Status atual das demandas não planejadas');
 }
 
 function makeStripe(color){
