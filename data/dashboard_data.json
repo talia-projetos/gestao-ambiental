@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T12:56:52.035Z",
+  "generated_at": "2026-10-04T12:57:48.322Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1432,7 +1432,7 @@
       "atividade_sugerida": "Outra demanda não catalogada",
       "descricao": "Outra demanda não catalogada",
       "prioridade": "CRÍTICA",
-      "status": "PENDENTE",
+      "status": "CONCLUÍDA",
       "horas_consumidas": 0,
       "latitude": "-25513456",
       "longitude": "-54595193",
