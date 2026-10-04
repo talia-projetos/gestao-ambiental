@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T12:47:50.892Z",
+  "generated_at": "2026-10-04T12:48:16.210Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -200,7 +200,7 @@
       "atividade": "Monitoramento de ictiofauna",
       "unidade": "horas",
       "meta_planejada": "30",
-      "status_planejamento": "PLANEJADO",
+      "status_planejamento": "EXECUTADO",
       "restricao_principal": "SECA",
       "alternativa_id": "",
       "atividade_alternativa": "Instalação de câmeras-trap",
@@ -217,7 +217,7 @@
       "atividade": "Inventário de biodiversidade + câmeras-trap",
       "unidade": "horas",
       "meta_planejada": "30",
-      "status_planejamento": "PLANEJADO",
+      "status_planejamento": "EXECUTADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
       "atividade_alternativa": "Monitoramento de herpetofauna",
@@ -234,7 +234,7 @@
       "atividade": "Resgate e triagem de fauna",
       "unidade": "horas",
       "meta_planejada": "30",
-      "status_planejamento": "PLANEJADO",
+      "status_planejamento": "EXECUTADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
       "atividade_alternativa": "Monitoramento de avifauna",
@@ -1332,6 +1332,60 @@
       "longitude": "",
       "observacoes": "",
       "origem_dado": "PROERG"
+    },
+    {
+      "execucao_id": "EX003",
+      "data": "2026-10-04",
+      "equipe_id": "EQ01",
+      "lider_tecnico": "Renata Souza Oliveira",
+      "atividade_id": "",
+      "atividade": "Monitoramento de ictiofauna",
+      "horas_executadas": 6,
+      "unidade": "horas",
+      "quantidade_executada": 6,
+      "status_execucao": "EXECUTADO",
+      "bloqueador": "",
+      "local_referencia": "",
+      "latitude": "",
+      "longitude": "",
+      "observacoes": "",
+      "origem_dado": "PROERG"
+    },
+    {
+      "execucao_id": "EX004",
+      "data": "2026-10-04",
+      "equipe_id": "EQ01",
+      "lider_tecnico": "Renata Souza Oliveira",
+      "atividade_id": "",
+      "atividade": "Inventário de biodiversidade + câmeras-trap",
+      "horas_executadas": 6,
+      "unidade": "horas",
+      "quantidade_executada": 6,
+      "status_execucao": "EXECUTADO",
+      "bloqueador": "",
+      "local_referencia": "",
+      "latitude": "",
+      "longitude": "",
+      "observacoes": "",
+      "origem_dado": "PROERG"
+    },
+    {
+      "execucao_id": "EX005",
+      "data": "2026-10-04",
+      "equipe_id": "EQ01",
+      "lider_tecnico": "Renata Souza Oliveira",
+      "atividade_id": "",
+      "atividade": "Resgate e triagem de fauna",
+      "horas_executadas": 6,
+      "unidade": "horas",
+      "quantidade_executada": 6,
+      "status_execucao": "EXECUTADO",
+      "bloqueador": "",
+      "local_referencia": "",
+      "latitude": "",
+      "longitude": "",
+      "observacoes": "",
+      "origem_dado": "PROERG"
     }
   ],
   "demands": [
@@ -1651,6 +1705,53 @@
       "meta": 3000
     }
   ],
-  "weather_api": null,
+  "weather_api": {
+    "fonte": "Open-Meteo",
+    "atualizado": "2026-10-04T09:45",
+    "temperatura": 21.1,
+    "sensacao": 24.3,
+    "precipitacao": 0,
+    "vento_kmh": 1,
+    "codigo_tempo": 3,
+    "condicao": "Nublado",
+    "previsao": [
+      {
+        "data": "2026-10-04",
+        "chuva_mm": 26.4,
+        "prob_chuva": 100,
+        "tmax": 26.1,
+        "tmin": 16,
+        "codigo": 95,
+        "condicao": "Tempestade"
+      },
+      {
+        "data": "2026-10-05",
+        "chuva_mm": 24.9,
+        "prob_chuva": 98,
+        "tmax": 25.3,
+        "tmin": 20.2,
+        "codigo": 96,
+        "condicao": "Tempestade"
+      },
+      {
+        "data": "2026-10-06",
+        "chuva_mm": 0.6,
+        "prob_chuva": 69,
+        "tmax": 26.8,
+        "tmin": 20.3,
+        "codigo": 51,
+        "condicao": "Chuvisco"
+      },
+      {
+        "data": "2026-10-07",
+        "chuva_mm": 2.7,
+        "prob_chuva": 53,
+        "tmax": 27,
+        "tmin": 22.1,
+        "codigo": 55,
+        "condicao": "Chuvisco"
+      }
+    ]
+  },
   "reservatorio": null
 }
