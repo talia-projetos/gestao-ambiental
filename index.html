@@ -95,8 +95,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .mobile-home-hub{display:none;flex-direction:column;gap:12px}
 /* Dois modos: select (escolha de equipe) e hub (conteúdo completo) */
 .mobile-home-hub[data-mode="select"] .hub-actions,
-.mobile-home-hub[data-mode="select"] .hub-section{display:none}
-.mobile-home-hub[data-mode="select"] .hub-hub-header{display:none}
+.mobile-home-hub[data-mode="select"] .hub-greeting-area{display:none}
 .mobile-home-hub[data-mode="hub"] .hub-select-area{display:none}
 /* Card de equipe */
 .mobile-hub-team{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px 18px}
@@ -110,12 +109,14 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .hub-select-wrap::after{content:'';position:absolute;right:15px;top:50%;transform:translateY(-50%);width:10px;height:6px;background:var(--muted);clip-path:polygon(0 0,100% 0,50% 100%);pointer-events:none}
 .hub-confirm-btn{margin-top:12px;width:100%;height:48px;background:var(--green);border:0;border-radius:14px;color:#fff;font:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:.14s}
 .hub-confirm-btn:active{opacity:.85;transform:scale(.98)}
-/* Cabeçalho após seleção */
-.hub-hub-header{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.hub-team-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:3px}
-.hub-team-name{font-size:17px;font-weight:700;line-height:1.2}
-.hub-change-btn{border:1px solid var(--border);background:var(--surface-2);border-radius:10px;padding:7px 13px;font:inherit;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:.14s;flex:none}
-.hub-change-btn:active{background:var(--surface-3)}
+/* Saudação após seleção */
+.hub-greeting-area{padding:2px 0 4px}
+.hub-greeting-time{font-size:12px;color:var(--muted);margin-bottom:2px}
+.hub-greeting-name{font-size:22px;font-weight:800;line-height:1.15;color:var(--text);margin-bottom:3px}
+.hub-greeting-date{font-size:12px;color:var(--muted);margin-bottom:10px;text-transform:capitalize}
+.hub-team-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hub-team-label2{font-size:12px;font-weight:600;color:var(--muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hub-change-link{background:none;border:none;padding:0;font:inherit;font-size:11px;color:var(--blue);cursor:pointer;text-decoration:underline;white-space:nowrap;line-height:1}
 /* Botões de ação */
 .hub-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}
 .hub-action-btn{display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;cursor:pointer;font:inherit;color:var(--text);text-align:left;box-shadow:var(--shadow);transition:.14s;height:100%}
@@ -442,8 +443,6 @@ body{font-size:15px}
   .segmented button{white-space:normal;line-height:1.3;font-size:12px;padding:8px 4px;min-height:44px}
   #page-planning .dashboard-grid{display:none!important}
   #mob-plan-view{display:flex!important;flex-direction:column;gap:10px}
-  #mob-plan-view #mobPlanSection{overflow-x:hidden}
-  #mob-plan-view #mobPlanList{min-width:0}
   #mob-plan-view #mobDemSection{overflow-x:hidden}
   #mob-plan-view #mobDemList{min-width:0}
   .toolbar{flex-wrap:wrap;gap:6px!important}
@@ -470,6 +469,16 @@ body{font-size:15px}
 .mob-dem-dismiss{background:none;border:none;padding:7px 4px 7px 8px;color:var(--faint);cursor:pointer;flex:none;line-height:0;border-radius:8px}
 .mob-dem-dismiss:active{color:var(--red);background:color-mix(in srgb,var(--red) 10%,transparent)}
 .mob-dem-dismiss svg{width:14px;height:14px;display:block}
+/* Pie de demandas (aba Demandas mobile) */
+.mob-dem-pie-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px}
+.mob-dem-pie-hdr{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:14px}
+.mob-dem-pie-body{display:flex;align-items:center;gap:18px}
+.mob-dem-pie-canvas-wrap{width:130px;height:130px;flex:none}
+.mob-pie-legend{display:flex;flex-direction:column;gap:10px;flex:1}
+.mob-pie-legend-item{display:flex;align-items:center;gap:8px}
+.mob-pie-legend-dot{width:10px;height:10px;border-radius:50%;flex:none}
+.mob-pie-legend-label{font-size:12px;color:var(--muted);flex:1}
+.mob-pie-legend-count{font-size:14px;font-weight:700;color:var(--text)}
 .mob-empty{font-size:12px;color:var(--muted);padding:4px 0}
 </style>
 </head>
@@ -601,15 +610,15 @@ body{font-size:15px}
               </div>
               <button id="hubConfirmBtn" class="hub-confirm-btn">Entrar</button>
             </div>
-            <!-- Cabeçalho após seleção (mode=hub) -->
-            <div class="hub-hub-header">
-              <div>
-                <div class="hub-team-label">Minha equipe</div>
-                <div id="hubTeamName" class="hub-team-name">—</div>
-              </div>
-              <div style="display:flex;gap:6px;align-items:center">
-                <button id="hubRefreshBtn" class="hub-change-btn" title="Atualizar dados" style="padding:7px 10px"><i data-lucide="refresh-cw" style="width:14px;height:14px;vertical-align:middle"></i></button>
-                <button id="hubChangeTeamBtn" class="hub-change-btn">Trocar</button>
+            <!-- Saudação após seleção (mode=hub) -->
+            <div class="hub-greeting-area">
+              <div class="hub-greeting-time" id="hubGreetingTime">—</div>
+              <div class="hub-greeting-name" id="hubGreetingName">Olá!</div>
+              <div class="hub-greeting-date" id="hubGreetingDate">—</div>
+              <div class="hub-team-row">
+                <span id="hubTeamName" class="hub-team-label2">—</span>
+                <button id="hubChangeTeamBtn" class="hub-change-link">Trocar equipe</button>
+                <button id="hubRefreshBtn" class="hub-change-link">Atualizar</button>
               </div>
             </div>
           </div>
@@ -625,16 +634,6 @@ body{font-size:15px}
               <strong>Demanda não planejada</strong>
               <small>Registrar ocorrência ou solicitação</small>
             </button>
-          </div>
-          <!-- Planejamento do mês (oculto no mode=select) -->
-          <div class="hub-section">
-            <div class="hub-section-title">Planejamento do mês</div>
-            <div id="hubPlanList"><p style="font-size:12px;color:var(--muted)">Carregando…</p></div>
-          </div>
-          <!-- Métricas da equipe (ocultas no mode=select) -->
-          <div class="hub-section">
-            <div class="hub-section-title">Minhas métricas</div>
-            <div id="hubMetrics"><p style="font-size:12px;color:var(--muted)">Carregando…</p></div>
           </div>
         </div>
         <section class="dashboard-grid">
@@ -712,12 +711,15 @@ body{font-size:15px}
       <div id="page-planning" class="page">
         <!-- Mobile: planejamento + emergenciais (substituí a tabela no mobile) -->
         <div id="mob-plan-view">
-          <div class="mob-list-section" id="mobPlanSection">
-            <div class="mob-list-title">Planejamento do mês <span class="mob-count" id="mobPlanCount">0</span></div>
-            <div id="mobPlanList"><p class="mob-empty">Carregando…</p></div>
+          <div class="mob-dem-pie-card">
+            <div class="mob-dem-pie-hdr">Status das demandas</div>
+            <div class="mob-dem-pie-body">
+              <div class="mob-dem-pie-canvas-wrap"><canvas id="mobDemPie"></canvas></div>
+              <div id="mobDemPieLegend" class="mob-pie-legend"></div>
+            </div>
           </div>
           <div class="mob-list-section mob-dem-section" id="mobDemSection">
-            <div class="mob-list-title">Demandas emergenciais <span class="mob-count" id="mobDemCount">0</span></div>
+            <div class="mob-list-title">Demandas <span class="mob-count" id="mobDemCount">0</span></div>
             <div id="mobDemList"><p class="mob-empty">Carregando…</p></div>
           </div>
         </div>
@@ -1974,67 +1976,95 @@ function showPage(id){
   },50);
 }
 function renderMobilePlanView(){
-  const planEl=document.getElementById('mobPlanList');
   const demEl=document.getElementById('mobDemList');
-  const planCnt=document.getElementById('mobPlanCount');
   const demCnt=document.getElementById('mobDemCount');
-  if(!planEl||!demEl)return;
+  if(!demEl)return;
   const m=Number(state.month);
-  // Usa sempre a equipe salva no dispositivo; se não houver, mostra aviso
   const teamId=localStorage.getItem('ga-my-team')||null;
   if(!teamId){
-    planEl.innerHTML='<p class="mob-empty">Selecione sua equipe no início para ver o planejamento.</p>';
     demEl.innerHTML='<p class="mob-empty">Selecione sua equipe no início para ver as demandas.</p>';
-    if(planCnt)planCnt.textContent='0';if(demCnt)demCnt.textContent='0';
-    return;
+    if(demCnt)demCnt.textContent='0';
+    renderMobDemPie();return;
   }
-  // Planejamento
-  const plan=state.planning.filter(p=>planMesMatch(p,m)&&(teamId?p.equipe_id===teamId:true));
-  if(planCnt)planCnt.textContent=plan.length;
-  const stColor=s=>{const u=(s||'').toUpperCase();return u==='EXECUTADO'?'green':u==='BLOQUEADO'?'red':u==='PARCIAL'?'ochre':u==='EM ANDAMENTO'?'blue':'muted';};
-  const stLabel=s=>{const u=(s||'').toUpperCase();return{EXECUTADO:'Feito',BLOQUEADO:'Bloqueado',PARCIAL:'Parcial','EM ANDAMENTO':'Andamento'}[u]||'Pendente';};
-  const stCls=s=>{const u=(s||'').toUpperCase();return u==='EXECUTADO'?'ok':u==='BLOQUEADO'?'blq':'pend';};
-  planEl.innerHTML=plan.length
-    ?plan.map(p=>`<div class="hub-plan-item"><div class="hub-plan-dot" style="background:var(--${stColor(p.status_planejamento)})"></div><span class="hub-plan-name">${p.atividade||'—'}</span><span class="hub-plan-status ${stCls(p.status_planejamento)}">${stLabel(p.status_planejamento)}</span></div>`).join('')
-    :'<p class="mob-empty">Nenhuma atividade planejada para este mês.</p>';
-  // Demandas emergenciais (publicadas + locais)
   const dk=d=>`${d.equipe_id}|${d.data}|${(d.descricao||d.atividade_sugerida||'').trim()}`;
-  // JSON tem prioridade; local só entra se não houver versão no JSON
   const jsonDems=state.demands.filter(d=>(monthOf(d)===m||m===0)&&(teamId?d.equipe_id===teamId:true));
   const jsonKeys=new Set(jsonDems.map(dk));
   let dems=[...jsonDems];
   try{
     const loc=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
-    if(loc.demands) loc.demands.forEach(d=>{
-      if(!jsonKeys.has(dk(d))&&(teamId?d.equipe_id===teamId:true)) dems.push({...d,_local:true});
-    });
+    if(loc.demands) loc.demands.forEach(d=>{if(!jsonKeys.has(dk(d))&&(teamId?d.equipe_id===teamId:true))dems.push({...d,_local:true});});
   }catch(_){}
+  const sup=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
+  dems=dems.filter(d=>{const k=`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;return!sup.has(k);});
   if(demCnt)demCnt.textContent=dems.length;
   demEl.innerHTML=dems.length
     ?dems.map(d=>{
-      const team=state.teams.find(t=>t.equipe_id===d.equipe_id);
-      const nm=team?team.equipe:d.equipe_id;
-      const st=d.status||'ABERTA';
-      const stU=st.toUpperCase();
+      const st=d.status||'ABERTA';const stU=st.toUpperCase();
       const stCls=stU==='CONCLUÍDA'||stU==='RESOLVIDA'?'ok':stU==='EM ANDAMENTO'||stU==='EM ATENDIMENTO'?'andamento':stU==='CANCELADA'?'cancel':'';
       const dKey=`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;
       return`<div class="mob-dem-item" data-key="${dKey}" data-did="${d.demanda_id||''}"><div class="mob-dem-dot"></div><div class="mob-dem-body"><div class="mob-dem-desc">${d.descricao||d.tipo||'—'}</div><div class="mob-dem-meta">${d.data||''}</div></div><span class="mob-dem-badge ${stCls}">${st}</span><button class="mob-dem-dismiss" title="Ocultar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`;
     }).join('')
-    :'<p class="mob-empty">Nenhuma demanda emergencial no período.</p>';
+    :'<p class="mob-empty">Nenhuma demanda no período.</p>';
   demEl.querySelectorAll('.mob-dem-dismiss').forEach(btn=>{
     btn.addEventListener('click',e=>{
       e.stopPropagation();
       const item=btn.closest('.mob-dem-item');
-      const key=item.dataset.key, did=item.dataset.did;
+      const key=item.dataset.key,did=item.dataset.did;
       state.demands=state.demands.filter(d=>d.demanda_id!==did);
       const local=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
       if(Array.isArray(local.demands)) local.demands=local.demands.filter(d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`!==key);
       localStorage.setItem('ga-local-records',JSON.stringify(local));
-      const sup=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
-      sup.add(key);
-      localStorage.setItem('ga-suppressed-demands',JSON.stringify([...sup]));
+      const sup2=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
+      sup2.add(key);localStorage.setItem('ga-suppressed-demands',JSON.stringify([...sup2]));
       renderMobilePlanView();renderKPIs();
     });
+  });
+  renderMobDemPie();
+}
+let mobDemPieChart=null;
+function renderMobDemPie(){
+  const canvas=document.getElementById('mobDemPie'); if(!canvas)return;
+  const teamId=localStorage.getItem('ga-my-team');
+  const m=Number(state.month);
+  const sup=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
+  const dk=d=>`${d.equipe_id}|${d.data}|${(d.descricao||d.atividade_sugerida||'').trim()}`;
+  let dems=state.demands.filter(d=>(m===0||monthOf(d)===m)&&(!teamId||d.equipe_id===teamId));
+  try{
+    const loc=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
+    const existKeys=new Set(dems.map(dk));
+    if(loc.demands) loc.demands.forEach(d=>{if(!existKeys.has(dk(d))&&(!teamId||d.equipe_id===teamId))dems.push(d);});
+  }catch(_){}
+  dems=dems.filter(d=>!sup.has(`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`));
+  let nA=0,nP=0,nR=0;
+  dems.forEach(d=>{const s=(d.status||'').toUpperCase();if(s==='CONCLUÍDA'||s==='CONCLUIDA'||s==='RESOLVIDA')nR++;else if(s==='ANDAMENTO'||s==='EM ANDAMENTO'||s==='EM ATENDIMENTO')nP++;else nA++;});
+  const total=nA+nP+nR;
+  const cs=getComputedStyle(document.documentElement);
+  const ochre=cs.getPropertyValue('--ochre').trim()||'#E6AC5B';
+  const blue=cs.getPropertyValue('--blue').trim()||'#4C77BB';
+  const green=cs.getPropertyValue('--green').trim()||'#48B381';
+  const muted=cs.getPropertyValue('--muted').trim()||'#888';
+  const textColor=cs.getPropertyValue('--text').trim()||'#111';
+  const border=cs.getPropertyValue('--border').trim()||'#eee';
+  const legend=document.getElementById('mobDemPieLegend');
+  if(legend) legend.innerHTML=[['Abertas',nA,ochre],['Andamento',nP,blue],['Resolvidas',nR,green]]
+    .map(([l,n,c])=>`<div class="mob-pie-legend-item"><span class="mob-pie-legend-dot" style="background:${c}"></span><span class="mob-pie-legend-label">${l}</span><span class="mob-pie-legend-count">${n}</span></div>`).join('');
+  if(mobDemPieChart){mobDemPieChart.destroy();mobDemPieChart=null;}
+  const data=total===0?[1,0,0]:[nA,nP,nR];
+  const colors=total===0?[border,border,border]:[ochre,blue,green];
+  mobDemPieChart=new Chart(canvas,{
+    type:'doughnut',
+    data:{labels:['Abertas','Andamento','Resolvidas'],datasets:[{data,backgroundColor:colors,borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+      plugins:{legend:{display:false},tooltip:{enabled:total>0,callbacks:{label:c=>`${c.label}: ${c.parsed} (${total>0?Math.round(c.parsed/total*100):0}%)`}}}},
+    plugins:[{id:'center',beforeDraw(ch){
+      const{ctx,chartArea:{top,bottom,left,right}}=ch;
+      const cx=(left+right)/2,cy=(top+bottom)/2;
+      ctx.save();
+      ctx.font=`700 18px system-ui`;ctx.fillStyle=textColor;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(String(total),cx,cy-6);
+      ctx.font=`10px system-ui`;ctx.fillStyle=muted;ctx.fillText('demandas',cx,cy+10);
+      ctx.restore();
+    }}]
   });
 }
 function renderAll(){
@@ -2294,29 +2324,16 @@ function renderMobileHub(){
   hub.dataset.mode='hub';
   const teamId=saved;
   const t=state.teams.find(x=>x.equipe_id===teamId);
-  const nameEl=document.getElementById('hubTeamName');
-  if(nameEl) nameEl.textContent=t?`${t.equipe_id} · ${t.equipe}`:'—';
-  const m=Number(state.month);
-  const plan=state.planning.filter(p=>p.equipe_id===teamId&&planMesMatch(p,m));
-  const planEl=document.getElementById('hubPlanList');
-  if(planEl){
-    const statusColor=s=>{const u=(s||'').toUpperCase();return u==='EXECUTADO'?'ok':u==='BLOQUEADO'?'blq':'pend';};
-    const statusLabel=s=>{const u=(s||'').toUpperCase();return u==='EXECUTADO'?'Feito':u==='BLOQUEADO'?'Bloq.':u==='EM ANDAMENTO'?'Andamento':'Pendente';};
-    planEl.innerHTML=plan.length
-      ?plan.map(p=>`<div class="hub-plan-item"><div class="hub-plan-dot" style="background:var(--${p.status_planejamento?.toUpperCase()==='EXECUTADO'?'green':p.status_planejamento?.toUpperCase()==='BLOQUEADO'?'ochre':'blue'})"></div><span class="hub-plan-name">${p.atividade||'—'}</span><span class="hub-plan-status ${statusColor(p.status_planejamento)}">${statusLabel(p.status_planejamento)}</span></div>`).join('')
-      :'<p style="font-size:12px;color:var(--muted)">Nenhuma atividade planejada para este mês.</p>';
-  }
-  const mt=metricsForTeam(teamId,state.month);
-  const metEl=document.getElementById('hubMetrics');
-  if(metEl) metEl.innerHTML=`
-    <div class="hub-kpi-row">
-      <div class="hub-kpi"><div class="hk-label">Cobertura</div><div class="hk-val">${fmtPct(mt.coverage)}</div><div class="hk-sub">${mt.covered} de ${mt.totalPlan} ativ.</div></div>
-      <div class="hub-kpi"><div class="hk-label">Demandas</div><div class="hk-val">${mt.openDem}</div><div class="hk-sub">abertas</div></div>
-    </div>
-    <div class="hub-kpi-row">
-      <div class="hub-kpi"><div class="hk-label">Bloqueio</div><div class="hk-val">${fmtPct(mt.blockRate)}</div><div class="hk-sub">horas bloqueadas</div></div>
-      <div class="hub-kpi"><div class="hk-label">Impacto</div><div class="hk-val">${fmtPct(mt.planImpactRate)}</div><div class="hk-sub">não entregues</div></div>
-    </div>`;
+  const now=new Date();
+  const h=now.getHours();
+  const grt=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
+  const firstName=(t?.lider_tecnico||teamId).split(' ')[0];
+  const timeStr=now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const dateStr=now.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+  const tEl=document.getElementById('hubGreetingTime');if(tEl)tEl.textContent=timeStr;
+  const nEl=document.getElementById('hubGreetingName');if(nEl)nEl.textContent=`${grt}, ${firstName}!`;
+  const dEl=document.getElementById('hubGreetingDate');if(dEl)dEl.textContent=dateStr.charAt(0).toUpperCase()+dateStr.slice(1);
+  const tnEl=document.getElementById('hubTeamName');if(tnEl)tnEl.textContent=t?`${t.equipe_id} · ${t.equipe}`:'—';
   lucide.createIcons({nodes:[...document.querySelectorAll('.mobile-home-hub [data-lucide]')]});
 }
 function openLeaderForm(){
@@ -2450,6 +2467,7 @@ function setupUI(){
     localStorage.removeItem('ga-my-team');renderMobileHub();
   });
   document.getElementById('hubRefreshBtn')?.addEventListener('click',()=>loadData());
+  setInterval(()=>{if(localStorage.getItem('ga-my-team')&&window.innerWidth<=760)renderMobileHub();},30000);
   // botões do card mobile que navegam para páginas
   document.querySelectorAll('.mobile-nav-card [data-page]').forEach(btn=>{
     btn.addEventListener('click',()=>{
