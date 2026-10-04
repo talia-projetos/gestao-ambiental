@@ -1342,15 +1342,12 @@ function renderPlanChart(){
 
 function renderImpactChart(){
   const m=currentAggregate();
-  const impacts=m.impacted;
-  // mapa de cores fixo por destino (evita depender de ordem do Object.entries)
-  const colorMap={REPROGRAMADO:cssVar('--ochre'),ABSORVIDO:cssVar('--blue'),PARCIAL:cssVar('--amber'),SUBSTITUÍDO:cssVar('--green'),CANCELADO:cssVar('--red'),'EM ANÁLISE':cssVar('--purple')};
+  // Deriva destino automaticamente do status da demanda — sem precisar preencher planilha
+  const statusToDestino=s=>{const u=(s||'').toUpperCase();return u==='CONCLUÍDA'||u==='RESOLVIDA'?'RESOLVIDA':u==='CANCELADA'?'CANCELADA':u==='EM ANDAMENTO'?'EM ANDAMENTO':'EM ANÁLISE';};
+  const colorMap={RESOLVIDA:cssVar('--green'),'EM ANDAMENTO':cssVar('--blue'),CANCELADA:cssVar('--red'),'EM ANÁLISE':cssVar('--ochre')};
   const counts={};
-  impacts.forEach(i=>{const k=(i.destino_planejamento||'REPROGRAMADO').toUpperCase(); counts[k]=(counts[k]||0)+1;});
-  const impactedDemandIds=new Set(impacts.map(x=>x.demanda_id));
-  const noImpact=m.demands.filter(d=>!impactedDemandIds.has(d.demanda_id)).length;
+  m.demands.forEach(d=>{const k=statusToDestino(d.status);counts[k]=(counts[k]||0)+1;});
   const labels=[]; const data=[]; const colors=[];
-  if(noImpact>0){labels.push('Sem impacto identificado');data.push(noImpact);colors.push(cssVar('--border'));}
   Object.entries(counts).forEach(([k,v])=>{if(v>0){labels.push(k);data.push(v);colors.push(colorMap[k]||cssVar('--muted'));}});
   if(!data.length){labels.push('Sem demandas');data.push(1);colors.push(cssVar('--border'));}
   const options={responsive:true,maintainAspectRatio:false,cutout:'68%',animation:state.animations?{duration:500}:false,plugins:{legend:{position:'bottom',align:'center',labels:{color:cssVar('--muted'),boxWidth:7,boxHeight:7,usePointStyle:true,pointStyle:'circle',font:{size:9},padding:10}},tooltip:{backgroundColor:cssVar('--text'),titleColor:cssVar('--surface'),bodyColor:cssVar('--surface')}}};
