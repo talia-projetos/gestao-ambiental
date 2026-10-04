@@ -314,7 +314,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
   .brand-mark,.brand-text,.sidebar-label,.sidebar-divider,.sidebar-bottom{display:none!important}
   .sidebar-nav{flex-direction:row!important;width:100%!important;gap:0!important;align-items:stretch!important;padding:0!important}
   .nav-btn{display:none!important}
-  .nav-btn[data-page="page-overview"],.nav-btn[data-page="page-planning"],.nav-btn[data-page="page-map"],.nav-btn#leaderFormBtn{display:flex!important;flex-direction:column!important;height:100%!important;width:auto!important;flex:1!important;justify-content:center!important;padding:6px 2px!important;gap:2px!important;border-radius:0!important}
+  .nav-btn[data-page="page-overview"],.nav-btn[data-page="page-planning"],.nav-btn#leaderFormBtn{display:flex!important;flex-direction:column!important;height:100%!important;width:auto!important;flex:1!important;justify-content:center!important;padding:6px 2px!important;gap:2px!important;border-radius:0!important}
   .nav-btn#leaderFormBtn{background:color-mix(in srgb,var(--green) 14%,var(--surface))!important;color:var(--green)!important}
   .nav-btn span{display:block!important;font-size:9px!important;font-weight:500!important;letter-spacing:.01em!important}
   .nav-btn svg{width:20px!important;height:20px!important}
@@ -467,6 +467,9 @@ body{font-size:15px}
 .mob-dem-badge.ok{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green)}
 .mob-dem-badge.andamento{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue)}
 .mob-dem-badge.cancel{background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--red)}
+.mob-dem-dismiss{background:none;border:none;padding:7px 4px 7px 8px;color:var(--faint);cursor:pointer;flex:none;line-height:0;border-radius:8px}
+.mob-dem-dismiss:active{color:var(--red);background:color-mix(in srgb,var(--red) 10%,transparent)}
+.mob-dem-dismiss svg{width:14px;height:14px;display:block}
 .mob-empty{font-size:12px;color:var(--muted);padding:4px 0}
 </style>
 </head>
@@ -2014,9 +2017,25 @@ function renderMobilePlanView(){
       const st=d.status||'ABERTA';
       const stU=st.toUpperCase();
       const stCls=stU==='CONCLUÍDA'||stU==='RESOLVIDA'?'ok':stU==='EM ANDAMENTO'||stU==='EM ATENDIMENTO'?'andamento':stU==='CANCELADA'?'cancel':'';
-      return`<div class="mob-dem-item"><div class="mob-dem-dot"></div><div class="mob-dem-body"><div class="mob-dem-desc">${d.descricao||d.tipo||'—'}</div><div class="mob-dem-meta">${d.data||''}</div></div><span class="mob-dem-badge ${stCls}">${st}</span></div>`;
+      const dKey=`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;
+      return`<div class="mob-dem-item" data-key="${dKey}" data-did="${d.demanda_id||''}"><div class="mob-dem-dot"></div><div class="mob-dem-body"><div class="mob-dem-desc">${d.descricao||d.tipo||'—'}</div><div class="mob-dem-meta">${d.data||''}</div></div><span class="mob-dem-badge ${stCls}">${st}</span><button class="mob-dem-dismiss" title="Ocultar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`;
     }).join('')
     :'<p class="mob-empty">Nenhuma demanda emergencial no período.</p>';
+  demEl.querySelectorAll('.mob-dem-dismiss').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const item=btn.closest('.mob-dem-item');
+      const key=item.dataset.key, did=item.dataset.did;
+      state.demands=state.demands.filter(d=>d.demanda_id!==did);
+      const local=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
+      if(Array.isArray(local.demands)) local.demands=local.demands.filter(d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`!==key);
+      localStorage.setItem('ga-local-records',JSON.stringify(local));
+      const sup=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
+      sup.add(key);
+      localStorage.setItem('ga-suppressed-demands',JSON.stringify([...sup]));
+      renderMobilePlanView();renderKPIs();
+    });
+  });
 }
 function renderAll(){
   [renderKPIs,renderPlanChart,renderCapacityChart,renderTrendChart,renderImpactChart,renderPressureChart,renderTeamPressureChart,renderDemandTable,renderWeather,renderTeamTable,renderAttention,renderMobilePlanView,renderMobileHub]
