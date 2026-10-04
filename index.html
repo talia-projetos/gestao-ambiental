@@ -601,7 +601,10 @@ body{font-size:15px}
                 <div class="hub-team-label">Minha equipe</div>
                 <div id="hubTeamName" class="hub-team-name">—</div>
               </div>
-              <button id="hubChangeTeamBtn" class="hub-change-btn">Trocar</button>
+              <div style="display:flex;gap:6px;align-items:center">
+                <button id="hubRefreshBtn" class="hub-change-btn" title="Atualizar dados" style="padding:7px 10px"><i data-lucide="refresh-cw" style="width:14px;height:14px;vertical-align:middle"></i></button>
+                <button id="hubChangeTeamBtn" class="hub-change-btn">Trocar</button>
+              </div>
             </div>
           </div>
           <!-- Ações rápidas (ocultas no mode=select) -->
@@ -1945,10 +1948,16 @@ function renderMobilePlanView(){
     ?plan.map(p=>`<div class="hub-plan-item"><div class="hub-plan-dot" style="background:var(--${stColor(p.status_planejamento)})"></div><span class="hub-plan-name">${p.atividade||'—'}</span><span class="hub-plan-status ${stCls(p.status_planejamento)}">${stLabel(p.status_planejamento)}</span></div>`).join('')
     :'<p class="mob-empty">Nenhuma atividade planejada para este mês.</p>';
   // Demandas emergenciais (publicadas + locais)
-  let dems=[...state.demands.filter(d=>(monthOf(d)===m||m===0)&&(teamId?d.equipe_id===teamId:true))];
+  const dk=d=>`${d.equipe_id}|${d.data}|${(d.descricao||d.atividade_sugerida||'').trim()}`;
+  // JSON tem prioridade; local só entra se não houver versão no JSON
+  const jsonDems=state.demands.filter(d=>(monthOf(d)===m||m===0)&&(teamId?d.equipe_id===teamId:true));
+  const jsonKeys=new Set(jsonDems.map(dk));
+  let dems=[...jsonDems];
   try{
     const loc=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
-    if(loc.demands){const dk=d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;const keys=new Set(dems.map(dk));loc.demands.forEach(d=>{if(!keys.has(dk(d))&&(teamId?d.equipe_id===teamId:true))dems.push({...d,_local:true});});}
+    if(loc.demands) loc.demands.forEach(d=>{
+      if(!jsonKeys.has(dk(d))&&(teamId?d.equipe_id===teamId:true)) dems.push({...d,_local:true});
+    });
   }catch(_){}
   if(demCnt)demCnt.textContent=dems.length;
   demEl.innerHTML=dems.length
@@ -2369,6 +2378,7 @@ function setupUI(){
   document.getElementById('hubChangeTeamBtn')?.addEventListener('click',()=>{
     localStorage.removeItem('ga-my-team');renderMobileHub();
   });
+  document.getElementById('hubRefreshBtn')?.addEventListener('click',()=>loadData());
   // botões do card mobile que navegam para páginas
   document.querySelectorAll('.mobile-nav-card [data-page]').forEach(btn=>{
     btn.addEventListener('click',()=>{
