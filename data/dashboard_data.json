@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T12:35:49.188Z",
+  "generated_at": "2026-10-04T12:36:06.604Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -693,7 +693,7 @@
       "atividade": "Manutenção de plantios estabelecidos",
       "unidade": "horas",
       "meta_planejada": "30",
-      "status_planejamento": "PLANEJADO",
+      "status_planejamento": "EXECUTADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
       "atividade_alternativa": "Elaboração de projetos de restauração",
@@ -710,7 +710,7 @@
       "atividade": "Manutenção de plantios estabelecidos",
       "unidade": "horas",
       "meta_planejada": "30",
-      "status_planejamento": "PLANEJADO",
+      "status_planejamento": "EXECUTADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
       "atividade_alternativa": "Adubação e tratos culturais em viveiro",
@@ -812,7 +812,7 @@
       "atividade": "Revegetação de taludes degradados",
       "unidade": "horas",
       "meta_planejada": "30",
-      "status_planejamento": "PLANEJADO",
+      "status_planejamento": "EXECUTADO",
       "restricao_principal": "SECA",
       "alternativa_id": "",
       "atividade_alternativa": "Preparo de área para plantio de setembro",
@@ -1296,7 +1296,44 @@
       "origem_dado": "PROERG"
     }
   ],
-  "execution": [],
+  "execution": [
+    {
+      "execucao_id": "EX001",
+      "data": "2026-10-04",
+      "equipe_id": "EQ04",
+      "lider_tecnico": "Diego Henrique Mendes",
+      "atividade_id": "",
+      "atividade": "Revegetação de taludes degradados",
+      "horas_executadas": 12,
+      "unidade": "horas",
+      "quantidade_executada": 12,
+      "status_execucao": "EXECUTADO",
+      "bloqueador": "",
+      "local_referencia": "",
+      "latitude": "",
+      "longitude": "",
+      "observacoes": "",
+      "origem_dado": "PROERG"
+    },
+    {
+      "execucao_id": "EX002",
+      "data": "2026-10-04",
+      "equipe_id": "EQ04",
+      "lider_tecnico": "Diego Henrique Mendes",
+      "atividade_id": "",
+      "atividade": "Manutenção de plantios estabelecidos",
+      "horas_executadas": 12,
+      "unidade": "horas",
+      "quantidade_executada": 8,
+      "status_execucao": "EXECUTADO",
+      "bloqueador": "",
+      "local_referencia": "",
+      "latitude": "",
+      "longitude": "",
+      "observacoes": "",
+      "origem_dado": "PROERG"
+    }
+  ],
   "demands": [
     {
       "demanda_id": "DC001",
@@ -1586,6 +1623,53 @@
       "meta": 3000
     }
   ],
-  "weather_api": null,
+  "weather_api": {
+    "fonte": "Open-Meteo",
+    "atualizado": "2026-10-04T09:30",
+    "temperatura": 20.8,
+    "sensacao": 23.9,
+    "precipitacao": 0,
+    "vento_kmh": 1,
+    "codigo_tempo": 3,
+    "condicao": "Nublado",
+    "previsao": [
+      {
+        "data": "2026-10-04",
+        "chuva_mm": 26.4,
+        "prob_chuva": 100,
+        "tmax": 26.1,
+        "tmin": 16,
+        "codigo": 95,
+        "condicao": "Tempestade"
+      },
+      {
+        "data": "2026-10-05",
+        "chuva_mm": 24.9,
+        "prob_chuva": 98,
+        "tmax": 25.3,
+        "tmin": 20.2,
+        "codigo": 96,
+        "condicao": "Tempestade"
+      },
+      {
+        "data": "2026-10-06",
+        "chuva_mm": 0.6,
+        "prob_chuva": 69,
+        "tmax": 26.8,
+        "tmin": 20.3,
+        "codigo": 51,
+        "condicao": "Chuvisco"
+      },
+      {
+        "data": "2026-10-07",
+        "chuva_mm": 2.7,
+        "prob_chuva": 53,
+        "tmax": 27,
+        "tmin": 22.1,
+        "codigo": 55,
+        "condicao": "Chuvisco"
+      }
+    ]
+  },
   "reservatorio": null
 }
