@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T12:48:16.210Z",
+  "generated_at": "2026-10-04T12:48:35.497Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1422,6 +1422,23 @@
       "local_referencia": "Resgate e triagem de fauna",
       "equipe_apoio": "",
       "origem_dado": "DEMANDA"
+    },
+    {
+      "demanda_id": "DC003",
+      "data": "2026-10-04",
+      "equipe_id": "EQ01",
+      "lider_tecnico": "Renata Souza Oliveira",
+      "atividade_id": "",
+      "atividade_sugerida": "",
+      "descricao": "",
+      "prioridade": "CRÍTICA",
+      "status": "ABERTA",
+      "horas_consumidas": 0,
+      "latitude": "",
+      "longitude": "",
+      "local_referencia": "Outra demanda não catalogada",
+      "equipe_apoio": "",
+      "origem_dado": "DEMANDA"
     }
   ],
   "blockers": [
@@ -1664,6 +1681,17 @@
       "horas_desviadas": "0",
       "qtd_planejada_afetada": "1",
       "destino_planejamento": "ABSORVIDO",
+      "nova_data_prevista": "",
+      "origem_dado": "DEMANDA"
+    },
+    {
+      "demanda_id": "DC003",
+      "impactou_planejamento": "NÃO",
+      "plano_afetado_id": "",
+      "tipo_impacto": "INTERRUPÇÃO",
+      "horas_desviadas": "0",
+      "qtd_planejada_afetada": "1",
+      "destino_planejamento": "CANCELADO",
       "nova_data_prevista": "",
       "origem_dado": "DEMANDA"
     }
