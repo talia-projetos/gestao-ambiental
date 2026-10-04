@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T12:49:11.325Z",
+  "generated_at": "2026-10-04T12:49:36.277Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycbxpC-FU1cKEPlPbh5rFZzK46sFvd5w527C-UkGge-PHUu4GUIP1mHTQwczon8PCX5mp/exec",
   "teams": [
@@ -1434,8 +1434,8 @@
       "prioridade": "CRÍTICA",
       "status": "ABERTA",
       "horas_consumidas": 0,
-      "latitude": "",
-      "longitude": "",
+      "latitude": "-25513456",
+      "longitude": "-54595193",
       "local_referencia": "Outra demanda não catalogada",
       "equipe_apoio": "",
       "origem_dado": "DEMANDA"
