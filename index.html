@@ -1283,12 +1283,11 @@ function renderKPIs(){
   }
   const ndAlta=m.demands.filter(x=>['ALTA','CRÍTICA'].includes((x.prioridade||'').toUpperCase())).length;
   document.getElementById('kpiDemandNote').textContent=`${ndAlta} alta prioridade · ${ndDone} concluídas`;
-  document.getElementById('kpiImpact').textContent=fmtPct(m.impactRatio);
-  const _hDesv=m.demands.reduce((s,x)=>s+Number(x.horas_consumidas||0),0);
   const _hPlan=m.planning.reduce((s,x)=>s+Number(x.meta_planejada||0),0);
   const _hPlanNote=_hPlan>0?`de ${fmtNum(_hPlan)} h planejadas`:'sem horas previstas';
-  document.getElementById('kpiImpactNote').textContent=`${fmtNum(_hDesv)} h desviadas · ${_hPlanNote}`;
-  setRing('ringImpact',m.impactRatio,true);
+  document.getElementById('kpiImpact').textContent=fmtPct(m.blockRate);
+  document.getElementById('kpiImpactNote').textContent=`${fmtNum(m.blockedHours)} h afetadas · ${_hPlanNote}`;
+  setRing('ringImpact',m.blockRate,true);
   document.getElementById('kpiBlocked').textContent=fmtPct(m.blockRate);
   document.getElementById('kpiBlockedNote').textContent=`${fmtNum(m.blockedHours)} h bloqueadas · ${_hPlanNote}`;
   setRing('ringBlocked',m.blockRate,true);
