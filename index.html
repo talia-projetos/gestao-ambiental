@@ -131,10 +131,10 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 /* Seções */
 .hub-section{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px}
 .hub-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:12px}
-.hub-plan-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.hub-plan-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
 .hub-plan-item:last-child{border-bottom:0;padding-bottom:0}
 .hub-plan-dot{width:8px;height:8px;border-radius:50%;flex:none}
-.hub-plan-name{flex:1;font-size:13px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hub-plan-name{flex:1;font-size:13px;font-weight:500;min-width:0;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.35}
 .hub-plan-status{font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;white-space:nowrap;flex:none}
 .hub-plan-status.ok{background:color-mix(in srgb,var(--green) 14%,transparent);color:var(--green)}
 .hub-plan-status.blq{background:color-mix(in srgb,var(--ochre) 14%,transparent);color:var(--ochre)}
@@ -142,7 +142,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .hub-kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .hub-kpi-row:last-child{margin-bottom:0}
 .hub-kpi{background:var(--surface-2);border-radius:12px;padding:12px}
-.hub-kpi .hk-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.hub-kpi .hk-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
 .hub-kpi .hk-val{font-size:22px;font-weight:800;line-height:1;margin-top:4px}
 .hub-kpi .hk-sub{font-size:11px;color:var(--muted);margin-top:2px}
 @media(max-width:760px){
@@ -314,7 +314,7 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
   .brand-mark,.brand-text,.sidebar-label,.sidebar-divider,.sidebar-bottom{display:none!important}
   .sidebar-nav{flex-direction:row!important;width:100%!important;gap:0!important;align-items:stretch!important;padding:0!important}
   .nav-btn{display:none!important}
-  .nav-btn[data-page="page-overview"],.nav-btn#leaderFormBtn{display:flex!important;flex-direction:column!important;height:100%!important;width:auto!important;flex:1!important;justify-content:center!important;padding:6px 2px!important;gap:2px!important;border-radius:0!important}
+  .nav-btn[data-page="page-overview"],.nav-btn[data-page="page-planning"],.nav-btn[data-page="page-map"],.nav-btn#leaderFormBtn{display:flex!important;flex-direction:column!important;height:100%!important;width:auto!important;flex:1!important;justify-content:center!important;padding:6px 2px!important;gap:2px!important;border-radius:0!important}
   .nav-btn#leaderFormBtn{background:color-mix(in srgb,var(--green) 14%,var(--surface))!important;color:var(--green)!important}
   .nav-btn span{display:block!important;font-size:9px!important;font-weight:500!important;letter-spacing:.01em!important}
   .nav-btn svg{width:20px!important;height:20px!important}
@@ -442,10 +442,10 @@ body{font-size:15px}
   .segmented button{white-space:normal;line-height:1.3;font-size:12px;padding:8px 4px;min-height:44px}
   #page-planning .dashboard-grid{display:none!important}
   #mob-plan-view{display:flex!important;flex-direction:column;gap:10px}
-  #mob-plan-view #mobPlanSection{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  #mob-plan-view #mobPlanList{min-width:max-content}
-  #mob-plan-view #mobDemSection{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  #mob-plan-view #mobDemList{min-width:max-content}
+  #mob-plan-view #mobPlanSection{overflow-x:hidden}
+  #mob-plan-view #mobPlanList{min-width:0}
+  #mob-plan-view #mobDemSection{overflow-x:hidden}
+  #mob-plan-view #mobDemList{min-width:0}
   .toolbar{flex-wrap:wrap;gap:6px!important}
   .filter-control{flex:1 1 auto;min-width:0}
   .filter-control select{width:100%;box-sizing:border-box}
@@ -461,9 +461,12 @@ body{font-size:15px}
 .mob-dem-item:last-child{border-bottom:0;padding-bottom:0}
 .mob-dem-dot{width:8px;height:8px;border-radius:50%;background:var(--ochre);flex:none;margin-top:4px}
 .mob-dem-body{flex:1;min-width:0}
-.mob-dem-desc{font-size:13px;font-weight:500;white-space:nowrap}
-.mob-dem-meta{font-size:11px;color:var(--muted);margin-top:1px}
-.mob-dem-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;background:color-mix(in srgb,var(--ochre) 16%,transparent);color:var(--ochre);flex:none}
+.mob-dem-desc{font-size:13px;font-weight:500;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.35}
+.mob-dem-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.mob-dem-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;background:color-mix(in srgb,var(--ochre) 16%,transparent);color:var(--ochre);flex:none;white-space:nowrap}
+.mob-dem-badge.ok{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green)}
+.mob-dem-badge.andamento{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue)}
+.mob-dem-badge.cancel{background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--red)}
 .mob-empty{font-size:12px;color:var(--muted);padding:4px 0}
 </style>
 </head>
@@ -2009,7 +2012,9 @@ function renderMobilePlanView(){
       const team=state.teams.find(t=>t.equipe_id===d.equipe_id);
       const nm=team?team.equipe:d.equipe_id;
       const st=d.status||'ABERTA';
-      return`<div class="mob-dem-item"><div class="mob-dem-dot"></div><div class="mob-dem-body"><div class="mob-dem-desc">${d.descricao||d.tipo||'—'}</div><div class="mob-dem-meta">${d.data||''}</div></div><span class="mob-dem-badge">${st}</span></div>`;
+      const stU=st.toUpperCase();
+      const stCls=stU==='CONCLUÍDA'||stU==='RESOLVIDA'?'ok':stU==='EM ANDAMENTO'||stU==='EM ATENDIMENTO'?'andamento':stU==='CANCELADA'?'cancel':'';
+      return`<div class="mob-dem-item"><div class="mob-dem-dot"></div><div class="mob-dem-body"><div class="mob-dem-desc">${d.descricao||d.tipo||'—'}</div><div class="mob-dem-meta">${d.data||''}</div></div><span class="mob-dem-badge ${stCls}">${st}</span></div>`;
     }).join('')
     :'<p class="mob-empty">Nenhuma demanda emergencial no período.</p>';
 }
