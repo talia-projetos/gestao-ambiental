@@ -1068,7 +1068,7 @@ const IBGE_REGION_SUFFIX = '?formato=application/vnd.geo%2Bjson&qualidade=minima
 const PARAGUAY_GEOJSON_URL = 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/PRY.geo.json';
 
 const state = {
-  teams: [], planning: [], execution: [], demands: [], blockers: [], climate: [], impact: [], metrics: [], weather: null, notifications: [],
+  teams: [], planning: [], execution: [], demands: [], blockers: [], climate: [], impact: [], metrics: [], weather: null, notifications: JSON.parse(localStorage.getItem('ga-notifs')||'[]'),
   month: 1, team: 'ALL', theme: localStorage.getItem('ga-theme') || 'light',
   animations: localStorage.getItem('ga-animations') !== 'false', names: localStorage.getItem('ga-names') !== 'false',
   presentation: localStorage.getItem('ga-presentation') === 'true', density: localStorage.getItem('ga-density') || 'comfortable',
@@ -1143,10 +1143,12 @@ async function fetchOpenMeteoWeather(){
     return {source:'Open-Meteo',location:'Foz do Iguaçu/PR',observed_at:(c.time||new Date().toISOString().slice(0,16))+':00',current:{temperature_c:c.temperature_2m??0,precipitation_mm:c.precipitation??0,wind_kmh:c.wind_speed_10m??0,gust_kmh:c.wind_gusts_10m??0},forecast};
   }catch(e){clearTimeout(tid);throw e;}
 }
+function saveNotifs(){try{localStorage.setItem('ga-notifs',JSON.stringify(state.notifications));}catch(e){}}
 function addNotification(type,title,msg){
   const n={id:Date.now(),type,title,msg,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),unread:true};
   state.notifications.unshift(n);
   if(state.notifications.length>30)state.notifications.length=30;
+  saveNotifs();
   renderNotifications();
   const btn=document.getElementById('notifBtn');
   if(btn){btn.classList.add('notif-pulse');setTimeout(()=>btn.classList.remove('notif-pulse'),500);}
@@ -1165,12 +1167,21 @@ function renderNotifications(){
 }
 function checkWeatherAlerts(weather){
   if(!weather)return;
-  // Remove alertas de clima anteriores para não acumular a cada atualização
+  const prev=state.notifications.filter(n=>n.type==='rain'||n.type==='wind');
   state.notifications=state.notifications.filter(n=>n.type!=='rain'&&n.type!=='wind');
   const c=weather.current||{};
-  if(c.precipitation_mm>=5)addNotification('rain','Chuva significativa em curso',`Precipitação atual: ${c.precipitation_mm}mm em Foz do Iguaçu. Avaliar condições de campo.`);
-  if(c.wind_kmh>=40||c.gust_kmh>=60)addNotification('wind','Ventos fortes detectados',`Velocidade: ${Math.round(c.wind_kmh)} km/h · Rajadas: ${Math.round(c.gust_kmh)} km/h. Verificar segurança das equipes.`);
-  (weather.forecast||[]).slice(0,3).forEach(f=>{if(f.precipitation_mm>=25)addNotification('rain','Previsão de chuva intensa',`${f.date}: ${f.precipitation_mm}mm previstos para a região.`);});
+  const addW=(type,title,msg)=>{
+    const old=prev.find(p=>p.title===title);
+    // Preserve unread state so notifications read before refresh stay read
+    const n=old?{...old,msg}:{id:Date.now()+Math.random()*100,type,title,msg,
+      time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),unread:true};
+    state.notifications.push(n);
+  };
+  if(c.precipitation_mm>=5)addW('rain','Chuva significativa em curso',`Precipitação atual: ${c.precipitation_mm}mm em Foz do Iguaçu. Avaliar condições de campo.`);
+  if(c.wind_kmh>=40||c.gust_kmh>=60)addW('wind','Ventos fortes detectados',`Velocidade: ${Math.round(c.wind_kmh)} km/h · Rajadas: ${Math.round(c.gust_kmh)} km/h. Verificar segurança das equipes.`);
+  (weather.forecast||[]).slice(0,3).forEach(f=>{if(f.precipitation_mm>=25)addW('rain','Previsão de chuva intensa',`${f.date}: ${f.precipitation_mm}mm previstos para a região.`);});
+  saveNotifs();
+  renderNotifications();
 }
 async function loadData(){
   const stamp=Date.now();
@@ -2739,6 +2750,7 @@ function setupUI(){
     panel.classList.toggle('open');
     if(panel.classList.contains('open')){
       state.notifications.forEach(n=>n.unread=false);
+      saveNotifs();
       renderNotifications();
       lucide.createIcons();
     }
@@ -2746,6 +2758,7 @@ function setupUI(){
   document.getElementById('clearNotifBtn').addEventListener('click',e=>{
     e.stopPropagation();
     state.notifications=[];
+    localStorage.removeItem('ga-notifs');
     renderNotifications();
     document.getElementById('notifPanel').classList.remove('open');
   });
