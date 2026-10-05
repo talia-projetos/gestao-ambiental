@@ -130,7 +130,7 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .hms-item span{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
 .hms-sep{width:1px;background:var(--border);margin:8px 0;flex:none}
 .hms-item.cov strong{color:var(--green)}
-.hms-item.dem strong{color:var(--ochre)}
+.hms-item.dem strong{color:var(--blue)}
 .hms-item.blq strong{color:var(--red)}
 /* Botões de ação — layout horizontal full-width */
 .hub-actions{display:flex;flex-direction:column;gap:8px}
@@ -726,7 +726,7 @@ body{font-size:15px}
               <div class="hub-metrics-strip" id="hubMetricsStrip">
                 <div class="hms-item cov"><strong id="hubMsCov">—</strong><span>cobertura</span></div>
                 <div class="hms-sep"></div>
-                <div class="hms-item dem"><strong id="hubMsDem">—</strong><span>demandas</span></div>
+                <div class="hms-item dem"><strong id="hubMsDem">—</strong><span>planejadas</span></div>
                 <div class="hms-sep"></div>
                 <div class="hms-item blq"><strong id="hubMsBlq">—</strong><span>bloqueadores</span></div>
               </div>
@@ -840,10 +840,6 @@ body{font-size:15px}
               <div class="mob-dem-pie-canvas-wrap"><canvas id="mobDemReqPie"></canvas></div>
               <div id="mobDemReqLegend" class="mob-pie-legend"></div>
             </div>
-          </div>
-          <div class="mob-list-section mob-dem-section" id="mobDemSection">
-            <div class="mob-list-title">Demandas <span class="mob-count" id="mobDemCount">0</span></div>
-            <div id="mobDemList"><p class="mob-empty">Carregando…</p></div>
           </div>
         </div>
         <section class="dashboard-grid">
@@ -2219,49 +2215,6 @@ function showPage(id){
   },50);
 }
 function renderMobilePlanView(){
-  const demEl=document.getElementById('mobDemList');
-  const demCnt=document.getElementById('mobDemCount');
-  if(!demEl)return;
-  const m=Number(state.month);
-  const teamId=localStorage.getItem('ga-my-team')||null;
-  if(!teamId){
-    demEl.innerHTML='<p class="mob-empty">Selecione sua equipe no início para ver as demandas.</p>';
-    if(demCnt)demCnt.textContent='0';
-    renderMobDemPie();renderMobDemReqPie();return;
-  }
-  const dk=d=>`${d.equipe_id}|${d.data}|${(d.descricao||d.atividade_sugerida||'').trim()}`;
-  const jsonDems=state.demands.filter(d=>(monthOf(d)===m||m===0)&&(teamId?d.equipe_id===teamId:true));
-  const jsonKeys=new Set(jsonDems.map(dk));
-  let dems=[...jsonDems];
-  try{
-    const loc=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
-    if(loc.demands) loc.demands.forEach(d=>{if(!jsonKeys.has(dk(d))&&(teamId?d.equipe_id===teamId:true))dems.push({...d,_local:true});});
-  }catch(_){}
-  const sup=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
-  dems=dems.filter(d=>{const k=`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;return!sup.has(k);});
-  if(demCnt)demCnt.textContent=dems.length;
-  demEl.innerHTML=dems.length
-    ?dems.map(d=>{
-      const st=d.status||'ABERTA';const stU=st.toUpperCase();
-      const stCls=stU==='CONCLUÍDA'||stU==='RESOLVIDA'?'ok':stU==='EM ANDAMENTO'||stU==='EM ATENDIMENTO'?'andamento':stU==='CANCELADA'?'cancel':'';
-      const dKey=`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`;
-      return`<div class="mob-dem-item" data-key="${dKey}" data-did="${d.demanda_id||''}"><div class="mob-dem-dot"></div><div class="mob-dem-body"><div class="mob-dem-desc">${d.descricao||d.tipo||'—'}</div><div class="mob-dem-meta">${d.data||''}</div></div><span class="mob-dem-badge ${stCls}">${st}</span><button class="mob-dem-dismiss" title="Ocultar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`;
-    }).join('')
-    :'<p class="mob-empty">Nenhuma demanda no período.</p>';
-  demEl.querySelectorAll('.mob-dem-dismiss').forEach(btn=>{
-    btn.addEventListener('click',e=>{
-      e.stopPropagation();
-      const item=btn.closest('.mob-dem-item');
-      const key=item.dataset.key,did=item.dataset.did;
-      state.demands=state.demands.filter(d=>d.demanda_id!==did);
-      const local=JSON.parse(localStorage.getItem('ga-local-records')||'{}');
-      if(Array.isArray(local.demands)) local.demands=local.demands.filter(d=>`${d.equipe_id}|${d.data}|${(d.descricao||'').trim()}`!==key);
-      localStorage.setItem('ga-local-records',JSON.stringify(local));
-      const sup2=new Set(JSON.parse(localStorage.getItem('ga-suppressed-demands')||'[]'));
-      sup2.add(key);localStorage.setItem('ga-suppressed-demands',JSON.stringify([...sup2]));
-      renderMobilePlanView();renderKPIs();
-    });
-  });
   renderMobDemPie();
   renderMobDemReqPie();
 }
@@ -2627,7 +2580,7 @@ function renderMobileHub(){
   if(ms&&state.planning.length){
     const m=metricsForTeam(teamId);
     const covEl=document.getElementById('hubMsCov');if(covEl)covEl.textContent=fmtPct(m.coverage);
-    const demEl=document.getElementById('hubMsDem');if(demEl)demEl.textContent=typeof m.openDem==='number'?m.openDem:(m.dem?.length??0);
+    const demEl=document.getElementById('hubMsDem');if(demEl)demEl.textContent=m.totalPlan??0;
     const blqEl=document.getElementById('hubMsBlq');if(blqEl)blqEl.textContent=Array.isArray(m.blq)?m.blq.length:(m.blq??0);
     // Colorir cobertura por status
     const covItem=ms.querySelector('.hms-item.cov');
