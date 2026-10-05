@@ -118,9 +118,11 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .hub-greeting-time{font-size:11px;color:var(--muted);margin-bottom:1px}
 .hub-greeting-name{font-size:21px;font-weight:800;line-height:1.15;color:var(--text);margin-bottom:2px}
 .hub-greeting-date{font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:capitalize}
-.hub-team-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hub-team-row{display:flex;align-items:center;gap:8px}
 .hub-team-label2{font-size:12px;font-weight:600;color:var(--muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hub-change-link{background:none;border:none;padding:0;font:inherit;font-size:11px;color:var(--blue);cursor:pointer;text-decoration:underline;white-space:nowrap;line-height:1}
+.hub-icon-action{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:.15s;flex:none;padding:0}
+.hub-icon-action:active{background:var(--surface-3);color:var(--text);transform:scale(.93)}
+.hub-icon-action svg{width:15px;height:15px;stroke-width:2}
 /* Strip de métricas da equipe */
 .hub-metrics-strip{display:flex;align-items:stretch;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:12px 0 0}
 .hms-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px;gap:3px}
@@ -163,8 +165,12 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .hub-kpi .hk-val{font-size:22px;font-weight:800;line-height:1;margin-top:4px}
 .hub-kpi .hk-sub{font-size:11px;color:var(--muted);margin-top:2px}
 @media(max-width:760px){
-  .mobile-home-hub{display:flex!important}
+  .mobile-home-hub{display:flex!important;flex-direction:column;flex:1;min-height:0}
+  #page-overview{display:flex;flex-direction:column;min-height:calc(100dvh - 140px)}
   #page-overview .dashboard-grid{display:none!important}
+  .hub-actions{flex:1;justify-content:flex-end}
+  .hub-action-btn{flex:none;min-height:62px}
+  .app-footer{display:none!important}
 }
 
 @media(max-width:760px){
@@ -718,8 +724,8 @@ body{font-size:15px}
               <div class="hub-greeting-date" id="hubGreetingDate">—</div>
               <div class="hub-team-row">
                 <span id="hubTeamName" class="hub-team-label2">—</span>
-                <button id="hubChangeTeamBtn" class="hub-change-link">Trocar</button>
-                <button id="hubRefreshBtn" class="hub-change-link">Atualizar</button>
+                <button id="hubChangeTeamBtn" class="hub-icon-action" title="Trocar equipe"><i data-lucide="repeat-2"></i></button>
+                <button id="hubRefreshBtn" class="hub-icon-action" title="Atualizar dados"><i data-lucide="refresh-cw"></i></button>
               </div>
               <div class="hub-metrics-strip" id="hubMetricsStrip">
                 <div class="hms-item cov"><strong id="hubMsCov">—</strong><span>cobertura</span></div>
