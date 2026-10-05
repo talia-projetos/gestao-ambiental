@@ -165,15 +165,49 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 }
 .report-modal{position:fixed;inset:0;background:rgba(14,18,16,.48);display:none;align-items:center;justify-content:center;padding:20px;z-index:1350}
 .report-modal.open{display:flex}
-.report-panel{width:min(1120px,97vw);max-height:94vh;overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.25);padding:24px}
+.report-panel{width:min(1120px,97vw);max-height:94vh;overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.25);padding:0}
 .report-toolbar{display:flex;gap:10px;align-items:center}
+.report-inner{padding:24px}
+/* Status bar topo */
+.report-status-bar{height:5px;border-radius:24px 24px 0 0;background:var(--green)}
+.report-status-bar.bar-warn{background:var(--ochre)}
+.report-status-bar.bar-alert{background:var(--red)}
+/* Hero */
 .report-hero{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--border)}
-.report-hero h3{font-size:24px;margin:0 0 5px}.report-hero p{margin:0;color:var(--muted)}
+.report-hero h3{font-size:22px;font-weight:800;margin:0 0 4px;letter-spacing:-.02em}
+.report-hero p{margin:0 0 3px;color:var(--muted);font-size:13px}
+/* KPIs */
 .report-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:18px 0}
-.report-kpi{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:12px}
-.report-kpi span{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}.report-kpi strong{font-size:22px}
-.report-section{margin-top:20px}.report-section h4{font-size:14px;margin:0 0 10px}
-.report-table{width:100%;border-collapse:collapse;font-size:12px}.report-table th,.report-table td{padding:9px 8px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}.report-table th{color:var(--muted);font-weight:700}
+.report-kpi{background:var(--surface-2);border:1px solid var(--border);border-left-width:3px;border-radius:14px;padding:14px 12px}
+.report-kpi .rk-label{display:block;color:var(--muted);font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.report-kpi strong{font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1;display:block}
+.report-kpi .rk-note{display:block;font-size:10px;color:var(--faint);margin-top:5px;line-height:1.3}
+.report-kpi.kpi-ok{border-left-color:var(--green)}.report-kpi.kpi-ok strong{color:var(--green)}
+.report-kpi.kpi-warn{border-left-color:var(--ochre)}.report-kpi.kpi-warn strong{color:var(--ochre)}
+.report-kpi.kpi-bad{border-left-color:var(--red)}.report-kpi.kpi-bad strong{color:var(--red)}
+.report-kpi.kpi-neutral{border-left-color:var(--border)}
+/* Seções */
+.report-section{margin-top:22px}
+.report-section-hdr{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.report-section-hdr h4{font-size:13px;font-weight:700;margin:0;flex:1}
+.rep-count{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+/* Tabelas */
+.report-table{width:100%;border-collapse:collapse;font-size:12px}
+.report-table th{color:var(--muted);font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:2px solid var(--border);white-space:nowrap;background:var(--surface-2)}
+.report-table td{padding:9px 10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:middle}
+.report-table tbody tr:last-child td{border-bottom:0}
+.report-table tbody tr:hover{background:color-mix(in srgb,var(--green) 4%,var(--surface))}
+/* Pills de status planejamento */
+.rep-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap;display:inline-block}
+.rep-pill.ok{background:color-mix(in srgb,var(--green) 14%,transparent);color:var(--green)}
+.rep-pill.andamento{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)}
+.rep-pill.blq{background:color-mix(in srgb,var(--ochre) 14%,transparent);color:var(--ochre)}
+.rep-pill.pend{background:var(--surface-2);color:var(--muted)}
+.rep-pill.dem-open{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red)}
+.rep-pill.dem-ok{background:color-mix(in srgb,var(--green) 12%,transparent);color:var(--green)}
+/* Footer */
+.report-footer{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--faint)}
+.report-empty{padding:24px;text-align:center;color:var(--faint);font-size:12px;background:var(--surface-2);border-radius:10px}
 .report-empty{padding:14px;border:1px dashed var(--border);border-radius:12px;color:var(--muted);font-size:12px}
 .report-footer{margin-top:18px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:11px}
 .team-row-action{font-weight:700;color:var(--blue)}
@@ -186,28 +220,33 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
   body *{visibility:hidden!important}
   #teamReportModal,#teamReportModal *{visibility:visible!important}
   #teamReportModal{display:block!important;position:absolute!important;inset:0!important;background:#fff!important;padding:0!important}
-  #teamReportModal .report-panel{width:100%!important;max-height:none!important;overflow:visible!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:0!important;background:#fff!important;color:#111!important}
+  #teamReportModal .report-panel{width:100%!important;max-height:none!important;overflow:visible!important;border:0!important;box-shadow:none!important;border-radius:0!important;background:#fff!important;color:#111!important}
+  #teamReportModal .report-status-bar{display:none!important}
   #teamReportModal .report-toolbar,#teamReportModal .drawer-head button,#teamReportModal .drawer-head{display:none!important}
   #teamReportModal .print-header{display:flex!important;align-items:center;justify-content:space-between;padding:0 0 8mm;border-bottom:1.5px solid #bbb;margin-bottom:6mm}
   #teamReportModal .print-header-left{display:flex;align-items:center;gap:8px}
   #teamReportModal .print-header img{width:22px;height:22px;filter:grayscale(1) opacity(.65);object-fit:contain}
   #teamReportModal .print-header-title{font-size:11px;font-weight:700;letter-spacing:.06em;color:#555;text-transform:uppercase}
   #teamReportModal .print-header-right{font-size:10px;color:#999}
-  #teamReportModal .report-kpis{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;margin:12px 0!important}
-  #teamReportModal .report-kpi{background:#f5f5f5!important;border:1px solid #ddd!important;border-radius:8px!important;padding:10px 12px!important;page-break-inside:avoid}
-  #teamReportModal .report-kpi span{font-size:10px!important;color:#666!important}
-  #teamReportModal .report-kpi strong{font-size:20px!important;color:#111!important}
+  #teamReportModal .report-kpis{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:6px!important;margin:12px 0!important}
+  #teamReportModal .report-kpi{background:#f7f7f7!important;border:1px solid #ddd!important;border-left-width:3px!important;border-radius:8px!important;padding:10px 12px!important;page-break-inside:avoid}
+  #teamReportModal .report-kpi .rk-label{font-size:9px!important;color:#666!important}
+  #teamReportModal .report-kpi strong{font-size:19px!important;color:#111!important}
+  #teamReportModal .report-kpi.kpi-ok strong{color:#2a7a55!important}
+  #teamReportModal .report-kpi.kpi-warn strong{color:#b07820!important}
+  #teamReportModal .report-kpi.kpi-bad strong{color:#c03030!important}
   #teamReportModal .report-hero{padding:8px 0 12px!important}
   #teamReportModal .report-hero h3{font-size:20px!important}
   #teamReportModal .report-section{page-break-inside:avoid;margin-top:14px!important}
-  #teamReportModal .report-section h4{font-size:12px!important;border-bottom:1px solid #ddd;padding-bottom:4px;margin-bottom:8px!important}
+  #teamReportModal .report-section-hdr{border-bottom:1px solid #ddd!important;padding-bottom:5px!important;margin-bottom:8px!important}
+  #teamReportModal .report-section-hdr h4{font-size:12px!important}
   #teamReportModal .report-table{font-size:11px!important}
   #teamReportModal .report-table thead{display:table-header-group}
   #teamReportModal .report-table th{background:#f0f0f0!important;color:#444!important;padding:7px 8px!important;border-bottom:1.5px solid #bbb!important}
   #teamReportModal .report-table td{padding:7px 8px!important;border-bottom:1px solid #e0e0e0!important;color:#222!important}
   #teamReportModal .report-table tr{page-break-inside:avoid}
   #teamReportModal .report-footer{border-top:1px solid #ccc!important;padding-top:8px!important;margin-top:14px!important;font-size:10px!important;color:#888!important}
-  #teamReportModal .status-pill{border:1px solid #bbb!important;background:#eee!important;color:#333!important;filter:grayscale(1)}
+  #teamReportModal .status-pill,.rep-pill{border:1px solid #bbb!important;background:#eee!important;color:#333!important;filter:grayscale(1)}
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -855,22 +894,25 @@ body{font-size:15px}
 
   <div class="report-modal" id="teamReportModal" aria-hidden="true">
     <div class="report-panel">
-      <div class="drawer-head">
-        <div><h2>Relatório operacional por equipe</h2><p id="reportPeriod">—</p></div>
-        <div class="report-toolbar">
-          <button type="button" class="secondary-action" id="printTeamReport"><i data-lucide="printer"></i> Imprimir / Salvar PDF</button>
-          <button type="button" class="secondary-action" id="filterFromReport"><i data-lucide="filter"></i> Filtrar dashboard</button>
-          <button type="button" class="icon-btn ghost" id="closeTeamReport"><i data-lucide="x"></i></button>
+      <div id="reportStatusBar" class="report-status-bar"></div>
+      <div class="report-inner">
+        <div class="drawer-head">
+          <div><h2>Relatório operacional por equipe</h2><p id="reportPeriod">—</p></div>
+          <div class="report-toolbar">
+            <button type="button" class="secondary-action" id="printTeamReport"><i data-lucide="printer"></i> Imprimir / Salvar PDF</button>
+            <button type="button" class="secondary-action" id="filterFromReport"><i data-lucide="filter"></i> Filtrar dashboard</button>
+            <button type="button" class="icon-btn ghost" id="closeTeamReport"><i data-lucide="x"></i></button>
+          </div>
         </div>
-      </div>
-      <div class="print-header">
-        <div class="print-header-left">
-          <img src="assets/favicon.png" alt="Proerg" />
-          <span class="print-header-title">PROERG · Gestão Ambiental</span>
+        <div class="print-header">
+          <div class="print-header-left">
+            <img src="assets/favicon.png" alt="Proerg" />
+            <span class="print-header-title">PROERG · Gestão Ambiental</span>
+          </div>
+          <span class="print-header-right" id="printHeaderDate"></span>
         </div>
-        <span class="print-header-right" id="printHeaderDate"></span>
+        <div id="teamReportContent"></div>
       </div>
-      <div id="teamReportContent"></div>
     </div>
   </div>
 
@@ -1711,44 +1753,81 @@ function openTeamReport(teamId){
   const demandIds=new Set(m.dem.map(d=>d.demanda_id));
   const impacts=state.impact.filter(x=>demandIds.has(x.demanda_id)&&x.impactou_planejamento==='SIM');
   const impactMap=new Map(impacts.map(x=>[x.demanda_id,x]));
-  const planMap=new Map(m.plan.map(x=>[x.plano_id,x]));
   const execIds=new Set(m.exec.map(x=>x.atividade_id));
+
+  // KPI helpers
+  const kpi=(label,val,note,cls)=>`<div class="report-kpi ${cls}"><span class="rk-label">${label}</span><strong>${val}</strong><span class="rk-note">${note}</span></div>`;
+  const coverCls=m.coverage>=.8?'kpi-ok':m.coverage>=.5?'kpi-warn':'kpi-bad';
+  const blqCls=m.blockRate<.1?'kpi-ok':m.blockRate<.3?'kpi-warn':'kpi-bad';
+  const impCls=m.impactRatio<.1?'kpi-ok':m.impactRatio<.25?'kpi-warn':'kpi-bad';
+  const totCls=m.planImpactRate<.2?'kpi-ok':m.planImpactRate<.4?'kpi-warn':'kpi-bad';
+  const demCls=m.dem.length===0?'kpi-ok':m.dem.length<=3?'kpi-warn':'kpi-bad';
+  const nFeito=m.plan.filter(p=>(p.status_planejamento||'').toUpperCase()==='EXECUTADO').length;
+  const nBlq=m.plan.filter(p=>(p.status_planejamento||'').toUpperCase()==='BLOQUEADO').length;
+  const totalBlqH=m.blq.reduce((s,r)=>s+Number(r.horas_impactadas||0),0);
+
+  // Plan status pill
+  const planPill=s=>{const u=(s||'').toUpperCase();if(u==='EXECUTADO')return`<span class="rep-pill ok">Executado</span>`;if(u==='EM ANDAMENTO'||u==='ANDAMENTO'||u==='PARCIAL')return`<span class="rep-pill andamento">Andamento</span>`;if(u==='BLOQUEADO')return`<span class="rep-pill blq">Bloqueado</span>`;return`<span class="rep-pill pend">Pendente</span>`;};
+  // Demand status pill
+  const demPill=s=>{const u=(s||'').toUpperCase();if(u==='CONCLUÍDA'||u==='RESOLVIDA')return`<span class="rep-pill ok">${s}</span>`;if(u==='EM ANDAMENTO'||u==='EM ATENDIMENTO')return`<span class="rep-pill andamento">${s}</span>`;return`<span class="rep-pill dem-open">${s||'Aberta'}</span>`;};
+  // Section header helper
+  const secHdr=(title,n)=>`<div class="report-section-hdr"><h4>${title}</h4>${n!=null?`<span class="rep-count">${n}</span>`:''}</div>`;
+
+  // Bar modifier
+  const barEl=document.getElementById('reportStatusBar');
+  if(barEl) barEl.className=`report-status-bar${lvl[1]==='status-alert'?' bar-alert':lvl[1]==='status-watch'?' bar-warn':''}`;
+
   const report=document.getElementById('teamReportContent');
   report.innerHTML=`
     <div class="report-hero">
-      <div><h3>${t.equipe_id} · ${t.equipe}</h3><p>${t.frente_atuacao}</p><p>${state.names?t.lider_tecnico:'Líder técnico oculto'} · ${t.qtd_colaboradores} colaboradores</p></div>
-      <span class="status-pill ${lvl[1]}">${levelIcon(lvl[0])} ${lvl[0]}</span>
+      <div>
+        <h3>${t.equipe_id} · ${t.equipe}</h3>
+        <p style="margin-bottom:2px">${t.frente_atuacao}</p>
+        <p>${state.names?t.lider_tecnico:'Líder técnico oculto'} &nbsp;·&nbsp; ${t.qtd_colaboradores} colaboradores</p>
+      </div>
+      <span class="status-pill ${lvl[1]}" style="flex:none">${levelIcon(lvl[0])} ${lvl[0]}</span>
     </div>
     <div class="report-kpis">
-      <div class="report-kpi"><span>Cobertura de atividades</span><strong>${fmtPct(m.coverage)}</strong></div>
-      <div class="report-kpi"><span>Demandas não previstas</span><strong>${m.dem.length}</strong></div>
-      <div class="report-kpi"><span>Taxa de bloqueio</span><strong>${fmtPct(m.blockRate)}</strong></div>
-      <div class="report-kpi"><span>Interferência por demandas</span><strong>${fmtPct(m.impactRatio)}</strong></div>
-      <div class="report-kpi"><span>Impacto total</span><strong>${fmtPct(m.planImpactRate)} ${levelIcon(lvl[0])}</strong></div>
+      ${kpi('Cobertura',fmtPct(m.coverage),`${nFeito} de ${m.totalPlan} executadas`,coverCls)}
+      ${kpi('Demandas emergenciais',m.dem.length,m.dem.length===0?'Nenhuma registrada':`${m.openDem} aberta${m.openDem!==1?'s':''}`,demCls)}
+      ${kpi('Bloqueio',fmtPct(m.blockRate),`${nBlq} atividade${nBlq!==1?'s':''} bloqueada${nBlq!==1?'s':''}`,blqCls)}
+      ${kpi('Interferência',fmtPct(m.impactRatio),`${totalBlqH} h impactadas`,impCls)}
+      ${kpi('Impacto total',`${fmtPct(m.planImpactRate)} ${levelIcon(lvl[0])}`,'Cobertura + bloqueios + desvios',totCls)}
     </div>
-    <div class="report-section"><h4>Planejamento do período</h4>${reportRows(m.plan,[
-      {label:'Atividade',value:r=>r.atividade},
-      {label:'Meta',value:r=>`${r.meta_planejada} ${r.unidade}`},
-      {label:'Execução registrada',value:r=>execIds.has(r.atividade_id)?'Sim':'Não'},
-      {label:'Afetada',value:r=>m.allAffectedPlanIds.includes(r.plano_id)?'Sim':'Não'}
-    ])}</div>
-    <div class="report-section"><h4>Demandas não previstas</h4>${reportRows(m.dem,[
-      {label:'ID',value:r=>r.demanda_id||'—'},
-      {label:'Data',value:r=>parseDate(r.data)?.toLocaleDateString('pt-BR')||r.data},
-      {label:'Atividade',value:r=>r.atividade_sugerida||'—'},
-      {label:'Descrição',value:r=>{const d=(r.descricao||'').trim(),a=(r.atividade_sugerida||'').trim();return d&&d!==a?d:'—';}},
-      {label:'Prioridade',value:r=>{const p=r.prioridade||'MÉDIA';const map={'CRÍTICA':'CRÍTICO','ALTA':'ALTO','MÉDIA':'MODERADO','BAIXA':'BAIXO'};return `${levelIcon(map[p]||p)} ${p}`;}},
-      {label:'Status',value:r=>r.status},
-      {label:'Efeito no plano',value:r=>{const x=impactMap.get(r.demanda_id);return x?`${x.destino_planejamento||x.tipo_impacto} · ${x.horas_desviadas||0} h`:'Sem impacto identificado';}}
-    ])}</div>
-    <div class="report-section"><h4>Bloqueadores</h4>${reportRows(m.blq,[
-      {label:'Data',value:r=>parseDate(r.data)?.toLocaleDateString('pt-BR')||r.data},
-      {label:'Bloqueador',value:r=>r.tipo_bloqueador},
-      {label:'Impacto',value:r=>{const lvl=r.impacto||'MÉDIO';const map={'ALTO':'ALTO','MÉDIO':'MODERADO','BAIXO':'BAIXO'};return `${levelIcon(map[lvl]||lvl)} ${lvl}`;}},
-      {label:'Horas',value:r=>`${r.horas_impactadas} h`},
-      {label:'Atividade afetada',value:r=>r.atividade_planejada_afetada||'—'}
-    ])}</div>
-    <div class="report-footer"><span>PROERG · Gestão Ambiental Itaipu BP3 · Período: ${mesNumLabel(state.month)}</span><span>Gerado em ${new Date().toLocaleString('pt-BR')}</span></div>`;
+    <div class="report-section">
+      ${secHdr('Planejamento do período',m.plan.length)}
+      ${reportRows(m.plan,[
+        {label:'Atividade',value:r=>r.atividade},
+        {label:'Meta',value:r=>`${r.meta_planejada} ${r.unidade||'h'}`},
+        {label:'Status',value:r=>planPill(r.status_planejamento)},
+        {label:'Afetada por demanda',value:r=>m.allAffectedPlanIds.includes(r.plano_id)?'<span class="rep-pill blq">Sim</span>':'<span style="color:var(--faint);font-size:11px">—</span>'}
+      ])}
+    </div>
+    <div class="report-section">
+      ${secHdr('Demandas não previstas',m.dem.length)}
+      ${reportRows(m.dem,[
+        {label:'Data',value:r=>parseDate(r.data)?.toLocaleDateString('pt-BR')||r.data},
+        {label:'Atividade',value:r=>r.atividade_sugerida||'—'},
+        {label:'Descrição',value:r=>{const d=(r.descricao||'').trim(),a=(r.atividade_sugerida||'').trim();return d&&d!==a?`<span style="max-width:280px;white-space:normal;display:block">${d}</span>`:'<span style="color:var(--faint)">—</span>';}},
+        {label:'Prioridade',value:r=>{const p=r.prioridade||'MÉDIA';const map={'CRÍTICA':'CRÍTICO','ALTA':'ALTO','MÉDIA':'MODERADO','BAIXA':'BAIXO'};return `${levelIcon(map[p]||p)} ${p}`;}},
+        {label:'Status',value:r=>demPill(r.status)},
+        {label:'Efeito no plano',value:r=>{const x=impactMap.get(r.demanda_id);return x?`${x.destino_planejamento||x.tipo_impacto} · ${x.horas_desviadas||0} h`:`<span style="color:var(--faint);font-size:11px">Sem impacto identificado</span>`;}}
+      ])}
+    </div>
+    <div class="report-section">
+      ${secHdr('Bloqueadores',m.blq.length)}
+      ${reportRows(m.blq,[
+        {label:'Data',value:r=>parseDate(r.data)?.toLocaleDateString('pt-BR')||r.data},
+        {label:'Bloqueador',value:r=>r.tipo_bloqueador},
+        {label:'Impacto',value:r=>{const lv=r.impacto||'MÉDIO';const map={'ALTO':'ALTO','MÉDIO':'MODERADO','BAIXO':'BAIXO'};return `${levelIcon(map[lv]||lv)} ${lv}`;}},
+        {label:'Horas',value:r=>`<strong>${r.horas_impactadas} h</strong>`},
+        {label:'Atividade afetada',value:r=>r.atividade_planejada_afetada||'<span style="color:var(--faint)">—</span>'}
+      ])}
+    </div>
+    <div class="report-footer">
+      <span>PROERG · Gestão Ambiental Itaipu BP3 · Período: ${mesNumLabel(state.month)}</span>
+      <span>Gerado em ${new Date().toLocaleString('pt-BR')}</span>
+    </div>`;
   document.getElementById('reportPeriod').textContent=mesNumLabel(state.month);
   const phd=document.getElementById('printHeaderDate');
   if(phd) phd.textContent=`Relatório operacional · ${mesNumLabel(state.month)} · ${new Date().toLocaleDateString('pt-BR')}`;
