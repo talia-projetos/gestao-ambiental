@@ -831,6 +831,13 @@ body{font-size:15px}
               <div id="mobDemPieLegend" class="mob-pie-legend"></div>
             </div>
           </div>
+          <div class="mob-dem-pie-card">
+            <div class="mob-dem-pie-hdr">Demandas não previstas</div>
+            <div class="mob-dem-pie-body">
+              <div class="mob-dem-pie-canvas-wrap"><canvas id="mobDemReqPie"></canvas></div>
+              <div id="mobDemReqLegend" class="mob-pie-legend"></div>
+            </div>
+          </div>
           <div class="mob-list-section mob-dem-section" id="mobDemSection">
             <div class="mob-list-title">Demandas <span class="mob-count" id="mobDemCount">0</span></div>
             <div id="mobDemList"><p class="mob-empty">Carregando…</p></div>
@@ -2217,7 +2224,7 @@ function renderMobilePlanView(){
   if(!teamId){
     demEl.innerHTML='<p class="mob-empty">Selecione sua equipe no início para ver as demandas.</p>';
     if(demCnt)demCnt.textContent='0';
-    renderMobDemPie();return;
+    renderMobDemPie();renderMobDemReqPie();return;
   }
   const dk=d=>`${d.equipe_id}|${d.data}|${(d.descricao||d.atividade_sugerida||'').trim()}`;
   const jsonDems=state.demands.filter(d=>(monthOf(d)===m||m===0)&&(teamId?d.equipe_id===teamId:true));
@@ -2253,6 +2260,7 @@ function renderMobilePlanView(){
     });
   });
   renderMobDemPie();
+  renderMobDemReqPie();
 }
 let mobDemPieChart=null;
 function renderMobDemPie(){
@@ -2295,6 +2303,51 @@ function renderMobDemPie(){
       ctx.font=`700 18px system-ui`;ctx.fillStyle=textColor;ctx.textAlign='center';ctx.textBaseline='middle';
       ctx.fillText(String(total),cx,cy-6);
       ctx.font=`10px system-ui`;ctx.fillStyle=muted;ctx.fillText('atividades',cx,cy+10);
+      ctx.restore();
+    }}]
+  });
+}
+let mobDemReqPieChart=null;
+function renderMobDemReqPie(){
+  const canvas=document.getElementById('mobDemReqPie');if(!canvas)return;
+  const teamId=localStorage.getItem('ga-my-team');
+  const m=Number(state.month);
+  const dem=state.demands.filter(d=>monthOf(d)===m&&(!teamId||d.equipe_id===teamId));
+  let nAberta=0,nAndamento=0,nResolvida=0,nCancelada=0;
+  dem.forEach(d=>{
+    const s=(d.status||'').toUpperCase();
+    if(s==='CONCLUÍDA'||s==='RESOLVIDA')nResolvida++;
+    else if(s==='EM ANDAMENTO'||s==='ANDAMENTO'||s==='EM ATENDIMENTO')nAndamento++;
+    else if(s==='CANCELADA')nCancelada++;
+    else nAberta++;
+  });
+  const total=dem.length;
+  const cs=getComputedStyle(document.documentElement);
+  const green=cs.getPropertyValue('--green').trim()||'#48B381';
+  const blue=cs.getPropertyValue('--blue').trim()||'#4C77BB';
+  const ochre=cs.getPropertyValue('--ochre').trim()||'#E89050';
+  const faint=cs.getPropertyValue('--faint').trim()||'#bbb';
+  const border=cs.getPropertyValue('--border').trim()||'#eee';
+  const muted=cs.getPropertyValue('--muted').trim()||'#888';
+  const textColor=cs.getPropertyValue('--text').trim()||'#111';
+  const legend=document.getElementById('mobDemReqLegend');
+  if(legend) legend.innerHTML=[['Aberta',nAberta,ochre],['Andamento',nAndamento,blue],['Resolvida',nResolvida,green],['Cancelada',nCancelada,faint]]
+    .map(([l,n,c])=>`<div class="mob-pie-legend-item"><span class="mob-pie-legend-dot" style="background:${c}"></span><span class="mob-pie-legend-label">${l}</span><span class="mob-pie-legend-count">${n}</span></div>`).join('');
+  if(mobDemReqPieChart){mobDemReqPieChart.destroy();mobDemReqPieChart=null;}
+  const data=total===0?[1,0,0,0]:[nAberta,nAndamento,nResolvida,nCancelada];
+  const colors=total===0?[border,border,border,border]:[ochre,blue,green,faint];
+  mobDemReqPieChart=new Chart(canvas,{
+    type:'doughnut',
+    data:{labels:['Aberta','Andamento','Resolvida','Cancelada'],datasets:[{data,backgroundColor:colors,borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+      plugins:{legend:{display:false},tooltip:{enabled:total>0,callbacks:{label:c=>`${c.label}: ${c.parsed}`}}}},
+    plugins:[{id:'center-req',beforeDraw(ch){
+      const{ctx,chartArea:{top,bottom,left,right}}=ch;
+      const cx=(left+right)/2,cy=(top+bottom)/2;
+      ctx.save();
+      ctx.font=`700 18px system-ui`;ctx.fillStyle=total>0?ochre:faint;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(String(total),cx,cy-6);
+      ctx.font=`10px system-ui`;ctx.fillStyle=muted;ctx.fillText('demandas',cx,cy+10);
       ctx.restore();
     }}]
   });
@@ -2571,8 +2624,8 @@ function renderMobileHub(){
   if(ms&&state.planning.length){
     const m=metricsForTeam(teamId);
     const covEl=document.getElementById('hubMsCov');if(covEl)covEl.textContent=fmtPct(m.coverage);
-    const demEl=document.getElementById('hubMsDem');if(demEl)demEl.textContent=m.openDem??0;
-    const blqEl=document.getElementById('hubMsBlq');if(blqEl)blqEl.textContent=m.blq;
+    const demEl=document.getElementById('hubMsDem');if(demEl)demEl.textContent=typeof m.openDem==='number'?m.openDem:(m.dem?.length??0);
+    const blqEl=document.getElementById('hubMsBlq');if(blqEl)blqEl.textContent=Array.isArray(m.blq)?m.blq.length:(m.blq??0);
     // Colorir cobertura por status
     const covItem=ms.querySelector('.hms-item.cov');
     if(covItem){const cl=m.coverage>=0.8?'var(--green)':m.coverage>=0.5?'var(--ochre)':'var(--red)';covItem.querySelector('strong').style.color=cl;}
