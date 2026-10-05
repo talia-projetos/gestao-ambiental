@@ -212,6 +212,17 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .rep-pill.dem-ok{background:color-mix(in srgb,var(--green) 12%,transparent);color:var(--green)}
 /* KPI label size */
 .report-kpi .rk-label{font-size:10px}
+/* Síntese executiva */
+.report-synthesis{border-left:3px solid var(--green);padding:16px 20px;margin:0 0 22px;background:var(--surface-2);border-radius:0 12px 12px 0}
+.report-synthesis-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.report-synthesis-text{font-size:13px;line-height:1.65;color:var(--text);margin:0}
+.report-insight-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.report-insight-item{padding:0 18px;border-right:1px solid var(--border)}
+.report-insight-item:first-child{padding-left:0}
+.report-insight-item:last-child{border-right:0;padding-right:0}
+.report-insight-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px}
+.report-insight-val{font-size:14px;font-weight:700;color:var(--text);line-height:1.2}
+.report-insight-sub{font-size:11px;color:var(--faint);margin-top:3px;line-height:1.35}
 /* Footer */
 .report-footer{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--faint)}
 .report-empty{padding:28px 20px;text-align:center;color:var(--faint);font-size:12px;background:var(--surface-2);border-radius:12px;border:1px dashed var(--border)}
@@ -1774,6 +1785,57 @@ function openTeamReport(teamId){
   const nFeito=m.plan.filter(p=>(p.status_planejamento||'').toUpperCase()==='EXECUTADO').length;
   const nBlq=m.plan.filter(p=>(p.status_planejamento||'').toUpperCase()==='BLOQUEADO').length;
   const totalBlqH=m.blq.reduce((s,r)=>s+Number(r.horas_impactadas||0),0);
+  const nPend=m.plan.filter(p=>{const u=(p.status_planejamento||'').toUpperCase();return!['EXECUTADO','EM ANDAMENTO','ANDAMENTO','BLOQUEADO','PARCIAL'].includes(u);}).length;
+
+  // Ranking entre equipes
+  const allRanks=state.teams.map(tt=>{const mm=metricsForTeam(tt.equipe_id);return{id:tt.equipe_id,cov:mm.coverage};});
+  const myRank=[...allRanks].sort((a,b)=>b.cov-a.cov).findIndex(x=>x.id===teamId)+1;
+  const nTeams=allRanks.length;
+
+  // Itens críticos
+  const highBlq=m.blq.filter(r=>(r.impacto||'').toUpperCase()==='ALTO');
+  const highDem=m.dem.filter(d=>['CRÍTICA','ALTA'].includes((d.prioridade||'').toUpperCase())&&!['CONCLUÍDA','RESOLVIDA','CANCELADA'].includes((d.status||'').toUpperCase()));
+
+  // Texto síntese
+  const sp=[];
+  if(m.coverage>=.8)sp.push('cobertura satisfatória — '+nFeito+' de '+m.totalPlan+' atividades executadas');
+  else if(m.coverage>0)sp.push(nFeito+' de '+m.totalPlan+' atividades executadas ('+fmtPct(m.coverage)+'), '+nPend+' ainda pendentes');
+  else sp.push('nenhuma atividade executada no período — '+m.totalPlan+' pendentes');
+  if(highBlq.length>0)sp.push(highBlq.length+' bloqueador'+(highBlq.length>1?'es':'')+' de alto impacto ('+totalBlqH+' h perdidas)');
+  else if(m.blq.length>0)sp.push(m.blq.length+' bloqueador'+(m.blq.length>1?'es':' registrado')+(m.blq.length>1?' registrados':'')+' ('+totalBlqH+' h)');
+  else sp.push('sem bloqueadores no período');
+  if(m.openDem>0)sp.push(m.openDem+' demanda'+(m.openDem>1?'s emergenciais abertas':' emergencial aberta')+(highDem.length>0?', '+highDem.length+' de alta prioridade':''));
+  else if(m.dem.length>0)sp.push(m.dem.length+' demanda'+(m.dem.length>1?'s emergenciais, todas encerradas':' emergencial encerrada'));
+  else sp.push('sem demandas emergenciais no período');
+  const synthText=(sp.join('; ')+'.').charAt(0).toUpperCase()+(sp.join('; ')+'.').slice(1);
+
+  // Meta do período
+  let gLabel,gSub,gColor;
+  if(m.coverage>=.8){gLabel='Meta atingida';gSub=nFeito+' de '+m.totalPlan+' atividades';gColor='var(--green)';}
+  else if(m.coverage>=.5){gLabel='Meta em risco';gSub=nFeito+' de '+m.totalPlan+' — ritmo insuficiente';gColor='var(--ochre)';}
+  else{gLabel='Meta comprometida';gSub=nFeito+' de '+m.totalPlan+' — requer ação imediata';gColor='var(--red)';}
+
+  // Ações requeridas
+  const acts=[...highBlq.map(r=>'Bloqueador: '+r.tipo_bloqueador+' ('+r.horas_impactadas+' h)'),...highDem.map(d=>'Demanda '+(d.prioridade||'')+': '+(d.descricao||d.atividade_sugerida||'').slice(0,45))];
+  const actLabel=acts.length>0?acts.length+' item'+(acts.length>1?'s':'')+(acts.length>1?' pendentes':' pendente'):'Nenhuma pendência crítica';
+  const actSub=acts.length>0?acts[0]+(acts.length>1?' (+'+(acts.length-1)+')':''):'Operação dentro do esperado';
+  const actColor=acts.length>0?'var(--red)':'var(--green)';
+  const barColor=lvl[1]==='status-alert'?'var(--red)':lvl[1]==='status-watch'?'var(--ochre)':'var(--green)';
+
+  const synthBlock='<div class="report-synthesis" style="border-left-color:'+barColor+'">'
+    +'<div class="report-synthesis-label">Síntese executiva</div>'
+    +'<p class="report-synthesis-text">'+synthText+'</p>'
+    +'<div class="report-insight-row">'
+    +'<div class="report-insight-item"><div class="report-insight-lbl">Posição entre equipes</div>'
+    +'<div class="report-insight-val">'+myRank+'º de '+nTeams+'</div>'
+    +'<div class="report-insight-sub">por cobertura de atividades</div></div>'
+    +'<div class="report-insight-item"><div class="report-insight-lbl">Meta do período</div>'
+    +'<div class="report-insight-val" style="color:'+gColor+'">'+gLabel+'</div>'
+    +'<div class="report-insight-sub">'+gSub+'</div></div>'
+    +'<div class="report-insight-item"><div class="report-insight-lbl">Ação requerida</div>'
+    +'<div class="report-insight-val" style="color:'+actColor+'">'+actLabel+'</div>'
+    +'<div class="report-insight-sub">'+actSub+'</div></div>'
+    +'</div></div>';
 
   // Plan status pill
   const planPill=s=>{const u=(s||'').toUpperCase();if(u==='EXECUTADO')return`<span class="rep-pill ok">Executado</span>`;if(u==='EM ANDAMENTO'||u==='ANDAMENTO'||u==='PARCIAL')return`<span class="rep-pill andamento">Andamento</span>`;if(u==='BLOQUEADO')return`<span class="rep-pill blq">Bloqueado</span>`;return`<span class="rep-pill pend">Pendente</span>`;};
@@ -1803,6 +1865,7 @@ function openTeamReport(teamId){
       ${kpi('Interferência',fmtPct(m.impactRatio),`${totalBlqH} h impactadas`,impCls)}
       ${kpi('Impacto total',`${fmtPct(m.planImpactRate)} ${levelIcon(lvl[0])}`,'Cobertura + bloqueios + desvios',totCls)}
     </div>
+    ${synthBlock}
     <div class="report-section">
       ${secHdr('Planejamento do período',m.plan.length)}
       ${m.plan.length?`<table class="report-table"><colgroup><col style="width:46%"><col style="width:14%"><col style="width:17%"><col style="width:23%"></colgroup>
