@@ -1809,7 +1809,7 @@ function openTeamReport(teamId){
   if(m.coverage>=.8)sp.push('cobertura satisfatória — '+nFeito+' de '+m.totalPlan+' atividades executadas');
   else if(m.coverage>0)sp.push(nFeito+' de '+m.totalPlan+' atividades executadas ('+fmtPct(m.coverage)+'), '+nPend+' ainda pendentes');
   else sp.push('nenhuma atividade executada no período — '+m.totalPlan+' pendentes');
-  if(highBlq.length>0)sp.push(highBlq.length+' bloqueador'+(highBlq.length>1?'es':'')+' de alto impacto ('+totalBlqH+' h perdidas)');
+  if(highBlq.length>0)sp.push(highBlq.length+' bloqueador'+(highBlq.length>1?'es':'')+' de alto impacto ('+totalBlqH+' h desviadas)');
   else if(m.blq.length>0)sp.push(m.blq.length+' bloqueador'+(m.blq.length>1?'es':' registrado')+(m.blq.length>1?' registrados':'')+' ('+totalBlqH+' h)');
   else sp.push('sem bloqueadores no período');
   if(m.openDem>0)sp.push(m.openDem+' demanda'+(m.openDem>1?'s emergenciais abertas':' emergencial aberta')+(highDem.length>0?', '+highDem.length+' de alta prioridade':''));
