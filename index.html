@@ -173,19 +173,22 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .report-status-bar.bar-warn{background:var(--ochre)}
 .report-status-bar.bar-alert{background:var(--red)}
 /* Hero */
-.report-hero{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--border)}
-.report-hero h3{font-size:22px;font-weight:800;margin:0 0 4px;letter-spacing:-.02em}
-.report-hero p{margin:0 0 3px;color:var(--muted);font-size:13px}
-/* KPIs */
-.report-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:18px 0}
-.report-kpi{background:var(--surface-2);border:1px solid var(--border);border-left-width:3px;border-radius:14px;padding:14px 12px}
-.report-kpi .rk-label{display:block;color:var(--muted);font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
-.report-kpi strong{font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1;display:block}
-.report-kpi .rk-note{display:block;font-size:10px;color:var(--faint);margin-top:5px;line-height:1.3}
-.report-kpi.kpi-ok{border-left-color:var(--green)}.report-kpi.kpi-ok strong{color:var(--green)}
-.report-kpi.kpi-warn{border-left-color:var(--ochre)}.report-kpi.kpi-warn strong{color:var(--ochre)}
-.report-kpi.kpi-bad{border-left-color:var(--red)}.report-kpi.kpi-bad strong{color:var(--red)}
-.report-kpi.kpi-neutral{border-left-color:var(--border)}
+.report-hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;padding:20px 0 18px}
+.report-hero h3{font-size:24px;font-weight:800;margin:0 0 5px;letter-spacing:-.03em;line-height:1.1}
+.report-hero-sub{font-size:12.5px;color:var(--muted);margin:0 0 3px;display:block}
+.report-hero-leader{font-size:13px;color:var(--text);font-weight:600;margin:0}
+/* KPIs — faixa executiva sem caixas */
+.report-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin:20px 0;border-top:1.5px solid var(--border);border-bottom:1.5px solid var(--border);padding:18px 0}
+.report-kpi{padding:0 22px;border-right:1px solid var(--border)}
+.report-kpi:first-child{padding-left:0}
+.report-kpi:last-child{border-right:0}
+.report-kpi .rk-label{display:block;color:var(--muted);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
+.report-kpi strong{font-size:28px;font-weight:800;letter-spacing:-.04em;line-height:1;display:block}
+.report-kpi .rk-note{display:block;font-size:10.5px;color:var(--faint);margin-top:6px;line-height:1.35}
+.report-kpi.kpi-ok strong{color:var(--green)}
+.report-kpi.kpi-warn strong{color:var(--ochre)}
+.report-kpi.kpi-bad strong{color:var(--red)}
+.report-kpi.kpi-neutral strong{color:var(--text)}
 /* Seções */
 .report-section{margin-top:22px}
 .report-section-hdr{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
@@ -232,10 +235,12 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
   #teamReportModal .print-header img{width:22px;height:22px;filter:grayscale(1) opacity(.65);object-fit:contain}
   #teamReportModal .print-header-title{font-size:11px;font-weight:700;letter-spacing:.06em;color:#555;text-transform:uppercase}
   #teamReportModal .print-header-right{font-size:10px;color:#999}
-  #teamReportModal .report-kpis{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:6px!important;margin:12px 0!important}
-  #teamReportModal .report-kpi{background:#f7f7f7!important;border:1px solid #ddd!important;border-left-width:3px!important;border-radius:8px!important;padding:10px 12px!important;page-break-inside:avoid}
-  #teamReportModal .report-kpi .rk-label{font-size:9px!important;color:#666!important}
-  #teamReportModal .report-kpi strong{font-size:19px!important;color:#111!important}
+  #teamReportModal .report-kpis{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:0!important;margin:14px 0!important;border-top:1px solid #ccc!important;border-bottom:1px solid #ccc!important;padding:14px 0!important}
+  #teamReportModal .report-kpi{background:transparent!important;border:none!important;border-right:1px solid #ddd!important;border-radius:0!important;padding:0 16px!important}
+  #teamReportModal .report-kpi:first-child{padding-left:0!important}
+  #teamReportModal .report-kpi:last-child{border-right:none!important}
+  #teamReportModal .report-kpi .rk-label{font-size:8.5px!important;color:#888!important}
+  #teamReportModal .report-kpi strong{font-size:22px!important;color:#111!important}
   #teamReportModal .report-kpi.kpi-ok strong{color:#2a7a55!important}
   #teamReportModal .report-kpi.kpi-warn strong{color:#b07820!important}
   #teamReportModal .report-kpi.kpi-bad strong{color:#c03030!important}
@@ -1784,12 +1789,12 @@ function openTeamReport(teamId){
   const report=document.getElementById('teamReportContent');
   report.innerHTML=`
     <div class="report-hero">
-      <div>
+      <div style="min-width:0">
         <h3>${t.equipe_id} · ${t.equipe}</h3>
-        <p style="margin-bottom:2px">${t.frente_atuacao}</p>
-        <p>${state.names?t.lider_tecnico:'Líder técnico oculto'} &nbsp;·&nbsp; ${t.qtd_colaboradores} colaboradores</p>
+        <span class="report-hero-sub">${t.frente_atuacao}</span>
+        <p class="report-hero-leader">${state.names?t.lider_tecnico:'Líder técnico'} &nbsp;·&nbsp; ${t.qtd_colaboradores} colaboradores</p>
       </div>
-      <span class="status-pill ${lvl[1]}" style="flex:none">${levelIcon(lvl[0])} ${lvl[0]}</span>
+      <span class="status-pill ${lvl[1]}" style="flex:none;margin-top:4px">${levelIcon(lvl[0])} ${lvl[0]}</span>
     </div>
     <div class="report-kpis">
       ${kpi('Cobertura',fmtPct(m.coverage),`${nFeito} de ${m.totalPlan} executadas`,coverCls)}
