@@ -98,17 +98,21 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .mobile-home-hub[data-mode="select"] .hub-greeting-area{display:none}
 .mobile-home-hub[data-mode="hub"] .hub-select-area{display:none}
 /* Card de equipe */
-.mobile-hub-team{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px 18px}
+.mobile-hub-team{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px 20px}
 /* Área de seleção */
-.hub-welcome-msg{text-align:center;padding:4px 0 18px}
-.hub-welcome-msg strong{display:block;font-size:18px;font-weight:800;margin-bottom:6px}
-.hub-welcome-msg p{font-size:13px;color:var(--muted);line-height:1.5;margin:0}
-.hub-select-area label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);display:block;margin-bottom:6px}
-.hub-select-wrap{position:relative;background:var(--surface-2);border:1px solid var(--border);border-radius:13px;overflow:hidden}
-.hub-select-wrap select{width:100%;border:none;background:transparent;font:inherit;font-size:15px;font-weight:600;color:var(--text);outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;padding:13px 40px 13px 14px}
-.hub-select-wrap::after{content:'';position:absolute;right:15px;top:50%;transform:translateY(-50%);width:10px;height:6px;background:var(--muted);clip-path:polygon(0 0,100% 0,50% 100%);pointer-events:none}
-.hub-confirm-btn{margin-top:12px;width:100%;height:48px;background:var(--green);border:0;border-radius:14px;color:#fff;font:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:.14s}
-.hub-confirm-btn:active{opacity:.85;transform:scale(.98)}
+.hub-welcome-logo{display:flex;justify-content:center;padding:4px 0 20px}
+.hub-welcome-logo img{width:56px;height:56px;object-fit:contain;border-radius:16px}
+.hub-welcome-msg{text-align:center;padding:0 0 24px}
+.hub-welcome-msg strong{display:block;font-size:24px;font-weight:800;letter-spacing:-.04em;margin-bottom:8px;color:var(--text)}
+.hub-welcome-msg p{font-size:13px;color:var(--muted);line-height:1.6;margin:0 auto;max-width:260px}
+.hub-select-field-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:8px;display:block}
+.hub-select-wrap{position:relative;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .15s}
+.hub-select-wrap:focus-within{border-color:var(--green)}
+.hub-select-wrap select{width:100%;border:none;background:transparent;font:inherit;font-size:15px;font-weight:600;color:var(--text);outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;padding:14px 44px 14px 16px}
+.hub-select-wrap::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:10px;height:6px;background:var(--muted);clip-path:polygon(0 0,100% 0,50% 100%);pointer-events:none}
+.hub-confirm-btn{margin-top:14px;width:100%;height:52px;background:var(--green);border:0;border-radius:15px;color:#fff;font:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px color-mix(in srgb,var(--green) 35%,transparent)}
+.hub-confirm-btn svg{width:18px;height:18px;stroke-width:2.2;stroke:#fff}
+.hub-confirm-btn:active{opacity:.88;transform:scale(.98);box-shadow:none}
 /* Saudação após seleção */
 .hub-greeting-area{padding:2px 0 4px}
 .hub-greeting-time{font-size:11px;color:var(--muted);margin-bottom:1px}
@@ -690,15 +694,21 @@ body{font-size:15px}
           <div class="mobile-hub-team">
             <!-- Tela de seleção (mode=select) -->
             <div class="hub-select-area">
-              <div class="hub-welcome-msg">
-                <strong>Bem-vindo</strong>
-                <p>Escolha sua equipe para ver o planejamento e registrar atividades.</p>
+              <div class="hub-welcome-logo">
+                <img src="assets/favicon.png" alt="Logo Proerg">
               </div>
-              <label>Minha equipe</label>
+              <div class="hub-welcome-msg">
+                <strong>Bem-vindo(a)</strong>
+                <p>Identifique sua equipe para acessar o planejamento e registrar atividades de campo.</p>
+              </div>
+              <span class="hub-select-field-label">Minha equipe</span>
               <div class="hub-select-wrap">
                 <select id="mobileHubTeam"></select>
               </div>
-              <button id="hubConfirmBtn" class="hub-confirm-btn">Entrar</button>
+              <button id="hubConfirmBtn" class="hub-confirm-btn">
+                <i data-lucide="log-in"></i>
+                Acessar
+              </button>
             </div>
             <!-- Saudação após seleção (mode=hub) -->
             <div class="hub-greeting-area">
