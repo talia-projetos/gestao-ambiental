@@ -524,8 +524,10 @@ body{font-size:15px}
 }
 /* ── Mobile: ajustes de layout ──────────────────────────────── */
 @media(max-width:760px){
-  .status-ops-label{display:none!important}
   .last-update{display:none!important}
+  .status-strip{flex-direction:row!important;align-items:center!important;gap:6px!important;padding:7px 12px!important}
+  .status-strip strong{font-size:11px!important}
+  .status-ops-label{font-size:11px!important;color:var(--muted)!important}
   .notif-wrap{display:none!important}
   #fullscreenBtn{display:none!important}
   #presentQuickBtn{display:none!important}
