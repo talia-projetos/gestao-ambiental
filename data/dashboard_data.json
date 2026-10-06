@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-06T01:02:51.136Z",
+  "generated_at": "2026-10-06T01:03:50.308Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1881,7 +1881,7 @@
       {
         "data": "2026-10-06",
         "chuva_mm": 1.5,
-        "prob_chuva": 73,
+        "prob_chuva": 41,
         "tmax": 26.5,
         "tmin": 19.7,
         "codigo": 53,
@@ -1890,7 +1890,7 @@
       {
         "data": "2026-10-07",
         "chuva_mm": 3.6,
-        "prob_chuva": 43,
+        "prob_chuva": 30,
         "tmax": 28.6,
         "tmin": 20.4,
         "codigo": 81,
@@ -1899,7 +1899,7 @@
       {
         "data": "2026-10-08",
         "chuva_mm": 10.6,
-        "prob_chuva": 78,
+        "prob_chuva": 80,
         "tmax": 28.8,
         "tmin": 21.1,
         "codigo": 81,
