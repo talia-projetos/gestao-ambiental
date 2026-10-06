@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-06T04:45:50.452Z",
+  "generated_at": "2026-10-06T04:46:49.383Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1859,6 +1859,53 @@
       "meta": 3000
     }
   ],
-  "weather_api": null,
+  "weather_api": {
+    "fonte": "Open-Meteo",
+    "atualizado": "2026-10-06T01:45",
+    "temperatura": 19.7,
+    "sensacao": 21.6,
+    "precipitacao": 0,
+    "vento_kmh": 10,
+    "codigo_tempo": 3,
+    "condicao": "Nublado",
+    "previsao": [
+      {
+        "data": "2026-10-06",
+        "chuva_mm": 1.5,
+        "prob_chuva": 57,
+        "tmax": 26.5,
+        "tmin": 19.7,
+        "codigo": 53,
+        "condicao": "Chuvisco"
+      },
+      {
+        "data": "2026-10-07",
+        "chuva_mm": 3.6,
+        "prob_chuva": 37,
+        "tmax": 28.6,
+        "tmin": 20.4,
+        "codigo": 81,
+        "condicao": "Aguaceiro"
+      },
+      {
+        "data": "2026-10-08",
+        "chuva_mm": 10.6,
+        "prob_chuva": 66,
+        "tmax": 28.8,
+        "tmin": 21.1,
+        "codigo": 81,
+        "condicao": "Aguaceiro"
+      },
+      {
+        "data": "2026-10-09",
+        "chuva_mm": 36.8,
+        "prob_chuva": 86,
+        "tmax": 28.6,
+        "tmin": 21.5,
+        "codigo": 96,
+        "condicao": "Tempestade"
+      }
+    ]
+  },
   "reservatorio": null
 }
