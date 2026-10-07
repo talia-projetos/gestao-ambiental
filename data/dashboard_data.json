@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07T12:26:54.091Z",
+  "generated_at": "2026-10-07T12:27:52.052Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -84,7 +84,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Elaboração de relatórios de biodiversidade",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -101,7 +101,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Atualização de banco de dados faunístico",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -118,7 +118,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Análise de dados de câmeras-trap",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -135,7 +135,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Inventário de fauna aquática",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -152,7 +152,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Monitoramento de avifauna",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -169,7 +169,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Análise laboratorial de amostras",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -186,7 +186,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "GEADA POSSÍVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Elaboração de laudos técnicos",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -203,7 +203,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "SECA",
       "alternativa_id": "",
-      "atividade_alternativa": "Instalação de câmeras-trap",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -220,7 +220,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Monitoramento de herpetofauna",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -237,7 +237,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Monitoramento de avifauna",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -254,7 +254,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA ALTA",
       "alternativa_id": "",
-      "atividade_alternativa": "Monitoramento em dias sem chuva",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -271,7 +271,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Análise de dados de câmeras-trap",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -288,7 +288,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Análise de fitossociologia",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -305,7 +305,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Elaboração de mapas de vegetação",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -322,7 +322,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Controle de exóticas invasoras em abrigo",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -339,7 +339,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Coleta de sementes nativas",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -356,7 +356,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Mapeamento de fitofisionomias",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -373,7 +373,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Inventário florestal",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -390,7 +390,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "GEADA POSSÍVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Elaboração de laudos técnicos",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -407,7 +407,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "SECA",
       "alternativa_id": "",
-      "atividade_alternativa": "Inventário florestal",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -424,7 +424,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Controle de exóticas invasoras",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -441,7 +441,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Mapeamento de fitofisionomias",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -458,7 +458,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA ALTA",
       "alternativa_id": "",
-      "atividade_alternativa": "Controle de exóticas em dias favoráveis",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -475,7 +475,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Análise de imagens de satélite",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -492,7 +492,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Elaboração de relatórios de qualidade",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -509,7 +509,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Atualização de banco de dados hídricos",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -526,7 +526,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Análise laboratorial",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -543,7 +543,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Controle de macrófitas",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -560,7 +560,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Monitoramento de erosão marginal",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -577,7 +577,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Coleta de sedimentos",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -594,7 +594,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "GEADA POSSÍVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Monitoramento de qualidade da água",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -611,7 +611,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "SECA",
       "alternativa_id": "",
-      "atividade_alternativa": "Batimetria de corpo hídrico",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -628,7 +628,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Controle de macrófitas",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -645,7 +645,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Monitoramento de qualidade da água",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -662,7 +662,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA ALTA",
       "alternativa_id": "",
-      "atividade_alternativa": "Monitoramento em janelas sem chuva",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -679,7 +679,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Análise laboratorial de amostras",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -696,7 +696,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Elaboração de projetos de restauração",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -713,7 +713,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Adubação e tratos culturais em viveiro",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -730,7 +730,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Preparo de área para plantio",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -747,7 +747,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Recuperação de nascentes",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -764,7 +764,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Semeadura direta",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -781,7 +781,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Plantio de mudas",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -798,7 +798,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "GEADA POSSÍVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Elaboração de laudos de restauração",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -815,7 +815,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "SECA",
       "alternativa_id": "",
-      "atividade_alternativa": "Preparo de área para plantio de setembro",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -832,7 +832,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Restauração de APP e nascentes",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -849,7 +849,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Semeadura direta",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -866,7 +866,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA ALTA",
       "alternativa_id": "",
-      "atividade_alternativa": "Elaboração de relatórios técnicos",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -883,7 +883,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Manutenção de plantios no viveiro",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -900,7 +900,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Análise de imagens de drone/satélite",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -917,7 +917,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Georreferenciamento de focos erosivos",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -934,7 +934,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Instalação de bacias de contenção",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -951,7 +951,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Instalação de bacias de contenção",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -968,7 +968,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Monitoramento de taludes",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -985,7 +985,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Controle de assoreamento",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1002,7 +1002,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "GEADA POSSÍVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Análise de dados geotécnicos",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1019,7 +1019,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "SECA",
       "alternativa_id": "",
-      "atividade_alternativa": "Georreferenciamento de focos erosivos",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1036,7 +1036,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Instalação de bacias de contenção",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1053,7 +1053,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Controle de voçorocas",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1070,7 +1070,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA ALTA",
       "alternativa_id": "",
-      "atividade_alternativa": "Monitoramento em janelas favoráveis",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1087,7 +1087,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Análise de imagens de satélite",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1104,7 +1104,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Produção de materiais educativos",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1121,7 +1121,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Planejamento de eventos do semestre",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1138,7 +1138,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Visitas guiadas ao Ecomuseu",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1155,7 +1155,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Ações de sensibilização comunitária",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1172,7 +1172,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Programa em escolas",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1189,7 +1189,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Visitas ao Ecomuseu",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1206,7 +1206,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "GEADA POSSÍVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Produção de materiais educativos",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1223,7 +1223,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "SECA",
       "alternativa_id": "",
-      "atividade_alternativa": "Capacitação de agentes ambientais",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1240,7 +1240,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "FAVORÁVEL",
       "alternativa_id": "",
-      "atividade_alternativa": "Trilhas interpretativas + escolas",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1257,7 +1257,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA MODERADA",
       "alternativa_id": "",
-      "atividade_alternativa": "Visitas ao Ecomuseu",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1274,7 +1274,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA ALTA",
       "alternativa_id": "",
-      "atividade_alternativa": "Programa em escolas",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     },
@@ -1291,7 +1291,7 @@
       "status_planejamento": "PLANEJADO",
       "restricao_principal": "CHUVA INTENSA",
       "alternativa_id": "",
-      "atividade_alternativa": "Produção de materiais para 2027",
+      "atividade_alternativa": "",
       "observacao": "",
       "origem_dado": "PROERG"
     }
@@ -1435,53 +1435,6 @@
       "meta": 3000
     }
   ],
-  "weather_api": {
-    "fonte": "Open-Meteo",
-    "atualizado": "2026-10-07T09:15",
-    "temperatura": 24.7,
-    "sensacao": 26.7,
-    "precipitacao": 0,
-    "vento_kmh": 15,
-    "codigo_tempo": 0,
-    "condicao": "Céu limpo",
-    "previsao": [
-      {
-        "data": "2026-10-07",
-        "chuva_mm": 0.2,
-        "prob_chuva": 4,
-        "tmax": 29.3,
-        "tmin": 20.5,
-        "codigo": 51,
-        "condicao": "Chuvisco"
-      },
-      {
-        "data": "2026-10-08",
-        "chuva_mm": 4.6,
-        "prob_chuva": 58,
-        "tmax": 27.7,
-        "tmin": 19.8,
-        "codigo": 80,
-        "condicao": "Aguaceiro"
-      },
-      {
-        "data": "2026-10-09",
-        "chuva_mm": 45.1,
-        "prob_chuva": 86,
-        "tmax": 27.6,
-        "tmin": 22.6,
-        "codigo": 96,
-        "condicao": "Tempestade"
-      },
-      {
-        "data": "2026-10-10",
-        "chuva_mm": 17.1,
-        "prob_chuva": 99,
-        "tmax": 26.1,
-        "tmin": 21.3,
-        "codigo": 96,
-        "condicao": "Tempestade"
-      }
-    ]
-  },
+  "weather_api": null,
   "reservatorio": null
 }
