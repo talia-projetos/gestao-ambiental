@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-10-07T10:36:50.525Z",
+  "generated_at": "2026-10-07T10:37:49.775Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
     {
       "equipe_id": "EQ01",
-      "equipe": "Monitoramento de Fauna",
+      "equipe": "Usina",
       "lider_tecnico": "Renata Souza Oliveira",
-      "frente_atuacao": "Monitoramento de Fauna",
+      "frente_atuacao": "Usina",
       "qtd_colaboradores": 20,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
@@ -16,9 +16,9 @@
     },
     {
       "equipe_id": "EQ02",
-      "equipe": "Gestão da Flora e Vegetação",
+      "equipe": "Refúgio (viveiro)",
       "lider_tecnico": "Marcelo Ferreira Santos",
-      "frente_atuacao": "Gestão da Flora e Vegetação",
+      "frente_atuacao": "Refúgio (viveiro)",
       "qtd_colaboradores": 20,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
