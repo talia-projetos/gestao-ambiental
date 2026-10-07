@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07T10:54:52.191Z",
+  "generated_at": "2026-10-07T10:55:49.917Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -39,7 +39,7 @@
     {
       "equipe_id": "EQ04",
       "equipe": "Refúgio (jardinagem)",
-      "lider_tecnico": "Celso",
+      "lider_tecnico": "Celso Luiz Bordim",
       "frente_atuacao": "Refúgio (jardinagem)",
       "qtd_colaboradores": 19,
       "jornada_horas_dia": 6,
@@ -50,7 +50,7 @@
     {
       "equipe_id": "EQ05",
       "equipe": "Museu",
-      "lider_tecnico": "Celso",
+      "lider_tecnico": "Celso Luiz Bordim",
       "frente_atuacao": "Museu",
       "qtd_colaboradores": 19,
       "jornada_horas_dia": 6,
@@ -61,7 +61,7 @@
     {
       "equipe_id": "EQ06",
       "equipe": "Mirantes",
-      "lider_tecnico": "Celso",
+      "lider_tecnico": "Celso Luiz Bordim",
       "frente_atuacao": "Mirantes",
       "qtd_colaboradores": 18,
       "jornada_horas_dia": 6,
