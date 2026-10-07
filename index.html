@@ -1350,8 +1350,10 @@ function filtered(){
   };
 }
 
+const FUNCOES_ADMIN=new Set(['preposto','administração','administracao','supervisão','supervisao']);
+function isAdminFuncao(f){return FUNCOES_ADMIN.has((f||'').trim().toLowerCase())}
 function metricsForTeam(teamId, month=state.month){
-  const plan=state.planning.filter(r=>planMesMatch(r,Number(month))&&r.equipe_id===teamId);
+  const plan=state.planning.filter(r=>planMesMatch(r,Number(month))&&r.equipe_id===teamId&&!isAdminFuncao(r.funcao));
   const exec=state.execution.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
   const dem=state.demands.filter(r=>monthOf(r)===Number(month)&&r.equipe_id===teamId);
   const blq=state.blockers.filter(r=>r.equipe_id===teamId);
