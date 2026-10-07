@@ -1219,16 +1219,26 @@ function checkWeatherAlerts(weather){
   const prev=state.notifications.filter(n=>n.type==='rain'||n.type==='wind');
   state.notifications=state.notifications.filter(n=>n.type!=='rain'&&n.type!=='wind');
   const c=weather.current||{};
+  const fc=(weather.forecast||[]).slice(0,3).filter(f=>f.precipitation_mm>=25);
+  // Assinatura das condições — só notifica como novo quando condições mudam
+  const sig=[
+    c.precipitation_mm>=5?`rain:${Math.round(c.precipitation_mm)}`:null,
+    (c.wind_kmh>=40||c.gust_kmh>=60)?`wind:${Math.round(c.wind_kmh)}`:null,
+    ...fc.map(f=>`fc:${f.date}`)
+  ].filter(Boolean).sort().join('|');
+  const lastSig=localStorage.getItem('ga-weather-sig')||'';
+  const conditionsChanged=sig!==lastSig;
+  if(sig)localStorage.setItem('ga-weather-sig',sig);
   const addW=(type,title,msg)=>{
     const old=prev.find(p=>p.title===title);
-    // Preserve unread state so notifications read before refresh stay read
+    // Se já existia: preserva unread. Se é novo: só unread se condições mudaram
     const n=old?{...old,msg}:{id:Date.now()+Math.random()*100,type,title,msg,
-      time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),unread:true};
+      time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),unread:conditionsChanged};
     state.notifications.push(n);
   };
   if(c.precipitation_mm>=5)addW('rain','Chuva significativa em curso',`Precipitação atual: ${c.precipitation_mm}mm em Foz do Iguaçu. Avaliar condições de campo.`);
   if(c.wind_kmh>=40||c.gust_kmh>=60)addW('wind','Ventos fortes detectados',`Velocidade: ${Math.round(c.wind_kmh)} km/h · Rajadas: ${Math.round(c.gust_kmh)} km/h. Verificar segurança das equipes.`);
-  (weather.forecast||[]).slice(0,3).forEach(f=>{if(f.precipitation_mm>=25)addW('rain','Previsão de chuva intensa',`${f.date}: ${f.precipitation_mm}mm previstos para a região.`);});
+  fc.forEach(f=>addW('rain','Previsão de chuva intensa',`${f.date}: ${f.precipitation_mm}mm previstos para a região.`));
   saveNotifs();
   renderNotifications();
 }
