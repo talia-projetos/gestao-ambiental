@@ -2583,7 +2583,7 @@ function saveExecRecord(e){
   }catch(err){if(note)note.textContent='Erro JS: '+err.message;console.error('saveExecRecord:',err);}
 }
 function parseLideres(str){
-  return (str||'').replace(/\s+e\s+/gi,', ').split(',').map(s=>s.trim()).filter(Boolean);
+  return (str||'').replace(/\s+e\s+/gi,';').replace(/,/g,';').split(';').map(s=>s.trim()).filter(Boolean);
 }
 function renderMobileHub(){
   const hub=document.querySelector('.mobile-home-hub'); if(!hub)return;
