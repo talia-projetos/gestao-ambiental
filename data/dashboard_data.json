@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-10-07T10:52:49.403Z",
+  "generated_at": "2026-10-07T10:53:50.767Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
     {
       "equipe_id": "EQ01",
       "equipe": "Usina",
-      "lider_tecnico": "Nome",
+      "lider_tecnico": "Aldair, Denis e Wilson",
       "frente_atuacao": "Usina",
       "qtd_colaboradores": 20,
       "jornada_horas_dia": 6,
@@ -17,7 +17,7 @@
     {
       "equipe_id": "EQ02",
       "equipe": "Refúgio (viveiro)",
-      "lider_tecnico": "Nome 1",
+      "lider_tecnico": "Elizabet",
       "frente_atuacao": "Refúgio (viveiro)",
       "qtd_colaboradores": 20,
       "jornada_horas_dia": 6,
@@ -28,7 +28,7 @@
     {
       "equipe_id": "EQ03",
       "equipe": "Refúgio (manutenção)",
-      "lider_tecnico": "Nome 2",
+      "lider_tecnico": "Danilo de Lima",
       "frente_atuacao": "Refúgio (manutenção)",
       "qtd_colaboradores": 19,
       "jornada_horas_dia": 6,
