@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-09T06:46:48.031Z",
+  "generated_at": "2026-10-09T06:47:55.117Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1472,8 +1472,8 @@
     "sensacao": 25.5,
     "precipitacao": 0,
     "vento_kmh": 2,
-    "codigo_tempo": 3,
-    "condicao": "Nublado",
+    "codigo_tempo": 2,
+    "condicao": "Parcialmente nublado",
     "previsao": [
       {
         "data": "2026-10-09",
@@ -1481,7 +1481,7 @@
         "prob_chuva": 92,
         "tmax": 30.9,
         "tmin": 21.4,
-        "codigo": 96,
+        "codigo": 95,
         "condicao": "Tempestade"
       },
       {
