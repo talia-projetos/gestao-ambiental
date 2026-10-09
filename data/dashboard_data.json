@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-10-09T18:00:48.945Z",
+  "generated_at": "2026-10-09T18:01:51.571Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
     {
       "equipe_id": "EQ01",
-      "equipe": "Usina",
-      "lider_tecnico": "Denis de Lima; Nilson Domingos do Nascimento; Oldair Jose Wille",
-      "frente_atuacao": "Usina",
+      "equipe": "Usina: rotativo",
+      "lider_tecnico": "Denis de Lima",
+      "frente_atuacao": "Usina: rotativo",
       "qtd_colaboradores": 68,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
@@ -16,6 +16,28 @@
     },
     {
       "equipe_id": "EQ02",
+      "equipe": "Usina 2",
+      "lider_tecnico": "",
+      "frente_atuacao": "Usina 2",
+      "qtd_colaboradores": 0,
+      "jornada_horas_dia": 6,
+      "status": "ATIVA",
+      "cor": "",
+      "origem_dado": "PROERG"
+    },
+    {
+      "equipe_id": "EQ03",
+      "equipe": "Usina 3",
+      "lider_tecnico": "",
+      "frente_atuacao": "Usina 3",
+      "qtd_colaboradores": 0,
+      "jornada_horas_dia": 6,
+      "status": "ATIVA",
+      "cor": "",
+      "origem_dado": "PROERG"
+    },
+    {
+      "equipe_id": "EQ04",
       "equipe": "Refúgio: viveiro",
       "lider_tecnico": "Elizabeth Martinez Huergo",
       "frente_atuacao": "Refúgio: viveiro",
@@ -26,7 +48,7 @@
       "origem_dado": "PROERG"
     },
     {
-      "equipe_id": "EQ03",
+      "equipe_id": "EQ05",
       "equipe": "Refúgio: manutenção",
       "lider_tecnico": "Danilo de Lima",
       "frente_atuacao": "Refúgio: manutenção",
@@ -37,7 +59,7 @@
       "origem_dado": "PROERG"
     },
     {
-      "equipe_id": "EQ04",
+      "equipe_id": "EQ06",
       "equipe": "Refúgio: jardinagem",
       "lider_tecnico": "Celso Luiz Bordim",
       "frente_atuacao": "Refúgio: jardinagem",
@@ -48,7 +70,7 @@
       "origem_dado": "PROERG"
     },
     {
-      "equipe_id": "EQ05",
+      "equipe_id": "EQ07",
       "equipe": "Museu",
       "lider_tecnico": "Celso Luiz Bordim",
       "frente_atuacao": "Museu",
@@ -59,7 +81,7 @@
       "origem_dado": "PROERG"
     },
     {
-      "equipe_id": "EQ06",
+      "equipe_id": "EQ08",
       "equipe": "Mirantes",
       "lider_tecnico": "Celso Luiz Bordim",
       "frente_atuacao": "Mirantes",
