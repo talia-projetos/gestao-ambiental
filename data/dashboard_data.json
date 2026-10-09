@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-09T07:14:49.953Z",
+  "generated_at": "2026-10-09T07:15:50.998Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1467,13 +1467,13 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-09T04:00",
-    "temperatura": 21.6,
-    "sensacao": 24.6,
-    "precipitacao": 0.1,
-    "vento_kmh": 2,
-    "codigo_tempo": 51,
-    "condicao": "Chuvisco",
+    "atualizado": "2026-10-09T04:15",
+    "temperatura": 21.7,
+    "sensacao": 24.5,
+    "precipitacao": 1.4,
+    "vento_kmh": 4,
+    "codigo_tempo": 95,
+    "condicao": "Tempestade",
     "previsao": [
       {
         "data": "2026-10-09",
