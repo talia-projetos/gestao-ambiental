@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-09T18:05:55.466Z",
+  "generated_at": "2026-10-09T18:06:48.474Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -22,7 +22,7 @@
       "qtd_colaboradores": 21,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
-      "cor": "",
+      "cor": "#C29F47",
       "origem_dado": "PROERG"
     },
     {
@@ -33,7 +33,7 @@
       "qtd_colaboradores": 21,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
-      "cor": "",
+      "cor": "#BC5276",
       "origem_dado": "PROERG"
     },
     {
@@ -166,7 +166,7 @@
       "ano": "2026",
       "mes_num": "1",
       "mes": "Janeiro",
-      "equipe_id": "EQ01",
+      "equipe_id": "EQ02",
       "atividade_id": "AT005",
       "atividade": "",
       "unidade": "horas",
@@ -183,7 +183,7 @@
       "ano": "2026",
       "mes_num": "1",
       "mes": "Janeiro",
-      "equipe_id": "EQ01",
+      "equipe_id": "EQ02",
       "atividade_id": "AT006",
       "atividade": "",
       "unidade": "horas",
@@ -200,7 +200,7 @@
       "ano": "2026",
       "mes_num": "1",
       "mes": "Janeiro",
-      "equipe_id": "EQ01",
+      "equipe_id": "EQ02",
       "atividade_id": "AT007",
       "atividade": "",
       "unidade": "horas",
@@ -217,7 +217,7 @@
       "ano": "2026",
       "mes_num": "1",
       "mes": "Janeiro",
-      "equipe_id": "EQ01",
+      "equipe_id": "EQ03",
       "atividade_id": "AT008",
       "atividade": "",
       "unidade": "horas",
@@ -234,7 +234,7 @@
       "ano": "2026",
       "mes_num": "1",
       "mes": "Janeiro",
-      "equipe_id": "EQ01",
+      "equipe_id": "EQ03",
       "atividade_id": "AT009",
       "atividade": "",
       "unidade": "horas",
@@ -251,7 +251,7 @@
       "ano": "2026",
       "mes_num": "1",
       "mes": "Janeiro",
-      "equipe_id": "EQ01",
+      "equipe_id": "EQ03",
       "atividade_id": "AT010",
       "atividade": "",
       "unidade": "horas",
