@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-10-09T18:02:50.664Z",
+  "generated_at": "2026-10-09T18:04:09.098Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
     {
       "equipe_id": "EQ01",
-      "equipe": "Usina: rotativo",
+      "equipe": "Usina A",
       "lider_tecnico": "Denis de Lima",
-      "frente_atuacao": "Usina: rotativo",
+      "frente_atuacao": "Usina A",
       "qtd_colaboradores": 68,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
@@ -16,9 +16,9 @@
     },
     {
       "equipe_id": "EQ02",
-      "equipe": "Usina 2",
+      "equipe": "Usina B",
       "lider_tecnico": "Nilson Domingos do Nascimento",
-      "frente_atuacao": "Usina 2",
+      "frente_atuacao": "Usina B",
       "qtd_colaboradores": 0,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
@@ -27,9 +27,9 @@
     },
     {
       "equipe_id": "EQ03",
-      "equipe": "Usina 3",
+      "equipe": "Usina C",
       "lider_tecnico": "Oldair Jose Wille",
-      "frente_atuacao": "Usina 3",
+      "frente_atuacao": "Usina C",
       "qtd_colaboradores": 0,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
