@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-09T18:04:09.098Z",
+  "generated_at": "2026-10-09T18:04:57.681Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -8,7 +8,7 @@
       "equipe": "Usina A",
       "lider_tecnico": "Denis de Lima",
       "frente_atuacao": "Usina A",
-      "qtd_colaboradores": 68,
+      "qtd_colaboradores": 21,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
       "cor": "#48B381",
@@ -19,7 +19,7 @@
       "equipe": "Usina B",
       "lider_tecnico": "Nilson Domingos do Nascimento",
       "frente_atuacao": "Usina B",
-      "qtd_colaboradores": 0,
+      "qtd_colaboradores": 21,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
       "cor": "",
@@ -30,7 +30,7 @@
       "equipe": "Usina C",
       "lider_tecnico": "Oldair Jose Wille",
       "frente_atuacao": "Usina C",
-      "qtd_colaboradores": 0,
+      "qtd_colaboradores": 21,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
       "cor": "",
