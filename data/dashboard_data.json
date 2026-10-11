@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11T05:44:47.943Z",
+  "generated_at": "2026-10-11T05:45:52.031Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1489,11 +1489,11 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-11T02:30",
+    "atualizado": "2026-10-11T02:45",
     "temperatura": 20,
-    "sensacao": 22.8,
+    "sensacao": 22.9,
     "precipitacao": 0,
-    "vento_kmh": 7,
+    "vento_kmh": 6,
     "codigo_tempo": 3,
     "condicao": "Nublado",
     "previsao": [
