@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11T00:39:50.851Z",
+  "generated_at": "2026-10-11T00:40:53.453Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1521,7 +1521,7 @@
         "prob_chuva": 100,
         "tmax": 22.2,
         "tmin": 19.6,
-        "codigo": 96,
+        "codigo": 95,
         "condicao": "Tempestade"
       },
       {
