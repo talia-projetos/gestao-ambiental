@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-12T01:02:48.347Z",
+  "generated_at": "2026-10-12T01:03:54.280Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1492,14 +1492,14 @@
     "atualizado": "2026-10-11T22:00",
     "temperatura": 21.2,
     "sensacao": 24.7,
-    "precipitacao": 0,
+    "precipitacao": 0.1,
     "vento_kmh": 4,
-    "codigo_tempo": 3,
-    "condicao": "Nublado",
+    "codigo_tempo": 51,
+    "condicao": "Chuvisco",
     "previsao": [
       {
         "data": "2026-10-11",
-        "chuva_mm": 20.5,
+        "chuva_mm": 20,
         "prob_chuva": 100,
         "tmax": 25.1,
         "tmin": 19.2,
@@ -1508,7 +1508,7 @@
       },
       {
         "data": "2026-10-12",
-        "chuva_mm": 40.9,
+        "chuva_mm": 51,
         "prob_chuva": 100,
         "tmax": 22.9,
         "tmin": 19.1,
@@ -1517,7 +1517,7 @@
       },
       {
         "data": "2026-10-13",
-        "chuva_mm": 42.3,
+        "chuva_mm": 22,
         "prob_chuva": 100,
         "tmax": 25.2,
         "tmin": 20,
@@ -1526,7 +1526,7 @@
       },
       {
         "data": "2026-10-14",
-        "chuva_mm": 11.8,
+        "chuva_mm": 14.2,
         "prob_chuva": 86,
         "tmax": 25.3,
         "tmin": 20,
