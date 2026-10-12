@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-12T21:44:48.510Z",
+  "generated_at": "2026-10-12T21:46:14.755Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1489,11 +1489,11 @@
   ],
   "weather_api": {
     "fonte": "Open-Meteo",
-    "atualizado": "2026-10-12T18:30",
-    "temperatura": 20.9,
-    "sensacao": 23.2,
+    "atualizado": "2026-10-12T18:45",
+    "temperatura": 20.8,
+    "sensacao": 23.1,
     "precipitacao": 0.4,
-    "vento_kmh": 12,
+    "vento_kmh": 11,
     "codigo_tempo": 80,
     "condicao": "Aguaceiro",
     "previsao": [
