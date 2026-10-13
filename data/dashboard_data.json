@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-13T20:45:49.293Z",
+  "generated_at": "2026-10-13T20:46:49.022Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1490,8 +1490,8 @@
   "weather_api": {
     "fonte": "Open-Meteo",
     "atualizado": "2026-10-13T17:45",
-    "temperatura": 24.1,
-    "sensacao": 27.5,
+    "temperatura": 23.3,
+    "sensacao": 26.6,
     "precipitacao": 0,
     "vento_kmh": 5,
     "codigo_tempo": 1,
@@ -1501,7 +1501,7 @@
         "data": "2026-10-13",
         "chuva_mm": 15.1,
         "prob_chuva": 100,
-        "tmax": 24.8,
+        "tmax": 23.6,
         "tmin": 18.2,
         "codigo": 95,
         "condicao": "Tempestade"
@@ -1510,8 +1510,8 @@
         "data": "2026-10-14",
         "chuva_mm": 10.5,
         "prob_chuva": 100,
-        "tmax": 24.9,
-        "tmin": 19.6,
+        "tmax": 25.7,
+        "tmin": 19.2,
         "codigo": 95,
         "condicao": "Tempestade"
       },
@@ -1519,8 +1519,8 @@
         "data": "2026-10-15",
         "chuva_mm": 0.6,
         "prob_chuva": 42,
-        "tmax": 26,
-        "tmin": 18.2,
+        "tmax": 25.7,
+        "tmin": 18.7,
         "codigo": 51,
         "condicao": "Chuvisco"
       },
@@ -1528,8 +1528,8 @@
         "data": "2026-10-16",
         "chuva_mm": 0,
         "prob_chuva": 8,
-        "tmax": 25.5,
-        "tmin": 16.5,
+        "tmax": 25.6,
+        "tmin": 16.3,
         "codigo": 3,
         "condicao": "Nublado"
       }
