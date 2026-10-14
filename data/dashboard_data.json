@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T03:07:54.288Z",
+  "generated_at": "2026-10-14T03:08:49.918Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1499,7 +1499,7 @@
     "previsao": [
       {
         "data": "2026-10-14",
-        "chuva_mm": 10.4,
+        "chuva_mm": 10.3,
         "prob_chuva": 100,
         "tmax": 25.7,
         "tmin": 19.2,
@@ -1509,26 +1509,26 @@
       {
         "data": "2026-10-15",
         "chuva_mm": 1.6,
-        "prob_chuva": 35,
+        "prob_chuva": 42,
         "tmax": 25.5,
-        "tmin": 19,
+        "tmin": 18.9,
         "codigo": 53,
         "condicao": "Chuvisco"
       },
       {
         "data": "2026-10-16",
         "chuva_mm": 0,
-        "prob_chuva": 4,
-        "tmax": 25.3,
-        "tmin": 16.3,
+        "prob_chuva": 8,
+        "tmax": 25.4,
+        "tmin": 16.2,
         "codigo": 3,
         "condicao": "Nublado"
       },
       {
         "data": "2026-10-17",
         "chuva_mm": 0,
-        "prob_chuva": 0,
-        "tmax": 21.9,
+        "prob_chuva": 2,
+        "tmax": 22.2,
         "tmin": 13.7,
         "codigo": 3,
         "condicao": "Nublado"
