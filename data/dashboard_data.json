@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T01:00:53.167Z",
+  "generated_at": "2026-10-14T01:01:51.046Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1494,12 +1494,12 @@
     "sensacao": 25.7,
     "precipitacao": 0,
     "vento_kmh": 2,
-    "codigo_tempo": 3,
-    "condicao": "Nublado",
+    "codigo_tempo": 2,
+    "condicao": "Parcialmente nublado",
     "previsao": [
       {
         "data": "2026-10-13",
-        "chuva_mm": 18.4,
+        "chuva_mm": 15.1,
         "prob_chuva": 100,
         "tmax": 24.8,
         "tmin": 18.2,
@@ -1508,7 +1508,7 @@
       },
       {
         "data": "2026-10-14",
-        "chuva_mm": 10.3,
+        "chuva_mm": 10.5,
         "prob_chuva": 100,
         "tmax": 24.9,
         "tmin": 19.6,
@@ -1517,18 +1517,18 @@
       },
       {
         "data": "2026-10-15",
-        "chuva_mm": 1.6,
+        "chuva_mm": 0.6,
         "prob_chuva": 42,
-        "tmax": 26,
-        "tmin": 18.2,
-        "codigo": 53,
+        "tmax": 25.9,
+        "tmin": 18.3,
+        "codigo": 51,
         "condicao": "Chuvisco"
       },
       {
         "data": "2026-10-16",
         "chuva_mm": 0,
         "prob_chuva": 8,
-        "tmax": 25.5,
+        "tmax": 25.4,
         "tmin": 16.5,
         "codigo": 3,
         "condicao": "Nublado"
