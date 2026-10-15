@@ -655,6 +655,7 @@ body{font-size:15px}
         <button class="nav-btn" data-page="page-blockers" title="Bloqueadores"><i data-lucide="triangle-alert"></i><span>Bloqueadores</span></button>
         <button class="nav-btn" data-page="page-impact" title="Impacto operacional"><i data-lucide="bar-chart-big"></i><span>Impacto</span></button>
         <button class="nav-btn" data-page="page-rbv" title="Refúgio Biológico"><i data-lucide="leaf"></i><span>Refúgio · RBV</span></button>
+        <button class="nav-btn" data-page="page-atividades" title="Atividades do Contrato"><i data-lucide="list-checks"></i><span>Atividades</span></button>
       </nav>
       <div class="sidebar-bottom">
         <button class="nav-btn" id="settingsBtn" title="Configurações"><i data-lucide="settings-2"></i><span>Configurações</span></button>
@@ -1035,6 +1036,56 @@ body{font-size:15px}
         </section>
       </div>
 
+      <!-- ── Página: Atividades do Contrato ──────────────────────── -->
+      <div id="page-atividades" class="page">
+        <div class="topbar" style="margin-bottom:12px">
+          <div class="brand-row">
+            <div class="title-wrap">
+              <h1>Atividades do Contrato</h1>
+              <p>Itaipu Binacional · Anexo II · 53 itens · Todas as equipes</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="segmented" id="atPeriodSeg" style="width:auto">
+              <button class="active" data-period="semanal">Semanal</button>
+              <button data-period="mensal">Mensal</button>
+              <button data-period="trimestral">Trimestral</button>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:var(--gap)">
+          <div class="kpi-card accent-green">
+            <div class="kpi-head"><span>Total de itens</span><i data-lucide="file-check-2"></i></div>
+            <strong>53</strong>
+            <div class="kpi-foot">Atividades mapeadas · Anexo II</div>
+          </div>
+          <div class="kpi-card accent-blue">
+            <div class="kpi-head"><span>Com planejamento</span><i data-lucide="calendar-check"></i></div>
+            <strong id="atKpiPlan">—</strong>
+            <div class="kpi-foot">Itens com registros no período</div>
+          </div>
+          <div class="kpi-card accent-green">
+            <div class="kpi-head"><span>Diárias / semanais</span><i data-lucide="repeat"></i></div>
+            <strong id="atKpiRecorrente">—</strong>
+            <div class="kpi-foot">Itens de rotina frequente</div>
+          </div>
+          <div class="kpi-card accent-ochre">
+            <div class="kpi-head"><span>Eventuais</span><i data-lucide="zap"></i></div>
+            <strong id="atKpiEventual">—</strong>
+            <div class="kpi-foot">Itens sob demanda</div>
+          </div>
+        </div>
+        <article class="card" style="padding:20px 24px;margin-bottom:var(--gap)">
+          <div class="card-header compact" style="margin-bottom:16px">
+            <div><h2>Execução por atividade</h2><p>Progresso do contrato · Todas as equipes de campo</p></div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span id="atPeriodLabel" style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Semanal</span>
+            </div>
+          </div>
+          <div id="atContractContent"></div>
+        </article>
+      </div>
+
       <!-- ── Página: Refúgio Biológico ───────────────────────────── -->
       <div id="page-rbv" class="page">
         <div class="topbar" style="margin-bottom:12px">
@@ -1050,6 +1101,7 @@ body{font-size:15px}
               <button data-period="mensal">Mensal</button>
               <button data-period="trimestral">Trimestral</button>
             </div>
+            <span id="rbvPeriodLabel" style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Semanal</span>
           </div>
         </div>
         <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:var(--gap)">
@@ -1098,16 +1150,6 @@ body{font-size:15px}
             <div id="rbvViveiroContent" style="margin-top:14px"></div>
           </article>
         </div>
-        <!-- Atividades por categoria -->
-        <article class="card" style="padding:20px 24px;margin-bottom:var(--gap)">
-          <div class="card-header compact" style="margin-bottom:16px">
-            <div><h2>Execução por atividade</h2><p>Progresso do contrato · Anexo II · 53 itens</p></div>
-            <div style="display:flex;align-items:center;gap:8px">
-              <span id="rbvPeriodLabel" style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Semanal</span>
-            </div>
-          </div>
-          <div id="rbvContractContent"></div>
-        </article>
       </div>
 
       <footer class="app-footer">
@@ -2371,6 +2413,7 @@ function showPage(id){
     if(id==='page-blockers'){ renderContextPanel(); renderBlockerChartFull(); }
     if(id==='page-impact'){ renderImpactPage(); }
     if(id==='page-rbv'){ renderRbvPage(); }
+    if(id==='page-atividades'){ renderAtividadesPage(); }
   },50);
 }
 function renderMobilePlanView(){
@@ -2784,6 +2827,67 @@ const RBV_CATS=[
   {id:'insumos',label:'Insumos',cor:'var(--faint)'},
 ];
 function fmtQuant(n){return n>=1000?`${(n/1000).toFixed(n%1000===0?0:1)}k`:String(n)}
+function renderAtividadesPage(){
+  const period=document.querySelector('#atPeriodSeg button.active')?.dataset.period||'mensal';
+  const fator=period==='semanal'?52:period==='mensal'?12:4;
+  const periodLabel=period==='semanal'?'Semanal':period==='mensal'?'Mensal':'Trimestral';
+  const lbl=document.getElementById('atPeriodLabel');if(lbl)lbl.textContent=periodLabel;
+  // Execução de todas as equipes
+  function normStr(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim();}
+  const execByItem={};
+  RBV_ITEMS.forEach(function(it){
+    var palavras=normStr(it.atividade).split(' ').filter(function(w){return w.length>3;});
+    var total=0;
+    (state.planning||[]).forEach(function(r){
+      var at=normStr(r.atividade||'');
+      var match=palavras.length>0&&palavras.filter(function(w){return at.indexOf(w)>=0;}).length>=Math.ceil(palavras.length*0.5);
+      if(match) total+=parseFloat(r.quantidade)||0;
+    });
+    execByItem[it.item]=total;
+  });
+  // KPIs
+  const recorrentes=RBV_ITEMS.filter(function(it){return it.freq==='diaria'||it.freq==='semanal';}).length;
+  const eventuais=RBV_ITEMS.filter(function(it){return it.freq==='eventual';}).length;
+  const comDados=RBV_ITEMS.filter(function(it){return execByItem[it.item]>0;}).length;
+  const kp=document.getElementById('atKpiPlan');if(kp)kp.textContent=comDados;
+  const kr=document.getElementById('atKpiRecorrente');if(kr)kr.textContent=recorrentes;
+  const ke=document.getElementById('atKpiEventual');if(ke)ke.textContent=eventuais;
+  // Tabela por categoria
+  const cont=document.getElementById('atContractContent');
+  if(cont){
+    cont.innerHTML=RBV_CATS.map(cat=>{
+      const itens=RBV_ITEMS.filter(x=>x.cat===cat.id);
+      if(!itens.length)return'';
+      const rows=itens.map(it=>{
+        const meta=it.unid==='mês'?Math.round(it.quant/(period==='trimestral'?3:period==='mensal'?1:0.25)*10)/10:Math.round(it.quant/fator*10)/10;
+        const metaStr=meta<1&&meta>0?`~1`:String(meta<0.1?`<0.1`:fmtQuant(meta));
+        const freqTag=it.freq==='diaria'?'<span class="rbv-rotina-freq diaria" style="margin-left:6px">Diária</span>':it.freq==='semanal'?'<span class="rbv-rotina-freq semanal" style="margin-left:6px">Semanal</span>':'';
+        return `<div class="rbv-item-row" style="flex-wrap:wrap">
+          <span class="rbv-item-num">${it.item}</span>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:2px">
+              <span class="rbv-item-name" title="${it.atividade}">${it.atividade}</span>${freqTag}
+            </div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${it.alt}">&#8627; ${it.alt}</div>
+          </div>
+          <span class="rbv-item-meta" style="text-align:right">Meta: ${metaStr} ${it.unid}</span>
+          <div class="rbv-item-bar-wrap">
+            <div class="rbv-item-bar"><div class="rbv-item-bar-fill" style="width:0%;background:${cat.cor}"></div></div>
+            <div class="rbv-item-pct">0%</div>
+          </div>
+          <div class="rbv-item-status" style="color:var(--faint)"><i data-lucide="minus"></i></div>
+        </div>`;
+      }).join('');
+      return `<div class="rbv-cat-group">
+        <div class="rbv-cat-header">
+          <span class="rbv-cat-dot" style="background:${cat.cor}"></span>
+          <span class="rbv-cat-title">${cat.label}</span>
+          <span class="rbv-cat-count">${itens.length} ${itens.length===1?'item':'itens'}</span>
+        </div>${rows}</div>`;
+    }).join('');
+    lucide.createIcons({nodes:[...document.querySelectorAll('#atContractContent [data-lucide]')]});
+  }
+}
 function renderRbvPage(){
   const period=document.querySelector('#rbvPeriodSeg button.active')?.dataset.period||'mensal';
   const fator=period==='semanal'?52:period==='mensal'?12:4;
@@ -2932,38 +3036,6 @@ function renderRbvPage(){
         <i data-lucide="corner-down-right" style="width:11px;height:11px;vertical-align:middle;margin-right:4px"></i>Alt: ${it.alt}
       </div>`;
     }).join('');
-  }
-  // Categorias
-  const cont=document.getElementById('rbvContractContent');
-  if(cont){
-    cont.innerHTML=RBV_CATS.map(cat=>{
-      const itens=RBV_ITEMS.filter(x=>x.cat===cat.id);
-      if(!itens.length)return'';
-      const rows=itens.map(it=>{
-        const meta=it.unid==='mês'?Math.round(it.quant/(period==='trimestral'?3:period==='mensal'?1:0.25)*10)/10:Math.round(it.quant/fator*10)/10;
-        const metaStr=meta<1&&meta>0?`${(meta*10).toFixed(0)}/10`:meta<0.1?`~${(it.quant/fator).toFixed(2)}`:`${meta}`;
-        return `<div class="rbv-item-row" style="flex-wrap:wrap">
-          <span class="rbv-item-num">${it.item}</span>
-          <div style="flex:1;min-width:0">
-            <div class="rbv-item-name" title="${it.atividade}">${it.atividade}</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${it.alt}">&#8627; ${it.alt}</div>
-          </div>
-          <span class="rbv-item-meta" style="text-align:right">Meta: ${metaStr} ${it.unid}</span>
-          <div class="rbv-item-bar-wrap">
-            <div class="rbv-item-bar"><div class="rbv-item-bar-fill" style="width:0%;background:${cat.cor}"></div></div>
-            <div class="rbv-item-pct">0%</div>
-          </div>
-          <div class="rbv-item-status" style="color:var(--faint)"><i data-lucide="minus"></i></div>
-        </div>`;
-      }).join('');
-      return `<div class="rbv-cat-group">
-        <div class="rbv-cat-header">
-          <span class="rbv-cat-dot" style="background:${cat.cor}"></span>
-          <span class="rbv-cat-title">${cat.label}</span>
-          <span class="rbv-cat-count">${itens.length} ${itens.length===1?'item':'itens'}</span>
-        </div>${rows}</div>`;
-    }).join('');
-    lucide.createIcons({nodes:[...document.querySelectorAll('#rbvContractContent [data-lucide]')]});
   }
   // KPIs
   const covEl=document.getElementById('rbvKpiCov');if(covEl)covEl.textContent='0%';
@@ -3151,6 +3223,13 @@ function setupUI(){
     localStorage.removeItem('ga-my-team');localStorage.removeItem('ga-my-name');renderMobileHub();
   });
   document.getElementById('hubRefreshBtn')?.addEventListener('click',()=>loadData());
+  document.getElementById('atPeriodSeg')?.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('#atPeriodSeg button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderAtividadesPage();
+    });
+  });
   document.getElementById('rbvPeriodSeg')?.querySelectorAll('button').forEach(btn=>{
     btn.addEventListener('click',()=>{
       document.querySelectorAll('#rbvPeriodSeg button').forEach(b=>b.classList.remove('active'));
