@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T16:15:50.393Z",
+  "generated_at": "2026-10-15T16:16:49.258Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -38,9 +38,9 @@
     },
     {
       "equipe_id": "EQ04",
-      "equipe": "RBV: viveiro",
+      "equipe": "RBV: Viveiro",
       "lider_tecnico": "Elizabeth Martinez Huergo",
-      "frente_atuacao": "RBV: viveiro",
+      "frente_atuacao": "RBV: Viveiro",
       "qtd_colaboradores": 12,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
