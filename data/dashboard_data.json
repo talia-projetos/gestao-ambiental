@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T16:18:52.205Z",
+  "generated_at": "2026-10-15T16:19:49.377Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -16,9 +16,9 @@
     },
     {
       "equipe_id": "EQ02",
-      "equipe": "UHI B:",
+      "equipe": "UHI B: Vilas",
       "lider_tecnico": "Nilson Domingos do Nascimento",
-      "frente_atuacao": "UHI B:",
+      "frente_atuacao": "UHI B: Vilas",
       "qtd_colaboradores": 21,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
@@ -27,9 +27,9 @@
     },
     {
       "equipe_id": "EQ03",
-      "equipe": "UHI: C",
+      "equipe": "UHI C: Usina",
       "lider_tecnico": "Oldair Jose Wille",
-      "frente_atuacao": "UHI: C",
+      "frente_atuacao": "UHI C: Usina",
       "qtd_colaboradores": 21,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
