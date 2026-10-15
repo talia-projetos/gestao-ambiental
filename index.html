@@ -1100,6 +1100,29 @@ body{font-size:15px}
             <div class="kpi-foot">Itens sob demanda</div>
           </div>
         </div>
+        <article class="card" id="manutPlanoCard" style="padding:20px 24px;margin-bottom:var(--gap)">
+          <div class="card-header compact" style="margin-bottom:14px">
+            <div>
+              <h2>Plano mensal de manutenção · oito equipes</h2>
+              <p>Rotina contínua, prioridade do mês, atividade alternativa e critério de conclusão · outubro/2026 a setembro/2027</p>
+            </div>
+            <span style="font-size:10px;color:var(--muted);white-space:nowrap">PROPOSTA PARA VALIDAÇÃO</span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:650;color:var(--muted)">Equipe
+              <select id="manutEquipe" onchange="renderPlanoManutencao()" style="border:1px solid var(--border);background:var(--surface);padding:9px;border-radius:9px;min-width:230px"><option value="ALL">Todas as equipes</option></select>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:650;color:var(--muted)">Mês de competência
+              <select id="manutMes" onchange="renderPlanoManutencao()" style="border:1px solid var(--border);background:var(--surface);padding:9px;border-radius:9px;min-width:160px"></select>
+            </label>
+          </div>
+          <div id="manutPlanoResumo" style="font-size:12px;color:var(--muted);margin:0 0 10px">Carregando programação de manutenção...</div>
+          <div id="manutPlanoLista"></div>
+          <p style="margin:15px 0 0;font-size:11px;line-height:1.5;color:var(--muted)">
+            Programação gerencial proposta. A execução depende de validação dos setores, disponibilidade e segurança, vigência e saldo contratual.
+            Metas numéricas somente após levantamento e definição de ordens de serviço. Não representa medição ou faturamento.
+          </p>
+        </article>
         <article class="card" style="padding:20px 24px;margin-bottom:var(--gap)">
           <div class="card-header compact" style="margin-bottom:16px">
             <div><h2>Execução por atividade</h2><p>Progresso do contrato · Todas as equipes de campo</p></div>
@@ -2513,7 +2536,7 @@ function showPage(id){
     if(id==='page-blockers'){ renderContextPanel(); renderBlockerChartFull(); }
     if(id==='page-impact'){ renderImpactPage(); }
     if(id==='page-rbv'){ renderRbvPage(); }
-    if(id==='page-atividades'){ renderAtividadesPage(); }
+    if(id==='page-atividades'){ renderAtividadesPage(); carregarPlanoManutencao(); }
   },50);
 }
 function renderMobilePlanView(){
@@ -2927,6 +2950,70 @@ const RBV_CATS=[
   {id:'insumos',label:'Insumos',cor:'var(--faint)'},
 ];
 function fmtQuant(n){return n>=1000?`${(n/1000).toFixed(n%1000===0?0:1)}k`:String(n)}
+// Programação gerencial de manutenção: arquivo separado do JSON publicado pelo Apps Script.
+// Não confundir proposta, execução de campo ou medição contratual.
+let gaPlanoManutencao = null;
+let gaPlanoCarregando = false;
+async function carregarPlanoManutencao(){
+  if(gaPlanoManutencao){renderPlanoManutencao();return;}
+  if(gaPlanoCarregando)return;
+  gaPlanoCarregando=true;
+  try{
+    const response=await fetch('data/plano_manutencao_mensal.json',{cache:'no-store'});
+    if(!response.ok)throw new Error('HTTP '+response.status);
+    const dados=await response.json();
+    if(!Array.isArray(dados.atividades)||!Array.isArray(dados.equipes))throw new Error('Estrutura de dados inválida');
+    gaPlanoManutencao=dados;
+    const teams=document.getElementById('manutEquipe');
+    const months=document.getElementById('manutMes');
+    if(teams){
+      const chosen=teams.value;
+      teams.innerHTML='<option value="ALL">Todas as equipes</option>';
+      dados.equipes.forEach(t=>teams.add(new Option(t.nome,t.id)));
+      if(chosen&&[...teams.options].some(o=>o.value===chosen))teams.value=chosen;
+    }
+    if(months){
+      const chosen=months.value||'2026-10';
+      const competencias=[...new Set(dados.atividades.map(a=>a.competencia))].sort();
+      months.innerHTML='';
+      competencias.forEach(c=>{const [y,m]=c.split('-');months.add(new Option(m+'/'+y,c));});
+      months.value=competencias.includes(chosen)?chosen:competencias[0];
+    }
+    renderPlanoManutencao();
+  }catch(error){
+    const el=document.getElementById('manutPlanoResumo');
+    if(el)el.textContent='Não foi possível carregar a programação: '+error.message;
+  }finally{gaPlanoCarregando=false;}
+}
+function renderPlanoManutencao(){
+  const root=document.getElementById('manutPlanoLista');
+  const summary=document.getElementById('manutPlanoResumo');
+  if(!gaPlanoManutencao||!root)return;
+  const eq=document.getElementById('manutEquipe')?.value||'ALL';
+  const mes=document.getElementById('manutMes')?.value||'2026-10';
+  const rows=gaPlanoManutencao.atividades.filter(a=>a.competencia===mes&&(eq==='ALL'||a.equipe_id===eq));
+  const groups=[...new Set(rows.map(a=>a.equipe_id))];
+  const safe=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  if(summary)summary.textContent=groups.length+' equipe(s) · '+rows.length+' ações propostas · metas quantitativas pendentes de validação';
+  if(!rows.length){root.innerHTML='<p style="color:var(--muted)">Sem planejamento para o filtro selecionado.</p>';return;}
+  root.innerHTML=groups.map(id=>{
+    const items=rows.filter(a=>a.equipe_id===id);
+    const main=items.find(a=>a.tipo==='META_MENSAL');
+    const routine=items.find(a=>a.tipo==='ROTINA_CONTINUADA');
+    const team=gaPlanoManutencao.equipes.find(t=>t.id===id);
+    return `<details ${groups.length===1?'open':''} style="border:1px solid var(--border);border-radius:13px;padding:12px 14px;margin:8px 0;background:var(--surface-3)">
+      <summary style="cursor:pointer;font-size:13px;font-weight:750;color:var(--text)">${safe(team?.nome||id)} <span style="font-size:11px;font-weight:450;color:var(--muted)"> · ${safe(main?.fase||'Manutenção')}</span></summary>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px">
+        ${[routine,main].filter(Boolean).map(a=>`<section style="border:1px solid var(--border);border-radius:11px;padding:12px;background:var(--surface)">
+          <div style="font-size:10px;letter-spacing:.07em;font-weight:750;color:var(--muted);margin-bottom:7px">${a.tipo==='ROTINA_CONTINUADA'?'ROTINA DE MANUTENÇÃO':'PRIORIDADE DO MÊS'} · ${safe(a.item_contratual)}</div>
+          <div style="font-size:13px;font-weight:650;line-height:1.5;color:var(--text);margin-bottom:10px">${safe(a.atividade)}</div>
+          <div style="font-size:11px;line-height:1.55;color:var(--muted)"><b>Plano B:</b> ${safe(a.plano_b)}<div style="margin-top:6px"><b>Concluir quando:</b> ${safe(a.criterio_conclusao)}</div></div>
+        </section>`).join('')}
+      </div>
+    </details>`;
+  }).join('');
+}
+
 function renderAtividadesPage(){
   const period=document.querySelector('#atPeriodSeg button.active')?.dataset.period||'mensal';
   const fator=period==='semanal'?52:period==='mensal'?12:4;
