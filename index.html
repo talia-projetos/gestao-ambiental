@@ -2678,59 +2678,59 @@ function parseLideres(str){
 }
 /* ── RBV: dados do contrato (Anexo II) ─────────────────── */
 const RBV_ITEMS=[
-  {item:'3.1',cat:'mudas',atividade:'Identificação de matrizes',quant:40,unid:'un'},
-  {item:'3.2',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - pequenas',quant:10,unid:'kg'},
-  {item:'3.3',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - médias',quant:20,unid:'kg'},
-  {item:'3.4',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - grandes',quant:235,unid:'kg'},
-  {item:'3.5',cat:'mudas',atividade:'Produção de mudas florestais',quant:149000,unid:'un'},
-  {item:'3.6',cat:'mudas',atividade:'Expedição de mudas florestais',quant:149000,unid:'un'},
-  {item:'3.7',cat:'viveiro',atividade:'Manejo de plantas ornamentais e produção de hortaliças',quant:4,unid:'mês'},
-  {item:'3.8',cat:'viveiro',atividade:'Transporte de vasos',quant:1000,unid:'km'},
-  {item:'3.9',cat:'rbv',atividade:'Manutenção das trilhas no RBV',quant:4,unid:'mês'},
-  {item:'3.10',cat:'rbv',atividade:'Serviços complementares no RBV',quant:4,unid:'mês'},
-  {item:'3.11',cat:'solo',atividade:'Remoção manual de entulho',quant:2000,unid:'m³'},
-  {item:'3.12',cat:'solo',atividade:'Remoção mecânica de entulho',quant:1000,unid:'m³'},
-  {item:'3.13',cat:'solo',atividade:'Regularização manual de superfície',quant:3700,unid:'m²'},
-  {item:'3.14',cat:'plantio',atividade:'Adubação química de árvores e arbustos',quant:500,unid:'un'},
-  {item:'3.15',cat:'plantio',atividade:'Coroamento',quant:850,unid:'un'},
-  {item:'3.16',cat:'plantio',atividade:'Preparo de solo para forrações',quant:333,unid:'m²'},
-  {item:'3.17',cat:'plantio',atividade:'Plantio de plantas de forração',quant:333,unid:'m²'},
-  {item:'3.18',cat:'plantio',atividade:'Plantio de palmeiras e árvores para paisagismo',quant:33,unid:'un'},
-  {item:'3.19',cat:'plantio',atividade:'Plantio de arbustos e semi-arbustos/herbáceas',quant:33,unid:'un'},
-  {item:'3.20',cat:'plantio',atividade:'Transplante de palmeiras e árvores',quant:10,unid:'un'},
-  {item:'3.21',cat:'plantio',atividade:'Fornecimento e plantio de grama Esmeralda em leivas',quant:3700,unid:'m²'},
-  {item:'3.22',cat:'plantio',atividade:'Fornecimento e plantio de grama São Carlos em leivas',quant:350,unid:'m²'},
-  {item:'3.23',cat:'plantio',atividade:'Irrigação de mudas com utilização de equipamento',quant:320,unid:'h/m'},
-  {item:'3.24',cat:'podas',atividade:'Poda de árvores - Formação',quant:20,unid:'un'},
-  {item:'3.25',cat:'podas',atividade:'Poda de árvores - Limpeza',quant:3000,unid:'un'},
-  {item:'3.26',cat:'podas',atividade:'Poda de árvores - Drástica',quant:100,unid:'un'},
-  {item:'3.27',cat:'podas',atividade:'Poda de palmeiras - Limpeza',quant:300,unid:'un'},
-  {item:'3.28',cat:'podas',atividade:'Poda de arbusto',quant:500,unid:'un'},
-  {item:'3.29',cat:'podas',atividade:'Poda de cerca viva',quant:700,unid:'m'},
-  {item:'3.30',cat:'corte',atividade:'Corte de árvores com até 0,40 m de diâmetro',quant:2000,unid:'un'},
-  {item:'3.31',cat:'corte',atividade:'Corte de árvores entre 0,41 m e 0,70 m de diâmetro',quant:200,unid:'un'},
-  {item:'3.32',cat:'vegetacao',atividade:'Limpeza de cerca',quant:1000,unid:'m'},
-  {item:'3.33',cat:'vegetacao',atividade:'Controle manual de plantas daninhas',quant:350,unid:'ha'},
-  {item:'3.34',cat:'vegetacao',atividade:'Controle químico de plantas daninhas',quant:10,unid:'ha'},
-  {item:'3.35',cat:'vegetacao',atividade:'Corte de gramados',quant:500,unid:'ha'},
-  {item:'3.36',cat:'vegetacao',atividade:'Remoção de aparas e outros materiais',quant:500,unid:'ha'},
-  {item:'3.37',cat:'vegetacao',atividade:'Roçada geral',quant:320,unid:'ha'},
-  {item:'3.38',cat:'maquinario',atividade:'Operação de trator',quant:750,unid:'h/m'},
-  {item:'3.39',cat:'maquinario',atividade:'Manutenção de jardins',quant:12000,unid:'H/h'},
-  {item:'3.40',cat:'maquinario',atividade:'Postos de serviços de jardinagem',quant:4,unid:'mês'},
-  {item:'3.41',cat:'maquinario',atividade:'Serviços eventuais - expediente normal',quant:4500,unid:'H/h'},
-  {item:'3.42',cat:'maquinario',atividade:'Serviços eventuais - extra 50%',quant:70,unid:'H/h'},
-  {item:'3.43',cat:'maquinario',atividade:'Serviços eventuais - extra 100%',quant:120,unid:'H/h'},
-  {item:'3.44',cat:'diarias',atividade:'Diárias de viagem sem pernoite',quant:16,unid:'un'},
-  {item:'3.45',cat:'diarias',atividade:'Diárias de viagem com pernoite',quant:4,unid:'un'},
-  {item:'3.46',cat:'diarias',atividade:'Trator agrícola eventual',quant:640,unid:'h/m'},
-  {item:'3.47',cat:'diarias',atividade:'Caminhão basculante eventual',quant:150,unid:'h/m'},
-  {item:'3.48',cat:'diarias',atividade:'Retroescavadeira eventual',quant:150,unid:'h/m'},
-  {item:'3.49',cat:'insumos',atividade:'Fornecimento de calcáreo dolomítico',quant:12000,unid:'Kg'},
-  {item:'3.50',cat:'insumos',atividade:'Fornecimento de fertilizante mineral',quant:3000,unid:'Kg'},
-  {item:'3.51',cat:'insumos',atividade:'Fornecimento de adubo orgânico',quant:600,unid:'Kg'},
-  {item:'3.52',cat:'insumos',atividade:'Fornecimento de substrato florestal',quant:2000,unid:'Kg'},
-  {item:'3.53',cat:'insumos',atividade:'Fornecimento de casca de pinus polida',quant:150,unid:'Kg'},
+  {item:'3.1',cat:'mudas',atividade:'Identificação de matrizes',quant:40,unid:'un',alt:'Registro fotográfico e GPS das matrizes identificadas'},
+  {item:'3.2',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - pequenas',quant:10,unid:'kg',alt:'Triagem e descarte de sementes inviáveis'},
+  {item:'3.3',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - médias',quant:20,unid:'kg',alt:'Armazenamento e catalogação de sementes colhidas'},
+  {item:'3.4',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - grandes',quant:235,unid:'kg',alt:'Secagem e embalagem de sementes para estoque'},
+  {item:'3.5',cat:'mudas',atividade:'Produção de mudas florestais',quant:149000,unid:'un',alt:'Repicagem de plântulas e transplante para tubetes maiores'},
+  {item:'3.6',cat:'mudas',atividade:'Expedição de mudas florestais',quant:149000,unid:'un',alt:'Controle de qualidade e seleção de mudas aptas'},
+  {item:'3.7',cat:'viveiro',atividade:'Manejo de plantas ornamentais e produção de hortaliças',quant:4,unid:'mês',alt:'Adubação foliar e tratamento fitossanitário preventivo'},
+  {item:'3.8',cat:'viveiro',atividade:'Transporte de vasos',quant:1000,unid:'km',alt:'Organização e inventário de vasos no viveiro'},
+  {item:'3.9',cat:'rbv',atividade:'Manutenção das trilhas no RBV',quant:4,unid:'mês',alt:'Sinalização e marcação de pontos de interpretação ambiental'},
+  {item:'3.10',cat:'rbv',atividade:'Serviços complementares no RBV',quant:4,unid:'mês',alt:'Monitoramento de espécies da fauna e registro de ocorrências'},
+  {item:'3.11',cat:'solo',atividade:'Remoção manual de entulho',quant:2000,unid:'m³',alt:'Separação e destinação adequada de resíduos sólidos'},
+  {item:'3.12',cat:'solo',atividade:'Remoção mecânica de entulho',quant:1000,unid:'m³',alt:'Nivelamento de áreas após remoção de entulho'},
+  {item:'3.13',cat:'solo',atividade:'Regularização manual de superfície',quant:3700,unid:'m²',alt:'Compactação e preparo final de canteiros'},
+  {item:'3.14',cat:'plantio',atividade:'Adubação química de árvores e arbustos',quant:500,unid:'un',alt:'Adubação orgânica e cobertura com mulch'},
+  {item:'3.15',cat:'plantio',atividade:'Coroamento',quant:850,unid:'un',alt:'Capina manual ao redor das mudas após coroamento'},
+  {item:'3.16',cat:'plantio',atividade:'Preparo de solo para forrações',quant:333,unid:'m²',alt:'Incorporação de composto orgânico ao solo preparado'},
+  {item:'3.17',cat:'plantio',atividade:'Plantio de plantas de forração',quant:333,unid:'m²',alt:'Irrigação de estabelecimento e replantio de falhas'},
+  {item:'3.18',cat:'plantio',atividade:'Plantio de palmeiras e árvores para paisagismo',quant:33,unid:'un',alt:'Instalação de tutores e proteção de mudas recém-plantadas'},
+  {item:'3.19',cat:'plantio',atividade:'Plantio de arbustos e semi-arbustos/herbáceas',quant:33,unid:'un',alt:'Cobertura morta e delimitação de canteiros'},
+  {item:'3.20',cat:'plantio',atividade:'Transplante de palmeiras e árvores',quant:10,unid:'un',alt:'Monitoramento pós-transplante e irrigação de estabilização'},
+  {item:'3.21',cat:'plantio',atividade:'Fornecimento e plantio de grama Esmeralda em leivas',quant:3700,unid:'m²',alt:'Rolo compactor e irrigação de pegamento'},
+  {item:'3.22',cat:'plantio',atividade:'Fornecimento e plantio de grama São Carlos em leivas',quant:350,unid:'m²',alt:'Demarcação de divisas e acabamento de bordas'},
+  {item:'3.23',cat:'plantio',atividade:'Irrigação de mudas com utilização de equipamento',quant:320,unid:'h/m',alt:'Regulagem e manutenção preventiva do equipamento de irrigação'},
+  {item:'3.24',cat:'podas',atividade:'Poda de árvores - Formação',quant:20,unid:'un',alt:'Tratamento de cortes com pasta cúprica'},
+  {item:'3.25',cat:'podas',atividade:'Poda de árvores - Limpeza',quant:3000,unid:'un',alt:'Retirada e picagem de galhos para compostagem'},
+  {item:'3.26',cat:'podas',atividade:'Poda de árvores - Drástica',quant:100,unid:'un',alt:'Monitoramento de rebrota e acompanhamento pós-poda'},
+  {item:'3.27',cat:'podas',atividade:'Poda de palmeiras - Limpeza',quant:300,unid:'un',alt:'Remoção de inflorescências e cachos secos'},
+  {item:'3.28',cat:'podas',atividade:'Poda de arbusto',quant:500,unid:'un',alt:'Modelagem e acabamento decorativo de arbustos'},
+  {item:'3.29',cat:'podas',atividade:'Poda de cerca viva',quant:700,unid:'m',alt:'Reforço de falhas na cerca viva com replantio'},
+  {item:'3.30',cat:'corte',atividade:'Corte de árvores com até 0,40 m de diâmetro',quant:2000,unid:'un',alt:'Destoca e remoção de raízes após corte'},
+  {item:'3.31',cat:'corte',atividade:'Corte de árvores entre 0,41 m e 0,70 m de diâmetro',quant:200,unid:'un',alt:'Trituração de troncos para produção de mulch'},
+  {item:'3.32',cat:'vegetacao',atividade:'Limpeza de cerca',quant:1000,unid:'m',alt:'Revisão e reparo de estrutura da cerca após limpeza'},
+  {item:'3.33',cat:'vegetacao',atividade:'Controle manual de plantas daninhas',quant:350,unid:'ha',alt:'Monitoramento e mapeamento de espécies invasoras'},
+  {item:'3.34',cat:'vegetacao',atividade:'Controle químico de plantas daninhas',quant:10,unid:'ha',alt:'Registro de aplicação e monitoramento de reinfestação'},
+  {item:'3.35',cat:'vegetacao',atividade:'Corte de gramados',quant:500,unid:'ha',alt:'Recolhimento e destinação de aparas de grama'},
+  {item:'3.36',cat:'vegetacao',atividade:'Remoção de aparas e outros materiais',quant:500,unid:'ha',alt:'Compostagem ou destinação de resíduos vegetais'},
+  {item:'3.37',cat:'vegetacao',atividade:'Roçada geral',quant:320,unid:'ha',alt:'Limpeza de acessos e cercas após roçada'},
+  {item:'3.38',cat:'maquinario',atividade:'Operação de trator',quant:750,unid:'h/m',alt:'Verificação de manutenção e abastecimento do trator'},
+  {item:'3.39',cat:'maquinario',atividade:'Manutenção de jardins',quant:12000,unid:'H/h',alt:'Inspeção de pragas e doenças em jardins mantidos'},
+  {item:'3.40',cat:'maquinario',atividade:'Postos de serviços de jardinagem',quant:4,unid:'mês',alt:'Organização de ferramentas e EPI do posto de trabalho'},
+  {item:'3.41',cat:'maquinario',atividade:'Serviços eventuais - expediente normal',quant:4500,unid:'H/h',alt:'Apoio a atividades de outros itens com necessidade de reforço'},
+  {item:'3.42',cat:'maquinario',atividade:'Serviços eventuais - extra 50%',quant:70,unid:'H/h',alt:'Substituição em caso de ausência de equipe regular'},
+  {item:'3.43',cat:'maquinario',atividade:'Serviços eventuais - extra 100%',quant:120,unid:'H/h',alt:'Atendimento a demandas emergenciais em fins de semana'},
+  {item:'3.44',cat:'diarias',atividade:'Diárias de viagem sem pernoite',quant:16,unid:'un',alt:'Coleta de material técnico e amostras durante deslocamento'},
+  {item:'3.45',cat:'diarias',atividade:'Diárias de viagem com pernoite',quant:4,unid:'un',alt:'Levantamento de campo em áreas remotas'},
+  {item:'3.46',cat:'diarias',atividade:'Trator agrícola',quant:640,unid:'h/m',alt:'Subsolagem e aração de áreas para plantio'},
+  {item:'3.47',cat:'diarias',atividade:'Caminhão basculante',quant:150,unid:'h/m',alt:'Transporte de material orgânico para compostagem'},
+  {item:'3.48',cat:'diarias',atividade:'Retroescavadeira',quant:150,unid:'h/m',alt:'Escavação de berços para plantio de árvores grandes'},
+  {item:'3.49',cat:'insumos',atividade:'Fornecimento de calcáreo dolomítico',quant:12000,unid:'Kg',alt:'Aplicação de calcáreo como correção de acidez do solo'},
+  {item:'3.50',cat:'insumos',atividade:'Fornecimento de fertilizante mineral',quant:3000,unid:'Kg',alt:'Fertirrigação em canteiros com sistemas de gotejo'},
+  {item:'3.51',cat:'insumos',atividade:'Fornecimento de adubo orgânico',quant:600,unid:'Kg',alt:'Incorporação de bokashi em áreas de plantio'},
+  {item:'3.52',cat:'insumos',atividade:'Fornecimento de substrato florestal a base de casca de pinus',quant:2000,unid:'Kg',alt:'Mistura de substrato para tubetes do viveiro'},
+  {item:'3.53',cat:'insumos',atividade:'Fornecimento de casca de pinus polida',quant:150,unid:'Kg',alt:'Cobertura decorativa de canteiros de alto padrão'},
 ];
 const RBV_CATS=[
   {id:'mudas',label:'Sementes & Mudas',cor:'var(--green)'},
@@ -2747,18 +2747,29 @@ const RBV_CATS=[
 ];
 function fmtQuant(n){return n>=1000?`${(n/1000).toFixed(n%1000===0?0:1)}k`:String(n)}
 function renderRbvPage(){
+  const period=document.querySelector('#rbvPeriodSeg button.active')?.dataset.period||'mensal';
+  const fator=period==='semanal'?52:period==='mensal'?12:4;
+  const periodLabel=period==='semanal'?'Semanal':period==='mensal'?'Mensal':'Trimestral';
+  const lbl=document.getElementById('rbvPeriodLabel');if(lbl)lbl.textContent=periodLabel;
   // Viveiro
   const viv=document.getElementById('rbvViveiroContent');
   if(viv){
     const vivItems=RBV_ITEMS.filter(x=>x.item==='3.5'||x.item==='3.6');
     viv.innerHTML=vivItems.map(it=>{
-      const exec=0; const pct=0; // sem dados ainda
+      const meta=Math.round(it.quant/fator);
+      const exec=0;const pct=meta>0?Math.round(exec/it.quant*100):0;
       return `<div class="rbv-viveiro-row">
-        <div class="rbv-viveiro-label">${it.item} · ${it.atividade.replace('florestais','')}<div class="rbv-viveiro-sub">Meta: ${fmtQuant(it.quant)} ${it.unid}</div></div>
+        <div style="flex:none;min-width:170px">
+          <div class="rbv-viveiro-label">${it.item} · ${it.atividade.replace(' florestais','')}</div>
+          <div class="rbv-viveiro-sub">Meta ${periodLabel.toLowerCase()}: <strong>${fmtQuant(meta)} ${it.unid}</strong> · Anual: ${fmtQuant(it.quant)}</div>
+        </div>
         <div class="rbv-viveiro-bar-wrap">
           <div class="rbv-viveiro-bar"><div class="rbv-viveiro-bar-fill" style="width:${pct}%"></div></div>
-          <div class="rbv-viveiro-vals"><span class="rbv-viveiro-exec">${exec} ${it.unid} executados</span><span>${pct}%</span></div>
+          <div class="rbv-viveiro-vals"><span class="rbv-viveiro-exec">${exec} executados</span><span>${pct}%</span></div>
         </div>
+      </div>
+      <div style="padding:4px 0 10px 0;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);margin-bottom:2px">
+        <i data-lucide="corner-down-right" style="width:11px;height:11px;vertical-align:middle;margin-right:4px"></i>Alt: ${it.alt}
       </div>`;
     }).join('');
   }
@@ -2768,25 +2779,29 @@ function renderRbvPage(){
     cont.innerHTML=RBV_CATS.map(cat=>{
       const itens=RBV_ITEMS.filter(x=>x.cat===cat.id);
       if(!itens.length)return'';
-      const rows=itens.map(it=>`
-        <div class="rbv-item-row">
+      const rows=itens.map(it=>{
+        const meta=it.unid==='mês'?Math.round(it.quant/(period==='trimestral'?3:period==='mensal'?1:0.25)*10)/10:Math.round(it.quant/fator*10)/10;
+        const metaStr=meta<1&&meta>0?`${(meta*10).toFixed(0)}/10`:meta<0.1?`~${(it.quant/fator).toFixed(2)}`:`${meta}`;
+        return `<div class="rbv-item-row" style="flex-wrap:wrap">
           <span class="rbv-item-num">${it.item}</span>
-          <span class="rbv-item-name" title="${it.atividade}">${it.atividade}</span>
-          <span class="rbv-item-meta">${fmtQuant(it.quant)} ${it.unid}</span>
+          <div style="flex:1;min-width:0">
+            <div class="rbv-item-name" title="${it.atividade}">${it.atividade}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${it.alt}">&#8627; ${it.alt}</div>
+          </div>
+          <span class="rbv-item-meta" style="text-align:right">Meta: ${metaStr} ${it.unid}</span>
           <div class="rbv-item-bar-wrap">
             <div class="rbv-item-bar"><div class="rbv-item-bar-fill" style="width:0%;background:${cat.cor}"></div></div>
             <div class="rbv-item-pct">0%</div>
           </div>
           <div class="rbv-item-status" style="color:var(--faint)"><i data-lucide="minus"></i></div>
-        </div>`).join('');
+        </div>`;
+      }).join('');
       return `<div class="rbv-cat-group">
         <div class="rbv-cat-header">
           <span class="rbv-cat-dot" style="background:${cat.cor}"></span>
           <span class="rbv-cat-title">${cat.label}</span>
           <span class="rbv-cat-count">${itens.length} ${itens.length===1?'item':'itens'}</span>
-        </div>
-        ${rows}
-      </div>`;
+        </div>${rows}</div>`;
     }).join('');
     lucide.createIcons({nodes:[...document.querySelectorAll('#rbvContractContent [data-lucide]')]});
   }
@@ -2980,8 +2995,7 @@ function setupUI(){
     btn.addEventListener('click',()=>{
       document.querySelectorAll('#rbvPeriodSeg button').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      const lbl=document.getElementById('rbvPeriodLabel');
-      if(lbl)lbl.textContent=btn.dataset.period.charAt(0).toUpperCase()+btn.dataset.period.slice(1);
+      renderRbvPage();
     });
   });
   setInterval(()=>{if(localStorage.getItem('ga-my-team')&&window.innerWidth<=760)renderMobileHub();},30000);
