@@ -77,51 +77,21 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .gps-result svg{width:15px;height:15px;color:var(--green);flex:none}
 .gps-result span{flex:1;font-variant-numeric:tabular-nums}
 .gps-result.visible{display:flex}
+.photo-capture-area{display:flex;flex-direction:column;gap:8px}
+.photo-preview{display:none;position:relative;align-self:flex-start;max-width:100%}
+.photo-preview img{max-width:100%;max-height:180px;border-radius:12px;border:1px solid var(--border);object-fit:cover;display:block}
+.photo-remove-btn{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.photo-remove-btn svg{width:14px;height:14px;stroke:#fff;stroke-width:2.2}
 @media(max-width:760px){
   .gps-btn{padding:17px;font-size:15px}
   .gps-btn svg{width:22px;height:22px}
   #leaderModeToggle{display:none!important}
 }
 /* ── Página RBV ──────────────────────────────────────────── */
-.rbv-cat-group{margin-bottom:20px}
-.rbv-cat-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.rbv-cat-dot{width:9px;height:9px;border-radius:50%;flex:none}
-.rbv-cat-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
-.rbv-cat-count{font-size:10px;color:var(--faint);margin-left:auto}
-.rbv-item-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
-.rbv-item-row:last-child{border-bottom:0}
-.rbv-item-num{font-size:10px;font-weight:700;color:var(--faint);min-width:28px;flex:none}
-.rbv-item-name{flex:1;font-size:12px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rbv-item-meta{font-size:10.5px;color:var(--muted);white-space:nowrap;min-width:80px;text-align:right;flex:none}
-.rbv-item-bar-wrap{min-width:90px;max-width:120px;flex:none}
-.rbv-item-bar{height:5px;border-radius:4px;background:var(--surface-2);overflow:hidden}
-.rbv-item-bar-fill{height:100%;border-radius:4px;background:var(--green);transition:.4s}
-.rbv-item-pct{font-size:10px;color:var(--muted);text-align:right;margin-top:2px}
-.rbv-item-status{width:20px;height:20px;border-radius:6px;background:var(--surface-2);flex:none;display:flex;align-items:center;justify-content:center}
-.rbv-item-status svg{width:11px;height:11px;stroke-width:2.2}
-.rbv-plano-table{width:100%;border-collapse:collapse;font-size:12px}
-.rbv-plano-table th{background:var(--surface-2);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
-.rbv-plano-table td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
-.rbv-plano-table tr:last-child td{border-bottom:0}
-.rbv-plano-item-num{font-size:10px;font-weight:700;color:var(--faint);white-space:nowrap}
-.rbv-plano-nome{font-weight:600}
-.rbv-plano-alt{font-size:10px;color:var(--muted);margin-top:2px}
-.rbv-plano-qty{text-align:right;font-weight:700;white-space:nowrap}
-.rbv-plano-pct{text-align:right;white-space:nowrap;font-size:11px}
-.rbv-plano-mini{height:4px;border-radius:3px;background:var(--surface-2);overflow:hidden;min-width:60px}
-.rbv-plano-mini-fill{height:100%;border-radius:3px;background:var(--blue);transition:.4s}
-.rbv-plano-empty{text-align:center;padding:24px;color:var(--faint);font-size:12px}
-.rbv-rotina-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:12px}
-.rbv-rotina-item{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:8px;background:var(--surface-1);border:1px solid var(--border)}
-.rbv-rotina-item.diaria{border-left:3px solid var(--green)}
-.rbv-rotina-item.semanal{border-left:3px solid var(--blue)}
-.rbv-rotina-num{font-size:10px;font-weight:700;color:var(--faint);flex:none;margin-top:1px}
-.rbv-rotina-body{flex:1;min-width:0}
-.rbv-rotina-name{font-size:11.5px;font-weight:600;line-height:1.3}
-.rbv-rotina-meta{font-size:10px;color:var(--muted);margin-top:2px}
-.rbv-rotina-freq{display:inline-block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:4px;margin-top:4px}
-.rbv-rotina-freq.diaria{background:var(--green-bg,#d9ead3);color:var(--green)}
-.rbv-rotina-freq.semanal{background:var(--blue-bg,#dbeafe);color:var(--blue)}
+.rbv-pace-pill{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;background:var(--surface-2);color:var(--muted)}
+.rbv-pace-pill.ok{background:#d9ead3;color:#1e6e3a}
+.rbv-pace-pill.risk{background:#fff2cc;color:#7a5c00}
+.rbv-pace-pill.behind{background:#f4cccc;color:#7a1212}
 .rbv-viveiro-row{display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--border)}
 .rbv-viveiro-row:last-child{border-bottom:0}
 .rbv-viveiro-label{min-width:160px;font-size:12px;font-weight:600;flex:none}
@@ -131,6 +101,49 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .rbv-viveiro-bar-fill{height:100%;border-radius:6px;background:var(--green);transition:.5s}
 .rbv-viveiro-vals{display:flex;justify-content:space-between;margin-top:4px;font-size:10.5px;color:var(--muted)}
 .rbv-viveiro-exec{font-weight:700;color:var(--green)}
+.rbv-pipeline{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:4px 0}
+.rbv-pipe-step{flex:1;min-width:110px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+.rbv-pipe-step:not(:last-child)::after{content:'→';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--faint);z-index:1}
+.rbv-pipe-icon{width:44px;height:44px;border-radius:50%;background:var(--surface-2);display:flex;align-items:center;justify-content:center;margin-bottom:8px;border:2px solid var(--border)}
+.rbv-pipe-icon svg{width:20px;height:20px;stroke:var(--muted)}
+.rbv-pipe-icon.active{background:var(--green);border-color:var(--green)}
+.rbv-pipe-icon.active svg{stroke:#fff}
+.rbv-pipe-num{font-size:10px;font-weight:700;color:var(--faint);margin-bottom:2px}
+.rbv-pipe-label{font-size:11px;font-weight:600;line-height:1.3;color:var(--text)}
+.rbv-pipe-val{font-size:10px;color:var(--muted);margin-top:3px}
+.rbv-sementes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:4px}
+.rbv-semente-card{padding:12px 14px;border-radius:10px;background:var(--surface-1);border:1px solid var(--border)}
+.rbv-semente-num{font-size:10px;font-weight:700;color:var(--faint);margin-bottom:4px}
+.rbv-semente-name{font-size:11.5px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.rbv-semente-bar{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden;margin-bottom:4px}
+.rbv-semente-bar-fill{height:100%;border-radius:3px;background:var(--ochre);transition:.4s}
+.rbv-semente-vals{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+.rbv-ganho-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
+.rbv-ganho-card{padding:14px 16px;border-radius:10px;background:var(--surface-1);border:1px solid var(--border);text-align:center}
+.rbv-ganho-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px}
+.rbv-ganho-val{font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px}
+.rbv-ganho-sub{font-size:10.5px;color:var(--muted);line-height:1.4}
+.rbv-ganho-card.highlight{background:var(--green);border-color:var(--green);color:#fff}
+.rbv-ganho-card.highlight .rbv-ganho-label,.rbv-ganho-card.highlight .rbv-ganho-val,.rbv-ganho-card.highlight .rbv-ganho-sub{color:#fff}
+/* Cat group (atividades) */
+.rbv-cat-group{margin-bottom:16px}
+.rbv-cat-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.rbv-cat-dot{width:8px;height:8px;border-radius:50%;flex:none}
+.rbv-cat-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.rbv-cat-count{font-size:10px;color:var(--faint);margin-left:auto}
+.rbv-item-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
+.rbv-item-row:last-child{border-bottom:0}
+.rbv-item-num{font-size:10px;font-weight:700;color:var(--faint);min-width:28px;flex:none}
+.rbv-item-name{flex:1;font-size:12px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rbv-item-meta{font-size:10.5px;color:var(--muted);white-space:nowrap;min-width:80px;text-align:right;flex:none}
+.rbv-item-bar-wrap{min-width:90px;max-width:120px;flex:none}
+.rbv-item-bar{height:4px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.rbv-item-bar-fill{height:100%;border-radius:3px;background:var(--green);transition:.4s}
+.rbv-item-pct{font-size:10px;color:var(--muted);text-align:right;margin-top:2px}
+.rbv-item-status{width:18px;height:18px;border-radius:5px;background:var(--surface-2);flex:none;display:flex;align-items:center;justify-content:center}
+.rbv-item-status svg{width:10px;height:10px;stroke-width:2.2}
+/* Remover classes antigas que não existem mais */
+.rbv-rotina-grid,.rbv-rotina-item,.rbv-rotina-num,.rbv-rotina-body,.rbv-rotina-name,.rbv-rotina-meta,.rbv-rotina-freq{display:none}
 
 /* ── Loading screen ─────────────────────────────────────── */
 #loadingScreen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .45s}
@@ -968,6 +981,9 @@ body{font-size:15px}
                 <button class="chip-btn active" id="bp3Toggle"><i data-lucide="layers-3"></i> BP3</button>
                 <button class="chip-btn active" id="hydroToggle"><i data-lucide="waves"></i> Hidrografia</button>
                 <button class="chip-btn active" id="demandToggle"><i data-lucide="map-pin"></i> Demandas</button>
+                <button class="chip-btn active" id="crvToggle" title="Centro de Recepção de Visitantes"><i data-lucide="building-2"></i> CRV</button>
+                <button class="chip-btn active" id="gramadaoToggle" title="Gramadão e Central Elétrica"><i data-lucide="trees"></i> Gramadão</button>
+                <button class="chip-btn active" id="partesToggle" title="Áreas ITAIPU"><i data-lucide="map"></i> ITAIPU</button>
               </div>
             </div>
             <div class="map-filter-row">
@@ -979,7 +995,7 @@ body{font-size:15px}
             </div>
             <div id="map" style="height:420px" aria-label="Mapa operacional"></div>
             <div id="mapLegend" class="map-legend"></div>
-            <div class="map-caption"><span>BP3 e hidrografia: IAT/PR · Basemap: Esri</span><span>Pontos: demandas não previstas por equipe</span></div>
+            <div class="map-caption"><span>BP3 e hidrografia: IAT/PR · Basemap: Esri · Shapes: ITAIPU.qgz</span><span>Pontos: demandas não previstas por equipe</span></div>
           </article>
           <article class="card climate-card span-5">
             <div class="card-header compact"><div><h2>Meteorologia operacional</h2><p id="weatherLocation">Open-Meteo · Foz do Iguaçu/PR</p></div><i data-lucide="cloud-sun" class="section-icon"></i></div>
@@ -1136,76 +1152,87 @@ body{font-size:15px}
 
       <!-- ── Página: Refúgio Biológico ───────────────────────────── -->
       <div id="page-rbv" class="page">
+        <!-- Header -->
         <div class="topbar" style="margin-bottom:12px">
           <div class="brand-row">
             <div class="title-wrap">
               <h1>Refúgio Biológico · RBV</h1>
-              <p>Itaipu Binacional · Plano Diretor Operacional Anual</p>
+              <p>Viveiro · Manutenção · Jardinagem · Itaipu Binacional</p>
             </div>
           </div>
-          <div style="display:flex;align-items:center;gap:10px">
-            <div class="segmented" id="rbvPeriodSeg" style="width:auto">
-              <button class="active" data-period="semanal">Semanal</button>
-              <button data-period="mensal">Mensal</button>
-              <button data-period="trimestral">Trimestral</button>
-            </div>
-            <span id="rbvPeriodLabel" style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Semanal</span>
+          <div class="segmented" id="rbvPeriodSeg" style="width:auto">
+            <button class="active" data-period="semanal">Semanal</button>
+            <button data-period="mensal">Mensal</button>
+            <button data-period="trimestral">Trimestral</button>
           </div>
         </div>
+
+        <!-- KPI strip: viveiro em foco -->
         <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:var(--gap)">
           <div class="kpi-card accent-green">
-            <div class="kpi-head"><span>Itens do contrato</span><i data-lucide="file-check-2"></i></div>
-            <strong>53</strong>
-            <div class="kpi-foot">Atividades mapeadas · Anexo II</div>
+            <div class="kpi-head"><span>Mudas produzidas</span><i data-lucide="sprout"></i></div>
+            <strong id="rbvKpiMudas">0</strong>
+            <div class="kpi-foot" id="rbvKpiMudasPct">Meta: 149k un · 0%</div>
           </div>
           <div class="kpi-card accent-blue">
-            <div class="kpi-head"><span>Cobertura</span><i data-lucide="activity"></i></div>
-            <strong id="rbvKpiCov">0%</strong>
-            <div class="kpi-foot">Itens com execução registrada</div>
-          </div>
-          <div class="kpi-card accent-green">
-            <div class="kpi-head"><span>Em ritmo</span><i data-lucide="trending-up"></i></div>
-            <strong id="rbvKpiOk">—</strong>
-            <div class="kpi-foot">Itens dentro da meta de execução</div>
+            <div class="kpi-head"><span>Mudas expedidas</span><i data-lucide="truck"></i></div>
+            <strong id="rbvKpiExpedicao">0</strong>
+            <div class="kpi-foot" id="rbvKpiExpedicaoPct">Meta: 149k un · 0%</div>
           </div>
           <div class="kpi-card accent-ochre">
-            <div class="kpi-head"><span>Oportunidades</span><i data-lucide="target"></i></div>
-            <strong id="rbvKpiOpp">—</strong>
-            <div class="kpi-foot">Itens abaixo do ritmo esperado</div>
+            <div class="kpi-head"><span>Sementes coletadas</span><i data-lucide="leaf"></i></div>
+            <strong id="rbvKpiSementes">0</strong>
+            <div class="kpi-foot">kg · meta anual: 265 kg</div>
+          </div>
+          <div class="kpi-card accent-blue">
+            <div class="kpi-head"><span>Saídas de campo</span><i data-lucide="map-pin"></i></div>
+            <strong id="rbvKpiCampo">0</strong>
+            <div class="kpi-foot">coletas registradas no período</div>
           </div>
         </div>
-        <!-- Plano da semana · RBV -->
-        <article class="card" style="padding:20px 24px;margin-bottom:var(--gap)">
+
+        <!-- Pipeline de produção -->
+        <article class="card" style="padding:18px 24px;margin-bottom:var(--gap)">
           <div class="card-header compact" style="margin-bottom:14px">
-            <div><h2>Plano da semana · RBV</h2><p>Atividades registradas no planejamento mensal da equipe</p></div>
-            <span id="rbvPlanoMes" style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em"></span>
+            <div><h2>Pipeline · Da semente à muda</h2><p>Fluxo de produção do viveiro — itens 3.1 a 3.6 do contrato</p></div>
           </div>
-          <div id="rbvPlanoContent"></div>
+          <div id="rbvPipeline" class="rbv-pipeline"></div>
         </article>
-        <!-- Rotina da semana -->
-        <article class="card" style="padding:20px 24px;margin-bottom:var(--gap)">
-          <div class="card-header compact">
-            <div><h2>Rotina da semana</h2><p>Atividades recorrentes previstas para o período · Diárias e semanais</p></div>
-          </div>
-          <div id="rbvRotinaContent" class="rbv-rotina-grid"></div>
-        </article>
-        <!-- Viveiro destaque -->
+
+        <!-- Viveiro: Produção e Expedição -->
         <div class="dashboard-grid" style="margin-bottom:var(--gap)">
-          <article class="card span-12" style="padding:20px 22px">
-            <div class="card-header compact">
-              <div><h2>Viveiro · Produção de mudas florestais</h2><p>Meta anual do contrato — itens 3.5 (Produção) e 3.6 (Expedição)</p></div>
+          <article class="card span-6" style="padding:20px 22px">
+            <div class="card-header compact" style="margin-bottom:14px">
+              <div><h2>3.5 · Produção de mudas</h2><p>Meta anual: 149.000 unidades</p></div>
+              <span id="rbvProdPace" class="rbv-pace-pill">Sem dados</span>
             </div>
-            <div id="rbvViveiroContent" style="margin-top:14px"></div>
+            <div id="rbvProdContent"></div>
+          </article>
+          <article class="card span-6" style="padding:20px 22px">
+            <div class="card-header compact" style="margin-bottom:14px">
+              <div><h2>3.6 · Expedição de mudas</h2><p>Meta anual: 149.000 unidades</p></div>
+              <span id="rbvExpPace" class="rbv-pace-pill">Sem dados</span>
+            </div>
+            <div id="rbvExpContent"></div>
           </article>
         </div>
-        <!-- Contrato RBV: guia de atividades -->
-        <article class="card" style="padding:20px 24px;margin-bottom:var(--gap)">
-          <div class="card-header compact" style="margin-bottom:16px">
-            <div><h2>Guia de atividades · Contrato</h2><p>53 itens do Anexo II — base para o planejamento da equipe RBV</p></div>
-            <span id="rbvPeriodLabel2" style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Semanal</span>
+
+        <!-- Sementes e Matrizes -->
+        <article class="card" style="padding:18px 24px;margin-bottom:var(--gap)">
+          <div class="card-header compact" style="margin-bottom:14px">
+            <div><h2>Sementes &amp; Matrizes</h2><p>Itens 3.1–3.4 · Abastecimento do viveiro</p></div>
           </div>
-          <div id="rbvContractContent"></div>
+          <div id="rbvSementesContent" class="rbv-sementes-grid"></div>
         </article>
+
+        <!-- Potencial de ganho -->
+        <article class="card" style="padding:18px 24px;margin-bottom:var(--gap)">
+          <div class="card-header compact" style="margin-bottom:14px">
+            <div><h2>Análise de potencial</h2><p>Capacidade de produção vs contrato · Oportunidade de ampliação</p></div>
+          </div>
+          <div id="rbvGanhoContent"></div>
+        </article>
+
       </div>
 
       <footer class="app-footer">
@@ -1291,6 +1318,21 @@ body{font-size:15px}
               </div>
             </div>
             <input id="leaderCoords" type="hidden" data-lat="" data-lon="" />
+          </label>
+          <label class="field-label full">Foto da ocorrência
+            <div class="photo-capture-area">
+              <button type="button" class="gps-btn" id="demandPhotoBtn">
+                <i data-lucide="camera"></i>
+                <span id="demandPhotoBtnLabel">Adicionar foto</span>
+              </button>
+              <input id="demandPhotoInput" type="file" accept="image/*" capture="environment" style="display:none">
+              <div class="photo-preview" id="demandPhotoPreview">
+                <img id="demandPhotoImg" alt="Foto da demanda">
+                <button type="button" class="photo-remove-btn" id="demandPhotoRemove" title="Remover foto">
+                  <i data-lucide="x"></i>
+                </button>
+              </div>
+            </div>
           </label>
         </div>
       </div>
@@ -2691,6 +2733,25 @@ function setupMap(){
     if(state.demandLayer) state.demandLayer.bringToFront?.();
   }).catch(err=>console.warn('Hidrografia BP3 indisponível',err));
   state.demandLayer=L.layerGroup().addTo(state.map); updateDemandMarkers();
+  // Camadas ITAIPU (locais)
+  fetch('data/itaipu_partes.geojson').then(r=>r.json()).then(g=>{
+    state.itaipuPartesLayer=L.geoJSON(g,{style:{color:'#2563eb',weight:1.5,fillColor:'#3b82f6',fillOpacity:.07},
+      onEachFeature:function(ft,ly){const n=(ft.properties.Name||'Área ITAIPU').replace(/\[.*?\]/g,'').trim();ly.bindTooltip(n,{sticky:true,className:'map-tooltip'});}
+    }).addTo(state.map);
+    if(state.bp3Layer) state.bp3Layer.bringToFront();
+    if(state.hydroLayer) state.hydroLayer.bringToFront();
+  }).catch(err=>console.warn('itaipu_partes.geojson indisponível',err));
+  fetch('data/itaipu_gramadao.geojson').then(r=>r.json()).then(g=>{
+    state.gramadaoLayer=L.geoJSON(g,{style:{color:'#16a34a',weight:1.8,fillColor:'#22c55e',fillOpacity:.18},
+      onEachFeature:function(ft,ly){ly.bindTooltip('Gramadão e Central Elétrica',{sticky:true,className:'map-tooltip'});}
+    }).addTo(state.map);
+  }).catch(err=>console.warn('itaipu_gramadao.geojson indisponível',err));
+  fetch('data/itaipu_crv.geojson').then(r=>r.json()).then(g=>{
+    state.crvLayer=L.geoJSON(g,{style:{color:'#ea580c',weight:2,fillColor:'#f97316',fillOpacity:.25},
+      onEachFeature:function(ft,ly){ly.bindTooltip('Centro de Recepção de Visitantes — CRV',{sticky:true,className:'map-tooltip'});}
+    }).addTo(state.map);
+    if(state.demandLayer) state.demandLayer.bringToFront();
+  }).catch(err=>console.warn('itaipu_crv.geojson indisponível',err));
 }
 function setMapTheme(){ if(!state.map)return; [state.baseLight,state.labelsLight,state.baseDark,state.labelsDark].forEach(l=>l&&state.map.hasLayer(l)&&state.map.removeLayer(l)); const dark=document.documentElement.dataset.theme==='dark'; (dark?state.baseDark:state.baseLight).addTo(state.map); (dark?state.labelsDark:state.labelsLight).addTo(state.map); if(state.bp3Layer)state.bp3Layer.setStyle({color:cssVar('--green'),weight:1.8,fillColor:cssVar('--green'),fillOpacity:.04}); if(state.stateLayer)state.stateLayer.setStyle(bp3StateStyle()); if(state.hydroLayer)state.hydroLayer.setStyle(hydroStyle()); }
 function renderMapLegend(){
@@ -2760,8 +2821,9 @@ function populateLeaderForm(){
   const desc=document.getElementById('leaderDescription'); if(desc) desc.value='';
   const urg=document.getElementById('demandUrgency'); if(urg) urg.value='MÉDIA';
   const note=document.getElementById('leaderFormNote'); if(note){note.textContent='';note.classList.remove('success');}
-  // Reseta GPS — coordenadas antigas não devem persistir entre aberturas do formulário
+  // Reseta GPS e foto — não devem persistir entre aberturas do formulário
   if(state.resetGps) state.resetGps();
+  if(state.clearDemandPhoto) state.clearDemandPhoto();
   // Limpa campos de execução
   const execObs=document.getElementById('execObs'); if(execObs) execObs.value='';
   const execDate=document.getElementById('execDate'); if(execDate) execDate.value=new Date().toISOString().slice(0,10);
@@ -3081,197 +3143,171 @@ function renderRbvPage(){
   const periodLabel=period==='semanal'?'Semanal':period==='mensal'?'Mensal':'Trimestral';
   const lbl=document.getElementById('rbvPeriodLabel');if(lbl)lbl.textContent=periodLabel;
 
-  // Execução real por item (state.planning filtra por equipe RBV e cruza com atividade)
-  // Equipes do Refúgio: EQ04 (Viveiro), EQ05 (Manutenção), EQ06 (Jardinagem)
+  // Equipes RBV
   const RBV_IDS=new Set(['EQ04','EQ05','EQ06']);
   const rbvEquipes=(state.teams||[]).filter(function(t){
     const id=(t.equipe_id||'').toUpperCase();
     const nome=(t.equipe||'').toUpperCase();
-    return RBV_IDS.has(id)||
-           id.indexOf('RBV')>=0||id.indexOf('REF')>=0||
-           nome.indexOf('REFÚGIO')>=0||nome.indexOf('REFUGIO')>=0||
-           nome.indexOf('VIVEIRO')>=0||nome.indexOf('JARDIN')>=0||
-           (nome.indexOf('MANUTENÇÃO')>=0&&nome.indexOf('RBV')>=0);
+    return RBV_IDS.has(id)||id.indexOf('RBV')>=0||nome.indexOf('REFÚGIO')>=0||nome.indexOf('REFUGIO')>=0||nome.indexOf('VIVEIRO')>=0;
   }).map(function(t){return t.equipe_id;});
-  const planRbv=(state.planning||[]).filter(function(r){
-    return rbvEquipes.length===0||rbvEquipes.indexOf(r.equipe_id)>=0;
-  });
+  const planRbv=(state.planning||[]).filter(function(r){return rbvEquipes.length===0||rbvEquipes.indexOf(r.equipe_id)>=0;});
+  const execRbv=(state.execution||[]).filter(function(r){return rbvEquipes.length===0||rbvEquipes.indexOf(r.equipe_id)>=0;});
 
-  // Mapeia execução por item do contrato (cruza por atividade normalizada)
-  function normStr(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim();}
-  const execByItem={};
-  RBV_ITEMS.forEach(function(it){
+  function normStr(s){return(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim();}
+  function execItem(it){
+    var palavras=normStr(it.atividade).split(' ').filter(function(w){return w.length>3;});
+    var total=0;
+    execRbv.forEach(function(r){
+      var at=normStr(r.atividade||'');
+      var sc=palavras.filter(function(w){return at.indexOf(w)>=0;}).length;
+      if(sc>=Math.ceil(palavras.length*0.5)) total+=Number(r.quantidade_executada)||Number(r.horas_executadas)||0;
+    });
+    return total;
+  }
+  function planItem(it){
     var palavras=normStr(it.atividade).split(' ').filter(function(w){return w.length>3;});
     var total=0;
     planRbv.forEach(function(r){
       var at=normStr(r.atividade||'');
-      var match=palavras.length>0&&palavras.filter(function(w){return at.indexOf(w)>=0;}).length>=Math.ceil(palavras.length*0.5);
-      if(match) total+=parseFloat(r.quantidade)||0;
+      var sc=palavras.filter(function(w){return at.indexOf(w)>=0;}).length;
+      if(sc>=Math.ceil(palavras.length*0.5)) total+=Number(r.quantidade)||Number(r.meta_planejada)||0;
     });
-    execByItem[it.item]=total;
-  });
+    return total;
+  }
 
-  // Plano da semana — lê state.planning para a equipe RBV
-  (function(){
-    const el=document.getElementById('rbvPlanoContent');
-    const mesEl=document.getElementById('rbvPlanoMes');
+  // Items principais do viveiro
+  const it35=RBV_ITEMS.find(function(x){return x.item==='3.5';});
+  const it36=RBV_ITEMS.find(function(x){return x.item==='3.6';});
+  const exec35=execItem(it35||{atividade:'Produção de mudas florestais'});
+  const exec36=execItem(it36||{atividade:'Expedição de mudas florestais'});
+  const pct35=Math.min(100,Math.round(exec35/149000*100));
+  const pct36=Math.min(100,Math.round(exec36/149000*100));
+  const meta35=Math.round(149000/fator);
+  const meta36=Math.round(149000/fator);
+
+  // KPIs
+  const kpM=document.getElementById('rbvKpiMudas');if(kpM)kpM.textContent=fmtQuant(exec35)||'0';
+  const kpMp=document.getElementById('rbvKpiMudasPct');if(kpMp)kpMp.textContent='Meta: 149k un · '+pct35+'%';
+  const kpE=document.getElementById('rbvKpiExpedicao');if(kpE)kpE.textContent=fmtQuant(exec36)||'0';
+  const kpEp=document.getElementById('rbvKpiExpedicaoPct');if(kpEp)kpEp.textContent='Meta: 149k un · '+pct36+'%';
+  const sementesTotal=(['3.2','3.3','3.4']).reduce(function(s,num){
+    var it=RBV_ITEMS.find(function(x){return x.item===num;});
+    return s+(it?execItem(it):0);
+  },0);
+  const kpS=document.getElementById('rbvKpiSementes');if(kpS)kpS.textContent=sementesTotal>0?fmtQuant(sementesTotal):'0';
+  const campoCount=execRbv.filter(function(r){var a=normStr(r.atividade||'');return a.indexOf('coleta')>=0||a.indexOf('campo')>=0;}).length;
+  const kpC=document.getElementById('rbvKpiCampo');if(kpC)kpC.textContent=String(campoCount);
+
+  // Pipeline
+  const pipeline=document.getElementById('rbvPipeline');
+  if(pipeline){
+    const it31=RBV_ITEMS.find(function(x){return x.item==='3.1';});
+    const exec31=it31?execItem(it31):0;
+    const steps=[
+      {icon:'map-pin',num:'3.1',label:'Matrizes\nidentificadas',val:exec31>0?exec31+' un':'40 un/ano',active:exec31>0},
+      {icon:'scissors',num:'3.2–3.4',label:'Coleta de\nsementes',val:sementesTotal>0?fmtQuant(sementesTotal)+' kg':'265 kg/ano',active:sementesTotal>0},
+      {icon:'flask-conical',num:'—',label:'Beneficia-\nmento',val:'Processamento',active:sementesTotal>0},
+      {icon:'sprout',num:'3.5',label:'Produção\nde mudas',val:exec35>0?fmtQuant(exec35)+' un':'149k un/ano',active:exec35>0},
+      {icon:'truck',num:'3.6',label:'Expedição\nde mudas',val:exec36>0?fmtQuant(exec36)+' un':'149k un/ano',active:exec36>0},
+    ];
+    pipeline.innerHTML=steps.map(function(s){
+      return '<div class="rbv-pipe-step">'+
+        '<div class="rbv-pipe-icon'+(s.active?' active':'')+'"><i data-lucide="'+s.icon+'"></i></div>'+
+        '<div class="rbv-pipe-num">'+s.num+'</div>'+
+        '<div class="rbv-pipe-label">'+s.label.replace('\n','<br>')+'</div>'+
+        '<div class="rbv-pipe-val">'+s.val+'</div>'+
+      '</div>';
+    }).join('');
+    lucide.createIcons({nodes:[...pipeline.querySelectorAll('[data-lucide]')]});
+  }
+
+  // Produção (3.5)
+  function renderViveiroCard(elId, paceId, exec, meta, metaPeriod, color){
+    const el=document.getElementById(elId);
+    const paceEl=document.getElementById(paceId);
     if(!el) return;
-
-    // Filtra pelo mês atual (ou mês selecionado em state.month)
-    const mesFiltro=Number(state.month||new Date().getMonth()+1);
-    const mesesNomes=['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-    if(mesEl) mesEl.textContent=mesesNomes[mesFiltro]||'';
-
-    // planRbv já filtrado por equipe RBV acima
-    const planMes=planRbv.filter(function(r){
-      const m=Number(r.mes||0);
-      return m===mesFiltro||m===0; // 0 = sem mês definido, inclui mesmo assim
-    });
-
-    if(!planMes.length){
-      el.innerHTML='<div class="rbv-plano-empty">Nenhuma atividade registrada no planejamento para este período.<br>Registre na planilha <strong>04_Plano_Mensal</strong> com o ID da equipe RBV.</div>';
-      return;
+    const pct=Math.min(100,Math.round(exec/149000*100));
+    const proj=metaPeriod>0?Math.round(exec/metaPeriod*149000):0;
+    const paceOk=exec>=metaPeriod*0.9;
+    const paceRisk=exec>=metaPeriod*0.6&&exec<metaPeriod*0.9;
+    if(paceEl){
+      if(exec===0){paceEl.className='rbv-pace-pill';paceEl.textContent='Sem dados';}
+      else if(paceOk){paceEl.className='rbv-pace-pill ok';paceEl.textContent='No ritmo';}
+      else if(paceRisk){paceEl.className='rbv-pace-pill risk';paceEl.textContent='Atenção';}
+      else{paceEl.className='rbv-pace-pill behind';paceEl.textContent='Abaixo do ritmo';}
     }
+    el.innerHTML='<div style="margin-bottom:12px">'+
+      '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px">'+
+        '<span>Executado: <strong style="color:var(--text)">'+fmtQuant(exec)+' un</strong></span>'+
+        '<span>'+pct+'% da meta anual</span>'+
+      '</div>'+
+      '<div style="height:12px;border-radius:8px;background:var(--surface-2);overflow:hidden">'+
+        '<div style="height:100%;width:'+pct+'%;border-radius:8px;background:'+color+';transition:.5s"></div>'+
+      '</div>'+
+      '<div style="display:flex;justify-content:space-between;margin-top:5px;font-size:10px;color:var(--faint)">'+
+        '<span>0</span><span>Meta '+periodLabel.toLowerCase()+': '+fmtQuant(metaPeriod)+' un</span><span>149k</span>'+
+      '</div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">'+
+      '<div style="padding:10px 12px;border-radius:8px;background:var(--surface-1);border:1px solid var(--border)">'+
+        '<div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Meta do período</div>'+
+        '<div style="font-size:18px;font-weight:800">'+fmtQuant(metaPeriod)+'<span style="font-size:12px;font-weight:500;color:var(--muted)"> un</span></div>'+
+      '</div>'+
+      '<div style="padding:10px 12px;border-radius:8px;background:var(--surface-1);border:1px solid var(--border)">'+
+        '<div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Projeção anual</div>'+
+        '<div style="font-size:18px;font-weight:800">'+(exec>0?fmtQuant(proj):'—')+'<span style="font-size:12px;font-weight:500;color:var(--muted)">'+(exec>0?' un':'')+'</span></div>'+
+      '</div>'+
+    '</div>';
+  }
+  renderViveiroCard('rbvProdContent','rbvProdPace',exec35,149000,meta35,'var(--green)');
+  renderViveiroCard('rbvExpContent','rbvExpPace',exec36,149000,meta36,'var(--blue)');
 
-    // Agrupa por atividade (normaliza nome)
-    var grupos={};
-    planMes.forEach(function(r){
-      var k=normStr(r.atividade||'');
-      if(!grupos[k]) grupos[k]={atividade:r.atividade,unidade:r.unidade||r.unid||'',total:0,rows:[]};
-      grupos[k].total+=parseFloat(r.quantidade)||0;
-      grupos[k].rows.push(r);
-    });
-
-    // Para cada grupo, tenta localizar o item do contrato
-    var linhas=Object.values(grupos).map(function(g){
-      var palavras=normStr(g.atividade).split(' ').filter(function(w){return w.length>3;});
-      var melhorItem=null;
-      var melhorScore=0;
-      RBV_ITEMS.forEach(function(it){
-        var at=normStr(it.atividade);
-        var score=palavras.filter(function(w){return at.indexOf(w)>=0;}).length;
-        if(score>melhorScore){melhorScore=score;melhorItem=it;}
-      });
-      var pctAnual=melhorItem&&melhorItem.quant>0?Math.round(g.total/melhorItem.quant*100):null;
-      return {atividade:g.atividade,unidade:g.unidade,total:g.total,item:melhorItem,pct:pctAnual,score:melhorScore};
-    }).sort(function(a,b){
-      // Ordena: com item identificado primeiro, depois por nome
-      if(a.item&&!b.item) return -1;
-      if(!a.item&&b.item) return 1;
-      return (a.item?a.item.item:'z').localeCompare(b.item?b.item.item:'z',undefined,{numeric:true});
-    });
-
-    el.innerHTML='<table class="rbv-plano-table"><thead><tr>'+
-      '<th>Item</th><th>Atividade planejada</th>'+
-      '<th style="text-align:right">Qtd planejada</th>'+
-      '<th style="text-align:right">% do contrato anual</th>'+
-      '</tr></thead><tbody>'+
-      linhas.map(function(l){
-        var numStr=l.item?'<span class="rbv-plano-item-num">'+l.item.item+'</span>':'<span class="rbv-plano-item-num" style="color:var(--amber)">?</span>';
-        var pctStr=l.pct!==null?l.pct+'%':'—';
-        var pctFill=l.pct!==null?Math.min(l.pct,100):0;
-        var pctColor=pctFill>=90?'var(--green)':pctFill>=50?'var(--blue)':'var(--ochre)';
-        return '<tr>'+
-          '<td>'+numStr+'</td>'+
-          '<td><div class="rbv-plano-nome">'+l.atividade+'</div>'+
-            (l.item?'<div class="rbv-plano-alt">&#8627; '+l.item.alt+'</div>':'')+'</td>'+
-          '<td class="rbv-plano-qty">'+fmtQuant(l.total)+' '+l.unidade+'</td>'+
-          '<td class="rbv-plano-pct">'+
-            '<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">'+
-              '<span>'+pctStr+'</span>'+
-              '<div class="rbv-plano-mini"><div class="rbv-plano-mini-fill" style="width:'+pctFill+'%;background:'+pctColor+'"></div></div>'+
-            '</div>'+
-          '</td>'+
-        '</tr>';
-      }).join('')+
-      '</tbody></table>';
-  })();
-
-  // Rotina da semana
-  const rotEl=document.getElementById('rbvRotinaContent');
-  if(rotEl){
-    const freqVis=period==='semanal'?['diaria','semanal']:period==='mensal'?['diaria','semanal','mensal']:['diaria','semanal','mensal','trimestral'];
-    const itensRotina=RBV_ITEMS.filter(function(it){return freqVis.indexOf(it.freq)>=0;});
-    rotEl.innerHTML=itensRotina.map(function(it){
-      const meta=Math.round(it.quant/fator*10)/10;
-      const exec=execByItem[it.item]||0;
-      const freqLabel=it.freq==='diaria'?'Diária':'Semanal';
-      return '<div class="rbv-rotina-item '+it.freq+'">'+
-        '<span class="rbv-rotina-num">'+it.item+'</span>'+
-        '<div class="rbv-rotina-body">'+
-          '<div class="rbv-rotina-name">'+it.atividade+'</div>'+
-          '<div class="rbv-rotina-meta">Meta '+periodLabel.toLowerCase()+': '+
-            (meta<1&&meta>0?'~1':fmtQuant(meta))+' '+it.unid+(exec>0?' · Exec: '+fmtQuant(exec):'')+'</div>'+
-          '<span class="rbv-rotina-freq '+it.freq+'">'+freqLabel+'</span>'+
+  // Sementes
+  const semEl=document.getElementById('rbvSementesContent');
+  if(semEl){
+    const sItems=RBV_ITEMS.filter(function(x){return['3.1','3.2','3.3','3.4'].indexOf(x.item)>=0;});
+    semEl.innerHTML=sItems.map(function(it){
+      const exec=execItem(it);
+      const pct=Math.min(100,Math.round(exec/it.quant*100));
+      return '<div class="rbv-semente-card">'+
+        '<div class="rbv-semente-num">'+it.item+'</div>'+
+        '<div class="rbv-semente-name">'+it.atividade+'</div>'+
+        '<div class="rbv-semente-bar"><div class="rbv-semente-bar-fill" style="width:'+pct+'%"></div></div>'+
+        '<div class="rbv-semente-vals">'+
+          '<span>'+(exec>0?fmtQuant(exec)+' '+it.unid:'sem dados')+'</span>'+
+          '<span>Meta: '+fmtQuant(it.quant)+' '+it.unid+'</span>'+
         '</div>'+
       '</div>';
     }).join('');
   }
 
-  // Viveiro
-  const viv=document.getElementById('rbvViveiroContent');
-  if(viv){
-    const vivItems=RBV_ITEMS.filter(x=>x.item==='3.5'||x.item==='3.6');
-    viv.innerHTML=vivItems.map(it=>{
-      const meta=Math.round(it.quant/fator);
-      const exec=0;const pct=meta>0?Math.round(exec/it.quant*100):0;
-      return `<div class="rbv-viveiro-row">
-        <div style="flex:none;min-width:170px">
-          <div class="rbv-viveiro-label">${it.item} · ${it.atividade.replace(' florestais','')}</div>
-          <div class="rbv-viveiro-sub">Meta ${periodLabel.toLowerCase()}: <strong>${fmtQuant(meta)} ${it.unid}</strong> · Anual: ${fmtQuant(it.quant)}</div>
-        </div>
-        <div class="rbv-viveiro-bar-wrap">
-          <div class="rbv-viveiro-bar"><div class="rbv-viveiro-bar-fill" style="width:${pct}%"></div></div>
-          <div class="rbv-viveiro-vals"><span class="rbv-viveiro-exec">${exec} executados</span><span>${pct}%</span></div>
-        </div>
-      </div>
-      <div style="padding:4px 0 10px 0;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);margin-bottom:2px">
-        <i data-lucide="corner-down-right" style="width:11px;height:11px;vertical-align:middle;margin-right:4px"></i>Alt: ${it.alt}
-      </div>`;
-    }).join('');
+  // Análise de potencial
+  const ganhoEl=document.getElementById('rbvGanhoContent');
+  if(ganhoEl){
+    const semProd=Math.round(149000/52);
+    const mesAtual=Number(state.month)||new Date().getMonth()+1;
+    const mesesRestantes=Math.max(1,12-mesAtual+1);
+    const projAnual=exec35>0?Math.round(exec35/mesAtual*12):0;
+    const gap=Math.max(0,149000-exec35);
+    ganhoEl.innerHTML='<div class="rbv-ganho-grid">'+
+      '<div class="rbv-ganho-card">'+
+        '<div class="rbv-ganho-label">Ritmo necessário</div>'+
+        '<div class="rbv-ganho-val">'+fmtQuant(semProd)+'</div>'+
+        '<div class="rbv-ganho-sub">unidades/semana para atingir 149k no prazo</div>'+
+      '</div>'+
+      '<div class="rbv-ganho-card '+(exec35>0?'highlight':'')+'">'+
+        '<div class="rbv-ganho-label">Projeção anual</div>'+
+        '<div class="rbv-ganho-val">'+(projAnual>0?fmtQuant(projAnual):'—')+'</div>'+
+        '<div class="rbv-ganho-sub">'+(projAnual>=149000?'Meta será atingida':'unidades no ritmo atual'+(exec35===0?' · aguardando dados':''))+'</div>'+
+      '</div>'+
+      '<div class="rbv-ganho-card">'+
+        '<div class="rbv-ganho-label">Gap até a meta</div>'+
+        '<div class="rbv-ganho-val">'+(exec35>0?fmtQuant(gap):'149k')+'</div>'+
+        '<div class="rbv-ganho-sub">unidades restantes · '+mesesRestantes+' meses disponíveis</div>'+
+      '</div>'+
+    '</div>';
   }
-  // Guia de atividades do contrato (itens do Anexo II)
-  const cont2=document.getElementById('rbvContractContent');
-  const lbl2=document.getElementById('rbvPeriodLabel2');if(lbl2)lbl2.textContent=periodLabel;
-  if(cont2){
-    cont2.innerHTML=RBV_CATS.map(cat=>{
-      const itens=RBV_ITEMS.filter(x=>x.cat===cat.id);
-      if(!itens.length)return'';
-      const rows=itens.map(it=>{
-        const meta=it.unid==='mês'?Math.round(it.quant/(period==='trimestral'?3:period==='mensal'?1:0.25)*10)/10:Math.round(it.quant/fator*10)/10;
-        const metaStr=meta<1&&meta>0?'~1':fmtQuant(meta);
-        const exec=execByItem[it.item]||0;
-        const pct=it.quant>0?Math.min(100,Math.round(exec/it.quant*100)):0;
-        const freqTag=it.freq==='diaria'?'<span class="rbv-rotina-freq diaria" style="margin-left:6px">Diária</span>':it.freq==='semanal'?'<span class="rbv-rotina-freq semanal" style="margin-left:6px">Semanal</span>':'';
-        return `<div class="rbv-item-row" style="flex-wrap:wrap">
-          <span class="rbv-item-num">${it.item}</span>
-          <div style="flex:1;min-width:0">
-            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:2px">
-              <span class="rbv-item-name" title="${it.atividade}">${it.atividade}</span>${freqTag}
-            </div>
-            <div style="font-size:10px;color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${it.alt}">&#8627; ${it.alt}</div>
-          </div>
-          <span class="rbv-item-meta" style="text-align:right">Meta: ${metaStr} ${it.unid}</span>
-          <div class="rbv-item-bar-wrap">
-            <div class="rbv-item-bar"><div class="rbv-item-bar-fill" style="width:${pct}%;background:${cat.cor}"></div></div>
-            <div class="rbv-item-pct">${pct}%</div>
-          </div>
-          <div class="rbv-item-status" style="color:var(--faint)"><i data-lucide="minus"></i></div>
-        </div>`;
-      }).join('');
-      return `<div class="rbv-cat-group">
-        <div class="rbv-cat-header">
-          <span class="rbv-cat-dot" style="background:${cat.cor}"></span>
-          <span class="rbv-cat-title">${cat.label}</span>
-          <span class="rbv-cat-count">${itens.length} ${itens.length===1?'item':'itens'}</span>
-        </div>${rows}</div>`;
-    }).join('');
-    lucide.createIcons({nodes:[...document.querySelectorAll('#rbvContractContent [data-lucide]')]});
-  }
-  // KPIs
-  const covEl=document.getElementById('rbvKpiCov');if(covEl)covEl.textContent='0%';
-  const okEl=document.getElementById('rbvKpiOk');if(okEl)okEl.textContent='—';
-  const oppEl=document.getElementById('rbvKpiOpp');if(oppEl)oppEl.textContent='53';
+
 }
 
 function renderMobileHub(){
@@ -3356,6 +3392,7 @@ function saveLocalLeaderRecord(e){
     status:'ABERTA',
     latitude:coords.lat||'',
     longitude:coords.lon||'',
+    foto_base64:document.getElementById('demandPhotoInput')?.dataset.base64||'',
     origem_dado:'SIMULADO_LOCAL'
   };
   const impact={
@@ -3517,6 +3554,37 @@ function setupUI(){
     },{enableHighAccuracy:true,timeout:12000});
   });
   document.getElementById('clearGpsBtn')?.addEventListener('click',resetGps);
+  // Foto da demanda
+  const photoBtn=document.getElementById('demandPhotoBtn');
+  const photoInput=document.getElementById('demandPhotoInput');
+  const photoPreview=document.getElementById('demandPhotoPreview');
+  const photoImg=document.getElementById('demandPhotoImg');
+  const photoBtnLabel=document.getElementById('demandPhotoBtnLabel');
+  function clearDemandPhoto(){
+    photoInput.value='';
+    photoImg.src='';
+    photoPreview.style.display='none';
+    photoBtn.classList.remove('captured');
+    if(photoBtnLabel) photoBtnLabel.textContent='Adicionar foto';
+    delete photoInput.dataset.base64;
+  }
+  state.clearDemandPhoto=clearDemandPhoto;
+  photoBtn?.addEventListener('click',()=>photoInput.click());
+  photoInput?.addEventListener('change',function(){
+    const file=this.files[0];
+    if(!file) return;
+    const reader=new FileReader();
+    reader.onload=function(e){
+      photoImg.src=e.target.result;
+      photoPreview.style.display='block';
+      photoBtn.classList.add('captured');
+      if(photoBtnLabel) photoBtnLabel.textContent='Foto adicionada — clique para trocar';
+      photoInput.dataset.base64=e.target.result;
+    };
+    reader.readAsDataURL(file);
+    lucide.createIcons({nodes:[...photoPreview.querySelectorAll('[data-lucide]')]});
+  });
+  document.getElementById('demandPhotoRemove')?.addEventListener('click',clearDemandPhoto);
   const mfEl=document.getElementById('monthFilter');
   mfEl.innerHTML=Array.from({length:PROJECT_MONTHS},(_,i)=>`<option value="${i+1}">${mesNumLabel(i+1)}</option>`).join('');
   mfEl.value=state.month;
@@ -3553,6 +3621,18 @@ function setupUI(){
   document.getElementById('bp3Toggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.bp3Layer)return;const on=state.map.hasLayer(state.bp3Layer);on?state.map.removeLayer(state.bp3Layer):state.bp3Layer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('hydroToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.hydroLayer)return;const on=state.map.hasLayer(state.hydroLayer);on?state.map.removeLayer(state.hydroLayer):state.hydroLayer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('demandToggle').addEventListener('click',e=>{const b=e.currentTarget;const on=state.map.hasLayer(state.demandLayer);on?state.map.removeLayer(state.demandLayer):state.demandLayer.addTo(state.map);b.classList.toggle('active',!on);});
+  function toggleMapLayer(btnId,layerKey){
+    document.getElementById(btnId)?.addEventListener('click',e=>{
+      const b=e.currentTarget,ly=state[layerKey];
+      if(!ly)return;
+      const on=state.map.hasLayer(ly);
+      on?state.map.removeLayer(ly):ly.addTo(state.map);
+      b.classList.toggle('active',!on);
+    });
+  }
+  toggleMapLayer('crvToggle','crvLayer');
+  toggleMapLayer('gramadaoToggle','gramadaoLayer');
+  toggleMapLayer('partesToggle','itaipuPartesLayer');
   document.getElementById('bhoFilterInput').addEventListener('input',applyBhoFilter);
   document.getElementById('clearBhoFilter').addEventListener('click',()=>{document.getElementById('bhoFilterInput').value='';applyBhoFilter();});
   // Notification bell
