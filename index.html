@@ -553,6 +553,21 @@ html[data-theme="dark"] .notif-panel{background:var(--surface)!important;border-
 .impact-tile-bar{height:5px;border-radius:4px;background:var(--border);margin-top:8px;overflow:hidden}
 .impact-tile-bar-fill{height:100%;border-radius:4px;transition:width .4s ease}
 .impact-tile-meta{font-size:10px;color:var(--faint);margin-top:4px}
+.contract-exec-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:4px}
+.contract-exec-table th{background:var(--surface-2);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:7px 10px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.contract-exec-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.contract-exec-table tr:last-child td{border-bottom:0}
+.contract-exec-table tr:hover td{background:var(--surface-1)}
+.cet-num{font-size:10px;font-weight:700;color:var(--faint);white-space:nowrap}
+.cet-name{font-weight:500;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cet-teams{display:flex;flex-wrap:wrap;gap:4px}
+.cet-team-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.cet-team-tag.has-data{background:var(--blue);color:#fff}
+.cet-total{font-weight:700;text-align:right;white-space:nowrap}
+.cet-pct{text-align:right;white-space:nowrap;font-size:11px;color:var(--muted)}
+.cet-mini{height:4px;border-radius:3px;background:var(--surface-2);overflow:hidden;min-width:50px}
+.cet-mini-fill{height:100%;border-radius:3px;transition:.4s}
+.cet-zero{color:var(--faint);font-style:italic}
 .impact-empty{color:var(--faint);font-size:13px;padding:32px 0;text-align:center;grid-column:1/-1}
 /* TV: base maior para projeção */
 body{font-size:15px}
@@ -1032,6 +1047,16 @@ body{font-size:15px}
               <div><h2>Execuções semanais</h2><p>Registros de campo pelos líderes técnicos</p></div>
             </div>
             <div id="execWeeklyList" style="display:flex;flex-direction:column;gap:6px;max-height:320px;overflow-y:auto;padding-right:4px"></div>
+          </article>
+        </section>
+        <!-- Execução por item de contrato -->
+        <section class="dashboard-grid" style="margin-top:var(--gap)">
+          <article class="card span-12" style="padding:20px 24px">
+            <div class="card-header compact" style="margin-bottom:14px">
+              <div><h2>Execução por item de contrato</h2><p>Todas as equipes · Cruzamento com Anexo II · 53 itens</p></div>
+              <span id="cetPeriodSpan" style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em"></span>
+            </div>
+            <div id="cetTableWrap"></div>
           </article>
         </section>
       </div>
@@ -1894,6 +1919,72 @@ function renderImpactPage(){
   }
 
   document.getElementById('impactPageSub').textContent=`Produção acumulada por atividade — ${mesNumLabel(m)}`;
+
+  // Execução por item de contrato (Anexo II) × equipe
+  const cetWrap=document.getElementById('cetTableWrap');
+  const cetSpan=document.getElementById('cetPeriodSpan');
+  if(cetWrap){
+    if(cetSpan) cetSpan.textContent=mesNumLabel(m);
+    function normStr_(s){return(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim();}
+    // Agrupa execução por equipe+atividade
+    const execAll=byTeam(state.execution);
+    // Todos os IDs de equipes presentes
+    const teamIds=[...new Set(execAll.map(r=>r.equipe_id).filter(Boolean))].sort();
+    // Função: soma execução de uma equipe para um item do contrato
+    function execParaItem(it,eqId){
+      var palavras=normStr_(it.atividade).split(' ').filter(function(w){return w.length>3;});
+      var total=0;
+      execAll.filter(function(r){return !eqId||r.equipe_id===eqId;}).forEach(function(r){
+        var at=normStr_(r.atividade||'');
+        var score=palavras.filter(function(w){return at.indexOf(w)>=0;}).length;
+        if(score>=Math.ceil(palavras.length*0.5)) total+=Number(r.quantidade_executada)||Number(r.horas_executadas)||0;
+      });
+      return total;
+    }
+    // Filtra itens com pelo menos algum planejamento ou execução (evita 53 linhas vazias)
+    const planAtivs=new Set((state.planning||[]).map(r=>normStr_(r.atividade||'')));
+    const execAtivs=new Set(execAll.map(r=>normStr_(r.atividade||'')));
+    const itensComDados=RBV_ITEMS.filter(function(it){
+      var n=normStr_(it.atividade);
+      var palavras=n.split(' ').filter(function(w){return w.length>3;});
+      return palavras.some(function(w){
+        return [...planAtivs,...execAtivs].some(function(a){return a.indexOf(w)>=0;});
+      });
+    });
+    const itensExibir=itensComDados.length>0?itensComDados:RBV_ITEMS;
+    // Limita a 20 itens se nenhum tiver dados (estado inicial)
+    const itensFinal=execAll.length===0?RBV_ITEMS.slice(0,20):itensExibir;
+    // Nomes curtos das equipes
+    const teamNomes={};
+    (state.teams||[]).forEach(function(t){teamNomes[t.equipe_id]=t.equipe||t.equipe_id;});
+    cetWrap.innerHTML='<table class="contract-exec-table"><thead><tr>'+
+      '<th>Item</th><th>Atividade</th>'+
+      (teamIds.length?teamIds.map(function(id){return'<th style="text-align:right">'+((teamNomes[id]||id).split('·')[0].trim().split(' ').slice(0,2).join(' '))+'</th>';}).join(''):'<th>Execução</th>')+
+      '<th style="text-align:right">Total</th><th style="text-align:right">% anual</th>'+
+      '</tr></thead><tbody>'+
+      itensFinal.map(function(it){
+        const totPorEq=teamIds.map(function(id){return execParaItem(it,id);});
+        const total=teamIds.length?totPorEq.reduce(function(s,v){return s+v;},0):execParaItem(it,null);
+        const pct=it.quant>0?Math.min(100,Math.round(total/it.quant*100)):0;
+        const cor=pct>=80?'var(--green)':pct>=40?'var(--blue)':'var(--ochre)';
+        const teamCols=teamIds.length?totPorEq.map(function(v){
+          return '<td style="text-align:right">'+(v>0?'<strong>'+fmtQuant(v)+'</strong>':'<span class="cet-zero">—</span>')+'</td>';
+        }).join(''):'<td style="text-align:right">'+(total>0?fmtQuant(total):'<span class="cet-zero">—</span>')+'</td>';
+        return'<tr>'+
+          '<td class="cet-num">'+it.item+'</td>'+
+          '<td class="cet-name" title="'+it.atividade+'">'+it.atividade+'</td>'+
+          teamCols+
+          '<td class="cet-total">'+(total>0?fmtQuant(total)+' '+it.unid:'<span class="cet-zero">sem dados</span>')+'</td>'+
+          '<td class="cet-pct">'+
+            '<div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">'+
+              '<span>'+pct+'%</span>'+
+              '<div class="cet-mini"><div class="cet-mini-fill" style="width:'+pct+'%;background:'+cor+'"></div></div>'+
+            '</div>'+
+          '</td>'+
+        '</tr>';
+      }).join('')+
+      '</tbody></table>';
+  }
 }
 
 function renderPressureChart(){
