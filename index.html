@@ -99,6 +99,18 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .rbv-item-pct{font-size:10px;color:var(--muted);text-align:right;margin-top:2px}
 .rbv-item-status{width:20px;height:20px;border-radius:6px;background:var(--surface-2);flex:none;display:flex;align-items:center;justify-content:center}
 .rbv-item-status svg{width:11px;height:11px;stroke-width:2.2}
+.rbv-plano-table{width:100%;border-collapse:collapse;font-size:12px}
+.rbv-plano-table th{background:var(--surface-2);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.rbv-plano-table td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.rbv-plano-table tr:last-child td{border-bottom:0}
+.rbv-plano-item-num{font-size:10px;font-weight:700;color:var(--faint);white-space:nowrap}
+.rbv-plano-nome{font-weight:600}
+.rbv-plano-alt{font-size:10px;color:var(--muted);margin-top:2px}
+.rbv-plano-qty{text-align:right;font-weight:700;white-space:nowrap}
+.rbv-plano-pct{text-align:right;white-space:nowrap;font-size:11px}
+.rbv-plano-mini{height:4px;border-radius:3px;background:var(--surface-2);overflow:hidden;min-width:60px}
+.rbv-plano-mini-fill{height:100%;border-radius:3px;background:var(--blue);transition:.4s}
+.rbv-plano-empty{text-align:center;padding:24px;color:var(--faint);font-size:12px}
 .rbv-rotina-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:12px}
 .rbv-rotina-item{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:8px;background:var(--surface-1);border:1px solid var(--border)}
 .rbv-rotina-item.diaria{border-left:3px solid var(--green)}
@@ -1062,6 +1074,14 @@ body{font-size:15px}
             <div class="kpi-foot">Itens abaixo do ritmo esperado</div>
           </div>
         </div>
+        <!-- Plano da semana · RBV -->
+        <article class="card" style="padding:20px 24px;margin-bottom:var(--gap)">
+          <div class="card-header compact" style="margin-bottom:14px">
+            <div><h2>Plano da semana · RBV</h2><p>Atividades registradas no planejamento mensal da equipe</p></div>
+            <span id="rbvPlanoMes" style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em"></span>
+          </div>
+          <div id="rbvPlanoContent"></div>
+        </article>
         <!-- Rotina da semana -->
         <article class="card" style="padding:20px 24px;margin-bottom:var(--gap)">
           <div class="card-header compact">
@@ -2793,6 +2813,82 @@ function renderRbvPage(){
     });
     execByItem[it.item]=total;
   });
+
+  // Plano da semana — lê state.planning para a equipe RBV
+  (function(){
+    const el=document.getElementById('rbvPlanoContent');
+    const mesEl=document.getElementById('rbvPlanoMes');
+    if(!el) return;
+
+    // Filtra pelo mês atual (ou mês selecionado em state.month)
+    const mesFiltro=Number(state.month||new Date().getMonth()+1);
+    const mesesNomes=['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    if(mesEl) mesEl.textContent=mesesNomes[mesFiltro]||'';
+
+    // planRbv já filtrado por equipe RBV acima
+    const planMes=planRbv.filter(function(r){
+      const m=Number(r.mes||0);
+      return m===mesFiltro||m===0; // 0 = sem mês definido, inclui mesmo assim
+    });
+
+    if(!planMes.length){
+      el.innerHTML='<div class="rbv-plano-empty">Nenhuma atividade registrada no planejamento para este período.<br>Registre na planilha <strong>04_Plano_Mensal</strong> com o ID da equipe RBV.</div>';
+      return;
+    }
+
+    // Agrupa por atividade (normaliza nome)
+    var grupos={};
+    planMes.forEach(function(r){
+      var k=normStr(r.atividade||'');
+      if(!grupos[k]) grupos[k]={atividade:r.atividade,unidade:r.unidade||r.unid||'',total:0,rows:[]};
+      grupos[k].total+=parseFloat(r.quantidade)||0;
+      grupos[k].rows.push(r);
+    });
+
+    // Para cada grupo, tenta localizar o item do contrato
+    var linhas=Object.values(grupos).map(function(g){
+      var palavras=normStr(g.atividade).split(' ').filter(function(w){return w.length>3;});
+      var melhorItem=null;
+      var melhorScore=0;
+      RBV_ITEMS.forEach(function(it){
+        var at=normStr(it.atividade);
+        var score=palavras.filter(function(w){return at.indexOf(w)>=0;}).length;
+        if(score>melhorScore){melhorScore=score;melhorItem=it;}
+      });
+      var pctAnual=melhorItem&&melhorItem.quant>0?Math.round(g.total/melhorItem.quant*100):null;
+      return {atividade:g.atividade,unidade:g.unidade,total:g.total,item:melhorItem,pct:pctAnual,score:melhorScore};
+    }).sort(function(a,b){
+      // Ordena: com item identificado primeiro, depois por nome
+      if(a.item&&!b.item) return -1;
+      if(!a.item&&b.item) return 1;
+      return (a.item?a.item.item:'z').localeCompare(b.item?b.item.item:'z',undefined,{numeric:true});
+    });
+
+    el.innerHTML='<table class="rbv-plano-table"><thead><tr>'+
+      '<th>Item</th><th>Atividade planejada</th>'+
+      '<th style="text-align:right">Qtd planejada</th>'+
+      '<th style="text-align:right">% do contrato anual</th>'+
+      '</tr></thead><tbody>'+
+      linhas.map(function(l){
+        var numStr=l.item?'<span class="rbv-plano-item-num">'+l.item.item+'</span>':'<span class="rbv-plano-item-num" style="color:var(--amber)">?</span>';
+        var pctStr=l.pct!==null?l.pct+'%':'—';
+        var pctFill=l.pct!==null?Math.min(l.pct,100):0;
+        var pctColor=pctFill>=90?'var(--green)':pctFill>=50?'var(--blue)':'var(--ochre)';
+        return '<tr>'+
+          '<td>'+numStr+'</td>'+
+          '<td><div class="rbv-plano-nome">'+l.atividade+'</div>'+
+            (l.item?'<div class="rbv-plano-alt">&#8627; '+l.item.alt+'</div>':'')+'</td>'+
+          '<td class="rbv-plano-qty">'+fmtQuant(l.total)+' '+l.unidade+'</td>'+
+          '<td class="rbv-plano-pct">'+
+            '<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">'+
+              '<span>'+pctStr+'</span>'+
+              '<div class="rbv-plano-mini"><div class="rbv-plano-mini-fill" style="width:'+pctFill+'%;background:'+pctColor+'"></div></div>'+
+            '</div>'+
+          '</td>'+
+        '</tr>';
+      }).join('')+
+      '</tbody></table>';
+  })();
 
   // Rotina da semana
   const rotEl=document.getElementById('rbvRotinaContent');
