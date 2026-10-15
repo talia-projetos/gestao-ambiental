@@ -1326,6 +1326,7 @@ body{font-size:15px}
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="assets/equipes-contrato.js"></script>
   <script>
 const _lsStart = Date.now();
 const DATA_BASE = 'data/sample/';
@@ -1490,7 +1491,7 @@ async function loadData(){
   const weather=wxR.status==='fulfilled'?wxR.value:null;
 
   const {teams=[],planning=[],execution=[],demands=[],blockers=[],climate=[],impact=[],metrics=[],weather_api=null,reservatorio=null}=base||{};
-  Object.assign(state,{teams,planning,execution,demands,blockers,climate,impact,metrics,weather_api,reservatorio,weather,scriptUrl:base?.script_url||''});
+  Object.assign(state,{teams:window.GA_PADRONIZAR_EQUIPES(teams),planning,execution,demands,blockers,climate,impact,metrics,weather_api,reservatorio,weather,scriptUrl:base?.script_url||''});
   if(weather)checkWeatherAlerts(weather);
   const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
   // Aplica lista de supressão (demandas deletadas pelo X mas ainda presentes no JSON)
