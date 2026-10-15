@@ -1150,6 +1150,14 @@ body{font-size:15px}
             <div id="rbvViveiroContent" style="margin-top:14px"></div>
           </article>
         </div>
+        <!-- Contrato RBV: guia de atividades -->
+        <article class="card" style="padding:20px 24px;margin-bottom:var(--gap)">
+          <div class="card-header compact" style="margin-bottom:16px">
+            <div><h2>Guia de atividades · Contrato</h2><p>53 itens do Anexo II — base para o planejamento da equipe RBV</p></div>
+            <span id="rbvPeriodLabel2" style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Semanal</span>
+          </div>
+          <div id="rbvContractContent"></div>
+        </article>
       </div>
 
       <footer class="app-footer">
@@ -3036,6 +3044,44 @@ function renderRbvPage(){
         <i data-lucide="corner-down-right" style="width:11px;height:11px;vertical-align:middle;margin-right:4px"></i>Alt: ${it.alt}
       </div>`;
     }).join('');
+  }
+  // Guia de atividades do contrato (itens do Anexo II)
+  const cont2=document.getElementById('rbvContractContent');
+  const lbl2=document.getElementById('rbvPeriodLabel2');if(lbl2)lbl2.textContent=periodLabel;
+  if(cont2){
+    cont2.innerHTML=RBV_CATS.map(cat=>{
+      const itens=RBV_ITEMS.filter(x=>x.cat===cat.id);
+      if(!itens.length)return'';
+      const rows=itens.map(it=>{
+        const meta=it.unid==='mês'?Math.round(it.quant/(period==='trimestral'?3:period==='mensal'?1:0.25)*10)/10:Math.round(it.quant/fator*10)/10;
+        const metaStr=meta<1&&meta>0?'~1':fmtQuant(meta);
+        const exec=execByItem[it.item]||0;
+        const pct=it.quant>0?Math.min(100,Math.round(exec/it.quant*100)):0;
+        const freqTag=it.freq==='diaria'?'<span class="rbv-rotina-freq diaria" style="margin-left:6px">Diária</span>':it.freq==='semanal'?'<span class="rbv-rotina-freq semanal" style="margin-left:6px">Semanal</span>':'';
+        return `<div class="rbv-item-row" style="flex-wrap:wrap">
+          <span class="rbv-item-num">${it.item}</span>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:2px">
+              <span class="rbv-item-name" title="${it.atividade}">${it.atividade}</span>${freqTag}
+            </div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${it.alt}">&#8627; ${it.alt}</div>
+          </div>
+          <span class="rbv-item-meta" style="text-align:right">Meta: ${metaStr} ${it.unid}</span>
+          <div class="rbv-item-bar-wrap">
+            <div class="rbv-item-bar"><div class="rbv-item-bar-fill" style="width:${pct}%;background:${cat.cor}"></div></div>
+            <div class="rbv-item-pct">${pct}%</div>
+          </div>
+          <div class="rbv-item-status" style="color:var(--faint)"><i data-lucide="minus"></i></div>
+        </div>`;
+      }).join('');
+      return `<div class="rbv-cat-group">
+        <div class="rbv-cat-header">
+          <span class="rbv-cat-dot" style="background:${cat.cor}"></span>
+          <span class="rbv-cat-title">${cat.label}</span>
+          <span class="rbv-cat-count">${itens.length} ${itens.length===1?'item':'itens'}</span>
+        </div>${rows}</div>`;
+    }).join('');
+    lucide.createIcons({nodes:[...document.querySelectorAll('#rbvContractContent [data-lucide]')]});
   }
   // KPIs
   const covEl=document.getElementById('rbvKpiCov');if(covEl)covEl.textContent='0%';
