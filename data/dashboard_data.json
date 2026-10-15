@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T05:10:55.342Z",
+  "generated_at": "2026-10-15T05:12:00.374Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -1499,7 +1499,7 @@
     "previsao": [
       {
         "data": "2026-10-15",
-        "chuva_mm": 1.5,
+        "chuva_mm": 1.3,
         "prob_chuva": 78,
         "tmax": 26.5,
         "tmin": 18.2,
@@ -1520,7 +1520,7 @@
         "chuva_mm": 0,
         "prob_chuva": 2,
         "tmax": 23.1,
-        "tmin": 14.3,
+        "tmin": 14.2,
         "codigo": 3,
         "condicao": "Nublado"
       },
