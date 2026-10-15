@@ -82,6 +82,33 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
   .gps-btn svg{width:22px;height:22px}
   #leaderModeToggle{display:none!important}
 }
+/* ── Página RBV ──────────────────────────────────────────── */
+.rbv-cat-group{margin-bottom:20px}
+.rbv-cat-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rbv-cat-dot{width:9px;height:9px;border-radius:50%;flex:none}
+.rbv-cat-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.rbv-cat-count{font-size:10px;color:var(--faint);margin-left:auto}
+.rbv-item-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.rbv-item-row:last-child{border-bottom:0}
+.rbv-item-num{font-size:10px;font-weight:700;color:var(--faint);min-width:28px;flex:none}
+.rbv-item-name{flex:1;font-size:12px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rbv-item-meta{font-size:10.5px;color:var(--muted);white-space:nowrap;min-width:80px;text-align:right;flex:none}
+.rbv-item-bar-wrap{min-width:90px;max-width:120px;flex:none}
+.rbv-item-bar{height:5px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.rbv-item-bar-fill{height:100%;border-radius:4px;background:var(--green);transition:.4s}
+.rbv-item-pct{font-size:10px;color:var(--muted);text-align:right;margin-top:2px}
+.rbv-item-status{width:20px;height:20px;border-radius:6px;background:var(--surface-2);flex:none;display:flex;align-items:center;justify-content:center}
+.rbv-item-status svg{width:11px;height:11px;stroke-width:2.2}
+.rbv-viveiro-row{display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--border)}
+.rbv-viveiro-row:last-child{border-bottom:0}
+.rbv-viveiro-label{min-width:160px;font-size:12px;font-weight:600;flex:none}
+.rbv-viveiro-sub{font-size:10.5px;color:var(--muted);margin-top:1px}
+.rbv-viveiro-bar-wrap{flex:1;min-width:0}
+.rbv-viveiro-bar{height:10px;border-radius:6px;background:var(--surface-2);overflow:hidden}
+.rbv-viveiro-bar-fill{height:100%;border-radius:6px;background:var(--green);transition:.5s}
+.rbv-viveiro-vals{display:flex;justify-content:space-between;margin-top:4px;font-size:10.5px;color:var(--muted)}
+.rbv-viveiro-exec{font-weight:700;color:var(--green)}
+
 /* ── Loading screen ─────────────────────────────────────── */
 #loadingScreen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .45s}
 #loadingScreen.hidden{opacity:0;pointer-events:none}
@@ -604,6 +631,7 @@ body{font-size:15px}
         <button class="nav-btn" data-page="page-map" title="Mapa operacional"><i data-lucide="map"></i><span>Mapa</span></button>
         <button class="nav-btn" data-page="page-blockers" title="Bloqueadores"><i data-lucide="triangle-alert"></i><span>Bloqueadores</span></button>
         <button class="nav-btn" data-page="page-impact" title="Impacto operacional"><i data-lucide="bar-chart-big"></i><span>Impacto</span></button>
+        <button class="nav-btn" data-page="page-rbv" title="Refúgio Biológico"><i data-lucide="leaf"></i><span>Refúgio · RBV</span></button>
       </nav>
       <div class="sidebar-bottom">
         <button class="nav-btn" id="settingsBtn" title="Configurações"><i data-lucide="settings-2"></i><span>Configurações</span></button>
@@ -982,6 +1010,66 @@ body{font-size:15px}
             <div id="execWeeklyList" style="display:flex;flex-direction:column;gap:6px;max-height:320px;overflow-y:auto;padding-right:4px"></div>
           </article>
         </section>
+      </div>
+
+      <!-- ── Página: Refúgio Biológico ───────────────────────────── -->
+      <div id="page-rbv" class="page">
+        <div class="topbar" style="margin-bottom:12px">
+          <div class="brand-row">
+            <div class="title-wrap">
+              <h1>Refúgio Biológico · RBV</h1>
+              <p>Itaipu Binacional · Plano Diretor Operacional Anual</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="segmented" id="rbvPeriodSeg" style="width:auto">
+              <button class="active" data-period="semanal">Semanal</button>
+              <button data-period="mensal">Mensal</button>
+              <button data-period="trimestral">Trimestral</button>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:var(--gap)">
+          <div class="kpi-card accent-green">
+            <div class="kpi-head"><span>Itens do contrato</span><i data-lucide="file-check-2"></i></div>
+            <strong>53</strong>
+            <div class="kpi-foot">Atividades mapeadas · Anexo II</div>
+          </div>
+          <div class="kpi-card accent-blue">
+            <div class="kpi-head"><span>Cobertura</span><i data-lucide="activity"></i></div>
+            <strong id="rbvKpiCov">0%</strong>
+            <div class="kpi-foot">Itens com execução registrada</div>
+          </div>
+          <div class="kpi-card accent-green">
+            <div class="kpi-head"><span>Em ritmo</span><i data-lucide="trending-up"></i></div>
+            <strong id="rbvKpiOk">—</strong>
+            <div class="kpi-foot">Itens dentro da meta de execução</div>
+          </div>
+          <div class="kpi-card accent-ochre">
+            <div class="kpi-head"><span>Oportunidades</span><i data-lucide="target"></i></div>
+            <strong id="rbvKpiOpp">—</strong>
+            <div class="kpi-foot">Itens abaixo do ritmo esperado</div>
+          </div>
+        </div>
+        <!-- Viveiro destaque -->
+        <div class="dashboard-grid" style="margin-bottom:var(--gap)">
+          <article class="card span-12" style="padding:20px 22px">
+            <div class="card-header compact">
+              <div><h2>Viveiro · Produção de mudas florestais</h2><p>Meta anual do contrato — itens 3.5 (Produção) e 3.6 (Expedição)</p></div>
+            </div>
+            <div id="rbvViveiroContent" style="margin-top:14px"></div>
+          </article>
+        </div>
+        <!-- Atividades por categoria -->
+        <article class="card" style="padding:20px 24px;margin-bottom:var(--gap)">
+          <div class="card-header compact" style="margin-bottom:16px">
+            <div><h2>Execução por atividade</h2><p>Progresso do contrato · Anexo II · 53 itens</p></div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span id="rbvPeriodLabel" style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em">Semanal</span>
+            </div>
+          </div>
+          <div id="rbvContractContent"></div>
+        </article>
       </div>
 
       <footer class="app-footer">
@@ -2244,6 +2332,7 @@ function showPage(id){
     if(id==='page-map'&&state.map){ state.map.invalidateSize(); updateDemandMarkers(); }
     if(id==='page-blockers'){ renderContextPanel(); renderBlockerChartFull(); }
     if(id==='page-impact'){ renderImpactPage(); }
+    if(id==='page-rbv'){ renderRbvPage(); }
   },50);
 }
 function renderMobilePlanView(){
@@ -2587,6 +2676,126 @@ function saveExecRecord(e){
 function parseLideres(str){
   return (str||'').replace(/\s+e\s+/gi,';').replace(/,/g,';').split(';').map(s=>s.trim()).filter(Boolean);
 }
+/* ── RBV: dados do contrato (Anexo II) ─────────────────── */
+const RBV_ITEMS=[
+  {item:'3.1',cat:'mudas',atividade:'Identificação de matrizes',quant:40,unid:'un'},
+  {item:'3.2',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - pequenas',quant:10,unid:'kg'},
+  {item:'3.3',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - médias',quant:20,unid:'kg'},
+  {item:'3.4',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - grandes',quant:235,unid:'kg'},
+  {item:'3.5',cat:'mudas',atividade:'Produção de mudas florestais',quant:149000,unid:'un'},
+  {item:'3.6',cat:'mudas',atividade:'Expedição de mudas florestais',quant:149000,unid:'un'},
+  {item:'3.7',cat:'viveiro',atividade:'Manejo de plantas ornamentais e produção de hortaliças',quant:4,unid:'mês'},
+  {item:'3.8',cat:'viveiro',atividade:'Transporte de vasos',quant:1000,unid:'km'},
+  {item:'3.9',cat:'rbv',atividade:'Manutenção das trilhas no RBV',quant:4,unid:'mês'},
+  {item:'3.10',cat:'rbv',atividade:'Serviços complementares no RBV',quant:4,unid:'mês'},
+  {item:'3.11',cat:'solo',atividade:'Remoção manual de entulho',quant:2000,unid:'m³'},
+  {item:'3.12',cat:'solo',atividade:'Remoção mecânica de entulho',quant:1000,unid:'m³'},
+  {item:'3.13',cat:'solo',atividade:'Regularização manual de superfície',quant:3700,unid:'m²'},
+  {item:'3.14',cat:'plantio',atividade:'Adubação química de árvores e arbustos',quant:500,unid:'un'},
+  {item:'3.15',cat:'plantio',atividade:'Coroamento',quant:850,unid:'un'},
+  {item:'3.16',cat:'plantio',atividade:'Preparo de solo para forrações',quant:333,unid:'m²'},
+  {item:'3.17',cat:'plantio',atividade:'Plantio de plantas de forração',quant:333,unid:'m²'},
+  {item:'3.18',cat:'plantio',atividade:'Plantio de palmeiras e árvores para paisagismo',quant:33,unid:'un'},
+  {item:'3.19',cat:'plantio',atividade:'Plantio de arbustos e semi-arbustos/herbáceas',quant:33,unid:'un'},
+  {item:'3.20',cat:'plantio',atividade:'Transplante de palmeiras e árvores',quant:10,unid:'un'},
+  {item:'3.21',cat:'plantio',atividade:'Fornecimento e plantio de grama Esmeralda em leivas',quant:3700,unid:'m²'},
+  {item:'3.22',cat:'plantio',atividade:'Fornecimento e plantio de grama São Carlos em leivas',quant:350,unid:'m²'},
+  {item:'3.23',cat:'plantio',atividade:'Irrigação de mudas com utilização de equipamento',quant:320,unid:'h/m'},
+  {item:'3.24',cat:'podas',atividade:'Poda de árvores - Formação',quant:20,unid:'un'},
+  {item:'3.25',cat:'podas',atividade:'Poda de árvores - Limpeza',quant:3000,unid:'un'},
+  {item:'3.26',cat:'podas',atividade:'Poda de árvores - Drástica',quant:100,unid:'un'},
+  {item:'3.27',cat:'podas',atividade:'Poda de palmeiras - Limpeza',quant:300,unid:'un'},
+  {item:'3.28',cat:'podas',atividade:'Poda de arbusto',quant:500,unid:'un'},
+  {item:'3.29',cat:'podas',atividade:'Poda de cerca viva',quant:700,unid:'m'},
+  {item:'3.30',cat:'corte',atividade:'Corte de árvores com até 0,40 m de diâmetro',quant:2000,unid:'un'},
+  {item:'3.31',cat:'corte',atividade:'Corte de árvores entre 0,41 m e 0,70 m de diâmetro',quant:200,unid:'un'},
+  {item:'3.32',cat:'vegetacao',atividade:'Limpeza de cerca',quant:1000,unid:'m'},
+  {item:'3.33',cat:'vegetacao',atividade:'Controle manual de plantas daninhas',quant:350,unid:'ha'},
+  {item:'3.34',cat:'vegetacao',atividade:'Controle químico de plantas daninhas',quant:10,unid:'ha'},
+  {item:'3.35',cat:'vegetacao',atividade:'Corte de gramados',quant:500,unid:'ha'},
+  {item:'3.36',cat:'vegetacao',atividade:'Remoção de aparas e outros materiais',quant:500,unid:'ha'},
+  {item:'3.37',cat:'vegetacao',atividade:'Roçada geral',quant:320,unid:'ha'},
+  {item:'3.38',cat:'maquinario',atividade:'Operação de trator',quant:750,unid:'h/m'},
+  {item:'3.39',cat:'maquinario',atividade:'Manutenção de jardins',quant:12000,unid:'H/h'},
+  {item:'3.40',cat:'maquinario',atividade:'Postos de serviços de jardinagem',quant:4,unid:'mês'},
+  {item:'3.41',cat:'maquinario',atividade:'Serviços eventuais - expediente normal',quant:4500,unid:'H/h'},
+  {item:'3.42',cat:'maquinario',atividade:'Serviços eventuais - extra 50%',quant:70,unid:'H/h'},
+  {item:'3.43',cat:'maquinario',atividade:'Serviços eventuais - extra 100%',quant:120,unid:'H/h'},
+  {item:'3.44',cat:'diarias',atividade:'Diárias de viagem sem pernoite',quant:16,unid:'un'},
+  {item:'3.45',cat:'diarias',atividade:'Diárias de viagem com pernoite',quant:4,unid:'un'},
+  {item:'3.46',cat:'diarias',atividade:'Trator agrícola eventual',quant:640,unid:'h/m'},
+  {item:'3.47',cat:'diarias',atividade:'Caminhão basculante eventual',quant:150,unid:'h/m'},
+  {item:'3.48',cat:'diarias',atividade:'Retroescavadeira eventual',quant:150,unid:'h/m'},
+  {item:'3.49',cat:'insumos',atividade:'Fornecimento de calcáreo dolomítico',quant:12000,unid:'Kg'},
+  {item:'3.50',cat:'insumos',atividade:'Fornecimento de fertilizante mineral',quant:3000,unid:'Kg'},
+  {item:'3.51',cat:'insumos',atividade:'Fornecimento de adubo orgânico',quant:600,unid:'Kg'},
+  {item:'3.52',cat:'insumos',atividade:'Fornecimento de substrato florestal',quant:2000,unid:'Kg'},
+  {item:'3.53',cat:'insumos',atividade:'Fornecimento de casca de pinus polida',quant:150,unid:'Kg'},
+];
+const RBV_CATS=[
+  {id:'mudas',label:'Sementes & Mudas',cor:'var(--green)'},
+  {id:'viveiro',label:'Viveiro & Ornamentais',cor:'var(--blue)'},
+  {id:'rbv',label:'Manutenção RBV',cor:'var(--ochre)'},
+  {id:'solo',label:'Solo & Entulho',cor:'var(--amber)'},
+  {id:'plantio',label:'Plantio & Paisagismo',cor:'var(--green)'},
+  {id:'podas',label:'Podas',cor:'var(--purple)'},
+  {id:'corte',label:'Corte de Árvores',cor:'var(--red)'},
+  {id:'vegetacao',label:'Controle de Vegetação',cor:'var(--ochre)'},
+  {id:'maquinario',label:'Maquinário & Serviços',cor:'var(--blue)'},
+  {id:'diarias',label:'Diárias & Equipamentos',cor:'var(--muted)'},
+  {id:'insumos',label:'Insumos',cor:'var(--faint)'},
+];
+function fmtQuant(n){return n>=1000?`${(n/1000).toFixed(n%1000===0?0:1)}k`:String(n)}
+function renderRbvPage(){
+  // Viveiro
+  const viv=document.getElementById('rbvViveiroContent');
+  if(viv){
+    const vivItems=RBV_ITEMS.filter(x=>x.item==='3.5'||x.item==='3.6');
+    viv.innerHTML=vivItems.map(it=>{
+      const exec=0; const pct=0; // sem dados ainda
+      return `<div class="rbv-viveiro-row">
+        <div class="rbv-viveiro-label">${it.item} · ${it.atividade.replace('florestais','')}<div class="rbv-viveiro-sub">Meta: ${fmtQuant(it.quant)} ${it.unid}</div></div>
+        <div class="rbv-viveiro-bar-wrap">
+          <div class="rbv-viveiro-bar"><div class="rbv-viveiro-bar-fill" style="width:${pct}%"></div></div>
+          <div class="rbv-viveiro-vals"><span class="rbv-viveiro-exec">${exec} ${it.unid} executados</span><span>${pct}%</span></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  // Categorias
+  const cont=document.getElementById('rbvContractContent');
+  if(cont){
+    cont.innerHTML=RBV_CATS.map(cat=>{
+      const itens=RBV_ITEMS.filter(x=>x.cat===cat.id);
+      if(!itens.length)return'';
+      const rows=itens.map(it=>`
+        <div class="rbv-item-row">
+          <span class="rbv-item-num">${it.item}</span>
+          <span class="rbv-item-name" title="${it.atividade}">${it.atividade}</span>
+          <span class="rbv-item-meta">${fmtQuant(it.quant)} ${it.unid}</span>
+          <div class="rbv-item-bar-wrap">
+            <div class="rbv-item-bar"><div class="rbv-item-bar-fill" style="width:0%;background:${cat.cor}"></div></div>
+            <div class="rbv-item-pct">0%</div>
+          </div>
+          <div class="rbv-item-status" style="color:var(--faint)"><i data-lucide="minus"></i></div>
+        </div>`).join('');
+      return `<div class="rbv-cat-group">
+        <div class="rbv-cat-header">
+          <span class="rbv-cat-dot" style="background:${cat.cor}"></span>
+          <span class="rbv-cat-title">${cat.label}</span>
+          <span class="rbv-cat-count">${itens.length} ${itens.length===1?'item':'itens'}</span>
+        </div>
+        ${rows}
+      </div>`;
+    }).join('');
+    lucide.createIcons({nodes:[...document.querySelectorAll('#rbvContractContent [data-lucide]')]});
+  }
+  // KPIs
+  const covEl=document.getElementById('rbvKpiCov');if(covEl)covEl.textContent='0%';
+  const okEl=document.getElementById('rbvKpiOk');if(okEl)okEl.textContent='—';
+  const oppEl=document.getElementById('rbvKpiOpp');if(oppEl)oppEl.textContent='53';
+}
+
 function renderMobileHub(){
   const hub=document.querySelector('.mobile-home-hub'); if(!hub)return;
   const savedTeam=localStorage.getItem('ga-my-team');
@@ -2767,6 +2976,14 @@ function setupUI(){
     localStorage.removeItem('ga-my-team');localStorage.removeItem('ga-my-name');renderMobileHub();
   });
   document.getElementById('hubRefreshBtn')?.addEventListener('click',()=>loadData());
+  document.getElementById('rbvPeriodSeg')?.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('#rbvPeriodSeg button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const lbl=document.getElementById('rbvPeriodLabel');
+      if(lbl)lbl.textContent=btn.dataset.period.charAt(0).toUpperCase()+btn.dataset.period.slice(1);
+    });
+  });
   setInterval(()=>{if(localStorage.getItem('ga-my-team')&&window.innerWidth<=760)renderMobileHub();},30000);
   // botões do card mobile que navegam para páginas
   document.querySelectorAll('.mobile-nav-card [data-page]').forEach(btn=>{
