@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T16:07:52.869Z",
+  "generated_at": "2026-10-15T16:08:49.093Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -38,9 +38,9 @@
     },
     {
       "equipe_id": "EQ04",
-      "equipe": "RBV",
+      "equipe": "RBV: viveiro",
       "lider_tecnico": "Elizabeth Martinez Huergo",
-      "frente_atuacao": "RBV",
+      "frente_atuacao": "RBV: viveiro",
       "qtd_colaboradores": 12,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
@@ -49,9 +49,9 @@
     },
     {
       "equipe_id": "EQ05",
-      "equipe": "RBV",
+      "equipe": "RBV: manutenção",
       "lider_tecnico": "Danilo de Lima",
-      "frente_atuacao": "RBV",
+      "frente_atuacao": "RBV: manutenção",
       "qtd_colaboradores": 12,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
@@ -60,9 +60,9 @@
     },
     {
       "equipe_id": "EQ06",
-      "equipe": "RBV",
+      "equipe": "RBV: Centro Executivo / Gramadão",
       "lider_tecnico": "Celso Luiz Bordim",
-      "frente_atuacao": "RBV",
+      "frente_atuacao": "RBV: Centro Executivo / Gramadão",
       "qtd_colaboradores": 12,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
@@ -1487,6 +1487,53 @@
       "meta": 3000
     }
   ],
-  "weather_api": null,
+  "weather_api": {
+    "fonte": "Open-Meteo",
+    "atualizado": "2026-10-15T13:00",
+    "temperatura": 25.6,
+    "sensacao": 29.7,
+    "precipitacao": 0,
+    "vento_kmh": 8,
+    "codigo_tempo": 1,
+    "condicao": "Parcialmente nublado",
+    "previsao": [
+      {
+        "data": "2026-10-15",
+        "chuva_mm": 2.6,
+        "prob_chuva": 78,
+        "tmax": 26.5,
+        "tmin": 18.9,
+        "codigo": 51,
+        "condicao": "Chuvisco"
+      },
+      {
+        "data": "2026-10-16",
+        "chuva_mm": 0.3,
+        "prob_chuva": 22,
+        "tmax": 26,
+        "tmin": 17.1,
+        "codigo": 51,
+        "condicao": "Chuvisco"
+      },
+      {
+        "data": "2026-10-17",
+        "chuva_mm": 0,
+        "prob_chuva": 2,
+        "tmax": 22.9,
+        "tmin": 14.7,
+        "codigo": 3,
+        "condicao": "Nublado"
+      },
+      {
+        "data": "2026-10-18",
+        "chuva_mm": 0,
+        "prob_chuva": 0,
+        "tmax": 22.6,
+        "tmin": 12.3,
+        "codigo": 2,
+        "condicao": "Parcialmente nublado"
+      }
+    ]
+  },
   "reservatorio": null
 }
