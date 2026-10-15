@@ -2903,10 +2903,16 @@ function renderRbvPage(){
   const lbl=document.getElementById('rbvPeriodLabel');if(lbl)lbl.textContent=periodLabel;
 
   // Execução real por item (state.planning filtra por equipe RBV e cruza com atividade)
+  // Equipes do Refúgio: EQ04 (Viveiro), EQ05 (Manutenção), EQ06 (Jardinagem)
+  const RBV_IDS=new Set(['EQ04','EQ05','EQ06']);
   const rbvEquipes=(state.teams||[]).filter(function(t){
-    return (t.equipe_id||'').toUpperCase().indexOf('RBV')>=0||
-           (t.equipe||'').toUpperCase().indexOf('RBV')>=0||
-           (t.equipe||'').toUpperCase().indexOf('REF')>=0;
+    const id=(t.equipe_id||'').toUpperCase();
+    const nome=(t.equipe||'').toUpperCase();
+    return RBV_IDS.has(id)||
+           id.indexOf('RBV')>=0||id.indexOf('REF')>=0||
+           nome.indexOf('REFÚGIO')>=0||nome.indexOf('REFUGIO')>=0||
+           nome.indexOf('VIVEIRO')>=0||nome.indexOf('JARDIN')>=0||
+           (nome.indexOf('MANUTENÇÃO')>=0&&nome.indexOf('RBV')>=0);
   }).map(function(t){return t.equipe_id;});
   const planRbv=(state.planning||[]).filter(function(r){
     return rbvEquipes.length===0||rbvEquipes.indexOf(r.equipe_id)>=0;
