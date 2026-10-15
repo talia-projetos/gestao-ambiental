@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T16:35:17.168Z",
+  "generated_at": "2026-10-15T16:35:50.243Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -103,11 +103,11 @@
       "atividade": "Corte de gramados e acabamento em frentes gerais de maior prioridade; apoio aos circuitos da UHI e vilas.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva forte, trovoadas e solo encharcado podem impedir corte e roçada.",
       "alternativa_id": "",
       "atividade_alternativa": "Revisão e manutenção de roçadeiras e cortadores sob cobertura; organização de roteiros e equipamentos.",
-      "observacao": "",
+      "observacao": "Competência 2026-10. UHI A: Global. Levantar pendências e priorizar grandes frentes, sem sobrepor medições das demais equipes.",
       "origem_dado": "PROERG"
     },
     {
@@ -120,11 +120,11 @@
       "atividade": "Corte de gramados e acabamento nas Vilas A, B e C; primeira passagem nos setores prioritários.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva forte, trovoadas e solo encharcado podem impedir corte e roçada.",
       "alternativa_id": "",
       "atividade_alternativa": "Preparação e manutenção de máquinas em área coberta; planejamento da sequência de setores das vilas.",
-      "observacao": "",
+      "observacao": "Competência 2026-10. UHI B: Vilas. Organizar roteiros contínuos por setor, com registro de área executada em cada passagem.",
       "origem_dado": "PROERG"
     },
     {
@@ -137,11 +137,11 @@
       "atividade": "Corte de gramados e acabamento nas áreas internas autorizadas da UHI; roçada geral em frentes programadas.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva forte, trovoadas e solo encharcado podem impedir corte e roçada.",
       "alternativa_id": "",
       "atividade_alternativa": "Manutenção de equipamentos sob cobertura e verificação documental das autorizações de acesso.",
-      "observacao": "",
+      "observacao": "Competência 2026-10. UHI C: Usina. Definir setores liberados; preservar restrições de acesso e segurança operacional.",
       "origem_dado": "PROERG"
     },
     {
@@ -154,11 +154,11 @@
       "atividade": "Inventário e manejo de lotes no viveiro RBV; irrigação conforme necessidade, semeadura e repicagem.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva e vento impedem coleta de sementes em campo; monitorar excesso de umidade no viveiro.",
       "alternativa_id": "",
       "atividade_alternativa": "Beneficiamento e organização de sementes e registros de lotes em área interna segura.",
-      "observacao": "",
+      "observacao": "Competência 2026-10. RBV: viveiro. Identificar lotes prioritários, germinação, sanidade e estoque; coleta externa só com autorização.",
       "origem_dado": "PROERG"
     },
     {
@@ -171,11 +171,11 @@
       "atividade": "Inspeção e conservação das trilhas, acessos e estruturas do RBV; correção de riscos prioritários.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva forte, vento e trilhas escorregadias dificultam inspeções e reparos.",
       "alternativa_id": "",
       "atividade_alternativa": "Preparação de materiais e reparos em oficina coberta, desde que autorizados e seguros.",
-      "observacao": "",
+      "observacao": "Competência 2026-10. RBV: manutenção. Interditar e comunicar pontos inseguros; elaborar lista de pendências por trilha.",
       "origem_dado": "PROERG"
     },
     {
@@ -188,11 +188,11 @@
       "atividade": "Jardinagem e conservação de gramados, canteiros e áreas ornamentais do Centro Executivo e Gramadão.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva e solo encharcado impedem serviços em canteiros e corte de gramados.",
       "alternativa_id": "",
       "atividade_alternativa": "Organização de ferramentas e insumos sob cobertura; preparo de mudas e materiais em local seguro.",
-      "observacao": "",
+      "observacao": "Competência 2026-10. RBV: Centro Executivo / Gramadão. Garantir cobertura dos postos fixos; cortes extensos podem demandar apoio UHI.",
       "origem_dado": "PROERG"
     },
     {
@@ -205,11 +205,11 @@
       "atividade": "Conservação diária dos jardins, gramados, canteiros e acessos do Ecomuseu.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva, raios e piso molhado limitam manutenção das áreas de visitação.",
       "alternativa_id": "",
       "atividade_alternativa": "Organização de insumos e manutenção de ferramentas em área coberta.",
-      "observacao": "",
+      "observacao": "Competência 2026-10. Ecomuseu. Mapear pontos de maior circulação e corrigir problemas de apresentação.",
       "origem_dado": "PROERG"
     },
     {
@@ -222,11 +222,11 @@
       "atividade": "Jardinagem e conservação das áreas verdes, canteiros e acessos do CRV.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva, raios e piso molhado limitam manutenção das áreas de visitação.",
       "alternativa_id": "",
       "atividade_alternativa": "Organização de equipamentos e preparo de insumos em área coberta.",
-      "observacao": "",
+      "observacao": "Competência 2026-10. CRV. Priorizar percurso de visitantes, acesso e padrão de apresentação; mirantes apenas por designação.",
       "origem_dado": "PROERG"
     },
     {
@@ -239,11 +239,11 @@
       "atividade": "Corte de gramados em frentes gerais e reforço dos trechos atrasados das equipes UHI; remoção de aparas aplicável.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva acima da média prevista pelo Simepar, temporais e rajadas.",
       "alternativa_id": "",
       "atividade_alternativa": "Manutenção preventiva de equipamentos em local coberto; preparo de insumos e revisão das ordens de serviço.",
-      "observacao": "",
+      "observacao": "Competência 2026-11. UHI A: Global. Redistribuir frentes pelas janelas secas; registrar setores concluídos e pendências.",
       "origem_dado": "PROERG"
     },
     {
@@ -256,11 +256,11 @@
       "atividade": "Corte recorrente dos gramados das Vilas A, B e C e acabamento junto a meios-fios e obstáculos.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva acima da média prevista pelo Simepar, temporais e rajadas.",
       "alternativa_id": "",
       "atividade_alternativa": "Revisão de equipamentos em local coberto; programação de retorno aos setores com solo encharcado.",
-      "observacao": "",
+      "observacao": "Competência 2026-11. UHI B: Vilas. Antecipar cortes antes de sequências chuvosas quando houver condição segura.",
       "origem_dado": "PROERG"
     },
     {
@@ -273,11 +273,11 @@
       "atividade": "Corte recorrente dos gramados internos da usina e roçada em áreas autorizadas, conforme necessidade.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; chuva acima da média prevista pelo Simepar, temporais e rajadas.",
       "alternativa_id": "",
       "atividade_alternativa": "Inspeção e manutenção dos equipamentos em ambiente seguro e preparação das próximas frentes.",
-      "observacao": "",
+      "observacao": "Competência 2026-11. UHI C: Usina. Evitar operação em taludes ou solos saturados; registrar impedimentos de acesso.",
       "origem_dado": "PROERG"
     },
     {
@@ -290,11 +290,11 @@
       "atividade": "Produção e manejo de mudas no viveiro; coleta de sementes apenas quando tecnicamente adequada e autorizada.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; temporais impedem coleta externa e aumentam risco de excesso de umidade nos lotes.",
       "alternativa_id": "",
       "atividade_alternativa": "Triagem de sementes, repicagem e controle de lotes em instalações protegidas.",
-      "observacao": "",
+      "observacao": "Competência 2026-11. RBV: viveiro. Ajustar irrigação à umidade do substrato; interromper coleta de campo sob tempestade.",
       "origem_dado": "PROERG"
     },
     {
@@ -307,11 +307,11 @@
       "atividade": "Manutenção preventiva das trilhas e estruturas do RBV e reparos aprovados.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; temporais e rajadas aumentam risco de queda de galhos e interdição de trilhas.",
       "alternativa_id": "",
       "atividade_alternativa": "Carpintaria ou reparos em área coberta e preparação de materiais, conforme escopo e autorização.",
-      "observacao": "",
+      "observacao": "Competência 2026-11. RBV: manutenção. Não acessar trilhas encharcadas ou sujeitas a queda de árvores durante temporais.",
       "origem_dado": "PROERG"
     },
     {
@@ -324,11 +324,11 @@
       "atividade": "Manutenção diária dos jardins, gramados e canteiros do Centro Executivo e Gramadão.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; temporais e encharcamento restringem jardinagem ao ar livre.",
       "alternativa_id": "",
       "atividade_alternativa": "Preparação de substratos, organização de materiais e manutenção de ferramentas em ambiente protegido.",
-      "observacao": "",
+      "observacao": "Competência 2026-11. RBV: Centro Executivo / Gramadão. Reduzir irrigação após chuva e reprogramar serviços em solo saturado.",
       "origem_dado": "PROERG"
     },
     {
@@ -341,11 +341,11 @@
       "atividade": "Manutenção de jardins e gramados do Ecomuseu; acabamento e retirada de resíduos de jardinagem.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; temporais, vento e queda de galhos podem exigir isolamento de áreas de circulação.",
       "alternativa_id": "",
       "atividade_alternativa": "Preparação de canteiros e insumos em área protegida; revisão das ferramentas.",
-      "observacao": "",
+      "observacao": "Competência 2026-11. Ecomuseu. Executar intervenções ao ar livre somente em períodos seguros e com solo adequado.",
       "origem_dado": "PROERG"
     },
     {
@@ -358,11 +358,11 @@
       "atividade": "Conservação paisagística diária no CRV; corte localizado e acabamento em áreas designadas.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera; temporais, vento e queda de galhos podem exigir isolamento de áreas de circulação.",
       "alternativa_id": "",
       "atividade_alternativa": "Preparação de materiais, manutenção de ferramentas e atualização das pendências em espaço protegido.",
-      "observacao": "",
+      "observacao": "Competência 2026-11. CRV. Programar intervenções sem prejudicar o público; suspender atividade em tempestades.",
       "origem_dado": "PROERG"
     },
     {
@@ -375,11 +375,11 @@
       "atividade": "Corte de gramados em áreas de maior rebrota e reforço operacional às UHI para manter cobertura de dezembro.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera/verão; calor, pancadas intensas, raios e solo encharcado.",
       "alternativa_id": "",
       "atividade_alternativa": "Conferência e afiação de ferramentas em oficina segura; programação das frentes pendentes.",
-      "observacao": "",
+      "observacao": "Competência 2026-12. UHI A: Global. Programar cobertura de férias, feriados e substituições sem perda dos ciclos de corte.",
       "origem_dado": "PROERG"
     },
     {
@@ -392,11 +392,11 @@
       "atividade": "Intensificação do corte dos gramados das vilas e recolhimento das aparas conforme programação.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera/verão; calor, pancadas intensas, raios e solo encharcado.",
       "alternativa_id": "",
       "atividade_alternativa": "Manutenção preventiva dos cortadores e organização de insumos sob cobertura.",
-      "observacao": "",
+      "observacao": "Competência 2026-12. UHI B: Vilas. Reforçar circuitos de maior rebrota e registrar trechos não executados.",
       "origem_dado": "PROERG"
     },
     {
@@ -409,11 +409,11 @@
       "atividade": "Reforço do corte nas áreas internas da UHI e roçada de pontos críticos formalmente liberados.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera/verão; calor, pancadas intensas, raios e solo encharcado.",
       "alternativa_id": "",
       "atividade_alternativa": "Manutenção de roçadeiras e cortadores e conferência das pendências em local coberto.",
-      "observacao": "",
+      "observacao": "Competência 2026-12. UHI C: Usina. Organizar frentes em horários e acessos liberados; não executar com risco elétrico ou tempestade.",
       "origem_dado": "PROERG"
     },
     {
@@ -426,11 +426,11 @@
       "atividade": "Manejo de mudas e sementes, repicagem, rustificação e expedição dos lotes aptos quando solicitados.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Verão próximo; calor, chuva intensa e alta umidade elevam risco fitossanitário e impedem coleta externa.",
       "alternativa_id": "",
       "atividade_alternativa": "Beneficiamento de sementes, inventário e organização dos lotes em ambiente protegido.",
-      "observacao": "",
+      "observacao": "Competência 2026-12. RBV: viveiro. Monitorar excesso de água, calor, doenças e perdas; não presumir expedições sem solicitação.",
       "origem_dado": "PROERG"
     },
     {
@@ -443,11 +443,11 @@
       "atividade": "Conservação de trilhas, drenagens superficiais e estruturas acessíveis; resposta a danos por chuva.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera/verão; chuva intensa e solo saturado elevam risco de erosão, escorregamento e queda de galhos.",
       "alternativa_id": "",
       "atividade_alternativa": "Reparo de mobiliário ou componentes removidos em oficina segura, quando aprovado.",
-      "observacao": "",
+      "observacao": "Competência 2026-12. RBV: manutenção. Inspecionar riscos após tempestades antes de reabrir trechos ao uso.",
       "origem_dado": "PROERG"
     },
     {
@@ -460,11 +460,11 @@
       "atividade": "Jardinagem intensiva, acabamento e conservação paisagística do Centro Executivo e Gramadão.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera/verão; calor, pancadas intensas e solo saturado restringem manejo externo.",
       "alternativa_id": "",
       "atividade_alternativa": "Manutenção de ferramentas, preparo de insumos e organização de mudas em espaço coberto.",
-      "observacao": "",
+      "observacao": "Competência 2026-12. RBV: Centro Executivo / Gramadão. Reforçar apresentação paisagística sem interromper os postos fixos.",
       "origem_dado": "PROERG"
     },
     {
@@ -477,11 +477,11 @@
       "atividade": "Conservação paisagística intensiva das áreas de visitação do Ecomuseu.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera/verão; calor, chuva forte e raios podem interromper jardinagem e serviços junto ao público.",
       "alternativa_id": "",
       "atividade_alternativa": "Preparação de mudas e materiais sob cobertura; manutenção de ferramentas.",
-      "observacao": "",
+      "observacao": "Competência 2026-12. Ecomuseu. Ajustar manutenção ao fluxo de visitantes e às chuvas; não fechar acessos sem alinhamento.",
       "origem_dado": "PROERG"
     },
     {
@@ -494,11 +494,11 @@
       "atividade": "Jardinagem intensiva e manutenção dos gramados, canteiros e acessos do CRV.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Primavera/verão; calor, chuva forte e raios podem interromper jardinagem e serviços junto ao público.",
       "alternativa_id": "",
       "atividade_alternativa": "Organização dos insumos e manutenção preventiva de equipamentos em área coberta.",
-      "observacao": "",
+      "observacao": "Competência 2026-12. CRV. Priorizar circulação segura e apresentação das áreas de visitação no período de maior uso.",
       "origem_dado": "PROERG"
     },
     {
@@ -511,11 +511,11 @@
       "atividade": "Corte de gramados e acabamento nos circuitos gerais; recuperação das frentes adiadas pela chuva.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Verão; calor, umidade, pancadas de chuva e temporais vespertinos (risco sazonal).",
       "alternativa_id": "",
       "atividade_alternativa": "Manutenção de equipamentos sob cobertura e organização dos registros das áreas já executadas.",
-      "observacao": "",
+      "observacao": "Competência 2027-01. UHI A: Global. Priorizar manhãs favoráveis; encerrar pendências do ciclo e conferir quantitativos.",
       "origem_dado": "PROERG"
     },
     {
@@ -528,11 +528,11 @@
       "atividade": "Corte frequente dos gramados nas vilas, acabamento e regularização de áreas pendentes.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Verão; calor, umidade, pancadas de chuva e temporais vespertinos (risco sazonal).",
       "alternativa_id": "",
       "atividade_alternativa": "Oficina de equipamentos e atualização de roteiros em local coberto.",
-      "observacao": "",
+      "observacao": "Competência 2027-01. UHI B: Vilas. Priorizar janelas secas, evitar compactação do solo e controlar retornos pendentes.",
       "origem_dado": "PROERG"
     },
     {
@@ -545,11 +545,11 @@
       "atividade": "Corte de gramados e roçada programada na usina; recuperação de setores adiados por chuva.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Verão; calor, umidade, pancadas de chuva e temporais vespertinos (risco sazonal).",
       "alternativa_id": "",
       "atividade_alternativa": "Revisão técnica de equipamentos sob cobertura e programação de liberação dos setores.",
-      "observacao": "",
+      "observacao": "Competência 2027-01. UHI C: Usina. Atualizar lista de áreas atendidas e pendentes; usar janelas de tempo seguro.",
       "origem_dado": "PROERG"
     },
     {
@@ -562,11 +562,11 @@
       "atividade": "Continuidade do manejo dos lotes, semeadura, repicagem e expedição de mudas aptas.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Verão; calor e umidade elevados exigem controle de irrigação e sanidade; temporais impedem saídas de campo.",
       "alternativa_id": "",
       "atividade_alternativa": "Classificação de sementes, atualização de inventário e registros fitossanitários sob cobertura.",
-      "observacao": "",
+      "observacao": "Competência 2027-01. RBV: viveiro. Reavaliar irrigação e drenagem após chuvas; fechar balanço do período.",
       "origem_dado": "PROERG"
     },
     {
@@ -579,11 +579,11 @@
       "atividade": "Revisão e manutenção contínua de trilhas e estruturas do RBV; encerramento de pendências.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Verão; calor, chuva e enxurradas podem interditar trilhas e restringir manutenção externa.",
       "alternativa_id": "",
       "atividade_alternativa": "Organização de materiais e manutenção de ferramentas em local coberto.",
-      "observacao": "",
+      "observacao": "Competência 2027-01. RBV: manutenção. Priorizar segurança de visitantes e registro das intervenções por local.",
       "origem_dado": "PROERG"
     },
     {
@@ -596,11 +596,11 @@
       "atividade": "Manutenção de jardins, gramados e canteiros e revisão de necessidades de reposição.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Verão; calor e temporais vespertinos exigem ajuste de horários e impedem serviços sob chuva intensa.",
       "alternativa_id": "",
       "atividade_alternativa": "Preparação de materiais e planejamento de reposições autorizadas em local protegido.",
-      "observacao": "",
+      "observacao": "Competência 2027-01. RBV: Centro Executivo / Gramadão. Manejar calor e umidade; controlar pendências por local.",
       "origem_dado": "PROERG"
     },
     {
@@ -613,11 +613,11 @@
       "atividade": "Manutenção contínua dos gramados, jardins, canteiros e acessos do Ecomuseu.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Verão; calor, pancadas intensas e raios exigem interrupção de serviços externos e proteção dos visitantes.",
       "alternativa_id": "",
       "atividade_alternativa": "Organização de materiais e revisão de ferramentas em local coberto.",
-      "observacao": "",
+      "observacao": "Competência 2027-01. Ecomuseu. Encerrar pendências sem comprometer a rotina diária e a segurança dos visitantes.",
       "origem_dado": "PROERG"
     },
     {
@@ -630,11 +630,11 @@
       "atividade": "Manutenção diária das áreas verdes e ornamentais do CRV; conclusão dos trechos pendentes.",
       "unidade": "horas",
       "meta_planejada": "",
-      "status_planejamento": "",
+      "status_planejamento": "PLANEJADO",
       "restricao_principal": "Verão; calor, pancadas intensas e raios exigem interrupção de serviços externos e proteção dos visitantes.",
       "alternativa_id": "",
       "atividade_alternativa": "Preparação de materiais em ambiente protegido e manutenção de ferramentas.",
-      "observacao": "",
+      "observacao": "Competência 2027-01. CRV. Adequar as janelas de serviço a calor, chuva e fluxo de visitantes.",
       "origem_dado": "PROERG"
     },
     {
