@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T16:16:49.258Z",
+  "generated_at": "2026-10-15T16:17:49.919Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -49,9 +49,9 @@
     },
     {
       "equipe_id": "EQ05",
-      "equipe": "RBV: manutenção",
+      "equipe": "RBV: Manutenção",
       "lider_tecnico": "Danilo de Lima",
-      "frente_atuacao": "RBV: manutenção",
+      "frente_atuacao": "RBV: Manutenção",
       "qtd_colaboradores": 12,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
@@ -60,9 +60,9 @@
     },
     {
       "equipe_id": "EQ06",
-      "equipe": "RBV: Centro Executivo / Gramadão",
+      "equipe": "RBV: Jardinagem",
       "lider_tecnico": "Celso Luiz Bordim",
-      "frente_atuacao": "RBV: Centro Executivo / Gramadão",
+      "frente_atuacao": "RBV: Jardinagem",
       "qtd_colaboradores": 12,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
@@ -71,9 +71,9 @@
     },
     {
       "equipe_id": "EQ07",
-      "equipe": "Ecomuseu",
+      "equipe": "",
       "lider_tecnico": "Celso Luiz Bordim",
-      "frente_atuacao": "Ecomuseu",
+      "frente_atuacao": "",
       "qtd_colaboradores": 2,
       "jornada_horas_dia": 6,
       "status": "ATIVA",
