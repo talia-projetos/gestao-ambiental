@@ -3256,61 +3256,115 @@ function renderAtividadesPage(){
   const fator=period==='semanal'?52:period==='mensal'?12:4;
   const periodLabel=period==='semanal'?'Semanal':period==='mensal'?'Mensal':'Trimestral';
   const lbl=document.getElementById('atPeriodLabel');if(lbl)lbl.textContent=periodLabel;
-  // Execução de todas as equipes
-  function normStr(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim();}
-  const execByItem={};
-  RBV_ITEMS.forEach(function(it){
-    var palavras=normStr(it.atividade).split(' ').filter(function(w){return w.length>3;});
-    var total=0;
-    (state.execution||[]).forEach(function(r){
-      var at=normStr(r.atividade||'');
-      var match=palavras.length>0&&palavras.filter(function(w){return at.indexOf(w)>=0;}).length>=Math.ceil(palavras.length*0.5);
-      if(match) total+=parseFloat(r.quantidade_executada||r.horas_executadas)||0;
-    });
-    execByItem[it.item]=total;
+  const m=Number(state.month)||1;
+
+  // Filtro por equipe — selector preenchido dinamicamente
+  const atTeamSel=document.getElementById('atTeamFilter');
+  if(atTeamSel&&!atTeamSel._built){
+    atTeamSel._built=true;
+    atTeamSel.innerHTML='<option value="ALL">Todas as equipes</option>'+(state.teams||[]).map(t=>`<option value="${t.equipe_id}">${t.equipe||t.equipe_id}</option>`).join('');
+    atTeamSel.addEventListener('change',renderAtividadesPage);
+  }
+  const teamF=atTeamSel?.value||'ALL';
+
+  function normStr(s){return(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim();}
+  function fuzzy(palavras,str){const s=normStr(str);return palavras.length>0&&palavras.filter(w=>s.indexOf(w)>=0).length>=Math.ceil(palavras.length*0.5);}
+
+  // Execução e planejamento do mês/equipe
+  const execMes=(state.execution||[]).filter(r=>monthOf(r)===m&&(teamF==='ALL'||r.equipe_id===teamF));
+  const planMes=(state.planning||[]).filter(r=>planMesMatch(r,m)&&(teamF==='ALL'||r.equipe_id===teamF));
+  // Rotinas do mês/equipe — fonte primária de execução diária (campo rotina = nome da rotina)
+  const rotinasMes=(state.rotinas||[]).filter(r=>{
+    const rm=monthOf(r,'data'); const mesOk=rm===m||(rm<=0&&!r.data);
+    return mesOk&&(teamF==='ALL'||(r.equipe_id||'')===teamF);
   });
-  // KPIs
-  const recorrentes=RBV_ITEMS.filter(function(it){return it.freq==='diaria'||it.freq==='semanal';}).length;
-  const eventuais=RBV_ITEMS.filter(function(it){return it.freq==='eventual';}).length;
-  const comDados=RBV_ITEMS.filter(function(it){return execByItem[it.item]>0;}).length;
-  const kp=document.getElementById('atKpiPlan');if(kp)kp.textContent=comDados;
+
+  const execByItem={},planByItem={},rotByItem={},rotRealByItem={};
+  RBV_ITEMS.forEach(it=>{
+    const palavras=normStr(it.atividade).split(' ').filter(w=>w.length>3);
+    execByItem[it.item]=execMes.reduce((s,r)=>fuzzy(palavras,r.atividade||'')?s+(parseFloat(r.quantidade_executada||r.horas_executadas)||0):s,0);
+    planByItem[it.item]=planMes.reduce((s,r)=>fuzzy(palavras,r.atividade||'')?s+(Number(r.quantidade||r.meta_planejada)||0):s,0);
+    // Rotinas: match por item_contrato (ex "3.5") ou por nome (rotina essencial)
+    const rotMatch=rotinasMes.filter(r=>{
+      const ic=normStr(r.item_contrato||'');
+      return ic===it.item||ic.startsWith(it.item+' ')||fuzzy(palavras,r.rotina||'');
+    });
+    rotByItem[it.item]=rotMatch.length;
+    rotRealByItem[it.item]=rotMatch.filter(_rotIsRealizada).length;
+  });
+
+  const comExec=RBV_ITEMS.filter(it=>execByItem[it.item]>0||rotRealByItem[it.item]>0).length;
+  const comPlano=RBV_ITEMS.filter(it=>planByItem[it.item]>0||rotByItem[it.item]>0).length;
+  const recorrentes=RBV_ITEMS.filter(it=>it.freq==='diaria'||it.freq==='semanal').length;
+  const eventuais=RBV_ITEMS.filter(it=>it.freq==='eventual').length;
+  const kp=document.getElementById('atKpiPlan');if(kp)kp.textContent=comPlano+(comExec>0?` / ${comExec} exec.`:'');
   const kr=document.getElementById('atKpiRecorrente');if(kr)kr.textContent=recorrentes;
   const ke=document.getElementById('atKpiEventual');if(ke)ke.textContent=eventuais;
-  // Tabela por categoria
+
   const cont=document.getElementById('atContractContent');
-  if(cont){
-    cont.innerHTML=RBV_CATS.map(cat=>{
-      const itens=RBV_ITEMS.filter(x=>x.cat===cat.id);
-      if(!itens.length)return'';
-      const rows=itens.map(it=>{
-        const meta=it.unid==='mês'?Math.round(it.quant/(period==='trimestral'?3:period==='mensal'?1:0.25)*10)/10:Math.round(it.quant/fator*10)/10;
-        const metaStr=meta<1&&meta>0?`~1`:String(meta<0.1?`<0.1`:fmtQuant(meta));
-        const freqTag=it.freq==='diaria'?'<span class="rbv-rotina-freq diaria" style="margin-left:6px">Diária</span>':it.freq==='semanal'?'<span class="rbv-rotina-freq semanal" style="margin-left:6px">Semanal</span>':'';
-        return `<div class="rbv-item-row" style="flex-wrap:wrap">
-          <span class="rbv-item-num">${it.item}</span>
-          <div style="flex:1;min-width:0">
-            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:2px">
-              <span class="rbv-item-name" title="${it.atividade}">${it.atividade}</span>${freqTag}
-            </div>
-            <div style="font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${it.alt}">&#8627; ${it.alt}</div>
+  if(!cont)return;
+  cont.innerHTML=RBV_CATS.map(cat=>{
+    const itens=RBV_ITEMS.filter(x=>x.cat===cat.id);
+    if(!itens.length)return'';
+    const catComReg=itens.filter(it=>planByItem[it.item]>0||rotByItem[it.item]>0||execByItem[it.item]>0).length;
+    const rows=itens.map(it=>{
+      const meta=it.unid==='mês'?Math.round(it.quant/(period==='trimestral'?3:period==='mensal'?1:0.25)*10)/10:Math.round(it.quant/fator*10)/10;
+      const metaStr=meta<1&&meta>0?'~1':String(meta<0.1?'<0.1':fmtQuant(meta));
+      const exec=execByItem[it.item]||0;
+      const plan=planByItem[it.item]||0;
+      const rot=rotByItem[it.item]||0;
+      const rotReal=rotRealByItem[it.item]||0;
+      const pct=meta>0?Math.min(100,Math.round(exec/meta*100)):0;
+      const planPct=meta>0?Math.min(100,Math.round(plan/meta*100)):0;
+
+      const freqTag=it.freq==='diaria'?'<span class="rbv-rotina-freq diaria" style="margin-left:6px">Diária</span>':it.freq==='semanal'?'<span class="rbv-rotina-freq semanal" style="margin-left:6px">Semanal</span>':'';
+      const rotTag=rot>0?`<span style="font-size:9px;padding:1px 5px;border-radius:4px;margin-left:4px;background:color-mix(in srgb,var(--blue) 10%,transparent);color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 22%,transparent)">${rotReal}/${rot} rot.</span>`:'';
+      const planTag=plan>0&&exec===0&&rot===0?`<span style="font-size:9px;padding:1px 5px;border-radius:4px;margin-left:4px;background:color-mix(in srgb,var(--ochre) 10%,transparent);color:var(--ochre);border:1px solid color-mix(in srgb,var(--ochre) 22%,transparent)">Planejado</span>`:'';
+
+      let barInner,pctLabel,statusIcon,statusColor;
+      if(exec>0){
+        barInner=`<div class="rbv-item-bar-fill" style="width:${pct}%;background:${cat.cor}"></div>`;
+        pctLabel=`${pct}%`;
+        statusIcon=pct>=90?'circle-check':'activity'; statusColor=pct>=90?'var(--green)':pct>=50?'var(--blue)':'var(--ochre)';
+      } else if(rot>0){
+        const rPct=Math.round(rotReal/rot*100);
+        barInner=`<div class="rbv-item-bar-fill" style="width:${rPct}%;background:${cat.cor};opacity:.55"></div>`;
+        pctLabel=`<span style="font-size:9px;color:var(--muted)">${rotReal}/${rot}</span>`;
+        statusIcon=rotReal===rot?'check-circle-2':rotReal>0?'clock':'calendar-clock';
+        statusColor=rotReal===rot?'var(--green)':rotReal>0?'var(--blue)':'var(--muted)';
+      } else if(plan>0){
+        barInner=`<div class="rbv-item-bar-fill" style="width:${planPct}%;background:color-mix(in srgb,${cat.cor} 22%,transparent);border-right:2px dashed color-mix(in srgb,${cat.cor} 55%,transparent)"></div>`;
+        pctLabel=`<span style="font-size:9px;color:var(--muted)">plan.</span>`;
+        statusIcon='calendar-clock'; statusColor='var(--muted)';
+      } else {
+        barInner=''; pctLabel='—'; statusIcon='minus'; statusColor='var(--faint)';
+      }
+
+      return `<div class="rbv-item-row" style="flex-wrap:wrap">
+        <span class="rbv-item-num">${it.item}</span>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:2px">
+            <span class="rbv-item-name" title="${it.atividade}">${it.atividade}</span>${freqTag}${rotTag}${planTag}
           </div>
-          <span class="rbv-item-meta" style="text-align:right">Meta: ${metaStr} ${it.unid}</span>
-          <div class="rbv-item-bar-wrap">
-            <div class="rbv-item-bar"><div class="rbv-item-bar-fill" style="width:0%;background:${cat.cor}"></div></div>
-            <div class="rbv-item-pct">0%</div>
-          </div>
-          <div class="rbv-item-status" style="color:var(--faint)"><i data-lucide="minus"></i></div>
-        </div>`;
-      }).join('');
-      return `<div class="rbv-cat-group">
-        <div class="rbv-cat-header">
-          <span class="rbv-cat-dot" style="background:${cat.cor}"></span>
-          <span class="rbv-cat-title">${cat.label}</span>
-          <span class="rbv-cat-count">${itens.length} ${itens.length===1?'item':'itens'}</span>
-        </div>${rows}</div>`;
+          <div style="font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${it.alt}">&#8627; ${it.alt}</div>
+        </div>
+        <span class="rbv-item-meta" style="text-align:right">Meta: ${metaStr} ${it.unid}</span>
+        <div class="rbv-item-bar-wrap">
+          <div class="rbv-item-bar">${barInner}</div>
+          <div class="rbv-item-pct">${pctLabel}</div>
+        </div>
+        <div class="rbv-item-status" style="color:${statusColor}"><i data-lucide="${statusIcon}"></i></div>
+      </div>`;
     }).join('');
-    lucide.createIcons({nodes:[...document.querySelectorAll('#atContractContent [data-lucide]')]});
-  }
+    return `<div class="rbv-cat-group">
+      <div class="rbv-cat-header">
+        <span class="rbv-cat-dot" style="background:${cat.cor}"></span>
+        <span class="rbv-cat-title">${cat.label}</span>
+        <span class="rbv-cat-count">${itens.length} ${itens.length===1?'item':'itens'}</span>
+        ${catComReg>0?`<span style="font-size:10px;color:var(--muted);margin-left:auto">${catComReg} com registro</span>`:''}
+      </div>${rows}</div>`;
+  }).join('');
+  lucide.createIcons({nodes:[...document.querySelectorAll('#atContractContent [data-lucide]')]});
 }
 function renderRbvPage(){
   const period=document.querySelector('#rbvPeriodSeg button.active')?.dataset.period||'mensal';
