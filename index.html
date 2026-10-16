@@ -2111,16 +2111,17 @@ function renderImpactPage(){
     // Filtra itens com pelo menos algum planejamento ou execução (evita 53 linhas vazias)
     const planAtivs=new Set((state.planning||[]).map(r=>normStr_(r.atividade||'')));
     const execAtivs=new Set(execAll.map(r=>normStr_(r.atividade||'')));
-    const itensComDados=RBV_ITEMS.filter(function(it){
+    const CI_=getContractItems();
+    const itensComDados=CI_.filter(function(it){
       var n=normStr_(it.atividade);
       var palavras=n.split(' ').filter(function(w){return w.length>3;});
       return palavras.some(function(w){
         return [...planAtivs,...execAtivs].some(function(a){return a.indexOf(w)>=0;});
       });
     });
-    const itensExibir=itensComDados.length>0?itensComDados:RBV_ITEMS;
+    const itensExibir=itensComDados.length>0?itensComDados:CI_;
     // Limita a 20 itens se nenhum tiver dados (estado inicial)
-    const itensFinal=execAll.length===0?RBV_ITEMS.slice(0,20):itensExibir;
+    const itensFinal=execAll.length===0?CI_.slice(0,20):itensExibir;
     // Nomes curtos das equipes
     const teamNomes={};
     (state.teams||[]).forEach(function(t){teamNomes[t.equipe_id]=t.equipe||t.equipe_id;});
@@ -2948,7 +2949,16 @@ function updateLeaderDependentFields(){
   const m=Number(state.month);
   // Helper: find RBV item for a planning record
   function normStr(s){return(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim();}
-  function findItem(a){const n=normStr(a);return RBV_ITEMS.find(it=>{const wds=normStr(it.atividade).split(' ').filter(w=>w.length>3);return wds.length&&wds.filter(w=>n.includes(w)).length>=Math.ceil(wds.length*0.5);});}
+  function getContractItems(){
+    const mets=(state.metrics||[]).filter(m=>m.item&&m.atividade);
+    if(!mets.length) return RBV_ITEMS;
+    return mets.map(m=>{
+      const si=RBV_ITEMS.find(r=>r.item===String(m.item))||
+               RBV_ITEMS.find(r=>{const wds=normStr(r.atividade).split(' ').filter(w=>w.length>3);return wds.length&&wds.filter(w=>normStr(String(m.atividade)).includes(w)).length>=Math.ceil(wds.length*0.5);});
+      return {item:String(m.item),atividade:String(m.atividade),quant:Number(m.meta||0),unid:String(m.unidade||si?.unid||'un'),cat:si?.cat||'rbv',freq:si?.freq||'eventual',alt:si?.alt||''};
+    });
+  }
+  function findItem(a){const n=normStr(a);return getContractItems().find(it=>{const wds=normStr(it.atividade).split(' ').filter(w=>w.length>3);return wds.length&&wds.filter(w=>n.includes(w)).length>=Math.ceil(wds.length*0.5);});}
   // Demanda: atividades da equipe como opções curtas
   const acts=uniq(state.planning.filter(p=>p.equipe_id===teamId).map(p=>p.atividade));
   document.getElementById('leaderActivity').innerHTML=acts.map(a=>{const it=findItem(a);const lbl=it?`${it.item} · ${it.atividade.slice(0,50)}`:a.slice(0,60);return`<option value="${a}">${lbl}</option>`;}).join('')+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
@@ -3334,8 +3344,9 @@ function renderAtividadesPage(){
     return mesOk&&(teamF==='ALL'||(r.equipe_id||'')===teamF);
   });
 
+  const CONTRACT_ITEMS=getContractItems();
   const execByItem={},planByItem={},rotByItem={},rotRealByItem={};
-  RBV_ITEMS.forEach(it=>{
+  CONTRACT_ITEMS.forEach(it=>{
     const palavras=normStr(it.atividade).split(' ').filter(w=>w.length>3);
     execByItem[it.item]=execMes.reduce((s,r)=>fuzzy(palavras,r.atividade||'')?s+(parseFloat(r.quantidade_executada||r.horas_executadas)||0):s,0);
     planByItem[it.item]=planMes.reduce((s,r)=>fuzzy(palavras,r.atividade||'')?s+(Number(r.quantidade||r.meta_planejada)||0):s,0);
@@ -3348,10 +3359,10 @@ function renderAtividadesPage(){
     rotRealByItem[it.item]=rotMatch.filter(_rotIsRealizada).length;
   });
 
-  const comExec=RBV_ITEMS.filter(it=>execByItem[it.item]>0||rotRealByItem[it.item]>0).length;
-  const comPlano=RBV_ITEMS.filter(it=>planByItem[it.item]>0||rotByItem[it.item]>0).length;
-  const recorrentes=RBV_ITEMS.filter(it=>it.freq==='diaria'||it.freq==='semanal').length;
-  const eventuais=RBV_ITEMS.filter(it=>it.freq==='eventual').length;
+  const comExec=CONTRACT_ITEMS.filter(it=>execByItem[it.item]>0||rotRealByItem[it.item]>0).length;
+  const comPlano=CONTRACT_ITEMS.filter(it=>planByItem[it.item]>0||rotByItem[it.item]>0).length;
+  const recorrentes=CONTRACT_ITEMS.filter(it=>it.freq==='diaria'||it.freq==='semanal').length;
+  const eventuais=CONTRACT_ITEMS.filter(it=>it.freq==='eventual').length;
   const kp=document.getElementById('atKpiPlan');if(kp)kp.textContent=comPlano+(comExec>0?` / ${comExec} exec.`:'');
   const kr=document.getElementById('atKpiRecorrente');if(kr)kr.textContent=recorrentes;
   const ke=document.getElementById('atKpiEventual');if(ke)ke.textContent=eventuais;
@@ -3359,7 +3370,7 @@ function renderAtividadesPage(){
   const cont=document.getElementById('atContractContent');
   if(!cont)return;
   cont.innerHTML=RBV_CATS.map(cat=>{
-    const itens=RBV_ITEMS.filter(x=>x.cat===cat.id);
+    const itens=CONTRACT_ITEMS.filter(x=>x.cat===cat.id);
     if(!itens.length)return'';
     const catComReg=itens.filter(it=>planByItem[it.item]>0||rotByItem[it.item]>0||execByItem[it.item]>0).length;
     const rows=itens.map(it=>{
