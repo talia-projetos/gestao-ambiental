@@ -3099,43 +3099,45 @@ function updateLeaderDependentFields(){
     demDiv.style.display=demMes.length?'':'none';
     demDiv.innerHTML=demMes.length?`<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px">${demMes.length} demanda${demMes.length>1?'s':''} registrada${demMes.length>1?'s':''} este mês</div>`+demMes.slice(0,4).map(d=>`<div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border)"><span style="width:6px;height:6px;border-radius:50%;background:${urgColors[d.urgencia||d.status_urgencia]||'var(--muted)'};flex-shrink:0"></span><span style="font-size:11px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.descricao||d.tipo_demanda||'Demanda'}</span><span style="font-size:10px;color:var(--muted)">${d.urgencia||''}</span></div>`).join(''):'';
   }
-  // Execução: cards clicáveis com todos os itens do contrato para esta equipe
-  const execLider=t?.lider_tecnico||'';
-  const execLiderFirst=(execLider.split(' ')[0]||'').toLowerCase();
-  const execCI=getContractItems();
-  const myItems=execLiderFirst?execCI.filter(it=>(ITEM_RESP[it.item]||'').toLowerCase().startsWith(execLiderFirst)):execCI;
-  const showItems=myItems.length?myItems:execCI;
+  // Execução: todos os 73 itens do contrato (RBV_ITEMS é fonte de verdade; metrics enriquece unidades)
+  const metUnitMap=Object.fromEntries((state.metrics||[]).filter(r=>r.item).map(r=>[String(r.item),r.unidade||'']));
+  const allExecItems=RBV_ITEMS.map(it=>({...it,unid:metUnitMap[it.item]||it.unid||'un'}));
   const planSet=new Set((state.planning||[]).filter(p=>p.equipe_id===teamId&&planMesMatch(p,m)).map(p=>p.atividade));
-  const catOrder2=['mudas','rbv','solo','plantio','poda','supressao','gramados','jardins','maquinaria','servicos','insumos'];
-  const catLbls2={mudas:'Sementes & Mudas',rbv:'RBV',solo:'Solo & Adubação',plantio:'Plantio & Forração',poda:'Podas & Cortes',supressao:'Supressão & Controle',gramados:'Gramados & Roçada',jardins:'Jardins',maquinaria:'Maquinário',servicos:'Serviços Eventuais',insumos:'Insumos'};
-  const bycat2={};
-  for(const it of showItems){const c=it.cat||'rbv';if(!bycat2[c])bycat2[c]=[];bycat2[c].push(it);}
-  const UNITS=['ha','m²','km','m³','mudas','horas','dias','unidades','relatórios','amostras','pontos','animais','armadilhas','km²'];
+  const planExecItems=allExecItems.filter(it=>planSet.has(it.atividade));
+  const noPlanItems=allExecItems.filter(it=>!planSet.has(it.atividade));
+  const execCatOrder=['mudas','rbv','solo','plantio','poda','supressao','gramados','jardins','maquinaria','servicos','insumos'];
+  const execCatLbls={mudas:'Sementes & Mudas',rbv:'RBV — Trilhas & Edificações',solo:'Solo & Adubação',plantio:'Plantio & Forração',poda:'Podas & Cortes de Árvores',supressao:'Supressão & Controle de Vegetação',gramados:'Gramados & Roçada',jardins:'Jardins & Paisagismo',maquinaria:'Maquinário, Equipamentos & Veículos',servicos:'Serviços Eventuais',insumos:'Fornecimento de Insumos'};
+  const bycatEx={};
+  for(const it of noPlanItems){const c=it.cat||'rbv';if(!bycatEx[c])bycatEx[c]=[];bycatEx[c].push(it);}
+  const EXEC_UNITS=['ha','m²','km','m³','mudas','horas','dias','unidades','relatórios','amostras','pontos','animais','armadilhas','km²'];
   const listEl=document.getElementById('execActivityList');
   if(!listEl)return;
-  if(!showItems.length){listEl.innerHTML='<p style="color:var(--faint);font-size:12px;padding:8px 0">Nenhum item de contrato encontrado para esta equipe.</p>';return;}
+  function mkExecCard(it,planned){
+    const short=it.atividade.length>62?it.atividade.slice(0,62)+'…':it.atividade;
+    const defUnit=it.unid||'unidades';
+    const opts=EXEC_UNITS.map(u=>`<option value="${u}"${u===defUnit?' selected':''}>${u}</option>`).join('');
+    return`<div class="exec-activity-row${planned?' planned':''}" data-activity="${it.atividade}" data-item="${it.item}">
+      <div class="exec-row-header">
+        <div class="exec-check-icon"><i data-lucide="check" style="width:12px;height:12px"></i></div>
+        <div class="exec-item-info"><span class="exec-item-code">${it.item}</span><span class="exec-item-name">${short}</span></div>
+        ${planned?'<span class="exec-planned-badge">plan.</span>':''}
+      </div>
+      <div class="exec-row-inputs" style="display:none">
+        <div><div class="exec-row-mini-label">Quantidade</div><input type="number" class="exec-row-qtd" min="0" step="0.1" placeholder="0"></div>
+        <div><div class="exec-row-mini-label">Unidade</div><select class="exec-row-unidade">${opts}</select></div>
+        <div><div class="exec-row-mini-label">Dias campo</div><input type="number" class="exec-row-dias" min="0" step="0.5" placeholder="0"></div>
+      </div>
+    </div>`;
+  }
   let html2='';
-  for(const cat of catOrder2){
-    if(!bycat2[cat])continue;
-    html2+=`<div class="exec-cat-header">${catLbls2[cat]||cat}</div>`;
-    html2+=bycat2[cat].map(it=>{
-      const planned=planSet.has(it.atividade);
-      const short=it.atividade.length>58?it.atividade.slice(0,58)+'…':it.atividade;
-      const defUnit=it.unid||'unidades';
-      const optsSel=UNITS.map(u=>`<option value="${u}"${u===defUnit?' selected':''}>${u}</option>`).join('');
-      return`<div class="exec-activity-row${planned?' planned':''}" data-activity="${it.atividade}" data-item="${it.item}">
-        <div class="exec-row-header">
-          <div class="exec-check-icon"><i data-lucide="check" style="width:12px;height:12px"></i></div>
-          <div class="exec-item-info"><span class="exec-item-code">${it.item}</span><span class="exec-item-name">${short}</span></div>
-          ${planned?'<span class="exec-planned-badge">plan.</span>':''}
-        </div>
-        <div class="exec-row-inputs" style="display:none">
-          <div><div class="exec-row-mini-label">Quantidade</div><input type="number" class="exec-row-qtd" min="0" step="0.1" placeholder="0" /></div>
-          <div><div class="exec-row-mini-label">Unidade</div><select class="exec-row-unidade">${optsSel}</select></div>
-          <div><div class="exec-row-mini-label">Dias campo</div><input type="number" class="exec-row-dias" min="0" step="0.5" placeholder="0" /></div>
-        </div>
-      </div>`;
-    }).join('');
+  if(planExecItems.length){
+    html2+=`<div class="exec-cat-header" style="color:var(--blue)">Planejado este mês (${planExecItems.length})</div>`;
+    html2+=planExecItems.map(it=>mkExecCard(it,true)).join('');
+  }
+  for(const cat of execCatOrder){
+    if(!bycatEx[cat])continue;
+    html2+=`<div class="exec-cat-header">${execCatLbls[cat]||cat}</div>`;
+    html2+=bycatEx[cat].map(it=>mkExecCard(it,false)).join('');
   }
   listEl.innerHTML=html2;
   lucide.createIcons({nodes:[...listEl.querySelectorAll('[data-lucide]')]});
