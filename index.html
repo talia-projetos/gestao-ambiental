@@ -148,6 +148,33 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .rbv-rotina-grid,.rbv-rotina-item,.rbv-rotina-num,.rbv-rotina-body,.rbv-rotina-name,.rbv-rotina-meta{display:none}
 .rbv-rotina-freq{display:inline-flex;align-items:center;padding:1px 7px;border-radius:8px;font-size:9.5px;font-weight:650;background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 25%,transparent)}
 .rbv-rotina-freq.diaria{background:color-mix(in srgb,var(--green) 12%,transparent);color:#1e7c4a;border-color:color-mix(in srgb,var(--green) 28%,transparent)}
+/* ── Rotinas page ─────────────────────────────────────────── */
+.rot-group{margin-bottom:18px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.rot-group-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface-1);border-bottom:1px solid var(--border)}
+.rot-group-name{font-weight:700;font-size:13px;flex:1}
+.rot-group-stats{font-size:11px;color:var(--muted);white-space:nowrap}
+.rot-group-bar{flex:0 0 80px;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.rot-group-bar-fill{height:100%;background:var(--green);border-radius:3px;transition:width .4s}
+.rot-row{display:grid;grid-template-columns:80px 56px 1fr 120px 110px 88px;gap:8px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--border);font-size:12px}
+.rot-row:last-child{border-bottom:none}
+.rot-row.pend{background:color-mix(in srgb,var(--warn-bg,#FFF8E1) 40%,transparent)}
+.rot-row-date{display:flex;flex-direction:column;gap:1px}
+.rot-row-date strong{font-size:12px}
+.rot-row-date span{font-size:10px;color:var(--muted);text-transform:capitalize}
+.rot-turno{display:inline-flex;align-items:center;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:650;white-space:nowrap}
+.rot-turno.manha{background:color-mix(in srgb,#F59E0B 12%,transparent);color:#B45309;border:1px solid color-mix(in srgb,#F59E0B 28%,transparent)}
+.rot-turno.tarde{background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 25%,transparent)}
+.rot-row-body{min-width:0}
+.rot-row-name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rot-row-foco{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.rot-row-bloc{font-size:10.5px;color:var(--warn,#B45309);display:flex;align-items:center;gap:3px;margin-top:2px}
+.rot-row-bloc [data-lucide]{width:11px;height:11px;flex-shrink:0}
+.rot-row-loc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rot-row-resp{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rot-status{display:inline-flex;align-items:center;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:650;white-space:nowrap}
+.rot-status.ok{background:color-mix(in srgb,var(--green) 14%,transparent);color:#1e7c4a;border:1px solid color-mix(in srgb,var(--green) 28%,transparent)}
+.rot-status.pend{background:color-mix(in srgb,var(--ochre,#D97706) 12%,transparent);color:#92400E;border:1px solid color-mix(in srgb,var(--ochre,#D97706) 25%,transparent)}
+@media(max-width:700px){.rot-row{grid-template-columns:70px 50px 1fr auto;}.rot-row-loc,.rot-row-resp{display:none}}
 
 /* ── Loading screen ─────────────────────────────────────── */
 #loadingScreen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .45s}
@@ -688,6 +715,7 @@ body{font-size:15px}
         <button class="nav-btn" data-page="page-impact" title="Impacto operacional"><i data-lucide="bar-chart-big"></i><span>Impacto</span></button>
         <button class="nav-btn" data-page="page-rbv" title="Refúgio Biológico"><i data-lucide="leaf"></i><span>Refúgio · RBV</span></button>
         <button class="nav-btn" data-page="page-atividades" title="Atividades do Contrato"><i data-lucide="list-checks"></i><span>Atividades</span></button>
+        <button class="nav-btn" data-page="page-rotinas" title="Rotinas operacionais"><i data-lucide="repeat-2"></i><span>Rotinas</span></button>
       </nav>
       <div class="sidebar-bottom">
         <button class="nav-btn" id="settingsBtn" title="Configurações"><i data-lucide="settings-2"></i><span>Configurações</span></button>
@@ -1238,6 +1266,59 @@ body{font-size:15px}
         </article>
 
       </div>
+
+      <!-- ══ ROTINAS ══════════════════════════════════════════════ -->
+      <div id="page-rotinas" class="page">
+        <div class="topbar" style="margin-bottom:12px">
+          <div class="brand-row">
+            <div class="title-wrap">
+              <h1>Rotinas Operacionais</h1>
+              <p>Execução das rotinas diárias e semanais por equipe</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <select id="rotTurnoFilter" class="filter-control" style="min-width:110px">
+              <option value="ALL">Todos os turnos</option>
+              <option value="MANHÃ">Manhã</option>
+              <option value="TARDE">Tarde</option>
+            </select>
+            <select id="rotEquipeFilter" class="filter-control" style="min-width:150px">
+              <option value="ALL">Todas as equipes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:var(--gap)">
+          <div class="kpi-card accent-green">
+            <div class="kpi-head"><span>Realizadas</span><i data-lucide="circle-check"></i></div>
+            <strong id="rotKpiRealizadas">0</strong>
+            <div class="kpi-foot" id="rotKpiAderencia">Aderência: —</div>
+          </div>
+          <div class="kpi-card accent-ochre">
+            <div class="kpi-head"><span>Pendentes</span><i data-lucide="clock-alert"></i></div>
+            <strong id="rotKpiPendentes">0</strong>
+            <div class="kpi-foot" id="rotKpiTotal">Total: 0 rotinas</div>
+          </div>
+          <div class="kpi-card accent-blue">
+            <div class="kpi-head"><span>Turno Manhã</span><i data-lucide="sun"></i></div>
+            <strong id="rotKpiManha">0</strong>
+            <div class="kpi-foot">rotinas no período</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-head"><span>Turno Tarde</span><i data-lucide="moon"></i></div>
+            <strong id="rotKpiTarde">0</strong>
+            <div class="kpi-foot">rotinas no período</div>
+          </div>
+        </div>
+
+        <article class="card" style="padding:18px 24px">
+          <div class="card-header compact" style="margin-bottom:14px">
+            <div><h2>Registro de rotinas</h2><p id="rotSubtitle">Mês atual</p></div>
+          </div>
+          <div id="rotTable"></div>
+        </article>
+      </div>
+      <!-- ══ /ROTINAS ══════════════════════════════════════════════ -->
 
       <footer class="app-footer">
         <span>Proerg · Gestão Ambiental · BP3 Itaipu</span>
@@ -2588,6 +2669,7 @@ function showPage(id){
     if(id==='page-impact'){ renderImpactPage(); }
     if(id==='page-rbv'){ renderRbvPage(); }
     if(id==='page-atividades'){ renderAtividadesPage(); carregarPlanoManutencao(); }
+    if(id==='page-rotinas'){ renderRotinasPage(); }
   },50);
 }
 function renderMobilePlanView(){
@@ -3085,6 +3167,90 @@ function renderPlanoManutencao(){
   }).join('');
 }
 
+function _rotIsRealizada(r){
+  const v=String(r.realizado||r.status||'').toLowerCase().trim();
+  return v==='sim'||v==='s'||v==='1'||v==='true'||v==='realizado'||v==='concluido'||v==='concluída';
+}
+function _rotFmtData(d){
+  if(!d)return'—';
+  const dt=new Date(d);
+  if(isNaN(dt.getTime()))return String(d);
+  return dt.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+}
+function renderRotinasPage(){
+  const turnoF=(document.getElementById('rotTurnoFilter')||{}).value||'ALL';
+  const m=Number(state.month)||1;
+  const allMes=(state.rotinas||[]).filter(r=>{
+    const comp=parseInt(String(r.competencia||'').replace(/\D/g,''))||0;
+    return comp===m||!r.competencia; // sem competencia = mostra tudo se não há dado
+  });
+  // Populate equipe filter once
+  const rotEqEl=document.getElementById('rotEquipeFilter');
+  if(rotEqEl&&rotEqEl.options.length<=1){
+    const equipes=[...new Set(allMes.map(r=>r.equipe||r.equipe_id||'').filter(Boolean))].sort();
+    equipes.forEach(eq=>{const o=document.createElement('option');o.value=eq;o.textContent=eq;rotEqEl.appendChild(o);});
+  }
+  const equipeF=(rotEqEl||{}).value||'ALL';
+  const rows=allMes.filter(r=>{
+    if(turnoF!=='ALL'&&(r.turno||'').toUpperCase()!==turnoF.toUpperCase())return false;
+    if(equipeF!=='ALL'){const k=r.equipe||r.equipe_id||'';if(k!==equipeF)return false;}
+    return true;
+  });
+  const total=rows.length;
+  const realizadas=rows.filter(_rotIsRealizada).length;
+  const pendentes=total-realizadas;
+  const manha=rows.filter(r=>(r.turno||'').toUpperCase()==='MANHÃ').length;
+  const tarde=rows.filter(r=>(r.turno||'').toUpperCase()==='TARDE').length;
+  const aderencia=total>0?Math.round(realizadas/total*100):0;
+  const _el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  _el('rotKpiRealizadas',realizadas);
+  _el('rotKpiAderencia','Aderência: '+aderencia+'%');
+  _el('rotKpiPendentes',pendentes);
+  _el('rotKpiTotal','Total: '+total+' rotinas');
+  _el('rotKpiManha',manha);
+  _el('rotKpiTarde',tarde);
+  _el('rotSubtitle','Mês '+m+(total?' · '+total+' rotinas':' · sem dados')+(equipeF!=='ALL'?' · '+equipeF:'')+(turnoF!=='ALL'?' · '+turnoF:''));
+  const cont=document.getElementById('rotTable');
+  if(!cont)return;
+  if(!total){
+    cont.innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Nenhuma rotina registrada para o período selecionado.</div>';
+    lucide.createIcons({nodes:[...document.querySelectorAll('#page-rotinas [data-lucide]')]});
+    return;
+  }
+  // Group by equipe
+  const byEq={};
+  rows.forEach(r=>{const k=r.equipe||r.equipe_id||'—';if(!byEq[k])byEq[k]=[];byEq[k].push(r);});
+  cont.innerHTML=Object.entries(byEq).map(([eq,itens])=>{
+    const eqReal=itens.filter(_rotIsRealizada).length;
+    const eqTot=itens.length;
+    const eqPct=eqTot>0?Math.round(eqReal/eqTot*100):0;
+    const rowsHtml=itens.map(r=>{
+      const ok=_rotIsRealizada(r);
+      const statusTag=ok?'<span class="rot-status ok">Realizada</span>':'<span class="rot-status pend">Pendente</span>';
+      const turnoUp=(r.turno||'').toUpperCase();
+      const turnoTag=turnoUp==='MANHÃ'?'<span class="rot-turno manha">Manhã</span>':'<span class="rot-turno tarde">Tarde</span>';
+      const foco=r.foco?`<div class="rot-row-foco">${r.foco}</div>`:'';
+      const bloc=r.bloqueador&&!ok?`<div class="rot-row-bloc"><i data-lucide="triangle-alert"></i> ${r.bloqueador}</div>`:'';
+      return `<div class="rot-row${ok?'':' pend'}">
+        <div class="rot-row-date"><strong>${_rotFmtData(r.data)}</strong><span>${r.dia_semana||''}</span></div>
+        ${turnoTag}
+        <div class="rot-row-body"><div class="rot-row-name">${r.rotina||r.os||'—'}</div>${foco}${bloc}</div>
+        <div class="rot-row-loc" title="${r.local||''}">${r.local||'—'}</div>
+        <div class="rot-row-resp" title="${r.responsavel||r.tecnico_itaipu||''}">${r.responsavel||r.tecnico_itaipu||'—'}</div>
+        ${statusTag}
+      </div>`;
+    }).join('');
+    return `<div class="rot-group">
+      <div class="rot-group-header">
+        <span class="rot-group-name">${eq}</span>
+        <span class="rot-group-stats">${eqReal}/${eqTot} realizadas · ${eqPct}%</span>
+        <div class="rot-group-bar"><div class="rot-group-bar-fill" style="width:${eqPct}%"></div></div>
+      </div>
+      <div class="rot-rows">${rowsHtml}</div>
+    </div>`;
+  }).join('');
+  lucide.createIcons({nodes:[...document.querySelectorAll('#rotTable [data-lucide]')]});
+}
 function renderAtividadesPage(){
   const period=document.querySelector('#atPeriodSeg button.active')?.dataset.period||'mensal';
   const fator=period==='semanal'?52:period==='mensal'?12:4;
@@ -3515,6 +3681,8 @@ function setupUI(){
       renderRbvPage();
     });
   });
+  document.getElementById('rotTurnoFilter')?.addEventListener('change',()=>renderRotinasPage());
+  document.getElementById('rotEquipeFilter')?.addEventListener('change',()=>renderRotinasPage());
   setInterval(()=>{if(localStorage.getItem('ga-my-team')&&window.innerWidth<=760)renderMobileHub();},30000);
   // botões do card mobile que navegam para páginas
   document.querySelectorAll('.mobile-nav-card [data-page]').forEach(btn=>{
