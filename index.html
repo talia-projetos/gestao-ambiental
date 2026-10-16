@@ -1640,9 +1640,9 @@ async function loadData(){
   const base=baseR.status==='fulfilled'?baseR.value:null;
   const weather=wxR.status==='fulfilled'?wxR.value:null;
 
-  const {teams=[],planning=[],execution=[],demands=[],blockers=[],climate=[],impact=[],metrics=[],weather_api=null,reservatorio=null}=base||{};
+  const {teams=[],planning=[],execution=[],demands=[],blockers=[],climate=[],impact=[],metrics=[],rotinas=[],weather_api=null,reservatorio=null}=base||{};
   const _normEquipes=typeof window.GA_PADRONIZAR_EQUIPES==='function'?window.GA_PADRONIZAR_EQUIPES:(x=>x);
-  Object.assign(state,{teams:_normEquipes(teams),planning,execution,demands,blockers,climate,impact,metrics,weather_api,reservatorio,weather,scriptUrl:base?.script_url||''});
+  Object.assign(state,{teams:_normEquipes(teams),planning,execution,demands,blockers,climate,impact,metrics,rotinas,weather_api,reservatorio,weather,scriptUrl:base?.script_url||''});
   if(weather)checkWeatherAlerts(weather);
   const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
   // Aplica lista de supressão (demandas deletadas pelo X mas ainda presentes no JSON)
@@ -1674,7 +1674,7 @@ async function loadData(){
   // auto-detectar mês (sequencial): execução > demandas > planejamento > bloqueadores
   const execSeq=state.execution.map(r=>monthOf(r)).filter(m=>m>0);
   const demSeq=state.demands.map(r=>monthOf(r)).filter(m=>m>0);
-  const planSeq=state.planning.map(p=>{const n=Number(p.mes_num);return(n>=1&&n<=PROJECT_MONTHS)?n:0;}).filter(m=>m>0);
+  const planSeq=state.planning.map(p=>{const n=Number(p.mes_num);if(!n)return 0;const seq=n<=12?calToSeq(n):n;return(seq>=1&&seq<=PROJECT_MONTHS)?seq:0;}).filter(m=>m>0);
   const blqSeq=blockers.map(r=>monthOf(r)).filter(m=>m>0);
   const srcMs=execSeq.length?execSeq:demSeq.length?demSeq:planSeq.length?planSeq:blqSeq;
   // Só auto-detecta mês se o usuário não tiver feito seleção manual
@@ -3181,8 +3181,8 @@ function renderRotinasPage(){
   const turnoF=(document.getElementById('rotTurnoFilter')||{}).value||'ALL';
   const m=Number(state.month)||1;
   const allMes=(state.rotinas||[]).filter(r=>{
-    const comp=parseInt(String(r.competencia||'').replace(/\D/g,''))||0;
-    return comp===m||!r.competencia; // sem competencia = mostra tudo se não há dado
+    const rm=monthOf(r,'data');
+    return rm===m||(rm<=0&&!r.data); // sem data válida: inclui tudo (fallback)
   });
   // Populate equipe filter once
   const rotEqEl=document.getElementById('rotEquipeFilter');
