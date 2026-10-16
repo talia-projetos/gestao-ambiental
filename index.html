@@ -2984,9 +2984,22 @@ function updateLeaderDependentFields(){
     });
   }
   function findItem(a){const n=normStr(a);return getContractItems().find(it=>{const wds=normStr(it.atividade).split(' ').filter(w=>w.length>3);return wds.length&&wds.filter(w=>n.includes(w)).length>=Math.ceil(wds.length*0.5);});}
-  // Demanda: atividades da equipe como opções curtas
-  const acts=uniq(state.planning.filter(p=>p.equipe_id===teamId).map(p=>p.atividade));
-  document.getElementById('leaderActivity').innerHTML=acts.map(a=>{const it=findItem(a);const lbl=it?`${it.item} · ${it.atividade.slice(0,50)}`:a.slice(0,60);return`<option value="${a}">${lbl}</option>`;}).join('')+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
+  // Demanda: planejados da equipe no topo + todos os itens de contrato agrupados por categoria
+  const planActs=uniq((state.planning||[]).filter(p=>p.equipe_id===teamId&&planMesMatch(p,m)).map(p=>p.atividade));
+  const CI=getContractItems();
+  const catMap={mudas:'Viveiro / Mudas',viveiro:'Viveiro / Mudas',rbv:'RBV',jardins:'Jardins e paisagismo',gramados:'Gramados e campo',trilhas:'Trilhas e estruturas',supressao:'Supressão vegetal',outros:'Outros serviços'};
+  const catOrder=['mudas','viveiro','rbv','jardins','gramados','trilhas','supressao','outros'];
+  const planHtml=planActs.length
+    ?`<optgroup label="— Planejado este mês —">${planActs.map(a=>{const it=findItem(a);const lbl=it?`${it.item} · ${it.atividade.slice(0,52)}`:a.slice(0,60);return`<option value="${a}">${lbl}</option>`;}).join('')}</optgroup>`
+    :'';
+  const usedCats=new Set(CI.map(x=>x.cat));
+  const allCatsHtml=[...catOrder,...[...usedCats].filter(c=>!catOrder.includes(c))].map(cat=>{
+    const itens=CI.filter(x=>x.cat===cat);
+    if(!itens.length)return'';
+    const label=catMap[cat]||cat;
+    return`<optgroup label="${label}">${itens.map(it=>`<option value="${it.atividade}">${it.item} · ${it.atividade.slice(0,52)}</option>`).join('')}</optgroup>`;
+  }).join('');
+  document.getElementById('leaderActivity').innerHTML=planHtml+allCatsHtml+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
   // Mini resumo das demandas desta equipe no mês
   const demDiv=document.getElementById('demSummaryBox');
   if(demDiv){
