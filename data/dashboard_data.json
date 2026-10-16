@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T17:28:26.475Z",
+  "generated_at": "2026-10-16T17:29:10.065Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -868,39 +868,269 @@
   ],
   "metrics": [
     {
-      "atividade": "Plantio de mudas",
-      "unidade": "mudas",
-      "meta": 5000
+      "atividade": "Identificação de matrizes",
+      "unidade": "un",
+      "meta": 0
     },
     {
-      "atividade": "Revegetação de taludes",
-      "unidade": "ha",
-      "meta": 120
+      "atividade": "Coleta e beneficiamento de sementes - pequenas",
+      "unidade": "kg",
+      "meta": 0
     },
     {
-      "atividade": "Monitoramento de fauna",
-      "unidade": "registros",
-      "meta": 200
+      "atividade": "Coleta e beneficiamento de sementes - médias",
+      "unidade": "kg",
+      "meta": 0
     },
     {
-      "atividade": "Análise de amostras de água",
-      "unidade": "amostras",
-      "meta": 48
+      "atividade": "Coleta e beneficiamento de sementes - grandes",
+      "unidade": "kg",
+      "meta": 0
     },
     {
-      "atividade": "Elaboração de laudos",
-      "unidade": "laudos",
-      "meta": 36
+      "atividade": "Produção de mudas florestais",
+      "unidade": "un",
+      "meta": 0
     },
     {
-      "atividade": "Educação ambiental",
-      "unidade": "pessoas",
-      "meta": 1500
+      "atividade": "Expedição de mudas florestais",
+      "unidade": "un",
+      "meta": 0
     },
     {
-      "atividade": "Controle de erosão",
+      "atividade": "Manejo de plantas ornamentais e produção de hortaliças",
+      "unidade": "mês",
+      "meta": 0
+    },
+    {
+      "atividade": "Transporte de vasos",
+      "unidade": "km",
+      "meta": 0
+    },
+    {
+      "atividade": "Manutenção das trilhas no RBV",
+      "unidade": "mês",
+      "meta": 0
+    },
+    {
+      "atividade": "Serviços complementares no RBV",
+      "unidade": "mês",
+      "meta": 0
+    },
+    {
+      "atividade": "Remoção manual de entulho",
+      "unidade": "m³",
+      "meta": 0
+    },
+    {
+      "atividade": "Remoção mecânica de entulho",
+      "unidade": "m³",
+      "meta": 0
+    },
+    {
+      "atividade": "Regularização manual de superfície",
       "unidade": "m²",
-      "meta": 3000
+      "meta": 0
+    },
+    {
+      "atividade": "Adubação química de árvores e arbustos",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Coroamento",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Preparo de solo para forrações",
+      "unidade": "m²",
+      "meta": 0
+    },
+    {
+      "atividade": "Plantio de plantas de forração",
+      "unidade": "m²",
+      "meta": 0
+    },
+    {
+      "atividade": "Plantio de palmeiras e árvores para paisagismo",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Plantio de arbustos e semi-arbustos/herbáceas",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Transplante de palmeiras e árvores",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Fornecimento e plantio de grama Esmeralda (Zoyzia japonica) em leivas",
+      "unidade": "m²",
+      "meta": 0
+    },
+    {
+      "atividade": "Fornecimento e plantio de grama São Carlos (Axonopus compressus) em leivas",
+      "unidade": "m²",
+      "meta": 0
+    },
+    {
+      "atividade": "Irrigação de mudas com utilização de equipamento",
+      "unidade": "h/m",
+      "meta": 0
+    },
+    {
+      "atividade": "Poda de árvores - Formação",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Poda de árvores - Limpeza",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Poda de árvores - Drástica",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Poda de palmeiras - Limpeza",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Poda de arbusto",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Poda de cerca viva",
+      "unidade": "m",
+      "meta": 0
+    },
+    {
+      "atividade": "Corte de árvores com até 0,40 m de diâmetro",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Corte de árvores entre 0,41 m e 0,70 m de diâmetro",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Limpeza de cerca",
+      "unidade": "m",
+      "meta": 0
+    },
+    {
+      "atividade": "Controle manual de plantas daninhas",
+      "unidade": "ha",
+      "meta": 0
+    },
+    {
+      "atividade": "Controle químico de plantas daninhas",
+      "unidade": "ha",
+      "meta": 0
+    },
+    {
+      "atividade": "Corte de gramados",
+      "unidade": "ha",
+      "meta": 0
+    },
+    {
+      "atividade": "Remoção de aparas e outros materiais",
+      "unidade": "ha",
+      "meta": 0
+    },
+    {
+      "atividade": "Roçada geral",
+      "unidade": "ha",
+      "meta": 0
+    },
+    {
+      "atividade": "Operação de trator",
+      "unidade": "h/m",
+      "meta": 0
+    },
+    {
+      "atividade": "Manutenção de jardins",
+      "unidade": "H/h",
+      "meta": 0
+    },
+    {
+      "atividade": "Postos de serviços de jardinagem",
+      "unidade": "mês",
+      "meta": 0
+    },
+    {
+      "atividade": "Serviços eventuais expediente normal",
+      "unidade": "H/h",
+      "meta": 0
+    },
+    {
+      "atividade": "Serviços eventuais expediente extraordinário 50%",
+      "unidade": "H/h",
+      "meta": 0
+    },
+    {
+      "atividade": "Serviços eventuais expediente extraordinário 100%",
+      "unidade": "H/h",
+      "meta": 0
+    },
+    {
+      "atividade": "Diárias de viagem sem pernoite",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Diárias de viagem com pernoite",
+      "unidade": "un",
+      "meta": 0
+    },
+    {
+      "atividade": "Trator agrícola",
+      "unidade": "h/m",
+      "meta": 0
+    },
+    {
+      "atividade": "Caminhão basculante",
+      "unidade": "h/m",
+      "meta": 0
+    },
+    {
+      "atividade": "Retroescavadeira",
+      "unidade": "h/m",
+      "meta": 0
+    },
+    {
+      "atividade": "Fornecimento de calcáreo dolomítico",
+      "unidade": "kg",
+      "meta": 0
+    },
+    {
+      "atividade": "Fornecimento de fertilizante mineral",
+      "unidade": "kg",
+      "meta": 0
+    },
+    {
+      "atividade": "Fornecimento de adubo orgânico",
+      "unidade": "kg",
+      "meta": 0
+    },
+    {
+      "atividade": "Fornecimento de substrato florestal a base de casca de pinus",
+      "unidade": "kg",
+      "meta": 0
+    },
+    {
+      "atividade": "Fornecimento de casca de pinus polida",
+      "unidade": "kg",
+      "meta": 0
     }
   ],
   "rotinas": [
