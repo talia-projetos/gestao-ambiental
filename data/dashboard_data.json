@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T18:42:12.273Z",
+  "generated_at": "2026-10-16T18:43:15.802Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -34318,7 +34318,7 @@
       {
         "data": "2026-10-16",
         "chuva_mm": 0,
-        "prob_chuva": 33,
+        "prob_chuva": 8,
         "tmax": 26.2,
         "tmin": 17.5,
         "codigo": 3,
@@ -34327,9 +34327,9 @@
       {
         "data": "2026-10-17",
         "chuva_mm": 0,
-        "prob_chuva": 0,
-        "tmax": 24,
-        "tmin": 14.7,
+        "prob_chuva": 2,
+        "tmax": 24.1,
+        "tmin": 14.6,
         "codigo": 3,
         "condicao": "Nublado"
       },
@@ -34338,7 +34338,7 @@
         "chuva_mm": 0,
         "prob_chuva": 0,
         "tmax": 22.3,
-        "tmin": 12.6,
+        "tmin": 12.5,
         "codigo": 2,
         "condicao": "Parcialmente nublado"
       },
