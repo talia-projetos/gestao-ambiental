@@ -638,15 +638,38 @@ body{font-size:15px}
 .title-wrap h1{font-size:18px!important}
 .card-header p{font-size:11px!important}
 /* Execução multi-atividade */
-.exec-activity-row{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;transition:border-color .15s,background .15s}
-.exec-activity-row.row-checked{background:color-mix(in srgb,var(--green) 8%,var(--surface));border-color:color-mix(in srgb,var(--green) 30%,var(--border))}
-.exec-row-check{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
-.exec-row-check input[type="checkbox"]{width:17px;height:17px;accent-color:var(--green);cursor:pointer;flex:none}
-.exec-row-check span{font-size:12.5px;font-weight:500;color:var(--text);flex:1;line-height:1.35}
-.exec-row-inputs{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.exec-cat-header{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:10px 2px 4px;margin-top:2px}
+.exec-cat-header:first-child{padding-top:0}
+.exec-activity-row{background:var(--surface-2);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;transition:border-color .15s,background .15s;user-select:none}
+.exec-activity-row.planned{border-left:3px solid color-mix(in srgb,var(--blue) 45%,var(--border))}
+.exec-activity-row.row-checked{background:color-mix(in srgb,var(--green) 8%,var(--surface));border-color:color-mix(in srgb,var(--green) 40%,var(--border))}
+.exec-activity-row.row-checked.planned{border-left-color:var(--green)}
+.exec-row-header{display:flex;align-items:center;gap:9px;pointer-events:none}
+.exec-check-icon{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;color:transparent}
+.exec-activity-row.row-checked .exec-check-icon{background:var(--green);border-color:var(--green);color:#fff}
+.exec-item-info{flex:1;display:flex;align-items:center;gap:6px;min-width:0}
+.exec-item-code{font-size:9.5px;font-weight:700;color:var(--muted);background:var(--surface-1);border:1px solid var(--border);padding:1px 5px;border-radius:4px;flex-shrink:0;white-space:nowrap}
+.exec-item-name{font-size:12.5px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exec-planned-badge{font-size:9px;font-weight:700;color:var(--blue);background:color-mix(in srgb,var(--blue) 10%,transparent);border:1px solid color-mix(in srgb,var(--blue) 25%,transparent);padding:1px 5px;border-radius:4px;flex-shrink:0}
+.exec-row-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);pointer-events:all}
 .exec-row-mini-label{font-size:10px;color:var(--muted);font-weight:600;margin-bottom:4px}
-.exec-row-inputs input,.exec-row-inputs select{width:100%;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:10px;padding:7px 10px;font:inherit;font-size:12px;outline:none}
+.exec-row-inputs input,.exec-row-inputs select{width:100%;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:10px;padding:7px 10px;font:inherit;font-size:12px;outline:none;box-sizing:border-box}
 .exec-row-inputs input:focus,.exec-row-inputs select:focus{border-color:var(--blue)}
+/* DMS input */
+.dms-area{margin-top:10px;padding:8px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px}
+.dms-area summary{font-size:11.5px;color:var(--muted);cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px}
+.dms-area summary::-webkit-details-marker{display:none}
+.dms-area summary::before{content:'▶';font-size:8px;transition:transform .15s;flex-shrink:0}
+.dms-area[open] summary::before{transform:rotate(90deg)}
+.dms-row{display:flex;align-items:center;gap:4px;margin-top:8px;font-size:12px;color:var(--text)}
+.dms-row>span{color:var(--muted);font-size:11px;width:24px;font-weight:600;flex-shrink:0}
+.dms-row .dms-sym{width:auto;font-weight:400;color:var(--muted)}
+.dms-row input[type="number"]{width:46px;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;padding:5px 4px;font:inherit;font-size:12px;outline:none;text-align:center;-moz-appearance:textfield}
+.dms-row input[type="number"]::-webkit-outer-spin-button,.dms-row input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none}
+.dms-row select{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;padding:5px 6px;font:inherit;font-size:12px;outline:none}
+.dms-row input:focus,.dms-row select:focus{border-color:var(--blue)}
+.dms-confirm-btn{margin-top:8px;width:100%;padding:6px;border:1px solid var(--blue);background:color-mix(in srgb,var(--blue) 10%,transparent);color:var(--blue);border-radius:8px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:background .12s}
+.dms-confirm-btn:hover{background:color-mix(in srgb,var(--blue) 18%,transparent)}
 /* Medium sidebar: ícones sem texto (reforço após redesign CSS) */
 @media(min-width:761px) and (max-width:960px){
   .nav-btn span,.brand-text,.sidebar-label,.sidebar-divider{display:none!important}
@@ -1438,14 +1461,39 @@ body{font-size:15px}
               </div>
             </div>
             <input id="leaderCoords" type="hidden" data-lat="" data-lon="" />
+            <details class="dms-area" id="dmsArea">
+              <summary>Inserir coordenadas manualmente (GMS)</summary>
+              <div class="dms-row">
+                <span>Lat</span>
+                <input id="dmsLatD" type="number" placeholder="DD" min="0" max="90"><span class="dms-sym">°</span>
+                <input id="dmsLatM" type="number" placeholder="MM" min="0" max="59"><span class="dms-sym">′</span>
+                <input id="dmsLatS" type="number" placeholder="SS.ss" min="0" max="60" step="0.01"><span class="dms-sym">"</span>
+                <select id="dmsLatH"><option value="S">S</option><option value="N">N</option></select>
+              </div>
+              <div class="dms-row">
+                <span>Lon</span>
+                <input id="dmsLonD" type="number" placeholder="DDD" min="0" max="180"><span class="dms-sym">°</span>
+                <input id="dmsLonM" type="number" placeholder="MM" min="0" max="59"><span class="dms-sym">′</span>
+                <input id="dmsLonS" type="number" placeholder="SS.ss" min="0" max="60" step="0.01"><span class="dms-sym">"</span>
+                <select id="dmsLonH"><option value="O">O</option><option value="L">L</option></select>
+              </div>
+              <button type="button" class="dms-confirm-btn" id="dmsConfirmBtn">Confirmar coordenadas</button>
+            </details>
           </label>
           <label class="field-label full">Foto da ocorrência
             <div class="photo-capture-area">
-              <button type="button" class="gps-btn" id="demandPhotoBtn">
-                <i data-lucide="camera"></i>
-                <span id="demandPhotoBtnLabel">Adicionar foto</span>
-              </button>
+              <div style="display:flex;gap:7px">
+                <button type="button" class="gps-btn" id="demandCameraBtn" style="flex:1">
+                  <i data-lucide="camera"></i>
+                  <span>Câmera</span>
+                </button>
+                <button type="button" class="gps-btn" id="demandFileBtn" style="flex:1">
+                  <i data-lucide="paperclip"></i>
+                  <span>Galeria / arquivo</span>
+                </button>
+              </div>
               <input id="demandPhotoInput" type="file" accept="image/*" capture="environment" style="display:none">
+              <input id="demandFileInput" type="file" accept="image/*" style="display:none">
               <div class="photo-preview" id="demandPhotoPreview">
                 <img id="demandPhotoImg" alt="Foto da demanda">
                 <button type="button" class="photo-remove-btn" id="demandPhotoRemove" title="Remover foto">
@@ -1713,7 +1761,7 @@ async function loadData(){
   const blqSeq=blockers.map(r=>monthOf(r)).filter(m=>m>0);
   const srcMs=execSeq.length?execSeq:demSeq.length?demSeq:planSeq.length?planSeq:blqSeq;
   // Só auto-detecta mês se o usuário não tiver feito seleção manual
-  if(srcMs.length&&!state._monthManual){state.month=Math.max(...srcMs);const mf=document.getElementById('monthFilter');if(mf)mf.value=state.month;}
+  if(!state._monthManual){const todaySeq=calToSeq(new Date().getMonth()+1);state.month=(todaySeq>=1&&todaySeq<=PROJECT_MONTHS)?todaySeq:1;const mf=document.getElementById('monthFilter');if(mf)mf.value=state.month;}
   populateTeamFilter(); renderAll(); updateDemandMarkers(); renderMobileHub();
   const ls=document.getElementById('loadingScreen'); if(ls){const _lsDelay=Math.max(0,5000-(Date.now()-_lsStart));setTimeout(()=>{ls.classList.add('hidden');setTimeout(()=>ls.remove(),500);},_lsDelay);}
   if(lu)lu.textContent=`${state.teams.length} equipes · ${state.demands.length} demandas · atualizado às ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
@@ -3015,44 +3063,54 @@ function updateLeaderDependentFields(){
     demDiv.style.display=demMes.length?'':'none';
     demDiv.innerHTML=demMes.length?`<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px">${demMes.length} demanda${demMes.length>1?'s':''} registrada${demMes.length>1?'s':''} este mês</div>`+demMes.slice(0,4).map(d=>`<div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border)"><span style="width:6px;height:6px;border-radius:50%;background:${urgColors[d.urgencia||d.status_urgencia]||'var(--muted)'};flex-shrink:0"></span><span style="font-size:11px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.descricao||d.tipo_demanda||'Demanda'}</span><span style="font-size:10px;color:var(--muted)">${d.urgencia||''}</span></div>`).join(''):'';
   }
-  // Execução: checkboxes compactos com código + rótulo curto
-  const pendentes=state.planning.filter(p=>p.equipe_id===teamId&&planMesMatch(p,m)&&p.status_planejamento!=='EXECUTADO');
-  const pool=(pendentes.length?pendentes:state.planning.filter(p=>p.equipe_id===teamId));
-  const metaMap=Object.fromEntries((state.metrics||[]).map(r=>[r.atividade,r]));
-  const uniqActs=[...new Map(pool.map(p=>[p.atividade,p])).values()];
+  // Execução: cards clicáveis com todos os itens do contrato para esta equipe
+  const execLider=t?.lider_tecnico||'';
+  const execLiderFirst=(execLider.split(' ')[0]||'').toLowerCase();
+  const execCI=getContractItems();
+  const myItems=execLiderFirst?execCI.filter(it=>(ITEM_RESP[it.item]||'').toLowerCase().startsWith(execLiderFirst)):execCI;
+  const showItems=myItems.length?myItems:execCI;
+  const planSet=new Set((state.planning||[]).filter(p=>p.equipe_id===teamId&&planMesMatch(p,m)).map(p=>p.atividade));
+  const catOrder2=['mudas','rbv','solo','plantio','poda','supressao','gramados','jardins','maquinaria','servicos','insumos'];
+  const catLbls2={mudas:'Sementes & Mudas',rbv:'RBV',solo:'Solo & Adubação',plantio:'Plantio & Forração',poda:'Podas & Cortes',supressao:'Supressão & Controle',gramados:'Gramados & Roçada',jardins:'Jardins',maquinaria:'Maquinário',servicos:'Serviços Eventuais',insumos:'Insumos'};
+  const bycat2={};
+  for(const it of showItems){const c=it.cat||'rbv';if(!bycat2[c])bycat2[c]=[];bycat2[c].push(it);}
+  const UNITS=['ha','m²','km','m³','mudas','horas','dias','unidades','relatórios','amostras','pontos','animais','armadilhas','km²'];
   const listEl=document.getElementById('execActivityList');
-  if(!listEl) return;
-  const UNITS=['ha','km','m²','km²','m³','horas','mudas','animais','armadilhas','pontos','amostras','relatórios','unidades'];
-  const unitOpts=UNITS.map(u=>`<option value="${u}">${u}</option>`).join('');
-  if(!uniqActs.length){
-    listEl.innerHTML='<p style="color:var(--faint);font-size:12px;padding:8px 0">Nenhuma atividade planejada para este mês.</p>';
-  } else {
-    listEl.innerHTML=uniqActs.map(p=>{
-      const it=findItem(p.atividade);
-      const code=it?`<span style="font-size:9px;font-weight:700;color:var(--muted);background:var(--surface-1);border:1px solid var(--border);padding:0 5px;border-radius:4px;margin-right:5px;flex-shrink:0">${it.item}</span>`:'';
-      const lbl=it?it.atividade:p.atividade;
-      const short=lbl.length>60?lbl.slice(0,60)+'…':lbl;
-      return`<div class="exec-activity-row" data-activity="${p.atividade}" style="padding:8px 11px;border-radius:10px">
-        <label class="exec-row-check">
-          <input type="checkbox" value="${p.atividade}" />
-          <span style="display:flex;align-items:center;font-size:12px">${code}${short}</span>
-        </label>
+  if(!listEl)return;
+  if(!showItems.length){listEl.innerHTML='<p style="color:var(--faint);font-size:12px;padding:8px 0">Nenhum item de contrato encontrado para esta equipe.</p>';return;}
+  let html2='';
+  for(const cat of catOrder2){
+    if(!bycat2[cat])continue;
+    html2+=`<div class="exec-cat-header">${catLbls2[cat]||cat}</div>`;
+    html2+=bycat2[cat].map(it=>{
+      const planned=planSet.has(it.atividade);
+      const short=it.atividade.length>58?it.atividade.slice(0,58)+'…':it.atividade;
+      const defUnit=it.unid||'unidades';
+      const optsSel=UNITS.map(u=>`<option value="${u}"${u===defUnit?' selected':''}>${u}</option>`).join('');
+      return`<div class="exec-activity-row${planned?' planned':''}" data-activity="${it.atividade}" data-item="${it.item}">
+        <div class="exec-row-header">
+          <div class="exec-check-icon"><i data-lucide="check" style="width:12px;height:12px"></i></div>
+          <div class="exec-item-info"><span class="exec-item-code">${it.item}</span><span class="exec-item-name">${short}</span></div>
+          ${planned?'<span class="exec-planned-badge">plan.</span>':''}
+        </div>
         <div class="exec-row-inputs" style="display:none">
-          <div><div class="exec-row-mini-label">Métrica</div><select class="exec-row-unidade">${unitOpts}</select></div>
-          <div><div class="exec-row-mini-label">Quantidade</div><input type="number" class="exec-row-qtd" min="0" step="0.1" placeholder="ex: 12" /></div>
-          <div><div class="exec-row-mini-label">Dias campo</div><input type="number" class="exec-row-dias" min="0" step="0.5" placeholder="ex: 2" /></div>
+          <div><div class="exec-row-mini-label">Quantidade</div><input type="number" class="exec-row-qtd" min="0" step="0.1" placeholder="0" /></div>
+          <div><div class="exec-row-mini-label">Unidade</div><select class="exec-row-unidade">${optsSel}</select></div>
+          <div><div class="exec-row-mini-label">Dias campo</div><input type="number" class="exec-row-dias" min="0" step="0.5" placeholder="0" /></div>
         </div>
       </div>`;
     }).join('');
-    listEl.querySelectorAll('.exec-activity-row').forEach((row,i)=>{
-      const def=metaMap[uniqActs[i].atividade]?.unidade||uniqActs[i].unidade||'unidades';
-      const sel=row.querySelector('.exec-row-unidade'); if(sel) sel.value=def;
-      row.querySelector('input[type="checkbox"]').addEventListener('change',ev=>{
-        row.classList.toggle('row-checked',ev.target.checked);
-        row.querySelector('.exec-row-inputs').style.display=ev.target.checked?'grid':'none';
-      });
-    });
   }
+  listEl.innerHTML=html2;
+  lucide.createIcons({nodes:[...listEl.querySelectorAll('[data-lucide]')]});
+  listEl.querySelectorAll('.exec-activity-row').forEach(row=>{
+    row.addEventListener('click',e=>{
+      if(e.target.closest('.exec-row-inputs'))return;
+      const checked=row.classList.toggle('row-checked');
+      row.querySelector('.exec-row-inputs').style.display=checked?'grid':'none';
+      if(checked)lucide.createIcons({nodes:[...row.querySelectorAll('[data-lucide]')]});
+    });
+  });
 }
 function toggleLeaderMode(mode){
   const isDem=mode==='demanda';
@@ -3784,13 +3842,6 @@ function saveLocalLeaderRecord(e){
   note.textContent='Enviando…';
   const finalize=(ok)=>{
     state.demands.push(demand); state.impact.push(impact);
-    // Garante que o mês exibido corresponde ao mês da nova demanda
-    const dm=monthOf(demand);
-    if(dm>0 && dm!==Number(state.month)){
-      state.month=dm;
-      const mf=document.getElementById('monthFilter');
-      if(mf)mf.value=dm;
-    }
     renderAll(); updateDemandMarkers();
     const descPreview=(demand.descricao||'').slice(0,80)+(demand.descricao?.length>80?'…':'');
     addNotification('form',`Demanda registrada — ${team?.lider_tecnico||teamId}`,`${demand.atividade_sugerida}${descPreview?' · '+descPreview:''}`);
@@ -3941,37 +3992,52 @@ function setupUI(){
     },{enableHighAccuracy:true,timeout:12000});
   });
   document.getElementById('clearGpsBtn')?.addEventListener('click',resetGps);
-  // Foto da demanda
-  const photoBtn=document.getElementById('demandPhotoBtn');
-  const photoInput=document.getElementById('demandPhotoInput');
+  // Foto da demanda (câmera OU galeria/arquivo)
+  const photoInputCam=document.getElementById('demandPhotoInput');
+  const photoInputFile=document.getElementById('demandFileInput');
   const photoPreview=document.getElementById('demandPhotoPreview');
   const photoImg=document.getElementById('demandPhotoImg');
-  const photoBtnLabel=document.getElementById('demandPhotoBtnLabel');
   function clearDemandPhoto(){
-    photoInput.value='';
+    photoInputCam.value=''; photoInputFile.value='';
     photoImg.src='';
     photoPreview.style.display='none';
-    photoBtn.classList.remove('captured');
-    if(photoBtnLabel) photoBtnLabel.textContent='Adicionar foto';
-    delete photoInput.dataset.base64;
+    delete photoInputCam.dataset.base64;
   }
   state.clearDemandPhoto=clearDemandPhoto;
-  photoBtn?.addEventListener('click',()=>photoInput.click());
-  photoInput?.addEventListener('change',function(){
-    const file=this.files[0];
-    if(!file) return;
+  function handlePhotoFile(input){
+    const file=input.files[0];
+    if(!file)return;
     const reader=new FileReader();
-    reader.onload=function(e){
-      photoImg.src=e.target.result;
+    reader.onload=ev=>{
+      photoImg.src=ev.target.result;
       photoPreview.style.display='block';
-      photoBtn.classList.add('captured');
-      if(photoBtnLabel) photoBtnLabel.textContent='Foto adicionada — clique para trocar';
-      photoInput.dataset.base64=e.target.result;
+      photoInputCam.dataset.base64=ev.target.result;
+      lucide.createIcons({nodes:[...photoPreview.querySelectorAll('[data-lucide]')]});
     };
     reader.readAsDataURL(file);
-    lucide.createIcons({nodes:[...photoPreview.querySelectorAll('[data-lucide]')]});
-  });
+  }
+  document.getElementById('demandCameraBtn')?.addEventListener('click',()=>photoInputCam.click());
+  document.getElementById('demandFileBtn')?.addEventListener('click',()=>photoInputFile.click());
+  photoInputCam?.addEventListener('change',function(){handlePhotoFile(this);});
+  photoInputFile?.addEventListener('change',function(){handlePhotoFile(this);});
   document.getElementById('demandPhotoRemove')?.addEventListener('click',clearDemandPhoto);
+  // Coordenadas manuais GMS
+  document.getElementById('dmsConfirmBtn')?.addEventListener('click',()=>{
+    const dv=id=>Number(document.getElementById(id)?.value)||0;
+    const latD=dv('dmsLatD'),latM=dv('dmsLatM'),latS=dv('dmsLatS');
+    const lonD=dv('dmsLonD'),lonM=dv('dmsLonM'),lonS=dv('dmsLonS');
+    if(!latD&&!latM&&!latS&&!lonD&&!lonM&&!lonS)return;
+    const latH=document.getElementById('dmsLatH')?.value||'S';
+    const lonH=document.getElementById('dmsLonH')?.value||'O';
+    const lat=((latD+latM/60+latS/3600)*(latH==='S'?-1:1)).toFixed(6);
+    const lon=((lonD+lonM/60+lonS/3600)*(lonH==='O'?-1:1)).toFixed(6);
+    gpsHidden.dataset.lat=lat; gpsHidden.dataset.lon=lon;
+    gpsBtn.classList.remove('capturing'); gpsBtn.classList.add('captured');
+    gpsLabel.textContent='Coordenadas inseridas manualmente';
+    gpsCoordsText.textContent=`${lat}, ${lon} (GMS)`;
+    gpsResult.classList.add('visible');
+    document.getElementById('dmsArea')?.removeAttribute('open');
+  });
   const mfEl=document.getElementById('monthFilter');
   mfEl.innerHTML=Array.from({length:PROJECT_MONTHS},(_,i)=>`<option value="${i+1}">${mesNumLabel(i+1)}</option>`).join('');
   mfEl.value=state.month;
