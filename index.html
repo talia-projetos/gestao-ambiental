@@ -80,6 +80,10 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .gps-result span{flex:1;font-variant-numeric:tabular-nums}
 .gps-result.visible{display:flex}
 .photo-capture-area{display:flex;flex-direction:column;gap:8px}
+.local-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.loc-chip{padding:4px 11px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:background .12s,border-color .12s,color .12s;white-space:nowrap;font-family:inherit}
+.loc-chip:hover{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 8%,transparent);color:var(--blue)}
+.loc-chip.selected{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue);font-weight:650}
 .photo-preview{display:none;position:relative;align-self:flex-start;max-width:100%}
 .photo-preview img{max-width:100%;max-height:180px;border-radius:12px;border:1px solid var(--border);object-fit:cover;display:block}
 .photo-remove-btn{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
@@ -1390,6 +1394,24 @@ body{font-size:15px}
         <div class="leader-form-grid">
           <label class="field-label full">Demanda surgida
             <select id="leaderActivity" required></select>
+          </label>
+          <label class="field-label full">Local atendido
+            <div class="local-chips" id="localChips">
+              <button type="button" class="loc-chip" data-val="UHI">UHI</button>
+              <button type="button" class="loc-chip" data-val="Centro Executivo">Centro Executivo</button>
+              <button type="button" class="loc-chip" data-val="Gramadão">Gramadão</button>
+              <button type="button" class="loc-chip" data-val="Ecomuseu">Ecomuseu</button>
+              <button type="button" class="loc-chip" data-val="CRV">CRV</button>
+              <button type="button" class="loc-chip" data-val="RBV">RBV</button>
+              <button type="button" class="loc-chip" data-val="Parqtec">Parqtec</button>
+              <button type="button" class="loc-chip" data-val="Vila A">Vila A</button>
+              <button type="button" class="loc-chip" data-val="Vila B">Vila B</button>
+              <button type="button" class="loc-chip" data-val="Vila C">Vila C</button>
+              <button type="button" class="loc-chip" data-val="Av. Tancredo Neves">Av. Tancredo Neves</button>
+              <button type="button" class="loc-chip" data-val="Outro">Outro — qual?</button>
+            </div>
+            <input id="localOutroInput" type="text" placeholder="Especifique o local…" style="display:none;margin-top:7px;width:100%;box-sizing:border-box" />
+            <input id="localAtendido" type="hidden" />
           </label>
           <label class="field-label full">Descrição objetiva
             <textarea id="leaderDescription" placeholder="O que surgiu e o que precisa ser feito?" required></textarea>
@@ -2934,9 +2956,12 @@ function populateLeaderForm(){
   const desc=document.getElementById('leaderDescription'); if(desc) desc.value='';
   const urg=document.getElementById('demandUrgency'); if(urg) urg.value='MÉDIA';
   const note=document.getElementById('leaderFormNote'); if(note){note.textContent='';note.classList.remove('success');}
-  // Reseta GPS e foto — não devem persistir entre aberturas do formulário
+  // Reseta GPS, foto e chips de local
   if(state.resetGps) state.resetGps();
   if(state.clearDemandPhoto) state.clearDemandPhoto();
+  document.querySelectorAll('#localChips .loc-chip').forEach(c=>c.classList.remove('selected'));
+  const localOutro=document.getElementById('localOutroInput');if(localOutro){localOutro.style.display='none';localOutro.value='';}
+  const localHid=document.getElementById('localAtendido');if(localHid)localHid.value='';
   // Limpa campos de execução
   const execObs=document.getElementById('execObs'); if(execObs) execObs.value='';
   const execDate=document.getElementById('execDate'); if(execDate) execDate.value=new Date().toISOString().slice(0,10);
@@ -3674,6 +3699,7 @@ function saveLocalLeaderRecord(e){
   const teamId=document.getElementById('leaderTeam').value;
   const team=state.teams.find(t=>t.equipe_id===teamId);
   const coords=document.getElementById('leaderCoords').dataset;
+  const localAtend=document.getElementById('localAtendido')?.value||'';
   const id='LOCAL-'+Date.now();
   const demand={
     demanda_id:id,
@@ -3685,6 +3711,7 @@ function saveLocalLeaderRecord(e){
     atividade_sugerida:document.getElementById('leaderActivity').value,
     descricao:document.getElementById('leaderDescription').value.trim(),
     prioridade:document.getElementById('demandUrgency').value||'MÉDIA',
+    local_atendido:localAtend,
     status:'ABERTA',
     latitude:coords.lat||'',
     longitude:coords.lon||'',
@@ -3708,7 +3735,7 @@ function saveLocalLeaderRecord(e){
     equipe_id:demand.equipe_id, data:demand.data, tipo:'DEMANDA',
     descricao:demand.descricao, latitude:demand.latitude, longitude:demand.longitude,
     lider:demand.lider_tecnico, observacoes:demand.atividade_sugerida,
-    prioridade:demand.prioridade,
+    prioridade:demand.prioridade, local_atendido:demand.local_atendido,
   };
   const note=document.getElementById('leaderFormNote');
   note.classList.remove('success');
@@ -3819,6 +3846,26 @@ function setupUI(){
   document.getElementById('leaderTeam').addEventListener('change',e=>{updateLeaderDependentFields();const mhs=document.getElementById('mobileHubTeam');if(mhs)mhs.value=e.target.value;});
   document.getElementById('leaderDemandForm').addEventListener('submit',saveLocalLeaderRecord);
   document.querySelectorAll('#leaderModeToggle button').forEach(b=>b.addEventListener('click',()=>toggleLeaderMode(b.dataset.mode)));
+  // Chips: local atendido
+  document.getElementById('localChips').addEventListener('click',e=>{
+    const btn=e.target.closest('.loc-chip');
+    if(!btn)return;
+    document.querySelectorAll('#localChips .loc-chip').forEach(c=>c.classList.remove('selected'));
+    btn.classList.add('selected');
+    const val=btn.dataset.val;
+    const outroInput=document.getElementById('localOutroInput');
+    const hiddenField=document.getElementById('localAtendido');
+    if(val==='Outro'){
+      outroInput.style.display='';
+      outroInput.focus();
+      hiddenField.value='';
+      outroInput.oninput=()=>{ hiddenField.value=outroInput.value.trim()||'Outro'; };
+    } else {
+      outroInput.style.display='none';
+      outroInput.value='';
+      hiddenField.value=val;
+    }
+  });
   const gpsBtn=document.getElementById('captureLocation');
   const gpsLabel=document.getElementById('gpsBtnLabel');
   const gpsHidden=document.getElementById('leaderCoords');
