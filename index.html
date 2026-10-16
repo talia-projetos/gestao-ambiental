@@ -149,31 +149,43 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .rbv-rotina-freq{display:inline-flex;align-items:center;padding:1px 7px;border-radius:8px;font-size:9.5px;font-weight:650;background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 25%,transparent)}
 .rbv-rotina-freq.diaria{background:color-mix(in srgb,var(--green) 12%,transparent);color:#1e7c4a;border-color:color-mix(in srgb,var(--green) 28%,transparent)}
 /* ── Rotinas page ─────────────────────────────────────────── */
-.rot-group{margin-bottom:18px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.rot-group-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface-1);border-bottom:1px solid var(--border)}
-.rot-group-name{font-weight:700;font-size:13px;flex:1}
-.rot-group-stats{font-size:11px;color:var(--muted);white-space:nowrap}
-.rot-group-bar{flex:0 0 80px;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
-.rot-group-bar-fill{height:100%;background:var(--green);border-radius:3px;transition:width .4s}
-.rot-row{display:grid;grid-template-columns:80px 56px 1fr 120px 110px 88px;gap:8px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--border);font-size:12px}
-.rot-row:last-child{border-bottom:none}
-.rot-row.pend{background:color-mix(in srgb,var(--warn-bg,#FFF8E1) 40%,transparent)}
-.rot-row-date{display:flex;flex-direction:column;gap:1px}
-.rot-row-date strong{font-size:12px}
-.rot-row-date span{font-size:10px;color:var(--muted);text-transform:capitalize}
-.rot-turno{display:inline-flex;align-items:center;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:650;white-space:nowrap}
+/* Rotinas — compact monthly overview */
+.rot-turno{display:inline-flex;align-items:center;justify-content:center;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:650;white-space:nowrap;min-width:52px}
 .rot-turno.manha{background:color-mix(in srgb,#F59E0B 12%,transparent);color:#B45309;border:1px solid color-mix(in srgb,#F59E0B 28%,transparent)}
 .rot-turno.tarde{background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 25%,transparent)}
-.rot-row-body{min-width:0}
-.rot-row-name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rot-row-foco{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-.rot-row-bloc{font-size:10.5px;color:var(--warn,#B45309);display:flex;align-items:center;gap:3px;margin-top:2px}
-.rot-row-bloc [data-lucide]{width:11px;height:11px;flex-shrink:0}
-.rot-row-loc{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rot-row-resp{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rot-status{display:inline-flex;align-items:center;padding:1px 7px;border-radius:8px;font-size:10px;font-weight:650;white-space:nowrap}
 .rot-status.ok{background:color-mix(in srgb,var(--green) 14%,transparent);color:#1e7c4a;border:1px solid color-mix(in srgb,var(--green) 28%,transparent)}
 .rot-status.pend{background:color-mix(in srgb,var(--ochre,#D97706) 12%,transparent);color:#92400E;border:1px solid color-mix(in srgb,var(--ochre,#D97706) 25%,transparent)}
+/* Equipe card */
+.rot-eq-card{margin-bottom:10px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.rot-eq-hdr{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--surface-1)}
+.rot-eq-name{font-size:13px;font-weight:700;flex:1;color:var(--text)}
+.rot-eq-track{width:90px;height:5px;background:color-mix(in srgb,var(--border) 70%,transparent);border-radius:3px;flex-shrink:0}
+.rot-eq-fill{height:100%;border-radius:3px;transition:width .35s}
+.rot-eq-stat{font-size:11px;color:var(--muted);white-space:nowrap;min-width:78px;text-align:right}
+/* Bloqueadores */
+.rot-blocs-row{display:flex;flex-wrap:wrap;gap:5px;padding:6px 16px 8px;background:color-mix(in srgb,#D97706 4%,transparent);border-bottom:1px solid color-mix(in srgb,#D97706 14%,transparent)}
+.rot-bloc-tag{display:inline-flex;align-items:flex-start;gap:4px;font-size:10px;color:#92400E;background:color-mix(in srgb,#D97706 8%,transparent);border:1px solid color-mix(in srgb,#D97706 18%,transparent);padding:3px 8px;border-radius:20px;max-width:100%}
+/* Grouped type rows */
+.rot-type-tbl{border-top:1px solid var(--border)}
+.rot-type-thead{display:grid;grid-template-columns:60px 1fr 120px 42px;gap:6px;padding:4px 16px;background:color-mix(in srgb,var(--surface-1) 80%,transparent);border-bottom:1px solid var(--border)}
+.rot-type-row{display:grid;grid-template-columns:60px 1fr 120px 42px;gap:6px;align-items:center;padding:9px 16px;border-bottom:1px solid var(--border)}
+.rot-type-row:last-child{border-bottom:none}
+.rot-type-body{min-width:0}
+.rot-type-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.rot-item-tag{display:inline-block;font-size:9px;background:var(--surface-1);border:1px solid var(--border);color:var(--muted);padding:0 5px;border-radius:4px;margin-top:3px;margin-right:3px}
+.rot-type-local{font-size:10px;color:var(--faint);display:block;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rot-wk-cells{display:flex;gap:3px;align-items:center}
+.rot-wk-cell{width:26px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
+.rot-wk-cell.done{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green)}
+.rot-wk-cell.part{background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue)}
+.rot-wk-cell.pend{background:color-mix(in srgb,var(--border) 90%,transparent);color:var(--faint)}
+.rot-wk-cell.empty{background:transparent;border:1px dashed color-mix(in srgb,var(--border) 60%,transparent)}
+.rot-wk-hdr{display:flex;gap:3px}
+.rot-wk-hdr span{width:26px;text-align:center;font-size:9px;font-weight:700;color:var(--faint);letter-spacing:.02em}
+.rot-type-count{font-size:11px;font-weight:700;text-align:right;color:var(--muted)}
+.rot-type-count.ok{color:var(--green)}
+.rot-type-count.partial{color:var(--blue)}
 @media(max-width:700px){.rot-row{grid-template-columns:70px 50px 1fr auto;}.rot-row-loc,.rot-row-resp{display:none}}
 
 /* ── Loading screen ─────────────────────────────────────── */
@@ -1374,6 +1386,7 @@ body{font-size:15px}
       </div>
 
       <div id="demandSection">
+        <div id="demSummaryBox" style="display:none;background:color-mix(in srgb,var(--ochre) 6%,var(--surface));border:1px solid color-mix(in srgb,var(--ochre) 18%,var(--border));border-radius:10px;padding:10px 14px;margin-bottom:12px"></div>
         <div class="leader-form-grid">
           <label class="field-label full">Demanda surgida
             <select id="leaderActivity" required></select>
@@ -2773,8 +2786,8 @@ function renderAll(){
 }
 
 
-function bp3StateStyle(){ return {color:'#27ae60',weight:1.0,opacity:.8,fillOpacity:0}; }
-function hydroStyle(){ return {color:cssVar('--blue-2'),weight:1.15,opacity:.50}; }
+function bp3StateStyle(){ return {color:'#15803d',weight:1.2,opacity:.9,fillOpacity:0}; }
+function hydroStyle(){ return {color:'#3b82f6',weight:1.3,opacity:.7}; }
 function hydroBhoText(feature){
   const p=feature?.properties||{};
   const keys=['cobacia','COBACIA','cotrecho','COTRECHO','nunivotto','NUNIVOTTO','cocursodag','COCURSODAG','cobaciaotto','COBACIAOTTO'];
@@ -2814,7 +2827,7 @@ function setupMap(){
   state.labelsDark=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',{maxZoom:16,pane:'overlayPane'});
   setMapTheme();
   fetch(IAT_BP3_URL).then(r=>r.json()).then(g=>{
-    state.bp3Layer=L.geoJSON(g,{style:{color:cssVar('--green'),weight:1.8,fillColor:cssVar('--green'),fillOpacity:.04}}).addTo(state.map);
+    state.bp3Layer=L.geoJSON(g,{style:{color:'#15803d',weight:2.5,fillColor:'#15803d',fillOpacity:.05}}).addTo(state.map);
     try{state.map.fitBounds(state.bp3Layer.getBounds(),{padding:[18,18]});}catch(e){}
   }).catch(()=>{ state.map.fitBounds([[-25.5926,-54.6199],[-23.9889,-53.4399]]); });
   fetchArcGISGeoJSON(IAT_HIDRO_BP3_BASE).then(g=>{
@@ -2826,7 +2839,7 @@ function setupMap(){
   state.demandLayer=L.layerGroup().addTo(state.map); updateDemandMarkers();
   // Camadas ITAIPU (locais)
   fetch('data/itaipu_partes.geojson').then(r=>r.json()).then(g=>{
-    state.itaipuPartesLayer=L.geoJSON(g,{style:{color:'#2563eb',weight:1.5,fillColor:'#3b82f6',fillOpacity:.07},
+    state.itaipuPartesLayer=L.geoJSON(g,{style:{color:'#7c3aed',weight:1.8,fillColor:'#8b5cf6',fillOpacity:.1},
       onEachFeature:function(ft,ly){const n=(ft.properties.Name||'Área ITAIPU').replace(/\[.*?\]/g,'').trim();ly.bindTooltip(n,{sticky:true,className:'map-tooltip'});}
     }).addTo(state.map);
     if(state.bp3Layer) state.bp3Layer.bringToFront();
@@ -2848,12 +2861,20 @@ function setMapTheme(){ if(!state.map)return; [state.baseLight,state.labelsLight
 function renderMapLegend(){
   const legend=document.getElementById('mapLegend');
   if(!legend)return;
-  const teamsWithDemands=state.teams.filter(t=>byTeam(state.demands).some(d=>d.equipe_id===t.equipe_id&&d.latitude&&d.longitude));
-  if(!teamsWithDemands.length){legend.innerHTML='';return;}
-  legend.innerHTML=teamsWithDemands.map(t=>{
-    const color=teamColors[t.equipe_id]||'#888';
-    return `<span class="map-legend-item"><span class="map-legend-dot" style="background:${color}"></span>${t.equipe}</span>`;
-  }).join('');
+  const line=(col,label)=>`<span class="map-legend-item"><span style="display:inline-block;width:22px;height:3px;background:${col};border-radius:2px;vertical-align:middle;margin-right:5px"></span>${label}</span>`;
+  const area=(col,label)=>`<span class="map-legend-item"><span style="display:inline-block;width:14px;height:14px;background:${col};border-radius:3px;border:2px solid ${col.replace(/,.*/,'').replace('rgba(','').split(',').slice(0,3).join(',')||col};vertical-align:middle;margin-right:5px"></span>${label}</span>`;
+  const dot=(col,label)=>`<span class="map-legend-item"><span class="map-legend-dot" style="background:${col}"></span>${label}</span>`;
+  const layers=[
+    line('#15803d','Área de concessão BP3'),
+    line('#3b82f6','Hidrografia'),
+    area('rgba(139,92,246,0.18)','Áreas ITAIPU'),
+    area('rgba(34,197,94,0.2)','Gramadão'),
+    area('rgba(249,115,22,0.28)','CRV'),
+  ];
+  const teamsWithDemands=state.teams.filter(t=>(state.demands||[]).some(d=>d.equipe_id===t.equipe_id&&d.latitude&&d.longitude));
+  const demandItems=teamsWithDemands.map(t=>dot(teamColors[t.equipe_id]||'#888',t.equipe||t.equipe_id));
+  const sep=demandItems.length?[`<span style="display:block;width:100%;height:1px;background:var(--border);margin:5px 0"></span>`]:[];
+  legend.innerHTML=[...layers,...sep,...demandItems].join('');
 }
 
 function updateDemandMarkers(){
@@ -2924,11 +2945,22 @@ function updateLeaderDependentFields(){
   const teamId=document.getElementById('leaderTeam').value;
   const t=state.teams.find(x=>x.equipe_id===teamId);
   document.getElementById('leaderName').value=t?.lider_tecnico||'';
-  // Demanda: todas as atividades da equipe
-  const acts=uniq(state.planning.filter(p=>p.equipe_id===teamId).map(p=>p.atividade));
-  document.getElementById('leaderActivity').innerHTML=acts.map(a=>`<option value="${a}">${a}</option>`).join('')+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
-  // Execução: lista de checkboxes com atividades do mês
   const m=Number(state.month);
+  // Helper: find RBV item for a planning record
+  function normStr(s){return(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim();}
+  function findItem(a){const n=normStr(a);return RBV_ITEMS.find(it=>{const wds=normStr(it.atividade).split(' ').filter(w=>w.length>3);return wds.length&&wds.filter(w=>n.includes(w)).length>=Math.ceil(wds.length*0.5);});}
+  // Demanda: atividades da equipe como opções curtas
+  const acts=uniq(state.planning.filter(p=>p.equipe_id===teamId).map(p=>p.atividade));
+  document.getElementById('leaderActivity').innerHTML=acts.map(a=>{const it=findItem(a);const lbl=it?`${it.item} · ${it.atividade.slice(0,50)}`:a.slice(0,60);return`<option value="${a}">${lbl}</option>`;}).join('')+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
+  // Mini resumo das demandas desta equipe no mês
+  const demDiv=document.getElementById('demSummaryBox');
+  if(demDiv){
+    const demMes=(state.demands||[]).filter(d=>d.equipe_id===teamId&&monthOf(d,'data_ocorrencia'||'data')===m);
+    const urgColors={'CRÍTICA':'var(--red)','ALTA':'var(--ochre)','MÉDIA':'var(--blue)','BAIXA':'var(--green)'};
+    demDiv.style.display=demMes.length?'':'none';
+    demDiv.innerHTML=demMes.length?`<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px">${demMes.length} demanda${demMes.length>1?'s':''} registrada${demMes.length>1?'s':''} este mês</div>`+demMes.slice(0,4).map(d=>`<div style="display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border)"><span style="width:6px;height:6px;border-radius:50%;background:${urgColors[d.urgencia||d.status_urgencia]||'var(--muted)'};flex-shrink:0"></span><span style="font-size:11px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.descricao||d.tipo_demanda||'Demanda'}</span><span style="font-size:10px;color:var(--muted)">${d.urgencia||''}</span></div>`).join(''):'';
+  }
+  // Execução: checkboxes compactos com código + rótulo curto
   const pendentes=state.planning.filter(p=>p.equipe_id===teamId&&planMesMatch(p,m)&&p.status_planejamento!=='EXECUTADO');
   const pool=(pendentes.length?pendentes:state.planning.filter(p=>p.equipe_id===teamId));
   const metaMap=Object.fromEntries((state.metrics||[]).map(r=>[r.atividade,r]));
@@ -2940,17 +2972,23 @@ function updateLeaderDependentFields(){
   if(!uniqActs.length){
     listEl.innerHTML='<p style="color:var(--faint);font-size:12px;padding:8px 0">Nenhuma atividade planejada para este mês.</p>';
   } else {
-    listEl.innerHTML=uniqActs.map(p=>`<div class="exec-activity-row" data-activity="${p.atividade}">
-      <label class="exec-row-check">
-        <input type="checkbox" value="${p.atividade}" />
-        <span>${p.atividade}</span>
-      </label>
-      <div class="exec-row-inputs" style="display:none">
-        <div><div class="exec-row-mini-label">Métrica</div><select class="exec-row-unidade">${unitOpts}</select></div>
-        <div><div class="exec-row-mini-label">Quantidade</div><input type="number" class="exec-row-qtd" min="0" step="0.1" placeholder="ex: 12" /></div>
-        <div><div class="exec-row-mini-label">Dias campo</div><input type="number" class="exec-row-dias" min="0" step="0.5" placeholder="ex: 2" /></div>
-      </div>
-    </div>`).join('');
+    listEl.innerHTML=uniqActs.map(p=>{
+      const it=findItem(p.atividade);
+      const code=it?`<span style="font-size:9px;font-weight:700;color:var(--muted);background:var(--surface-1);border:1px solid var(--border);padding:0 5px;border-radius:4px;margin-right:5px;flex-shrink:0">${it.item}</span>`:'';
+      const lbl=it?it.atividade:p.atividade;
+      const short=lbl.length>60?lbl.slice(0,60)+'…':lbl;
+      return`<div class="exec-activity-row" data-activity="${p.atividade}" style="padding:8px 11px;border-radius:10px">
+        <label class="exec-row-check">
+          <input type="checkbox" value="${p.atividade}" />
+          <span style="display:flex;align-items:center;font-size:12px">${code}${short}</span>
+        </label>
+        <div class="exec-row-inputs" style="display:none">
+          <div><div class="exec-row-mini-label">Métrica</div><select class="exec-row-unidade">${unitOpts}</select></div>
+          <div><div class="exec-row-mini-label">Quantidade</div><input type="number" class="exec-row-qtd" min="0" step="0.1" placeholder="ex: 12" /></div>
+          <div><div class="exec-row-mini-label">Dias campo</div><input type="number" class="exec-row-dias" min="0" step="0.5" placeholder="ex: 2" /></div>
+        </div>
+      </div>`;
+    }).join('');
     listEl.querySelectorAll('.exec-activity-row').forEach((row,i)=>{
       const def=metaMap[uniqActs[i].atividade]?.unidade||uniqActs[i].unidade||'unidades';
       const sel=row.querySelector('.exec-row-unidade'); if(sel) sel.value=def;
@@ -3180,11 +3218,7 @@ function _rotFmtData(d){
 function renderRotinasPage(){
   const turnoF=(document.getElementById('rotTurnoFilter')||{}).value||'ALL';
   const m=Number(state.month)||1;
-  const allMes=(state.rotinas||[]).filter(r=>{
-    const rm=monthOf(r,'data');
-    return rm===m||(rm<=0&&!r.data); // sem data válida: inclui tudo (fallback)
-  });
-  // Populate equipe filter once
+  const allMes=(state.rotinas||[]).filter(r=>{const rm=monthOf(r,'data');return rm===m||(rm<=0&&!r.data);});
   const rotEqEl=document.getElementById('rotEquipeFilter');
   if(rotEqEl&&rotEqEl.options.length<=1){
     const equipes=[...new Set(allMes.map(r=>r.equipe||r.equipe_id||'').filter(Boolean))].sort();
@@ -3193,7 +3227,7 @@ function renderRotinasPage(){
   const equipeF=(rotEqEl||{}).value||'ALL';
   const rows=allMes.filter(r=>{
     if(turnoF!=='ALL'&&(r.turno||'').toUpperCase()!==turnoF.toUpperCase())return false;
-    if(equipeF!=='ALL'){const k=r.equipe||r.equipe_id||'';if(k!==equipeF)return false;}
+    if(equipeF!=='ALL'&&(r.equipe||r.equipe_id||'')!==equipeF)return false;
     return true;
   });
   const total=rows.length;
@@ -3213,40 +3247,61 @@ function renderRotinasPage(){
   const cont=document.getElementById('rotTable');
   if(!cont)return;
   if(!total){
-    cont.innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Nenhuma rotina registrada para o período selecionado.</div>';
-    lucide.createIcons({nodes:[...document.querySelectorAll('#page-rotinas [data-lucide]')]});
+    cont.innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Nenhuma rotina registrada para este período.</div>';
     return;
   }
-  // Group by equipe
+  // Week helper: 0-3 (S1..S4)
+  const getWk=r=>{if(!r.data)return-1;const d=new Date(r.data);return isNaN(d.getTime())?-1:Math.min(3,Math.floor((d.getDate()-1)/7));};
+  // Group by equipe → unique (rotina + turno)
   const byEq={};
-  rows.forEach(r=>{const k=r.equipe||r.equipe_id||'—';if(!byEq[k])byEq[k]=[];byEq[k].push(r);});
-  cont.innerHTML=Object.entries(byEq).map(([eq,itens])=>{
-    const eqReal=itens.filter(_rotIsRealizada).length;
-    const eqTot=itens.length;
+  rows.forEach(r=>{
+    const eq=r.equipe||r.equipe_id||'—';
+    if(!byEq[eq])byEq[eq]={items:[],byRot:{}};
+    byEq[eq].items.push(r);
+    const key=(r.rotina||r.os||'—')+'||'+(r.turno||'');
+    if(!byEq[eq].byRot[key]) byEq[eq].byRot[key]={nome:r.rotina||r.os||'—',turno:r.turno||'',item:r.item_contrato||'',local:r.local||'',total:0,real:0,weeks:[[],[],[],[]]};
+    const wk=getWk(r); if(wk>=0) byEq[eq].byRot[key].weeks[wk].push(_rotIsRealizada(r));
+    byEq[eq].byRot[key].total++; if(_rotIsRealizada(r)) byEq[eq].byRot[key].real++;
+  });
+  const weekHdr=`<div class="rot-wk-cells"><div class="rot-wk-hdr"><span>S1</span><span>S2</span><span>S3</span><span>S4</span></div></div>`;
+  cont.innerHTML=Object.entries(byEq).map(([eq,{items,byRot}])=>{
+    const eqReal=items.filter(_rotIsRealizada).length,eqTot=items.length;
     const eqPct=eqTot>0?Math.round(eqReal/eqTot*100):0;
-    const rowsHtml=itens.map(r=>{
-      const ok=_rotIsRealizada(r);
-      const statusTag=ok?'<span class="rot-status ok">Realizada</span>':'<span class="rot-status pend">Pendente</span>';
-      const turnoUp=(r.turno||'').toUpperCase();
-      const turnoTag=turnoUp==='MANHÃ'?'<span class="rot-turno manha">Manhã</span>':'<span class="rot-turno tarde">Tarde</span>';
-      const foco=r.foco?`<div class="rot-row-foco">${r.foco}</div>`:'';
-      const bloc=r.bloqueador&&!ok?`<div class="rot-row-bloc"><i data-lucide="triangle-alert"></i> ${r.bloqueador}</div>`:'';
-      return `<div class="rot-row${ok?'':' pend'}">
-        <div class="rot-row-date"><strong>${_rotFmtData(r.data)}</strong><span>${r.dia_semana||''}</span></div>
+    const barC=eqPct>=80?'var(--green)':eqPct>=50?'var(--blue)':'var(--ochre)';
+    // Unique blockers (not yet resolved)
+    const blocs=[...new Set(items.filter(r=>r.bloqueador&&!_rotIsRealizada(r)).map(r=>r.bloqueador))].slice(0,3);
+    const blocsHtml=blocs.length?`<div class="rot-blocs-row">${blocs.map(b=>`<span class="rot-bloc-tag"><i data-lucide="triangle-alert" style="width:10px;height:10px;flex-shrink:0"></i><span>${b.length>72?b.slice(0,72)+'…':b}</span></span>`).join('')}</div>`:'';
+    const rowsHtml=Object.values(byRot).map(rt=>{
+      const tUp=(rt.turno||'').toUpperCase();
+      const turnoTag=tUp==='MANHÃ'?'<span class="rot-turno manha">Manhã</span>':tUp==='TARDE'?'<span class="rot-turno tarde">Tarde</span>':'<span class="rot-turno" style="background:var(--surface-1);border:1px solid var(--border);color:var(--muted)">—</span>';
+      const pct=rt.total>0?Math.round(rt.real/rt.total*100):0;
+      const cntCls=pct>=80?'ok':pct>0?'partial':'';
+      const cells=rt.weeks.map((w,wi)=>{
+        if(!w.length)return`<span class="rot-wk-cell empty" title="Sem. ${wi+1}"></span>`;
+        const done=w.filter(Boolean).length;
+        return`<span class="rot-wk-cell ${done===w.length?'done':done>0?'part':'pend'}" title="Sem. ${wi+1}: ${done}/${w.length}">${done}/${w.length}</span>`;
+      }).join('');
+      return`<div class="rot-type-row">
         ${turnoTag}
-        <div class="rot-row-body"><div class="rot-row-name">${r.rotina||r.os||'—'}</div>${foco}${bloc}</div>
-        <div class="rot-row-loc" title="${r.local||''}">${r.local||'—'}</div>
-        <div class="rot-row-resp" title="${r.responsavel||r.tecnico_itaipu||''}">${r.responsavel||r.tecnico_itaipu||'—'}</div>
-        ${statusTag}
+        <div class="rot-type-body">
+          <div class="rot-type-name" title="${rt.nome}">${rt.nome}</div>
+          ${rt.item?`<span class="rot-item-tag">${rt.item}</span>`:''}${rt.local?`<span class="rot-type-local" title="${rt.local}">${rt.local.length>42?rt.local.slice(0,42)+'…':rt.local}</span>`:''}
+        </div>
+        <div class="rot-wk-cells">${cells}</div>
+        <div class="rot-type-count ${cntCls}">${rt.real}/${rt.total}</div>
       </div>`;
     }).join('');
-    return `<div class="rot-group">
-      <div class="rot-group-header">
-        <span class="rot-group-name">${eq}</span>
-        <span class="rot-group-stats">${eqReal}/${eqTot} realizadas · ${eqPct}%</span>
-        <div class="rot-group-bar"><div class="rot-group-bar-fill" style="width:${eqPct}%"></div></div>
+    return`<div class="rot-eq-card">
+      <div class="rot-eq-hdr">
+        <span class="rot-eq-name">${eq}</span>
+        <div class="rot-eq-track"><div class="rot-eq-fill" style="width:${eqPct}%;background:${barC}"></div></div>
+        <span class="rot-eq-stat">${eqReal}/${eqTot} realizadas · ${eqPct}%</span>
       </div>
-      <div class="rot-rows">${rowsHtml}</div>
+      ${blocsHtml}
+      <div class="rot-type-tbl">
+        <div class="rot-type-thead"><span style="font-size:9px;color:var(--faint);font-weight:700;letter-spacing:.04em">TURNO</span><span style="font-size:9px;color:var(--faint);font-weight:700;letter-spacing:.04em">ROTINA</span>${weekHdr}<span style="font-size:9px;color:var(--faint);font-weight:700;letter-spacing:.04em;text-align:right">TOTAL</span></div>
+        ${rowsHtml}
+      </div>
     </div>`;
   }).join('');
   lucide.createIcons({nodes:[...document.querySelectorAll('#rotTable [data-lucide]')]});
