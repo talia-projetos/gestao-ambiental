@@ -18,6 +18,7 @@
   --text:#18201A; --muted:#6C7570; --faint:#9BA49E; --border:#DFE5DC;
   --blue:#4c77bb; --blue-2:#598cc7; --green:#6DC030; --ochre:#E07825;
   --amber:#F0A829; --red:#E05252; --purple:#7f82b8;
+  --surface-1:#F0F3EE;
   --shadow:0 1px 2px rgba(0,0,0,.03),0 4px 16px rgba(0,0,0,.06),0 1px 0 rgba(255,255,255,.7) inset;
   --shadow-hover:0 2px 8px rgba(0,0,0,.06),0 8px 28px rgba(0,0,0,.10);
   --radius:20px; --radius-sm:13px; --sidebar:165px; --gap:16px;
@@ -28,6 +29,7 @@ html[data-theme="dark"] {
   --text:#EDF2EC; --muted:#A8B3A9; --faint:#7F8D81; --border:#2E3A2E;
   --blue:#6f9bd2; --blue-2:#78a9df; --green:#82D845; --ochre:#E89050;
   --amber:#F0B84A; --red:#E06B6B; --purple:#9b9ed0; --shadow:0 1px 3px rgba(0,0,0,.18),0 6px 20px rgba(0,0,0,.28);--shadow-hover:0 2px 8px rgba(0,0,0,.25),0 12px 36px rgba(0,0,0,.35);
+  --surface-1:#1E2820;
   --chart-grid:rgba(225,234,228,.09); --map-overlay:rgba(25,32,24,.96);
 }
 *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;transition:background .2s,color .2s}
@@ -143,7 +145,9 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 .rbv-item-status{width:18px;height:18px;border-radius:5px;background:var(--surface-2);flex:none;display:flex;align-items:center;justify-content:center}
 .rbv-item-status svg{width:10px;height:10px;stroke-width:2.2}
 /* Remover classes antigas que não existem mais */
-.rbv-rotina-grid,.rbv-rotina-item,.rbv-rotina-num,.rbv-rotina-body,.rbv-rotina-name,.rbv-rotina-meta,.rbv-rotina-freq{display:none}
+.rbv-rotina-grid,.rbv-rotina-item,.rbv-rotina-num,.rbv-rotina-body,.rbv-rotina-name,.rbv-rotina-meta{display:none}
+.rbv-rotina-freq{display:inline-flex;align-items:center;padding:1px 7px;border-radius:8px;font-size:9.5px;font-weight:650;background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 25%,transparent)}
+.rbv-rotina-freq.diaria{background:color-mix(in srgb,var(--green) 12%,transparent);color:#1e7c4a;border-color:color-mix(in srgb,var(--green) 28%,transparent)}
 
 /* ── Loading screen ─────────────────────────────────────── */
 #loadingScreen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .45s}
@@ -1556,7 +1560,8 @@ async function loadData(){
   const weather=wxR.status==='fulfilled'?wxR.value:null;
 
   const {teams=[],planning=[],execution=[],demands=[],blockers=[],climate=[],impact=[],metrics=[],weather_api=null,reservatorio=null}=base||{};
-  Object.assign(state,{teams:window.GA_PADRONIZAR_EQUIPES(teams),planning,execution,demands,blockers,climate,impact,metrics,weather_api,reservatorio,weather,scriptUrl:base?.script_url||''});
+  const _normEquipes=typeof window.GA_PADRONIZAR_EQUIPES==='function'?window.GA_PADRONIZAR_EQUIPES:(x=>x);
+  Object.assign(state,{teams:_normEquipes(teams),planning,execution,demands,blockers,climate,impact,metrics,weather_api,reservatorio,weather,scriptUrl:base?.script_url||''});
   if(weather)checkWeatherAlerts(weather);
   const local=JSON.parse(localStorage.getItem('ga-local-records')||'{"demands":[],"impact":[],"execution":[]}');
   // Aplica lista de supressão (demandas deletadas pelo X mas ainda presentes no JSON)
@@ -1586,12 +1591,13 @@ async function loadData(){
   if(localExecs.length<(local.execution||[]).length){local.execution=localExecs;changed=true;}
   if(changed) localStorage.setItem('ga-local-records',JSON.stringify(local));
   // auto-detectar mês (sequencial): execução > demandas > planejamento > bloqueadores
-  const execSeq=execution.map(r=>monthOf(r)).filter(m=>m>0);
+  const execSeq=state.execution.map(r=>monthOf(r)).filter(m=>m>0);
   const demSeq=state.demands.map(r=>monthOf(r)).filter(m=>m>0);
   const planSeq=state.planning.map(p=>{const n=Number(p.mes_num);return(n>=1&&n<=PROJECT_MONTHS)?n:0;}).filter(m=>m>0);
   const blqSeq=blockers.map(r=>monthOf(r)).filter(m=>m>0);
   const srcMs=execSeq.length?execSeq:demSeq.length?demSeq:planSeq.length?planSeq:blqSeq;
-  if(srcMs.length){state.month=Math.max(...srcMs);const mf=document.getElementById('monthFilter');if(mf)mf.value=state.month;}
+  // Só auto-detecta mês se o usuário não tiver feito seleção manual
+  if(srcMs.length&&!state._monthManual){state.month=Math.max(...srcMs);const mf=document.getElementById('monthFilter');if(mf)mf.value=state.month;}
   populateTeamFilter(); renderAll(); updateDemandMarkers(); renderMobileHub();
   const ls=document.getElementById('loadingScreen'); if(ls){const _lsDelay=Math.max(0,5000-(Date.now()-_lsStart));setTimeout(()=>{ls.classList.add('hidden');setTimeout(()=>ls.remove(),500);},_lsDelay);}
   if(lu)lu.textContent=`${state.teams.length} equipes · ${state.demands.length} demandas · atualizado às ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
@@ -1599,6 +1605,7 @@ async function loadData(){
 
 function populateTeamFilter(){
   const select=document.getElementById('teamFilter');
+  if(!select)return;
   const current=select.value;
   select.innerHTML='<option value="ALL">Todas as equipes</option>'+state.teams.map(t=>`<option value="${t.equipe_id}">${t.equipe_id} · ${t.equipe}</option>`).join('');
   select.value=state.team || current || 'ALL';
@@ -2083,7 +2090,8 @@ function renderCapacityChart(){
   const plannedH=eqIds.map(id=>state.planning.filter(r=>planMesMatch(r,m)&&r.equipe_id===id).reduce((s,r)=>s+Number(r.meta_planejada||0),0));
   const executedH=eqIds.map(id=>state.execution.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,r)=>s+Number(r.horas_executadas||r.quantidade_executada||0),0));
   const blockedH=eqIds.map(id=>state.blockers.filter(r=>r.equipe_id===id&&monthOf(r)===m).reduce((s,r)=>s+Number(r.horas_impactadas||0),0));
-  const demandsH=eqIds.map(id=>state.impact.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,r)=>s+Number(r.horas_consumidas||0),0));
+  // state.impact não tem data/equipe_id; usa state.demands como fonte de horas de desvio
+  const demandsH=eqIds.map(id=>state.demands.filter(r=>monthOf(r)===m&&r.equipe_id===id).reduce((s,r)=>s+Number(r.horas_consumidas||0),0));
   const residualH=eqIds.map((_,i)=>Math.max(0,plannedH[i]-executedH[i]-blockedH[i]-demandsH[i]));
   const options=chartBase();
   options.indexAxis='y';
@@ -2092,8 +2100,9 @@ function renderCapacityChart(){
   options.scales.x={beginAtZero:true,stacked:true,ticks:{color:cssVar('--muted'),font:{size:10}},grid:{color:cssVar('--chart-grid')},title:{display:true,text:'Horas',color:cssVar('--muted'),font:{size:9}}};
   options.scales.y={stacked:true,ticks:{color:cssVar('--muted'),font:{size:11,weight:'600'}},grid:{display:false}};
   options.plugins.tooltip={callbacks:{label:ctx=>{
-    const i=ctx.dataIndex,v=ctx.parsed.x,plan=plannedH[i]||1;
-    return ` ${ctx.dataset.label}: ${v}h (${Math.round(v/plan*100)}% do planejado)`;
+    const i=ctx.dataIndex,v=ctx.parsed.x,plan=plannedH[i];
+    const pct=plan>0?` (${Math.round(v/plan*100)}% do planejado)`:'';
+    return ` ${ctx.dataset.label}: ${v}h${pct}`;
   }}};
   destroyChart('capacityChart');
   const ctx=document.getElementById('capacityChart'); if(!ctx)return;
@@ -2503,7 +2512,7 @@ function renderAttention(){
       </button>
     </div>
   </div>`;
-  lucide.createIcons({el});
+  lucide.createIcons({nodes:[...document.querySelectorAll('.attention-inner-card [data-lucide]')]});
 }
 
 function renderBlockerChartFull(){
@@ -3087,10 +3096,10 @@ function renderAtividadesPage(){
   RBV_ITEMS.forEach(function(it){
     var palavras=normStr(it.atividade).split(' ').filter(function(w){return w.length>3;});
     var total=0;
-    (state.planning||[]).forEach(function(r){
+    (state.execution||[]).forEach(function(r){
       var at=normStr(r.atividade||'');
       var match=palavras.length>0&&palavras.filter(function(w){return at.indexOf(w)>=0;}).length>=Math.ceil(palavras.length*0.5);
-      if(match) total+=parseFloat(r.quantidade)||0;
+      if(match) total+=parseFloat(r.quantidade_executada||r.horas_executadas)||0;
     });
     execByItem[it.item]=total;
   });
@@ -3285,9 +3294,10 @@ function renderRbvPage(){
   const ganhoEl=document.getElementById('rbvGanhoContent');
   if(ganhoEl){
     const semProd=Math.round(149000/52);
-    const mesAtual=Number(state.month)||new Date().getMonth()+1;
-    const mesesRestantes=Math.max(1,12-mesAtual+1);
-    const projAnual=exec35>0?Math.round(exec35/mesAtual*12):0;
+    // state.month é mês sequencial do projeto (1=out/2026); converte para meses restantes de contrato (total=PROJECT_MONTHS)
+    const mesAtual=Math.min(Number(state.month)||1,PROJECT_MONTHS);
+    const mesesRestantes=Math.max(1,PROJECT_MONTHS-mesAtual+1);
+    const projAnual=exec35>0?Math.round(exec35/mesAtual*PROJECT_MONTHS):0;
     const gap=Math.max(0,149000-exec35);
     ganhoEl.innerHTML='<div class="rbv-ganho-grid">'+
       '<div class="rbv-ganho-card">'+
@@ -3588,7 +3598,7 @@ function setupUI(){
   const mfEl=document.getElementById('monthFilter');
   mfEl.innerHTML=Array.from({length:PROJECT_MONTHS},(_,i)=>`<option value="${i+1}">${mesNumLabel(i+1)}</option>`).join('');
   mfEl.value=state.month;
-  mfEl.addEventListener('change',e=>{state.month=Number(e.target.value);renderAll();updateDemandMarkers();});
+  mfEl.addEventListener('change',e=>{state.month=Number(e.target.value);state._monthManual=true;renderAll();updateDemandMarkers();});
   document.getElementById('teamFilter').addEventListener('change',e=>{state.team=e.target.value;renderAll();updateDemandMarkers();});
   document.getElementById('clearTeamFilter').addEventListener('click',()=>{state.team='ALL';document.getElementById('teamFilter').value='ALL';renderAll();updateDemandMarkers();});
   document.getElementById('refreshBtn').addEventListener('click',loadData);
@@ -3620,7 +3630,7 @@ function setupUI(){
   document.getElementById('clearLocalBtn').addEventListener('click',()=>{if(!confirm('Apagar todos os registros salvos localmente neste navegador?\n\nRegistros já publicados na planilha não são afetados.'))return;localStorage.removeItem('ga-local-records');localStorage.removeItem('ga-suppressed-demands');localStorage.removeItem('ga-suppressed-executions');location.reload();});
   document.getElementById('bp3Toggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.bp3Layer)return;const on=state.map.hasLayer(state.bp3Layer);on?state.map.removeLayer(state.bp3Layer):state.bp3Layer.addTo(state.map);b.classList.toggle('active',!on);});
   document.getElementById('hydroToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.hydroLayer)return;const on=state.map.hasLayer(state.hydroLayer);on?state.map.removeLayer(state.hydroLayer):state.hydroLayer.addTo(state.map);b.classList.toggle('active',!on);});
-  document.getElementById('demandToggle').addEventListener('click',e=>{const b=e.currentTarget;const on=state.map.hasLayer(state.demandLayer);on?state.map.removeLayer(state.demandLayer):state.demandLayer.addTo(state.map);b.classList.toggle('active',!on);});
+  document.getElementById('demandToggle').addEventListener('click',e=>{const b=e.currentTarget;if(!state.map||!state.demandLayer)return;const on=state.map.hasLayer(state.demandLayer);on?state.map.removeLayer(state.demandLayer):state.demandLayer.addTo(state.map);b.classList.toggle('active',!on);});
   function toggleMapLayer(btnId,layerKey){
     document.getElementById(btnId)?.addEventListener('click',e=>{
       const b=e.currentTarget,ly=state[layerKey];
