@@ -289,14 +289,41 @@ button,select{font:inherit;color:inherit}.app-shell{min-height:100vh}.sidebar{po
 @media(max-width:760px){
   .leader-form-grid,.form-secondary.visible{grid-template-columns:1fr}
   .leader-modal{padding:0!important;align-items:flex-end!important}
-  .leader-form-panel{width:100%!important;max-height:96vh!important;border-radius:20px 20px 0 0!important;padding:20px 18px 24px!important}
-  .field-label input,.field-label select,.field-label textarea{font-size:16px!important;padding:13px 12px!important}
-  .field-label textarea{min-height:100px!important}
+  .leader-form-panel{width:100%!important;max-height:96vh!important;border-radius:20px 20px 0 0!important;padding:20px 18px 0!important}
+  .field-label input,.field-label select,.field-label textarea{font-size:16px!important;padding:14px 13px!important}
+  .field-label textarea{min-height:110px!important}
+  /* Chips de local: alvos de toque grandes */
+  .loc-chip{min-height:40px!important;padding:0 14px!important;font-size:13px!important;display:inline-flex!important;align-items:center!important}
+  /* GPS buttons */
+  .gps-btn{padding:14px 16px!important;font-size:14px!important}
   .secondary-action.capture-gps{width:100%!important;padding:14px!important;font-size:15px!important;margin-top:4px!important;border:2px dashed var(--border)!important;border-radius:14px!important;background:var(--surface-2)!important}
-  .primary-action.submit-btn{width:100%!important;padding:16px!important;font-size:16px!important;border-radius:16px!important;margin-top:4px!important}
-  .form-actions{flex-direction:column-reverse!important;gap:8px!important}
+  /* Inputs dentro dos cards de execução */
+  .exec-row-inputs{grid-template-columns:1fr 1fr 1fr!important;gap:6px!important}
+  .exec-row-inputs input,.exec-row-inputs select{font-size:15px!important;padding:10px 8px!important}
+  .exec-row-mini-label{font-size:11px!important}
+  /* Cards de execução: alvo de toque maior */
+  .exec-activity-row{padding:13px 14px!important}
+  .exec-item-name{font-size:13px!important}
+  .exec-check-icon{width:26px!important;height:26px!important}
+  /* DMS */
+  .dms-row input[type="number"]{width:50px!important;font-size:14px!important;padding:7px 4px!important}
+  .dms-row select{font-size:14px!important;padding:7px 6px!important}
+  /* Sticky footer */
+  .form-sticky-footer{position:sticky!important;bottom:0!important;background:var(--surface)!important;padding:10px 18px 22px!important;margin:0 -18px!important;border-top:1px solid var(--border)!important}
+  .form-actions{flex-direction:column-reverse!important;gap:8px!important;margin-top:0!important}
+  .primary-action.submit-btn{width:100%!important;padding:17px!important;font-size:16px!important;border-radius:16px!important}
   .secondary-action.cancel-btn{width:100%!important;padding:14px!important;font-size:14px!important}
-  .form-note{font-size:11px!important}
+  .form-note{font-size:11px!important;margin-bottom:0!important}
+  /* Segmented toggle maior */
+  #leaderModeToggle button{padding:11px 0!important;font-size:13px!important}
+  /* Exec cat header clicável */
+  .exec-cat-header{cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:10px 0 5px!important}
+  .exec-cat-header::after{content:'▾';font-size:11px;color:var(--muted);transition:transform .2s;flex-shrink:0}
+  .exec-cat-header.collapsed::after{transform:rotate(-90deg)}
+  /* Busca exec no mobile */
+  #execSearch{width:160px!important;font-size:14px!important;padding:8px 12px 8px 30px!important}
+  /* Exec list no mobile: sem max-height fixo, deixa o painel controlar */
+  #execActivityList{max-height:none!important}
 }
 .report-modal{position:fixed;inset:0;background:rgba(14,18,16,.48);display:none;align-items:center;justify-content:center;padding:20px;z-index:1350}
 .report-modal.open{display:flex}
@@ -1512,8 +1539,14 @@ body{font-size:15px}
           </label>
           <div></div>
         </div>
-        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Atividades concluídas na semana</div>
-        <div id="execActivityList" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;padding-right:2px;margin-bottom:14px"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Atividades concluídas na semana</div>
+          <div style="position:relative;flex:0 0 auto">
+            <i data-lucide="search" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--muted);pointer-events:none"></i>
+            <input id="execSearch" type="search" placeholder="Buscar…" autocomplete="off" style="padding:5px 10px 5px 26px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:20px;font:inherit;font-size:12px;outline:none;width:130px">
+          </div>
+        </div>
+        <div id="execActivityList" style="display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto;padding-right:2px;margin-bottom:10px"></div>
         <div class="leader-form-grid">
           <label class="field-label full">Observações gerais
             <textarea id="execObs" placeholder="Condições do campo, pontos de atenção…" rows="2"></textarea>
@@ -1521,10 +1554,12 @@ body{font-size:15px}
         </div>
       </div>
 
-      <div class="form-note" id="leaderFormNote">Data, hora, status e identificadores são automáticos. Análise de impacto e alterações no planejamento são definidas pela gestão.</div>
-      <div class="form-actions">
-        <button type="button" class="secondary-action cancel-btn" id="cancelLeaderForm">Cancelar</button>
-        <button type="submit" class="primary-action submit-btn" id="leaderSubmitBtn">Registrar demanda</button>
+      <div class="form-sticky-footer">
+        <div class="form-note" id="leaderFormNote">Data, hora, status e identificadores são automáticos. Análise de impacto e alterações no planejamento são definidas pela gestão.</div>
+        <div class="form-actions">
+          <button type="button" class="secondary-action cancel-btn" id="cancelLeaderForm">Cancelar</button>
+          <button type="submit" class="primary-action submit-btn" id="leaderSubmitBtn">Registrar demanda</button>
+        </div>
       </div>
     </form>
   </div>
@@ -3013,6 +3048,7 @@ function populateLeaderForm(){
   // Limpa campos de execução
   const execObs=document.getElementById('execObs'); if(execObs) execObs.value='';
   const execDate=document.getElementById('execDate'); if(execDate) execDate.value=new Date().toISOString().slice(0,10);
+  const execSrch=document.getElementById('execSearch'); if(execSrch) execSrch.value='';
   updateLeaderDependentFields();
 }
 function updateLeaderDependentFields(){
@@ -3939,6 +3975,30 @@ function setupUI(){
   document.getElementById('leaderTeam').addEventListener('change',e=>{updateLeaderDependentFields();const mhs=document.getElementById('mobileHubTeam');if(mhs)mhs.value=e.target.value;});
   document.getElementById('leaderDemandForm').addEventListener('submit',saveLocalLeaderRecord);
   document.querySelectorAll('#leaderModeToggle button').forEach(b=>b.addEventListener('click',()=>toggleLeaderMode(b.dataset.mode)));
+  // Busca em tempo real na lista de execução
+  document.getElementById('execSearch')?.addEventListener('input',e=>{
+    const q=(e.target.value||'').toLowerCase().trim();
+    const list=document.getElementById('execActivityList');
+    if(!list)return;
+    list.querySelectorAll('.exec-activity-row').forEach(row=>{
+      const match=!q||(row.dataset.activity||'').toLowerCase().includes(q)||(row.dataset.item||'').toLowerCase().includes(q);
+      row.style.display=match?'':'none';
+    });
+    list.querySelectorAll('.exec-cat-header').forEach(hdr=>{
+      let next=hdr.nextElementSibling,has=false;
+      while(next&&!next.classList.contains('exec-cat-header')){if(next.style.display!=='none')has=true;next=next.nextElementSibling;}
+      hdr.style.display=has?'':'none';
+    });
+  });
+  // Categorias colapsáveis (mobile)
+  document.getElementById('execActivityList')?.addEventListener('click',e=>{
+    const hdr=e.target.closest('.exec-cat-header');
+    if(!hdr)return;
+    hdr.classList.toggle('collapsed');
+    const collapsed=hdr.classList.contains('collapsed');
+    let next=hdr.nextElementSibling;
+    while(next&&!next.classList.contains('exec-cat-header')){next.style.display=collapsed?'none':'';next=next.nextElementSibling;}
+  });
   // Chips: local atendido
   document.getElementById('localChips').addEventListener('click',e=>{
     const btn=e.target.closest('.loc-chip');
