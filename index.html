@@ -2984,22 +2984,29 @@ function updateLeaderDependentFields(){
     });
   }
   function findItem(a){const n=normStr(a);return getContractItems().find(it=>{const wds=normStr(it.atividade).split(' ').filter(w=>w.length>3);return wds.length&&wds.filter(w=>n.includes(w)).length>=Math.ceil(wds.length*0.5);});}
-  // Demanda: planejados da equipe no topo + todos os itens de contrato agrupados por categoria
+  // Demanda: planejados + "Seus itens" (por ITEM_RESP) + todos os demais por categoria
   const planActs=uniq((state.planning||[]).filter(p=>p.equipe_id===teamId&&planMesMatch(p,m)).map(p=>p.atividade));
+  const lider=t?.lider_tecnico||'';
+  const liderFirst=(lider.split(' ')[0]||'').toLowerCase();
   const CI=getContractItems();
-  const catMap={mudas:'Viveiro / Mudas',viveiro:'Viveiro / Mudas',rbv:'RBV',jardins:'Jardins e paisagismo',gramados:'Gramados e campo',trilhas:'Trilhas e estruturas',supressao:'Supressão vegetal',outros:'Outros serviços'};
-  const catOrder=['mudas','viveiro','rbv','jardins','gramados','trilhas','supressao','outros'];
+  const meusItens=liderFirst?CI.filter(it=>(ITEM_RESP[it.item]||'').toLowerCase().startsWith(liderFirst)):[];
+  const meusKeys=new Set(meusItens.map(x=>x.item));
+  const outrosItens=CI.filter(it=>!meusKeys.has(it.item));
+  const catLabels={mudas:'Mudas & Viveiro',rbv:'RBV',solo:'Solo & Adubação',plantio:'Plantio & Forração',poda:'Podas & Cortes',supressao:'Supressão & Controle',gramados:'Gramados & Roçada',jardins:'Jardins',maquinaria:'Maquinário',servicos:'Serviços Eventuais',insumos:'Insumos'};
+  const catOrder=['mudas','rbv','solo','plantio','poda','supressao','gramados','jardins','maquinaria','servicos','insumos'];
   const planHtml=planActs.length
     ?`<optgroup label="— Planejado este mês —">${planActs.map(a=>{const it=findItem(a);const lbl=it?`${it.item} · ${it.atividade.slice(0,52)}`:a.slice(0,60);return`<option value="${a}">${lbl}</option>`;}).join('')}</optgroup>`
     :'';
-  const usedCats=new Set(CI.map(x=>x.cat));
-  const allCatsHtml=[...catOrder,...[...usedCats].filter(c=>!catOrder.includes(c))].map(cat=>{
-    const itens=CI.filter(x=>x.cat===cat);
+  const meusHtml=meusItens.length
+    ?`<optgroup label="Seus itens (${ITEM_RESP[meusItens[0].item]||lider})">${meusItens.map(it=>`<option value="${it.atividade}">${it.item} · ${it.atividade.slice(0,52)}</option>`).join('')}</optgroup>`
+    :'';
+  const usedCats=new Set(outrosItens.map(x=>x.cat));
+  const outrosHtml=[...catOrder,...[...usedCats].filter(c=>!catOrder.includes(c))].map(cat=>{
+    const itens=outrosItens.filter(x=>x.cat===cat);
     if(!itens.length)return'';
-    const label=catMap[cat]||cat;
-    return`<optgroup label="${label}">${itens.map(it=>`<option value="${it.atividade}">${it.item} · ${it.atividade.slice(0,52)}</option>`).join('')}</optgroup>`;
+    return`<optgroup label="${catLabels[cat]||cat}">${itens.map(it=>`<option value="${it.atividade}">${it.item} · ${it.atividade.slice(0,52)}</option>`).join('')}</optgroup>`;
   }).join('');
-  document.getElementById('leaderActivity').innerHTML=planHtml+allCatsHtml+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
+  document.getElementById('leaderActivity').innerHTML=planHtml+meusHtml+outrosHtml+'<option value="Outra demanda não catalogada">Outra demanda não catalogada</option>';
   // Mini resumo das demandas desta equipe no mês
   const demDiv=document.getElementById('demSummaryBox');
   if(demDiv){
@@ -3119,74 +3126,96 @@ function saveExecRecord(e){
 function parseLideres(str){
   return (str||'').replace(/\s+e\s+/gi,';').replace(/,/g,';').split(';').map(s=>s.trim()).filter(Boolean);
 }
-/* ── RBV: dados do contrato (Anexo II) ─────────────────── */
+/* ── RBV: Anexo II — 73 itens (numeração correta) ──────── */
+const ITEM_RESP={'3.1':'Elizabeth','3.2':'Elizabeth','3.3':'Elizabeth','3.4':'Elizabeth','3.5':'Elizabeth','3.6':'Elizabeth','3.7':'Elizabeth','3.8':'Bordim','3.9':'Danilo','3.10':'Danilo','3.11':'Oldair','3.12':'Oldair','3.13':'Oldair','3.14':'Ronie','3.15':'Ronie','3.16':'Ronie','3.17':'Ronie','3.18':'Ronie','3.19':'Ronie','3.20':'Ronie','3.21':'Ronie','3.22':'Oldair','3.23':'Oldair','3.24':'Oldair','3.25':'Oldair','3.26':'Oldair','3.27':'Bordim','3.28':'Bordim','3.29':'Bordim','3.30':'Bordim','3.31':'Oldair','3.32':'Bordim','3.33':'Oldair','3.34':'Oldair','3.35':'Bordim','3.36':'Oldair','3.37':'Oldair','3.38':'Denis','3.39':'Denis','3.40':'Denis','3.41':'Denis','3.42':'Denis','3.43':'Denis','3.44':'Bordim','3.45':'Bordim','3.46':'Denis','3.47':'Denis','3.48':'Nilson','3.49':'Nilson','3.50':'Oldair','3.51':'Oldair','3.52':'Oldair','3.53':'Nilson','3.54':'Nilson','3.55':'Nilson','3.56':'Bordim','3.57':'Bordim','3.58':'Bordim','3.59':'Ronie','3.60':'Ronie','3.61':'Ronie','3.62':'Ronie','3.63':'Ronie','3.64':'Oldair','3.65':'Oldair','3.66':'Oldair','3.67':'Ronie','3.68':'Ronie','3.69':'Ronie','3.70':'Ronie','3.71':'Ronie','3.72':'Ronie','3.73':'Ronie'};
+const ITEM_TECH={'3.1':'Rubik','3.2':'Rubik','3.3':'Rubik','3.4':'Rubik','3.5':'Rubik','3.6':'Rubik','3.7':'Cláudio','3.8':'Cláudio','3.9':'Ana Maria','3.10':'Ana Maria','3.11':'Cláudio','3.12':'Cláudio','3.13':'Cláudio','3.14':'Jeferson','3.15':'Jeferson','3.16':'Jeferson','3.17':'Jeferson','3.18':'Jeferson','3.19':'Jeferson','3.20':'Jeferson','3.21':'Jeferson','3.22':'Cláudio','3.23':'Cláudio','3.24':'Cláudio','3.25':'Cláudio','3.26':'Cláudio','3.27':'Cláudio','3.28':'Cláudio','3.29':'Cláudio','3.30':'Cláudio','3.31':'Ródinei','3.32':'Cláudio','3.33':'Cláudio','3.34':'Cláudio','3.35':'Cláudio','3.36':'Cláudio','3.37':'Jeferson','3.38':'Ródinei','3.39':'Ródinei','3.40':'Ródinei','3.41':'Ródinei','3.42':'Ródinei','3.43':'Ródinei','3.44':'Ródinei','3.45':'Ródinei','3.46':'Ródinei','3.47':'Ródinei','3.48':'Ródinei','3.49':'Sandro','3.50':'Sandro','3.51':'Sandro','3.52':'Sandro','3.53':'Sandro','3.54':'Sandro','3.55':'Sandro','3.56':'Jeferson','3.57':'Cláudio','3.58':'Cláudio','3.59':'Cláudio','3.60':'Jeferson','3.61':'Jeferson','3.62':'Jeferson','3.63':'Jeferson','3.64':'Sandro','3.65':'Sandro','3.66':'Sandro','3.67':'Jeferson','3.68':'Jeferson','3.69':'Jeferson','3.70':'Rubik','3.71':'Jeferson','3.72':'Rubik','3.73':'Rubik'};
 const RBV_ITEMS=[
-  {item:'3.1',cat:'mudas',atividade:'Identificação de matrizes',quant:40,unid:'un',alt:'Registro fotográfico e GPS das matrizes identificadas',freq:'mensal'},
-  {item:'3.2',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - pequenas',quant:10,unid:'kg',alt:'Triagem e descarte de sementes inviáveis',freq:'semanal'},
-  {item:'3.3',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - médias',quant:20,unid:'kg',alt:'Armazenamento e catalogação de sementes colhidas',freq:'semanal'},
-  {item:'3.4',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - grandes',quant:235,unid:'kg',alt:'Secagem e embalagem de sementes para estoque',freq:'semanal'},
-  {item:'3.5',cat:'mudas',atividade:'Produção de mudas florestais',quant:149000,unid:'un',alt:'Repicagem de plântulas e transplante para tubetes maiores',freq:'diaria'},
-  {item:'3.6',cat:'mudas',atividade:'Expedição de mudas florestais',quant:149000,unid:'un',alt:'Controle de qualidade e seleção de mudas aptas',freq:'semanal'},
-  {item:'3.7',cat:'viveiro',atividade:'Manejo de plantas ornamentais e produção de hortaliças',quant:4,unid:'mês',alt:'Adubação foliar e tratamento fitossanitário preventivo',freq:'semanal'},
-  {item:'3.8',cat:'viveiro',atividade:'Transporte de vasos',quant:1000,unid:'km',alt:'Organização e inventário de vasos no viveiro',freq:'eventual'},
-  {item:'3.9',cat:'rbv',atividade:'Manutenção das trilhas no RBV',quant:4,unid:'mês',alt:'Sinalização e marcação de pontos de interpretação ambiental',freq:'mensal'},
-  {item:'3.10',cat:'rbv',atividade:'Serviços complementares no RBV',quant:4,unid:'mês',alt:'Monitoramento de espécies da fauna e registro de ocorrências',freq:'mensal'},
-  {item:'3.11',cat:'solo',atividade:'Remoção manual de entulho',quant:2000,unid:'m³',alt:'Separação e destinação adequada de resíduos sólidos',freq:'eventual'},
-  {item:'3.12',cat:'solo',atividade:'Remoção mecânica de entulho',quant:1000,unid:'m³',alt:'Nivelamento de áreas após remoção de entulho',freq:'eventual'},
-  {item:'3.13',cat:'solo',atividade:'Regularização manual de superfície',quant:3700,unid:'m²',alt:'Compactação e preparo final de canteiros',freq:'eventual'},
-  {item:'3.14',cat:'plantio',atividade:'Adubação química de árvores e arbustos',quant:500,unid:'un',alt:'Adubação orgânica e cobertura com mulch',freq:'mensal'},
-  {item:'3.15',cat:'plantio',atividade:'Coroamento',quant:850,unid:'un',alt:'Capina manual ao redor das mudas após coroamento',freq:'mensal'},
-  {item:'3.16',cat:'plantio',atividade:'Preparo de solo para forrações',quant:333,unid:'m²',alt:'Incorporação de composto orgânico ao solo preparado',freq:'eventual'},
-  {item:'3.17',cat:'plantio',atividade:'Plantio de plantas de forração',quant:333,unid:'m²',alt:'Irrigação de estabelecimento e replantio de falhas',freq:'eventual'},
-  {item:'3.18',cat:'plantio',atividade:'Plantio de palmeiras e árvores para paisagismo',quant:33,unid:'un',alt:'Instalação de tutores e proteção de mudas recém-plantadas',freq:'eventual'},
-  {item:'3.19',cat:'plantio',atividade:'Plantio de arbustos e semi-arbustos/herbáceas',quant:33,unid:'un',alt:'Cobertura morta e delimitação de canteiros',freq:'eventual'},
-  {item:'3.20',cat:'plantio',atividade:'Transplante de palmeiras e árvores',quant:10,unid:'un',alt:'Monitoramento pós-transplante e irrigação de estabilização',freq:'eventual'},
-  {item:'3.21',cat:'plantio',atividade:'Fornecimento e plantio de grama Esmeralda em leivas',quant:3700,unid:'m²',alt:'Rolo compactor e irrigação de pegamento',freq:'eventual'},
-  {item:'3.22',cat:'plantio',atividade:'Fornecimento e plantio de grama São Carlos em leivas',quant:350,unid:'m²',alt:'Demarcação de divisas e acabamento de bordas',freq:'eventual'},
-  {item:'3.23',cat:'plantio',atividade:'Irrigação de mudas com utilização de equipamento',quant:320,unid:'h/m',alt:'Regulagem e manutenção preventiva do equipamento de irrigação',freq:'semanal'},
-  {item:'3.24',cat:'podas',atividade:'Poda de árvores - Formação',quant:20,unid:'un',alt:'Tratamento de cortes com pasta cúprica',freq:'mensal'},
-  {item:'3.25',cat:'podas',atividade:'Poda de árvores - Limpeza',quant:3000,unid:'un',alt:'Retirada e picagem de galhos para compostagem',freq:'mensal'},
-  {item:'3.26',cat:'podas',atividade:'Poda de árvores - Drástica',quant:100,unid:'un',alt:'Monitoramento de rebrota e acompanhamento pós-poda',freq:'mensal'},
-  {item:'3.27',cat:'podas',atividade:'Poda de palmeiras - Limpeza',quant:300,unid:'un',alt:'Remoção de inflorescências e cachos secos',freq:'mensal'},
-  {item:'3.28',cat:'podas',atividade:'Poda de arbusto',quant:500,unid:'un',alt:'Modelagem e acabamento decorativo de arbustos',freq:'mensal'},
-  {item:'3.29',cat:'podas',atividade:'Poda de cerca viva',quant:700,unid:'m',alt:'Reforço de falhas na cerca viva com replantio',freq:'mensal'},
-  {item:'3.30',cat:'corte',atividade:'Corte de árvores com até 0,40 m de diâmetro',quant:2000,unid:'un',alt:'Destoca e remoção de raízes após corte',freq:'eventual'},
-  {item:'3.31',cat:'corte',atividade:'Corte de árvores entre 0,41 m e 0,70 m de diâmetro',quant:200,unid:'un',alt:'Trituração de troncos para produção de mulch',freq:'eventual'},
-  {item:'3.32',cat:'vegetacao',atividade:'Limpeza de cerca',quant:1000,unid:'m',alt:'Revisão e reparo de estrutura da cerca após limpeza',freq:'mensal'},
-  {item:'3.33',cat:'vegetacao',atividade:'Controle manual de plantas daninhas',quant:350,unid:'ha',alt:'Monitoramento e mapeamento de espécies invasoras',freq:'mensal'},
-  {item:'3.34',cat:'vegetacao',atividade:'Controle químico de plantas daninhas',quant:10,unid:'ha',alt:'Registro de aplicação e monitoramento de reinfestação',freq:'mensal'},
-  {item:'3.35',cat:'vegetacao',atividade:'Corte de gramados',quant:500,unid:'ha',alt:'Recolhimento e destinação de aparas de grama',freq:'semanal'},
-  {item:'3.36',cat:'vegetacao',atividade:'Remoção de aparas e outros materiais',quant:500,unid:'ha',alt:'Compostagem ou destinação de resíduos vegetais',freq:'semanal'},
-  {item:'3.37',cat:'vegetacao',atividade:'Roçada geral',quant:320,unid:'ha',alt:'Limpeza de acessos e cercas após roçada',freq:'semanal'},
-  {item:'3.38',cat:'maquinario',atividade:'Operação de trator',quant:750,unid:'h/m',alt:'Verificação de manutenção e abastecimento do trator',freq:'eventual'},
-  {item:'3.39',cat:'maquinario',atividade:'Manutenção de jardins',quant:12000,unid:'H/h',alt:'Inspeção de pragas e doenças em jardins mantidos',freq:'semanal'},
-  {item:'3.40',cat:'maquinario',atividade:'Postos de serviços de jardinagem',quant:4,unid:'mês',alt:'Organização de ferramentas e EPI do posto de trabalho',freq:'diaria'},
-  {item:'3.41',cat:'maquinario',atividade:'Serviços eventuais - expediente normal',quant:4500,unid:'H/h',alt:'Apoio a atividades de outros itens com necessidade de reforço',freq:'eventual'},
-  {item:'3.42',cat:'maquinario',atividade:'Serviços eventuais - extra 50%',quant:70,unid:'H/h',alt:'Substituição em caso de ausência de equipe regular',freq:'eventual'},
-  {item:'3.43',cat:'maquinario',atividade:'Serviços eventuais - extra 100%',quant:120,unid:'H/h',alt:'Atendimento a demandas emergenciais em fins de semana',freq:'eventual'},
-  {item:'3.44',cat:'diarias',atividade:'Diárias de viagem sem pernoite',quant:16,unid:'un',alt:'Coleta de material técnico e amostras durante deslocamento',freq:'eventual'},
-  {item:'3.45',cat:'diarias',atividade:'Diárias de viagem com pernoite',quant:4,unid:'un',alt:'Levantamento de campo em áreas remotas',freq:'eventual'},
-  {item:'3.46',cat:'diarias',atividade:'Trator agrícola',quant:640,unid:'h/m',alt:'Subsolagem e aração de áreas para plantio',freq:'eventual'},
-  {item:'3.47',cat:'diarias',atividade:'Caminhão basculante',quant:150,unid:'h/m',alt:'Transporte de material orgânico para compostagem',freq:'eventual'},
-  {item:'3.48',cat:'diarias',atividade:'Retroescavadeira',quant:150,unid:'h/m',alt:'Escavação de berços para plantio de árvores grandes',freq:'eventual'},
-  {item:'3.49',cat:'insumos',atividade:'Fornecimento de calcáreo dolomítico',quant:12000,unid:'Kg',alt:'Aplicação de calcáreo como correção de acidez do solo',freq:'eventual'},
-  {item:'3.50',cat:'insumos',atividade:'Fornecimento de fertilizante mineral',quant:3000,unid:'Kg',alt:'Fertirrigação em canteiros com sistemas de gotejo',freq:'eventual'},
-  {item:'3.51',cat:'insumos',atividade:'Fornecimento de adubo orgânico',quant:600,unid:'Kg',alt:'Incorporação de bokashi em áreas de plantio',freq:'eventual'},
-  {item:'3.52',cat:'insumos',atividade:'Fornecimento de substrato florestal a base de casca de pinus',quant:2000,unid:'Kg',alt:'Mistura de substrato para tubetes do viveiro',freq:'eventual'},
-  {item:'3.53',cat:'insumos',atividade:'Fornecimento de casca de pinus polida',quant:150,unid:'Kg',alt:'Cobertura decorativa de canteiros de alto padrão',freq:'eventual'},
+  {item:'3.1',cat:'mudas',atividade:'Identificação de matrizes',quant:0,unid:'un',freq:'mensal'},
+  {item:'3.2',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - pequenas',quant:0,unid:'kg',freq:'mensal'},
+  {item:'3.3',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - médias',quant:0,unid:'kg',freq:'mensal'},
+  {item:'3.4',cat:'mudas',atividade:'Coleta e beneficiamento de sementes - grandes',quant:0,unid:'kg',freq:'mensal'},
+  {item:'3.5',cat:'mudas',atividade:'Produção de mudas florestais',quant:0,unid:'un',freq:'semanal'},
+  {item:'3.6',cat:'mudas',atividade:'Expedição de mudas florestais',quant:0,unid:'un',freq:'mensal'},
+  {item:'3.7',cat:'mudas',atividade:'Manejo de plantas ornamentais e produção de hortaliças',quant:0,unid:'un',freq:'semanal'},
+  {item:'3.8',cat:'maquinaria',atividade:'Transporte de vasos',quant:0,unid:'un',freq:'eventual'},
+  {item:'3.9',cat:'rbv',atividade:'Manutenção das trilhas no RBV',quant:0,unid:'m',freq:'mensal'},
+  {item:'3.10',cat:'rbv',atividade:'Manutenção das edificações no Refúgio Biológico Bela Vista - RBV',quant:0,unid:'m²',freq:'mensal'},
+  {item:'3.11',cat:'rbv',atividade:'Remoção manual de entulho',quant:0,unid:'m³',freq:'eventual'},
+  {item:'3.12',cat:'rbv',atividade:'Remoção mecânica de entulho',quant:0,unid:'m³',freq:'eventual'},
+  {item:'3.13',cat:'rbv',atividade:'Regularização manual de superfície',quant:0,unid:'m²',freq:'eventual'},
+  {item:'3.14',cat:'solo',atividade:'Coleta e análise de solo',quant:0,unid:'un',freq:'eventual'},
+  {item:'3.15',cat:'solo',atividade:'Calagem tipo A',quant:0,unid:'t',freq:'eventual'},
+  {item:'3.16',cat:'solo',atividade:'Calagem tipo B',quant:0,unid:'t',freq:'eventual'},
+  {item:'3.17',cat:'solo',atividade:'Adubação química de base (preparo de solo)',quant:0,unid:'kg',freq:'eventual'},
+  {item:'3.18',cat:'solo',atividade:'Adubação orgânica de base (preparo de solo)',quant:0,unid:'kg',freq:'eventual'},
+  {item:'3.19',cat:'solo',atividade:'Adubação química de cobertura',quant:0,unid:'kg',freq:'mensal'},
+  {item:'3.20',cat:'solo',atividade:'Adubação orgânica de cobertura',quant:0,unid:'kg',freq:'mensal'},
+  {item:'3.21',cat:'solo',atividade:'Cobertura de gramados com terra',quant:0,unid:'m³',freq:'eventual'},
+  {item:'3.22',cat:'solo',atividade:'Adubação química de árvores e arbustos',quant:0,unid:'un',freq:'mensal'},
+  {item:'3.23',cat:'solo',atividade:'Adubação orgânica de árvores e arbustos',quant:0,unid:'un',freq:'mensal'},
+  {item:'3.24',cat:'solo',atividade:'Coroamento',quant:0,unid:'un',freq:'mensal'},
+  {item:'3.25',cat:'solo',atividade:'Abertura de covas Tipo A',quant:0,unid:'un',freq:'eventual'},
+  {item:'3.26',cat:'solo',atividade:'Abertura de covas Tipo B',quant:0,unid:'un',freq:'eventual'},
+  {item:'3.27',cat:'plantio',atividade:'Preparo de solo para forrações',quant:0,unid:'m²',freq:'eventual'},
+  {item:'3.28',cat:'plantio',atividade:'Plantio de plantas de forração',quant:0,unid:'m²',freq:'mensal'},
+  {item:'3.29',cat:'plantio',atividade:'Plantio de palmeiras e árvores para paisagismo',quant:0,unid:'un',freq:'eventual'},
+  {item:'3.30',cat:'plantio',atividade:'Plantio de arbustos e semi-arbustos/herbáceas',quant:0,unid:'un',freq:'eventual'},
+  {item:'3.31',cat:'plantio',atividade:'Manutenção de imóveis vagos',quant:0,unid:'m²',freq:'mensal'},
+  {item:'3.32',cat:'plantio',atividade:'Transplante de palmeiras e árvores',quant:0,unid:'un',freq:'eventual'},
+  {item:'3.33',cat:'plantio',atividade:'Fornecimento e plantio de grama Esmeralda (Zoyzia japonica) em leivas',quant:0,unid:'m²',freq:'eventual'},
+  {item:'3.34',cat:'plantio',atividade:'Fornecimento e plantio de grama São Carlos (Axonopus compressus) em leivas',quant:0,unid:'m²',freq:'eventual'},
+  {item:'3.35',cat:'plantio',atividade:'Plantio de grama e outras forrações em mudas',quant:0,unid:'m²',freq:'mensal'},
+  {item:'3.36',cat:'plantio',atividade:'Irrigação de mudas com utilização de equipamento',quant:0,unid:'h',freq:'semanal'},
+  {item:'3.37',cat:'plantio',atividade:'Semeadura',quant:0,unid:'m²',freq:'eventual'},
+  {item:'3.38',cat:'poda',atividade:'Poda de árvores - Formação',quant:0,unid:'un',freq:'mensal'},
+  {item:'3.39',cat:'poda',atividade:'Poda de árvores - Limpeza',quant:0,unid:'un',freq:'mensal'},
+  {item:'3.40',cat:'poda',atividade:'Poda de árvores - Drástica',quant:0,unid:'un',freq:'eventual'},
+  {item:'3.41',cat:'poda',atividade:'Poda de árvores em faixas contínuas de média intensidade',quant:0,unid:'m²',freq:'eventual'},
+  {item:'3.42',cat:'poda',atividade:'Poda de árvores em faixas contínuas de baixa intensidade',quant:0,unid:'m²',freq:'eventual'},
+  {item:'3.43',cat:'poda',atividade:'Poda de palmeiras - Limpeza',quant:0,unid:'un',freq:'mensal'},
+  {item:'3.44',cat:'poda',atividade:'Poda de arbusto',quant:0,unid:'un',freq:'mensal'},
+  {item:'3.45',cat:'poda',atividade:'Poda de cerca viva',quant:0,unid:'m',freq:'mensal'},
+  {item:'3.46',cat:'supressao',atividade:'Corte de árvores com até 0,40 m de diâmetro',quant:0,unid:'un',freq:'eventual'},
+  {item:'3.47',cat:'supressao',atividade:'Corte de árvores entre 0,41 m e 0,70 m de diâmetro',quant:0,unid:'un',freq:'eventual'},
+  {item:'3.48',cat:'supressao',atividade:'Limpeza de cerca',quant:0,unid:'m',freq:'mensal'},
+  {item:'3.49',cat:'supressao',atividade:'Controle manual de plantas daninhas',quant:0,unid:'m²',freq:'semanal'},
+  {item:'3.50',cat:'supressao',atividade:'Controle químico de plantas daninhas - Geral',quant:0,unid:'m²',freq:'eventual'},
+  {item:'3.51',cat:'supressao',atividade:'Controle químico de plantas daninhas - Seletivo',quant:0,unid:'m²',freq:'eventual'},
+  {item:'3.52',cat:'supressao',atividade:'Capina seletiva de ervas invasoras',quant:0,unid:'m²',freq:'semanal'},
+  {item:'3.53',cat:'gramados',atividade:'Corte de gramados',quant:0,unid:'m²',freq:'semanal'},
+  {item:'3.54',cat:'gramados',atividade:'Remoção de aparas e outros materiais',quant:0,unid:'m²',freq:'semanal'},
+  {item:'3.55',cat:'gramados',atividade:'Roçada geral',quant:0,unid:'m²',freq:'mensal'},
+  {item:'3.56',cat:'maquinaria',atividade:'Operação de trator',quant:0,unid:'h',freq:'eventual'},
+  {item:'3.57',cat:'jardins',atividade:'Manutenção de jardins',quant:0,unid:'m²',freq:'semanal'},
+  {item:'3.58',cat:'jardins',atividade:'Postos de serviços de jardinagem',quant:0,unid:'posto',freq:'mensal'},
+  {item:'3.59',cat:'servicos',atividade:'Serviços eventuais expediente normal',quant:0,unid:'h',freq:'eventual'},
+  {item:'3.60',cat:'servicos',atividade:'Serviços eventuais expediente extraordinário 50%',quant:0,unid:'h',freq:'eventual'},
+  {item:'3.61',cat:'servicos',atividade:'Serviços eventuais expediente extraordinário 100%',quant:0,unid:'h',freq:'eventual'},
+  {item:'3.62',cat:'servicos',atividade:'Diárias de viagem sem pernoite',quant:0,unid:'diária',freq:'eventual'},
+  {item:'3.63',cat:'servicos',atividade:'Diárias de viagem com pernoite',quant:0,unid:'diária',freq:'eventual'},
+  {item:'3.64',cat:'maquinaria',atividade:'Trator agrícola',quant:0,unid:'h',freq:'eventual'},
+  {item:'3.65',cat:'maquinaria',atividade:'Caminhão basculante',quant:0,unid:'h',freq:'eventual'},
+  {item:'3.66',cat:'maquinaria',atividade:'Retroescavadeira',quant:0,unid:'h',freq:'eventual'},
+  {item:'3.67',cat:'insumos',atividade:'Fornecimento de calcário dolomítico',quant:0,unid:'kg',freq:'eventual'},
+  {item:'3.68',cat:'insumos',atividade:'Fornecimento de fertilizante mineral',quant:0,unid:'kg',freq:'eventual'},
+  {item:'3.69',cat:'insumos',atividade:'Fornecimento de adubo orgânico',quant:0,unid:'kg',freq:'eventual'},
+  {item:'3.70',cat:'insumos',atividade:'Fornecimento de substrato florestal à base de casca de pinus',quant:0,unid:'m³',freq:'eventual'},
+  {item:'3.71',cat:'insumos',atividade:'Fornecimento de casca de pinus polida',quant:0,unid:'m³',freq:'eventual'},
+  {item:'3.72',cat:'insumos',atividade:'Fornecimento de adubo de liberação lenta',quant:0,unid:'kg',freq:'eventual'},
+  {item:'3.73',cat:'insumos',atividade:'Fornecimento de polímero absorvente',quant:0,unid:'kg',freq:'eventual'},
 ];
 const RBV_CATS=[
   {id:'mudas',label:'Sementes & Mudas',cor:'var(--green)'},
-  {id:'viveiro',label:'Viveiro & Ornamentais',cor:'var(--blue)'},
-  {id:'rbv',label:'Manutenção RBV',cor:'var(--ochre)'},
-  {id:'solo',label:'Solo & Entulho',cor:'var(--amber)'},
-  {id:'plantio',label:'Plantio & Paisagismo',cor:'var(--green)'},
-  {id:'podas',label:'Podas',cor:'var(--purple)'},
-  {id:'corte',label:'Corte de Árvores',cor:'var(--red)'},
-  {id:'vegetacao',label:'Controle de Vegetação',cor:'var(--ochre)'},
-  {id:'maquinario',label:'Maquinário & Serviços',cor:'var(--blue)'},
-  {id:'diarias',label:'Diárias & Equipamentos',cor:'var(--muted)'},
-  {id:'insumos',label:'Insumos',cor:'var(--faint)'},
+  {id:'rbv',label:'RBV — Trilhas & Edificações',cor:'var(--ochre)'},
+  {id:'solo',label:'Solo & Adubação',cor:'#92400e'},
+  {id:'plantio',label:'Plantio & Forração',cor:'var(--green)'},
+  {id:'poda',label:'Podas & Cortes de Árvores',cor:'var(--blue)'},
+  {id:'supressao',label:'Supressão & Controle de Vegetação',cor:'var(--purple)'},
+  {id:'gramados',label:'Gramados & Roçada',cor:'var(--green)'},
+  {id:'jardins',label:'Jardins & Paisagismo',cor:'var(--ochre)'},
+  {id:'maquinaria',label:'Maquinário & Equipamentos',cor:'var(--muted)'},
+  {id:'servicos',label:'Serviços Eventuais',cor:'var(--faint)'},
+  {id:'insumos',label:'Fornecimento de Insumos',cor:'var(--ochre)'},
 ];
 function fmtQuant(n){return n>=1000?`${(n/1000).toFixed(n%1000===0?0:1)}k`:String(n)}
 // Programação gerencial de manutenção: arquivo separado do JSON publicado pelo Apps Script.
