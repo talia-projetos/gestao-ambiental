@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T00:07:50.324Z",
+  "generated_at": "2026-10-16T00:08:52.605Z",
   "source": "PROERG",
   "script_url": "https://script.google.com/macros/s/AKfycby2TiQTR4Ripo2w8RIC9tjniCv2LJc14OHoUyQMLbAN91_XydoxUg4zl4kt6xh9IVpS/exec",
   "teams": [
@@ -820,17 +820,17 @@
       {
         "data": "2026-10-15",
         "chuva_mm": 4.7,
-        "prob_chuva": 76,
+        "prob_chuva": 78,
         "tmax": 26.8,
-        "tmin": 19.2,
+        "tmin": 18.9,
         "codigo": 80,
         "condicao": "Aguaceiro"
       },
       {
         "data": "2026-10-16",
         "chuva_mm": 0.2,
-        "prob_chuva": 11,
-        "tmax": 25.9,
+        "prob_chuva": 22,
+        "tmax": 26,
         "tmin": 17.1,
         "codigo": 51,
         "condicao": "Chuvisco"
